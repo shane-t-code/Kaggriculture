@@ -24,30 +24,70 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import re
 import statistics
 import sys
 import time
 
+# kaggle-environments bundles open_spiel, which prints harmless "Unknown game 'universal_poker'"
+# warnings on import for poker variants absent from this build. They do not affect Kaggriculture.
+# open_spiel prints from C++, straight to the OS file descriptors, so contextlib.redirect_stdout
+# (which only rebinds Python's sys.stdout) does NOT catch it -- we have to dup2 the real fds.
+import contextlib
+
+
+@contextlib.contextmanager
+def _silence_fds():
+    """Silence C-level stdout/stderr. Works on Windows and POSIX."""
+    devnull = saved_out = saved_err = None
+    try:
+        sys.stdout.flush()
+        sys.stderr.flush()
+        devnull = os.open(os.devnull, os.O_WRONLY)
+        saved_out, saved_err = os.dup(1), os.dup(2)
+        os.dup2(devnull, 1)
+        os.dup2(devnull, 2)
+        yield
+    finally:
+        try:
+            sys.stdout.flush()
+            sys.stderr.flush()
+        except Exception:
+            pass
+        if saved_out is not None:
+            os.dup2(saved_out, 1)
+            os.close(saved_out)
+        if saved_err is not None:
+            os.dup2(saved_err, 2)
+            os.close(saved_err)
+        if devnull is not None:
+            os.close(devnull)
+
+
 try:
-    from kaggle_environments import make
+    with _silence_fds():
+        from kaggle_environments import make
 except ImportError:
     sys.exit("kaggle-environments not installed.  pip install -U 'kaggle-environments>=1.32.7'")
 
 
 def check_version() -> None:
     """The engine changed twice mid-competition. Benchmarks across versions are not comparable."""
+    v = "unknown"
     try:
-        import kaggle_environments as ke
-        v = getattr(ke, "version", None) or getattr(ke, "__version__", "unknown")
-        print(f"kaggle-environments version: {v}")
-        parts = str(v).split(".")
-        if len(parts) >= 3:
-            major, minor, patch = (int(parts[0]), int(parts[1]), int(parts[2].split("a")[0]))
-            if (major, minor, patch) < (1, 32, 7):
-                print("  !! WARNING: need >= 1.32.7 (1.32.6 and 1.32.7 were balance changes).")
-                print("     pip install -U kaggle-environments")
-    except Exception as e:  # pragma: no cover
-        print(f"  (version check skipped: {e})")
+        from importlib.metadata import version as _pkg_version
+        v = _pkg_version("kaggle-environments")
+    except Exception:
+        try:
+            import kaggle_environments as ke
+            v = str(getattr(ke, "__version__", "unknown"))
+        except Exception:
+            pass
+    print(f"kaggle-environments version: {v}")
+    nums = re.findall(r"\d+", v)
+    if len(nums) >= 3 and tuple(int(n) for n in nums[:3]) < (1, 32, 7):
+        print("  !! WARNING: need >= 1.32.7 (1.32.6 and 1.32.7 were balance changes).")
+        print("     pip install -U kaggle-environments")
 
 
 def play(agent_a, agent_b, seed: int, steps: int = 720, debug: bool = False):
@@ -59,6 +99,14 @@ def play(agent_a, agent_b, seed: int, steps: int = 720, debug: bool = False):
     )
     env.run([agent_a, agent_b])
     final = env.steps[-1]
+    # A crashed agent silently PASSes forever and its bank sits at starting money —
+    # that is a broken measurement, not a loss. Shout about it. (Learned the hard way:
+    # a UTF-8 BOM from PowerShell Set-Content made an agent die on import and 'lose' 0-32.)
+    for i, s in enumerate(final):
+        if s.status != "DONE":
+            print(f"  !! WARNING seed {seed}: agent {i} ended with status {s.status!r} "
+                  f"(reward {s.reward}) — RESULT INVALID, agent likely crashed. "
+                  f"Re-run with --debug to see the error.")
     return final[0].reward, final[1].reward, env
 
 

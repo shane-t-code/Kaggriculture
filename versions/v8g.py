@@ -1,14 +1,13 @@
 """
 main.py — Kaggriculture agent.  ENTRY POINT (must be at archive root, must be named main.py).
 
-STATUS: v10 — Phase 5: v9 + FASTER HERD (opening speed).  The meta tape's herd is
-complete by day 8 (first cow milk lands day 7); v9's completed ~day 15 because the
-animal-buy gate demanded cost + reserve + a 4-day whole-herd feed cushion (~$1,900 for
-a $400 cow at herd 8).  That cushion predated the feed-sacred fix (feed buys bypass
-every reserve), so it was double protection.  Change: cushion 4 -> 2 days, and none on
-days 0-1 (the daily fertilizer stream — ~$98/animal/day — starts before the first feed
-bill can hurt).  Each animal still arrives with its 3-wheat dowry.
-A/B: v8d beat v9 42-22 over 64 (65.6% on BOTH seed batches, margin +2.0k/+3.0k).
+STATUS: v8g CANDIDATE — v10 + LATE WHEAT EXPANSION.  The meta tape converts dying
+strawberry/melon tiles into wheat late-game (57 wheat plants by day 27): wheat's log
+glut curve absorbs unlimited volume ($45-52 even after ~479 sold), seeds cost $10, and
+our late-game has idle labor (~550-640 PASS turns/game).  Change: from day 18 the wheat
+concurrent cap rises 20 -> 36 and last_plant 24 -> 25 (planted d25 still harvests 3-4
+units by day 28-29 at ~$45 each).
+Base = v10 (faster herd, 42-22 over 64 vs v9).
 Base (v9) = v8 rational thresholds + tape-family counter:
   * MELON: its day-20 wave kills the melon market permanently (measured: $246 -> $16 -> $1).
     Sell everything before it lands (threshold 60 from day 15, dump from day 18) and stop
@@ -91,7 +90,7 @@ NEVER_FORCE_SELL = {"WHEAT"}
 # Window (0,-1) = "watering never adds instant yield" (ongoing crops bonus only via fertilizer).
 CROP_INFO = {
     "MELON":      {"cost": 80,  "first": 10, "ready": 10, "last_plant": 19, "window": (6, 12), "cap": 12},
-    "WHEAT":      {"cost": 10,  "first": 2,  "ready": 4,  "last_plant": 24, "window": (2, 4),  "cap": 20},
+    "WHEAT":      {"cost": 10,  "first": 2,  "ready": 4,  "last_plant": 25, "window": (2, 4),  "cap": 20},
     "STRAWBERRY": {"cost": 100, "first": 10, "ready": 10, "last_plant": 17, "window": (0, -1), "cap": 24},
     "CARROT":     {"cost": 20,  "first": 2,  "ready": 3,  "last_plant": 26, "window": (2, 3),  "cap": 12},
 }
@@ -123,6 +122,11 @@ OPP_PRESSURE = {
 }
 PRESSURE_THRESHOLD_MULT = 0.65
 PRESSURE_BATCH_BONUS = 3
+
+# Late wheat expansion (v8g): tiles freed by decayed strawberries/melons become wheat.
+# Wheat is the one market that absorbs unlimited late volume (log glut curve).
+LATE_WHEAT_FROM = 18
+LATE_WHEAT_CAP = 36
 
 # Tape-family counter (v7c).  Fingerprint: the meta tape places exactly 4 SHEEP and
 # its first COW on day 0 (visible from day 1); we field 3 sheep and no cow then, so
@@ -374,7 +378,9 @@ def _build_tasks(tiles, day, seeds, tape_mode=False):
             crop = None
             for c in PLANT_ORDER:
                 info = CROP_INFO[c]
-                if (planned.get(c, 0) < info["cap"] and day <= info["last_plant"]
+                cap = LATE_WHEAT_CAP if (c == "WHEAT" and day >= LATE_WHEAT_FROM) \
+                    else info["cap"]
+                if (planned.get(c, 0) < cap and day <= info["last_plant"]
                         and budget.get(c, 0) > 0
                         and not (tape_mode and c == "MELON"
                                  and day > TAPE_MELON_LAST_PLANT)):

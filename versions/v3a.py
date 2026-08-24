@@ -1,9 +1,10 @@
 """
 main.py — Kaggriculture agent.  ENTRY POINT (must be at archive root, must be named main.py).
 
-STATUS: v3 — Phase 4: v2 (scheduler + 6 cows/2 sheep + CARE + fertilizer) + NE LAND +
-diversified crops (melon 12 / wheat-as-feed 10 / strawberry 10 / carrot 12) + hands scale
-with land.  A/B record: v3a beat v2 30-2 (93.8%).  Full lineage in docs/PLAN.md.
+STATUS: v2 — Phase 3: v1 scheduler + ANIMALS (6 cows + 2 sheep, CARE, fertilizer).
+A/B record: v2a (4C2S) beat v1 32-0 (+43.4k); 6C2S beat 4C2S 22-10; 6C2S vs 4C4S tied 16-16,
+6C2S kept for the higher win rate vs the common baseline and the lower-variance market (34%
+of seasons have no wool buyer).
 
 Everything from v1 (task list, greedy assignment, stickiness, 4 hands, melon-12 + carrot mix,
 day-29 endgame) plus the livestock pipeline:

@@ -1,9 +1,10 @@
 """
 main.py — Kaggriculture agent.  ENTRY POINT (must be at archive root, must be named main.py).
 
-STATUS: v3 — Phase 4: v2 (scheduler + 6 cows/2 sheep + CARE + fertilizer) + NE LAND +
-diversified crops (melon 12 / wheat-as-feed 10 / strawberry 10 / carrot 12) + hands scale
-with land.  A/B record: v3a beat v2 30-2 (93.8%).  Full lineage in docs/PLAN.md.
+STATUS: v2 — Phase 3: v1 scheduler + ANIMALS (6 cows + 2 sheep, CARE, fertilizer).
+A/B record: v2a (4C2S) beat v1 32-0 (+43.4k); 6C2S beat 4C2S 22-10; 6C2S vs 4C4S tied 16-16,
+6C2S kept for the higher win rate vs the common baseline and the lower-variance market (34%
+of seasons have no wool buyer).
 
 Everything from v1 (task list, greedy assignment, stickiness, 4 hands, melon-12 + carrot mix,
 day-29 endgame) plus the livestock pipeline:
@@ -33,7 +34,7 @@ DEBUG = False
 # ----------------------------------------------------------------------------------
 TARGET_HANDS = 4         # A/B'd in Phase 2: 2<3<4, 6 loses by its own wage bill (1 quadrant)
 HANDS_PER_EXTRA_QUADRANT = 2   # each new 25-tile quadrant brings ~30 more chores/day
-LAND_MAX_QUADRANTS = 2   # v3a: NW + NE. SW/SE are separate A/Bs.
+LAND_MAX_QUADRANTS = 3   # v3b: NW + NE + SW ($1k + $2k). SE is a separate A/B.
 LAND_PRICES = [1000, 2000, 4000]   # engine LAND_PRICES (ENGINE_NOTES B.1); order NE->SW->SE
 # (crop mix now lives in CROP_INFO caps + PLANT_ORDER + SEED_WANT below)
 LIQUIDATE_FROM_DAY = 28  # unsold inventory is worth $0 at the end — sell everything late
@@ -71,15 +72,15 @@ NEVER_FORCE_SELL = {"WHEAT"}
 # Window (0,-1) = "watering never adds instant yield" (ongoing crops bonus only via fertilizer).
 CROP_INFO = {
     "MELON":      {"cost": 80,  "first": 10, "ready": 10, "last_plant": 19, "window": (6, 12), "cap": 12},
-    "WHEAT":      {"cost": 10,  "first": 2,  "ready": 4,  "last_plant": 24, "window": (2, 4),  "cap": 10},
-    "STRAWBERRY": {"cost": 100, "first": 10, "ready": 10, "last_plant": 17, "window": (0, -1), "cap": 10},
-    "CARROT":     {"cost": 20,  "first": 2,  "ready": 3,  "last_plant": 26, "window": (2, 3),  "cap": 12},
+    "WHEAT":      {"cost": 10,  "first": 2,  "ready": 4,  "last_plant": 24, "window": (2, 4),  "cap": 12},
+    "STRAWBERRY": {"cost": 100, "first": 10, "ready": 10, "last_plant": 17, "window": (0, -1), "cap": 20},
+    "CARROT":     {"cost": 20,  "first": 2,  "ready": 3,  "last_plant": 26, "window": (2, 3),  "cap": 16},
 }
 # Planting priority when a tile opens up: melon (highest $/tile-day, tiny cap), wheat (feeds
 # the herd — replaces market buys at scarcity prices), strawberry (biggest town demand:
 # ~426/season median), carrot (fast filler, capped so we stop glutting our own market).
 PLANT_ORDER = ["MELON", "WHEAT", "STRAWBERRY", "CARROT"]
-SEED_WANT = {"MELON": 3, "WHEAT": 4, "STRAWBERRY": 3, "CARROT": 4}
+SEED_WANT = {"MELON": 3, "WHEAT": 5, "STRAWBERRY": 5, "CARROT": 5}
 WHEAT_FEED_RESERVE_DAYS = 2   # hold animals*this much wheat before selling any surplus
 
 SHED_TILE = (4, 4)

@@ -94,6 +94,36 @@ WHEAT_FEED_RESERVE_DAYS = 2   # hold animals*this much wheat before selling any 
 FERT_CROPS = {"STRAWBERRY": (7, 15), "MELON": (5, 7)}   # crop -> (min_age, max_age)
 FERT_KEEP = 6            # hold this much fertilizer stock back from selling
 
+# Opponent-pressure-aware selling (Phase 5, v6a). The opponent's farm is PUBLIC every
+# turn. When their visible capacity in a premium product is large, their dump is coming:
+# the first seller gets the better price and a crashed market hurts the later seller more
+# (measured by a competitor: selling harder cost them $4k and the opponent $11.8k). So
+# under pressure we sell earlier (lower threshold) and faster (bigger batch); with no
+# opposing capacity we hold for full price as usual. Tapes cannot respond to this.
+OPP_PRESSURE = {
+    #            how to count opponent capacity      trigger  threshold x  batch +
+    "MILK":       ("animal", "COW",        4),
+    "WOOL":       ("animal", "SHEEP",      3),
+    "STRAWBERRY": ("crop",   "STRAWBERRY", 8),
+    "MELON":      ("crop",   "MELON",      8),
+}
+PRESSURE_THRESHOLD_MULT = 0.65
+PRESSURE_BATCH_BONUS = 3
+
+
+def _opp_capacity(opp_tiles):
+    """Count the opponent's visible production sources by kind."""
+    crops = {}
+    animals = {}
+    for row in opp_tiles:
+        for t in row:
+            if isinstance(t, dict):
+                if t.get("kind") == "PLANT":
+                    crops[t.get("crop")] = crops.get(t.get("crop"), 0) + 1
+                elif t.get("animal"):
+                    animals[t["animal"]] = animals.get(t["animal"], 0) + 1
+    return crops, animals
+
 SHED_TILE = (4, 4)
 LAST_DAY = 29
 LAST_TICK_DAY = 28       # the game's final end-of-day refresh (ENGINE_NOTES B.4)

@@ -1,14 +1,12 @@
 """
 main.py — Kaggriculture agent.  ENTRY POINT (must be at archive root, must be named main.py).
 
-STATUS: v6 — Phase 5: full-scale farm on the healthy codebase — 3 quadrants, 8 cows +
-4 sheep, strawberry 24 / wheat 20 / melon 12 / carrot 12, 10 hands, crop fertilization,
-zoned routing, and hardened cash flow (feed buys bypass reserves; animals bought only
-with a 4-day feed cushion + wheat dowry; seeds respect a held-back feed budget).
-The identical scale config lost 12-20 as v4a while carrying five since-fixed bugs —
-scale was never the problem, its diseases were.
-A/B record: v5b beat v5 31-1 (96.9%, +12,754) | v5a beat v4 27-5 | v4c beat v3 28-4 |
-v3a beat v2 30-2 | v2a beat v1 32-0 | v1 beat v0 32-0.  Lineage: docs/PLAN.md.
+STATUS: v5 — Phase 5: v4 (crop fertilization) + ZONED ROUTING: routine work (water/care/
+collect/plant/dig) is carved into one serpentine chunk per free unit so each worker sweeps
+its own strip; urgent work (saves/feeds/harvests/chains) stays globally assigned. Effect:
+idle PASS turns fell ~12% -> ~6%; workers find work faster.
+A/B record: v5a beat v4 27-5 (84.4%, +2,483) | v4c beat v3 28-4 | v3a beat v2 30-2 |
+v2a beat v1 32-0 | v1 beat v0 32-0.  Full lineage + rejected experiments: docs/PLAN.md.
 
 Everything from v1 (task list, greedy assignment, stickiness, 4 hands, melon-12 + carrot mix,
 day-29 endgame) plus the livestock pipeline:
@@ -36,9 +34,9 @@ DEBUG = False
 # ----------------------------------------------------------------------------------
 # Tunables
 # ----------------------------------------------------------------------------------
-TARGET_HANDS = 6         # scale retest: 10 hands at 3 quadrants ($143/day fib)
-HANDS_PER_EXTRA_QUADRANT = 2
-LAND_MAX_QUADRANTS = 3   # v5b: retry the 3rd quadrant now that fert + cash bugs are fixed
+TARGET_HANDS = 4         # A/B'd in Phase 2: 2<3<4, 6 loses by its own wage bill (1 quadrant)
+HANDS_PER_EXTRA_QUADRANT = 2   # each new 25-tile quadrant brings ~30 more chores/day
+LAND_MAX_QUADRANTS = 2   # v3a: NW + NE. SW/SE are separate A/Bs.
 LAND_PRICES = [1000, 2000, 4000]   # engine LAND_PRICES (ENGINE_NOTES B.1); order NE->SW->SE
 # (crop mix now lives in CROP_INFO caps + PLANT_ORDER + SEED_WANT below)
 LIQUIDATE_FROM_DAY = 28  # unsold inventory is worth $0 at the end — sell everything late
@@ -47,7 +45,7 @@ UNLOAD_AT = 8            # a unit carrying this many items runs them to the shed
 
 # Livestock plan: sheep first (slowest payout -> place earliest, CARE stacks highest on it),
 # cows are the meta-proven workhorse. 6 animals ring the shed on one quadrant.
-ANIMAL_TARGETS = {"SHEEP": 4, "COW": 8}
+ANIMAL_TARGETS = {"SHEEP": 2, "COW": 6}
 BUY_PRIORITY = ["SHEEP", "COW"]
 ANIMAL_INFO = {
     "COW":   {"cost": 400, "build": "BUILD_PASTURE", "first": 8, "interval": 2, "product": "MILK"},
@@ -55,8 +53,7 @@ ANIMAL_INFO = {
 }
 # Ring around the shed-access tile (4,4): FEED/CARE/HARVEST/COLLECT all happen standing ON
 # the animal tile and the wheat lives at the shed, so clustering minimizes walking.
-ANIMAL_SLOTS = [(3, 4), (4, 3), (3, 3), (2, 4), (4, 2), (2, 3), (3, 2), (2, 2),
-                (4, 5), (3, 5), (2, 5), (4, 6)]   # +4 SW slots (build when land unlocks)
+ANIMAL_SLOTS = [(3, 4), (4, 3), (3, 3), (2, 4), (4, 2), (2, 3), (3, 2), (2, 2)]
 MONEY_RESERVE = 150      # keep enough cash for the day's wheat + seeds when buying animals
 
 # (batch, min_price, liquidation_day). Wheat doubles as animal feed: a reserve is held back
@@ -77,8 +74,8 @@ NEVER_FORCE_SELL = {"WHEAT"}
 # Window (0,-1) = "watering never adds instant yield" (ongoing crops bonus only via fertilizer).
 CROP_INFO = {
     "MELON":      {"cost": 80,  "first": 10, "ready": 10, "last_plant": 19, "window": (6, 12), "cap": 12},
-    "WHEAT":      {"cost": 10,  "first": 2,  "ready": 4,  "last_plant": 24, "window": (2, 4),  "cap": 20},
-    "STRAWBERRY": {"cost": 100, "first": 10, "ready": 10, "last_plant": 17, "window": (0, -1), "cap": 24},
+    "WHEAT":      {"cost": 10,  "first": 2,  "ready": 4,  "last_plant": 24, "window": (2, 4),  "cap": 10},
+    "STRAWBERRY": {"cost": 100, "first": 10, "ready": 10, "last_plant": 17, "window": (0, -1), "cap": 10},
     "CARROT":     {"cost": 20,  "first": 2,  "ready": 3,  "last_plant": 26, "window": (2, 3),  "cap": 12},
 }
 # Planting priority when a tile opens up: melon (highest $/tile-day, tiny cap), wheat (feeds
@@ -470,13 +467,12 @@ def _market_orders(day, hour, money, seeds, shed, inventories, prices, hires_tod
 
     # Wheat feed top-up from the market only if growing hasn't covered it. Bought wheat
     # lands in the shed after this turn's unit actions, so buy ahead of need.
-    wheat_price = max(1, prices.get("WHEAT", 25))
     if day <= LAST_TICK_DAY and placed_animals > 0:
         wheat_stock = shed.get("WHEAT", 0) + sum(inv.get("WHEAT", 0) for inv in inventories)
         want = placed_animals + 2
-        if wheat_stock < want and money > 0:
-            # FEED IS SACRED: feed buys bypass every reserve (the reserve exists FOR feed).
-            n = min(want - wheat_stock, int(money // wheat_price))
+        wheat_price = max(1, prices.get("WHEAT", 25))
+        if wheat_stock < want and money > MONEY_RESERVE:
+            n = min(want - wheat_stock, int((money - MONEY_RESERVE) // wheat_price))
             if n > 0:
                 orders.append(["BUY_PRODUCT", "WHEAT", n])
                 money -= n * wheat_price
@@ -493,45 +489,35 @@ def _market_orders(day, hour, money, seeds, shed, inventories, prices, hires_tod
                 owned[t["animal"]] += 1
     herd_complete = all(owned[sp] >= ANIMAL_TARGETS[sp] for sp in ANIMAL_TARGETS)
 
-    # Animals: buy toward targets (sheep first), one per turn — ONLY if the bank can also
-    # carry ~4 days of feed for the herd this animal joins (pre-income starvation destroyed
-    # ~$1.7k of animals in v4a before this gate existed). Each arrives with a wheat dowry.
-    if day <= 20 and not herd_complete:
-        herd_after = sum(owned.values()) + 1
-        feed_cushion = herd_after * wheat_price * 4
+    # Animals: buy toward targets (sheep first), one per turn, money-gated.
+    if day <= 20 and not herd_complete:  # placed after ~day 20 barely produces in time
         for sp in BUY_PRIORITY:
             cost = ANIMAL_INFO[sp]["cost"]
-            if owned[sp] < ANIMAL_TARGETS[sp] and money >= cost + MONEY_RESERVE + feed_cushion:
+            if owned[sp] < ANIMAL_TARGETS[sp] and money >= cost + MONEY_RESERVE:
                 orders.append(["BUY_ANIMAL", sp, 1])
                 money -= cost
-                orders.append(["BUY_PRODUCT", "WHEAT", 3])
-                money -= 3 * wheat_price
                 break
 
-    # Land: NE after 6 animals owned, SW after 8 (waiting for the full 12-herd would
-    # deadlock — animals 9-12 place on SW slots that need the land first).
-    land_ready = sum(owned.values()) >= (6 if n_quadrants == 1 else 8)
-    if (n_quadrants < LAND_MAX_QUADRANTS and day <= 20 and land_ready):
+    # Land: after the herd (animals out-earn bare land per dollar), buy the next quadrant.
+    # NE is $1k for 25 tiles — pays back within days at our per-tile earnings. Keep a
+    # cushion so the wheat/seed pipeline never starves (cash once dipped to $81 on day 5).
+    if (n_quadrants < LAND_MAX_QUADRANTS and day <= 20 and herd_complete):
         land_cost = LAND_PRICES[n_quadrants - 1]
         if money >= land_cost + MONEY_RESERVE + 200:
             orders.append(["BUY_LAND"])
             money -= land_cost
 
-    # Seeds spend only what the herd's feed budget doesn't claim (the day-0 seed burst
-    # once drained the bank to $0 and freshly placed sheep starved before any income).
-    feed_hold = sum(owned.values()) * wheat_price * 4
-    spendable = money - feed_hold
     for crop in PLANT_ORDER:
         info = CROP_INFO[crop]
         if day > info["last_plant"]:
             continue
         want = SEED_WANT[crop]
         have = seeds.get(crop, 0)
-        if have < want and spendable >= info["cost"]:
-            n = min(want - have, int(spendable // info["cost"]))
+        if have < want and money >= info["cost"]:
+            n = min(want - have, int(money // info["cost"]))
             if n > 0:
                 orders.append(["BUY_SEED", crop, n])
-                spendable -= n * info["cost"]
+                money -= n * info["cost"]
 
     return orders[:10]
 

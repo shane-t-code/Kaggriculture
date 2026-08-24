@@ -1,14 +1,14 @@
 """
 main.py — Kaggriculture agent.  ENTRY POINT (must be at archive root, must be named main.py).
 
-STATUS: v7 — Phase 5: v6 (full-scale farm: 3 quadrants, 8C/4S, 10 hands, fertilization,
-zoned routing, hardened cash flow) + OPPONENT-PRESSURE SELLING — the first ADAPTIVE layer:
-the opponent's farm is public, so when their visible premium capacity signals an incoming
-dump (cows >= 4, sheep >= 3, strawberry/melon plants >= 8) we sell ours earlier and
-faster; the first seller gets the better price and a replay tape cannot respond.
-A/B record: v6a beat v6 46-18 over 64 games (71.9%) | v5b beat v5 31-1 (96.9%) |
-v5a beat v4 27-5 | v4c beat v3 28-4 | v3a beat v2 30-2 | v2a beat v1 32-0 |
-v1 beat v0 32-0.  Full lineage + every rejected experiment: docs/PLAN.md.
+STATUS: v6 — Phase 5: full-scale farm on the healthy codebase — 3 quadrants, 8 cows +
+4 sheep, strawberry 24 / wheat 20 / melon 12 / carrot 12, 10 hands, crop fertilization,
+zoned routing, and hardened cash flow (feed buys bypass reserves; animals bought only
+with a 4-day feed cushion + wheat dowry; seeds respect a held-back feed budget).
+The identical scale config lost 12-20 as v4a while carrying five since-fixed bugs —
+scale was never the problem, its diseases were.
+A/B record: v5b beat v5 31-1 (96.9%, +12,754) | v5a beat v4 27-5 | v4c beat v3 28-4 |
+v3a beat v2 30-2 | v2a beat v1 32-0 | v1 beat v0 32-0.  Lineage: docs/PLAN.md.
 
 Everything from v1 (task list, greedy assignment, stickiness, 4 hands, melon-12 + carrot mix,
 day-29 endgame) plus the livestock pipeline:
@@ -93,36 +93,6 @@ WHEAT_FEED_RESERVE_DAYS = 2   # hold animals*this much wheat before selling any 
 # 6-cap ~2 days earlier. Everything else is byte-identical to v3a.
 FERT_CROPS = {"STRAWBERRY": (7, 15), "MELON": (5, 7)}   # crop -> (min_age, max_age)
 FERT_KEEP = 6            # hold this much fertilizer stock back from selling
-
-# Opponent-pressure-aware selling (Phase 5, v6a). The opponent's farm is PUBLIC every
-# turn. When their visible capacity in a premium product is large, their dump is coming:
-# the first seller gets the better price and a crashed market hurts the later seller more
-# (measured by a competitor: selling harder cost them $4k and the opponent $11.8k). So
-# under pressure we sell earlier (lower threshold) and faster (bigger batch); with no
-# opposing capacity we hold for full price as usual. Tapes cannot respond to this.
-OPP_PRESSURE = {
-    #            how to count opponent capacity      trigger  threshold x  batch +
-    "MILK":       ("animal", "COW",        4),
-    "WOOL":       ("animal", "SHEEP",      3),
-    "STRAWBERRY": ("crop",   "STRAWBERRY", 8),
-    "MELON":      ("crop",   "MELON",      8),
-}
-PRESSURE_THRESHOLD_MULT = 0.65
-PRESSURE_BATCH_BONUS = 3
-
-
-def _opp_capacity(opp_tiles):
-    """Count the opponent's visible production sources by kind."""
-    crops = {}
-    animals = {}
-    for row in opp_tiles:
-        for t in row:
-            if isinstance(t, dict):
-                if t.get("kind") == "PLANT":
-                    crops[t.get("crop")] = crops.get(t.get("crop"), 0) + 1
-                elif t.get("animal"):
-                    animals[t["animal"]] = animals.get(t["animal"], 0) + 1
-    return crops, animals
 
 SHED_TILE = (4, 4)
 LAST_DAY = 29
@@ -464,8 +434,7 @@ def _unit_action(unit_pos, task):
 
 
 def _market_orders(day, hour, money, seeds, shed, inventories, prices, hires_today,
-                   n_hands, tiles, n_quadrants, opp_tiles):
-    opp_crops, opp_animals = _opp_capacity(opp_tiles)
+                   n_hands, tiles, n_quadrants):
     """Queue order: SELL (income), HIRE, wheat, animals, LAND, seeds. Engine cap: 10."""
     orders = []
 
@@ -496,16 +465,8 @@ def _market_orders(day, hour, money, seeds, shed, inventories, prices, hires_tod
             continue
         price = prices.get(item, 0)
         force = shed_total >= SHED_FORCE_SELL and item not in NEVER_FORCE_SELL
-        threshold, n = min_price, batch
-        if item in OPP_PRESSURE and day < liq_day:
-            kind, source, trigger = OPP_PRESSURE[item]
-            count = (opp_animals if kind == "animal" else opp_crops).get(source, 0)
-            if count >= trigger:
-                # Their dump is coming — sell first, sell faster.
-                threshold = int(min_price * PRESSURE_THRESHOLD_MULT)
-                n = batch + PRESSURE_BATCH_BONUS
-        if day >= liq_day or force or price >= threshold:
-            orders.append(["SELL", item, min(n, stock)])
+        if day >= liq_day or force or price >= min_price:
+            orders.append(["SELL", item, min(batch, stock)])
 
     # Wheat feed top-up from the market only if growing hasn't covered it. Bought wheat
     # lands in the shed after this turn's unit actions, so buy ahead of need.
@@ -606,11 +567,9 @@ def agent(obs):
             if plant_counts[crop] > seeds.get(crop, 0):
                 actions[i] = ["PASS"]
 
-    opp = obs["farms"][1 - player]
     market = _market_orders(day, hour, money, seeds, shed, inventories, prices,
                             me.get("hires_today", 0), len(me.get("hands", [])), tiles,
-                            len(me.get("unlocked_quadrants", ["NW"])),
-                            opp.get("tiles", []))
+                            len(me.get("unlocked_quadrants", ["NW"])))
 
     if DEBUG:
         print(f"d{day} h{hour} units={len(units)} tasks={len(tasks)} market={market}")

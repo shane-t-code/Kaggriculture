@@ -464,7 +464,8 @@ def _unit_action(unit_pos, task):
 
 
 def _market_orders(day, hour, money, seeds, shed, inventories, prices, hires_today,
-                   n_hands, tiles, n_quadrants):
+                   n_hands, tiles, n_quadrants, opp_tiles):
+    opp_crops, opp_animals = _opp_capacity(opp_tiles)
     """Queue order: SELL (income), HIRE, wheat, animals, LAND, seeds. Engine cap: 10."""
     orders = []
 
@@ -495,8 +496,16 @@ def _market_orders(day, hour, money, seeds, shed, inventories, prices, hires_tod
             continue
         price = prices.get(item, 0)
         force = shed_total >= SHED_FORCE_SELL and item not in NEVER_FORCE_SELL
-        if day >= liq_day or force or price >= min_price:
-            orders.append(["SELL", item, min(batch, stock)])
+        threshold, n = min_price, batch
+        if item in OPP_PRESSURE and day < liq_day:
+            kind, source, trigger = OPP_PRESSURE[item]
+            count = (opp_animals if kind == "animal" else opp_crops).get(source, 0)
+            if count >= trigger:
+                # Their dump is coming — sell first, sell faster.
+                threshold = int(min_price * PRESSURE_THRESHOLD_MULT)
+                n = batch + PRESSURE_BATCH_BONUS
+        if day >= liq_day or force or price >= threshold:
+            orders.append(["SELL", item, min(n, stock)])
 
     # Wheat feed top-up from the market only if growing hasn't covered it. Bought wheat
     # lands in the shed after this turn's unit actions, so buy ahead of need.
@@ -597,9 +606,11 @@ def agent(obs):
             if plant_counts[crop] > seeds.get(crop, 0):
                 actions[i] = ["PASS"]
 
+    opp = obs["farms"][1 - player]
     market = _market_orders(day, hour, money, seeds, shed, inventories, prices,
                             me.get("hires_today", 0), len(me.get("hands", [])), tiles,
-                            len(me.get("unlocked_quadrants", ["NW"])))
+                            len(me.get("unlocked_quadrants", ["NW"])),
+                            opp.get("tiles", []))
 
     if DEBUG:
         print(f"d{day} h{hour} units={len(units)} tasks={len(tasks)} market={market}")

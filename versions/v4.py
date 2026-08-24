@@ -1,12 +1,12 @@
 """
 main.py — Kaggriculture agent.  ENTRY POINT (must be at archive root, must be named main.py).
 
-STATUS: v5 — Phase 5: v4 (crop fertilization) + ZONED ROUTING: routine work (water/care/
-collect/plant/dig) is carved into one serpentine chunk per free unit so each worker sweeps
-its own strip; urgent work (saves/feeds/harvests/chains) stays globally assigned. Effect:
-idle PASS turns fell ~12% -> ~6%; workers find work faster.
-A/B record: v5a beat v4 27-5 (84.4%, +2,483) | v4c beat v3 28-4 | v3a beat v2 30-2 |
-v2a beat v1 32-0 | v1 beat v0 32-0.  Full lineage + rejected experiments: docs/PLAN.md.
+STATUS: v4 — Phase 5: v3 (scheduler + 6C/2S + NE land + diversified crops) + CROP
+FERTILIZATION: our animals' daily fertilizer stream is applied to strawberries (doubles
+their production ticks) and melons (hit the 6-cap sooner) instead of being sold outright —
+gated so the holdback never starves early-game feed cash (day >= 8), and restock trips
+never outrank watering.  A/B record: v4c beat v3 28-4 (87.5%, +4,260).
+Full lineage and every rejected experiment: docs/PLAN.md.
 
 Everything from v1 (task list, greedy assignment, stickiness, 4 hands, melon-12 + carrot mix,
 day-29 endgame) plus the livestock pipeline:
@@ -349,61 +349,22 @@ def _assign(units, tasks, inventories, tiles, day, hour):
             assignment[ui] = tasks[best]
             taken[best] = True
 
-    def greedy(candidate_tis):
-        """Most urgent first, nearest eligible unit wins, stable tie-break."""
-        pairs = []
-        for ti in candidate_tis:
-            if taken[ti]:
+    # Global greedy: most urgent first, nearest eligible unit wins, stable tie-break.
+    pairs = []
+    for ti, task in enumerate(tasks):
+        if taken[ti]:
+            continue
+        for ui, (ux, uy) in enumerate(units):
+            if ui in assignment or not eligible(ui, task):
                 continue
-            task = tasks[ti]
-            for ui, (ux, uy) in enumerate(units):
-                if ui in assignment or not eligible(ui, task):
-                    continue
-                d = abs(task["x"] - ux) + abs(task["y"] - uy)
-                pairs.append((task["prio"], d, task["y"] * 16 + task["x"], ui, ti))
-        pairs.sort()
-        for prio, d, _, ui, ti in pairs:
-            if ui in assignment or taken[ti]:
-                continue
-            assignment[ui] = tasks[ti]
-            taken[ti] = True
-
-    # Urgent work (saves, feeds, harvests, supply chains) is assigned globally — a dying
-    # plant doesn't care about zones.
-    greedy([ti for ti, t in enumerate(tasks) if t["prio"] < P_WATER])
-
-    # ZONED SWEEP for routine work (water/care/collect/plant/dig): order the remaining
-    # tasks along a serpentine (row-by-row, alternating direction) and carve them into one
-    # contiguous chunk per free unit, matched to units by the same ordering. Each worker
-    # sweeps its own strip of farm instead of crisscrossing the whole board — walking was
-    # 52-54% of unit-turns under pure global-greedy (reported competitive floor ~33%).
-    def serp(x, y):
-        return (y, x if y % 2 == 0 else 15 - x)
-
-    low = [ti for ti, t in enumerate(tasks) if not taken[ti] and t["prio"] >= P_WATER]
-    free = [ui for ui in range(len(units)) if ui not in assignment]
-    if low and free:
-        low.sort(key=lambda ti: serp(tasks[ti]["x"], tasks[ti]["y"]))
-        free.sort(key=lambda ui: serp(units[ui][0], units[ui][1]))
-        chunk = (len(low) + len(free) - 1) // len(free)
-        for k, ui in enumerate(free):
-            part = low[k * chunk:(k + 1) * chunk]
-            ux, uy = units[ui]
-            best, best_key = None, None
-            for ti in part:
-                if taken[ti] or not eligible(ui, tasks[ti]):
-                    continue
-                t = tasks[ti]
-                key = (t["prio"], abs(t["x"] - ux) + abs(t["y"] - uy), t["y"] * 16 + t["x"])
-                if best_key is None or key < best_key:
-                    best, best_key = ti, key
-            if best is not None:
-                assignment[ui] = tasks[best]
-                taken[best] = True
-
-    # Cleanup: anything still unmatched (require-filtered tasks, empty chunks) falls back
-    # to plain global greedy so no unit idles while work exists.
-    greedy(range(len(tasks)))
+            d = abs(task["x"] - ux) + abs(task["y"] - uy)
+            pairs.append((task["prio"], d, task["y"] * 16 + task["x"], ui, ti))
+    pairs.sort()
+    for prio, d, _, ui, ti in pairs:
+        if ui in assignment or taken[ti]:
+            continue
+        assignment[ui] = tasks[ti]
+        taken[ti] = True
 
     # Idle-but-loaded units bank their cargo (sellable today instead of tomorrow),
     # but never while still carrying feed wheat for pending FEED tasks.

@@ -1,12 +1,12 @@
 """
 main.py — Kaggriculture agent.  ENTRY POINT (must be at archive root, must be named main.py).
 
-STATUS: v5 — Phase 5: v4 (crop fertilization) + ZONED ROUTING: routine work (water/care/
-collect/plant/dig) is carved into one serpentine chunk per free unit so each worker sweeps
-its own strip; urgent work (saves/feeds/harvests/chains) stays globally assigned. Effect:
-idle PASS turns fell ~12% -> ~6%; workers find work faster.
-A/B record: v5a beat v4 27-5 (84.4%, +2,483) | v4c beat v3 28-4 | v3a beat v2 30-2 |
-v2a beat v1 32-0 | v1 beat v0 32-0.  Full lineage + rejected experiments: docs/PLAN.md.
+STATUS: v4 — Phase 5: v3 (scheduler + 6C/2S + NE land + diversified crops) + CROP
+FERTILIZATION: our animals' daily fertilizer stream is applied to strawberries (doubles
+their production ticks) and melons (hit the 6-cap sooner) instead of being sold outright —
+gated so the holdback never starves early-game feed cash (day >= 8), and restock trips
+never outrank watering.  A/B record: v4c beat v3 28-4 (87.5%, +4,260).
+Full lineage and every rejected experiment: docs/PLAN.md.
 
 Everything from v1 (task list, greedy assignment, stickiness, 4 hands, melon-12 + carrot mix,
 day-29 endgame) plus the livestock pipeline:

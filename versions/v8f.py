@@ -1,14 +1,13 @@
 """
 main.py — Kaggriculture agent.  ENTRY POINT (must be at archive root, must be named main.py).
 
-STATUS: v10 — Phase 5: v9 + FASTER HERD (opening speed).  The meta tape's herd is
-complete by day 8 (first cow milk lands day 7); v9's completed ~day 15 because the
-animal-buy gate demanded cost + reserve + a 4-day whole-herd feed cushion (~$1,900 for
-a $400 cow at herd 8).  That cushion predated the feed-sacred fix (feed buys bypass
-every reserve), so it was double protection.  Change: cushion 4 -> 2 days, and none on
-days 0-1 (the daily fertilizer stream — ~$98/animal/day — starts before the first feed
-bill can hurt).  Each animal still arrives with its 3-wheat dowry.
-A/B: v8d beat v9 42-22 over 64 (65.6% on BOTH seed batches, margin +2.0k/+3.0k).
+STATUS: v8f CANDIDATE — v10 + FERTILIZER DISCIPLINE.  A fertilizer applied to a watered
+STRAWBERRY doubles its production ticks for 3 days (~+$150-400 of berries per $40-90 of
+fertilizer); the meta tape applies 72 per game, we apply far fewer because only
+FERT_KEEP=6 is held back from selling and the shed restock task only fires at a
+shortfall of 3+.  Change: FERT_KEEP 6 -> 12 (still liquidity-gated to day >= 8),
+restock trigger 3 -> 2.  Labor is available (12 hands just measured as saturated).
+Base = v10 (faster herd, 42-22 over 64 vs v9).
 Base (v9) = v8 rational thresholds + tape-family counter:
   * MELON: its day-20 wave kills the melon market permanently (measured: $246 -> $16 -> $1).
     Sell everything before it lands (threshold 60 from day 15, dump from day 18) and stop
@@ -106,7 +105,7 @@ WHEAT_FEED_RESERVE_DAYS = 2   # hold animals*this much wheat before selling any 
 # production ticks while watered (engine-verified) — ~$200+ of berries. Melon: reaches its
 # 6-cap ~2 days earlier. Everything else is byte-identical to v3a.
 FERT_CROPS = {"STRAWBERRY": (7, 15), "MELON": (5, 7)}   # crop -> (min_age, max_age)
-FERT_KEEP = 6            # hold this much fertilizer stock back from selling
+FERT_KEEP = 12           # v8f: hold more back for crop fertilizing (tape applies 72/game)
 
 # Opponent-pressure-aware selling (Phase 5, v6a). The opponent's farm is PUBLIC every
 # turn. When their visible capacity in a premium product is large, their dump is coming:
@@ -407,7 +406,7 @@ def _supply_tasks(tasks, n_feed, units, inventories, shed, tiles, day):
     # weeded out, 26 melon replants. Fertilizing is a luxury; restock at P_FERT(3).
     n_fert = sum(1 for t in tasks if t["op"][0] == "FERTILIZE")
     carried_fert = sum(inv.get("FERTILIZER", 0) for inv in inventories)
-    if n_fert - carried_fert >= 3 and shed.get("FERTILIZER", 0) > 0:
+    if n_fert - carried_fert >= 2 and shed.get("FERTILIZER", 0) > 0:
         n = min(n_fert - carried_fert, shed["FERTILIZER"])
         tasks.append({"prio": P_FERT, "x": SHED_TILE[0], "y": SHED_TILE[1],
                       "op": ["PICKUP", "FERTILIZER", n]})

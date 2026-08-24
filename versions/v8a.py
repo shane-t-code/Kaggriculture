@@ -1,14 +1,13 @@
 """
 main.py — Kaggriculture agent.  ENTRY POINT (must be at archive root, must be named main.py).
 
-STATUS: v10 — Phase 5: v9 + FASTER HERD (opening speed).  The meta tape's herd is
-complete by day 8 (first cow milk lands day 7); v9's completed ~day 15 because the
-animal-buy gate demanded cost + reserve + a 4-day whole-herd feed cushion (~$1,900 for
-a $400 cow at herd 8).  That cushion predated the feed-sacred fix (feed buys bypass
-every reserve), so it was double protection.  Change: cushion 4 -> 2 days, and none on
-days 0-1 (the daily fertilizer stream — ~$98/animal/day — starts before the first feed
-bill can hurt).  Each animal still arrives with its 3-wheat dowry.
-A/B: v8d beat v9 42-22 over 64 (65.6% on BOTH seed batches, margin +2.0k/+3.0k).
+STATUS: v8a CANDIDATE — v9 + STRAWBERRY-FIRST CROP MIX.  The decoded meta tape's single
+biggest revenue line is ~37 concurrent strawberry plants -> ~479 berries sold at ~$190
+(~$90k): strawberry is the game's biggest town demand (~426/season median) and its price
+NEVER crashed in any measured game, even with both players selling.  Melon is the
+OPPOSITE — the smallest market (town eats 30/season); 12+12 melons in self-play crashed
+it to $1-16 by day 22.  Shift: strawberry cap 24->34 + ahead of wheat in PLANT_ORDER +
+seed budget 3->5/turn; melon cap 12->8.  (Occupancy change: judge by win rate.)
 Base (v9) = v8 rational thresholds + tape-family counter:
   * MELON: its day-20 wave kills the melon market permanently (measured: $246 -> $16 -> $1).
     Sell everything before it lands (threshold 60 from day 15, dump from day 18) and stop
@@ -90,16 +89,16 @@ NEVER_FORCE_SELL = {"WHEAT"}
 # cap = max concurrent plants (market- or purpose-bound, not space-bound).
 # Window (0,-1) = "watering never adds instant yield" (ongoing crops bonus only via fertilizer).
 CROP_INFO = {
-    "MELON":      {"cost": 80,  "first": 10, "ready": 10, "last_plant": 19, "window": (6, 12), "cap": 12},
+    "MELON":      {"cost": 80,  "first": 10, "ready": 10, "last_plant": 19, "window": (6, 12), "cap": 8},
     "WHEAT":      {"cost": 10,  "first": 2,  "ready": 4,  "last_plant": 24, "window": (2, 4),  "cap": 20},
-    "STRAWBERRY": {"cost": 100, "first": 10, "ready": 10, "last_plant": 17, "window": (0, -1), "cap": 24},
+    "STRAWBERRY": {"cost": 100, "first": 10, "ready": 10, "last_plant": 17, "window": (0, -1), "cap": 34},
     "CARROT":     {"cost": 20,  "first": 2,  "ready": 3,  "last_plant": 26, "window": (2, 3),  "cap": 12},
 }
 # Planting priority when a tile opens up: melon (highest $/tile-day, tiny cap), wheat (feeds
 # the herd — replaces market buys at scarcity prices), strawberry (biggest town demand:
 # ~426/season median), carrot (fast filler, capped so we stop glutting our own market).
-PLANT_ORDER = ["MELON", "WHEAT", "STRAWBERRY", "CARROT"]
-SEED_WANT = {"MELON": 3, "WHEAT": 4, "STRAWBERRY": 3, "CARROT": 4}
+PLANT_ORDER = ["MELON", "STRAWBERRY", "WHEAT", "CARROT"]
+SEED_WANT = {"MELON": 3, "WHEAT": 4, "STRAWBERRY": 5, "CARROT": 4}
 WHEAT_FEED_RESERVE_DAYS = 2   # hold animals*this much wheat before selling any surplus
 
 # Fertilize-only addition (v4c): a $90 fertilizer applied to a STRAWBERRY doubles its
@@ -667,10 +666,7 @@ def _market_orders(day, hour, money, seeds, shed, inventories, prices, hires_tod
     # ~$1.7k of animals in v4a before this gate existed). Each arrives with a wheat dowry.
     if day <= 20 and not herd_complete:
         herd_after = sum(owned.values()) + 1
-        # 2-day cushion (feed buys are already sacred; 4 days double-protected and
-        # delayed the herd ~6 days).  Days 0-1: no cushion — the fertilizer stream
-        # (~$98/animal/day) starts before the first feed bill can hurt.
-        feed_cushion = 0 if day <= 1 else herd_after * wheat_price * 2
+        feed_cushion = herd_after * wheat_price * 4
         for sp in BUY_PRIORITY:
             cost = ANIMAL_INFO[sp]["cost"]
             if owned[sp] < ANIMAL_TARGETS[sp] and money >= cost + MONEY_RESERVE + feed_cushion:

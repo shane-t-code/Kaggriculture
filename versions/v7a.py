@@ -1,26 +1,15 @@
 """
 main.py — Kaggriculture agent.  ENTRY POINT (must be at archive root, must be named main.py).
 
-STATUS: v10 — Phase 5: v9 + FASTER HERD (opening speed).  The meta tape's herd is
-complete by day 8 (first cow milk lands day 7); v9's completed ~day 15 because the
-animal-buy gate demanded cost + reserve + a 4-day whole-herd feed cushion (~$1,900 for
-a $400 cow at herd 8).  That cushion predated the feed-sacred fix (feed buys bypass
-every reserve), so it was double protection.  Change: cushion 4 -> 2 days, and none on
-days 0-1 (the daily fertilizer stream — ~$98/animal/day — starts before the first feed
-bill can hurt).  Each animal still arrives with its 3-wheat dowry.
-A/B: v8d beat v9 42-22 over 64 (65.6% on BOTH seed batches, margin +2.0k/+3.0k).
-Base (v9) = v8 rational thresholds + tape-family counter:
-  * MELON: its day-20 wave kills the melon market permanently (measured: $246 -> $16 -> $1).
-    Sell everything before it lands (threshold 60 from day 15, dump from day 18) and stop
-    planting melons after day 8 (a melon maturing past ~day 18 will be worth $1).
-  * WOOL: its wool dump floors the market from day ~10.  Sell wool at anything >= 35
-    through day 12 rather than hold stock the market will never pay for again.
-Verified byte-identical vs non-tape opponents (4-seed exact-mirror check).  Vs the tape:
-margin -48.5k (v8: -54.0k, v7: -59.5k), sd 10.5k (was 16.0k); still 0-16 — the rest of
-the gap is production, targeted next (strawberry volume, opening speed).
-A/B record: v7a beat v7 51-13 over 64 (79.7%) | v6a beat v6 46-18 (71.9%) | v5b beat
-v5 31-1 | v5a beat v4 27-5 | v4c beat v3 28-4 | v3a beat v2 30-2 | v2a beat v1 32-0 |
-v1 beat v0 32-0.  Bank-diff risk (v7b): WASH, shelved for Phase 6.  docs/PLAN.md has all.
+STATUS: v7a CANDIDATE — v7 + RATIONAL SELL THRESHOLDS: a static threshold strands
+stock in a market that will never pay it again (measured: 20-35 wool held at $1 for the
+last 10 days of tape games AND self-play, then liquidated at $1).  Fix: from the engine's
+own price curve + the actual unlocked shops, compute the best price this market can still
+RECOVER to before liquidation day; if that is below our threshold, accept the recoverable
+price now instead of riding the stock to the floor.  Market-orders-only change.
+A/B record: v6a beat v6 46-18 over 64 games (71.9%) | v5b beat v5 31-1 (96.9%) |
+v5a beat v4 27-5 | v4c beat v3 28-4 | v3a beat v2 30-2 | v2a beat v1 32-0 |
+v1 beat v0 32-0.  Full lineage + every rejected experiment: docs/PLAN.md.
 
 Everything from v1 (task list, greedy assignment, stickiness, 4 hands, melon-12 + carrot mix,
 day-29 endgame) plus the livestock pipeline:
@@ -123,18 +112,6 @@ OPP_PRESSURE = {
 }
 PRESSURE_THRESHOLD_MULT = 0.65
 PRESSURE_BATCH_BONUS = 3
-
-# Tape-family counter (v7c).  Fingerprint: the meta tape places exactly 4 SHEEP and
-# its first COW on day 0 (visible from day 1); we field 3 sheep and no cow then, so
-# there is no self-detection.  Checked on days 1-3 and latched for the episode.
-TAPE_MELON_LAST_PLANT = 8    # a melon maturing after ~day 18 sells into their wave's wreckage
-TAPE_WOOL_SALVAGE_UNTIL = 12
-TAPE_WOOL_SALVAGE = 35
-TAPE_MELON_SOFT_DAY = 15     # sell melons at >= 60 from here...
-TAPE_MELON_SOFT = 60
-TAPE_MELON_DUMP_DAY = 18     # ...and at any price from here (their wave lands day 20)
-TAPE_MELON_DUMP = 10
-_TAPE_SEEN = {}              # player -> latched?  (reset at step 0 each episode)
 
 # ---------------------------------------------------------------------------
 # Rational sell thresholds (v7a).  The engine's glut-side price curve, verbatim
@@ -266,7 +243,7 @@ def _next_tick_day(placed_day, first, interval, after_day):
     return t if t <= LAST_TICK_DAY else None
 
 
-def _build_tasks(tiles, day, seeds, tape_mode=False):
+def _build_tasks(tiles, day, seeds):
     """Scan the farm -> the turn's task list. Returns (tasks, n_feed_needed)."""
     tasks = []
     crop_counts = {}
@@ -375,9 +352,7 @@ def _build_tasks(tiles, day, seeds, tape_mode=False):
             for c in PLANT_ORDER:
                 info = CROP_INFO[c]
                 if (planned.get(c, 0) < info["cap"] and day <= info["last_plant"]
-                        and budget.get(c, 0) > 0
-                        and not (tape_mode and c == "MELON"
-                                 and day > TAPE_MELON_LAST_PLANT)):
+                        and budget.get(c, 0) > 0):
                     crop = c
                     break
             if crop is None:
@@ -567,7 +542,7 @@ def _unit_action(unit_pos, task):
 
 
 def _market_orders(day, hour, money, seeds, shed, inventories, prices, hires_today,
-                   n_hands, tiles, n_quadrants, opp_tiles, market_inv, shops, tape_mode):
+                   n_hands, tiles, n_quadrants, opp_tiles, market_inv, shops):
     opp_crops, opp_animals = _opp_capacity(opp_tiles)
     my_crops, my_animals = _opp_capacity(tiles)
     """Queue order: SELL (income), HIRE, wheat, animals, LAND, seeds. Engine cap: 10."""
@@ -624,16 +599,6 @@ def _market_orders(day, hour, money, seeds, shed, inventories, prices, hires_tod
                 # Their dump is coming — sell first, sell faster.
                 threshold = max(2, int(threshold * PRESSURE_THRESHOLD_MULT))
                 n = batch + PRESSURE_BATCH_BONUS
-        if tape_mode and day < liq_day:
-            # We know the tape's decoded sell schedule; it cannot know ours.
-            if item == "WOOL" and day <= TAPE_WOOL_SALVAGE_UNTIL:
-                threshold = min(threshold, TAPE_WOOL_SALVAGE)
-                n = batch + 5
-            elif item == "MELON" and day >= TAPE_MELON_DUMP_DAY:
-                threshold = min(threshold, TAPE_MELON_DUMP)
-                n = batch + 5
-            elif item == "MELON" and day >= TAPE_MELON_SOFT_DAY:
-                threshold = min(threshold, TAPE_MELON_SOFT)
         if day >= liq_day or force or price >= threshold:
             orders.append(["SELL", item, min(n, stock)])
 
@@ -667,10 +632,7 @@ def _market_orders(day, hour, money, seeds, shed, inventories, prices, hires_tod
     # ~$1.7k of animals in v4a before this gate existed). Each arrives with a wheat dowry.
     if day <= 20 and not herd_complete:
         herd_after = sum(owned.values()) + 1
-        # 2-day cushion (feed buys are already sacred; 4 days double-protected and
-        # delayed the herd ~6 days).  Days 0-1: no cushion — the fertilizer stream
-        # (~$98/animal/day) starts before the first feed bill can hurt.
-        feed_cushion = 0 if day <= 1 else herd_after * wheat_price * 2
+        feed_cushion = herd_after * wheat_price * 4
         for sp in BUY_PRIORITY:
             cost = ANIMAL_INFO[sp]["cost"]
             if owned[sp] < ANIMAL_TARGETS[sp] and money >= cost + MONEY_RESERVE + feed_cushion:
@@ -724,18 +686,7 @@ def agent(obs):
 
     units = [tuple(me["farmer"])] + [tuple(h) for h in me.get("hands", [])]
 
-    # Tape-family fingerprint: evaluated on days 1-3, latched for the episode.
-    opp = obs["farms"][1 - player]
-    step = obs.get("step", day * 24 + hour)
-    if step == 0:
-        _TAPE_SEEN[player] = False
-    if not _TAPE_SEEN.get(player, False) and 1 <= day <= 3:
-        _oc, _oa = _opp_capacity(opp.get("tiles", []))
-        if _oa.get("SHEEP", 0) == 4 and _oa.get("COW", 0) >= 1:
-            _TAPE_SEEN[player] = True
-    tape_mode = _TAPE_SEEN.get(player, False)
-
-    tasks, n_feed = _build_tasks(tiles, day, seeds, tape_mode)
+    tasks, n_feed = _build_tasks(tiles, day, seeds)
     _supply_tasks(tasks, n_feed, units, inventories, shed, tiles, day)
     assignment = _assign(units, tasks, inventories, tiles, day, hour)
 
@@ -750,12 +701,13 @@ def agent(obs):
             if plant_counts[crop] > seeds.get(crop, 0):
                 actions[i] = ["PASS"]
 
+    opp = obs["farms"][1 - player]
     market_inv = (obs.get("market", {}) or {}).get("inventory", {}) or {}
     shops = (obs.get("town", {}) or {}).get("unlocked_shops", []) or []
     market = _market_orders(day, hour, money, seeds, shed, inventories, prices,
                             me.get("hires_today", 0), len(me.get("hands", [])), tiles,
                             len(me.get("unlocked_quadrants", ["NW"])),
-                            opp.get("tiles", []), market_inv, shops, tape_mode)
+                            opp.get("tiles", []), market_inv, shops)
 
     if DEBUG:
         print(f"d{day} h{hour} units={len(units)} tasks={len(tasks)} market={market}")

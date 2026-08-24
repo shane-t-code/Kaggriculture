@@ -1,14 +1,13 @@
 """
 main.py — Kaggriculture agent.  ENTRY POINT (must be at archive root, must be named main.py).
 
-STATUS: v10 — Phase 5: v9 + FASTER HERD (opening speed).  The meta tape's herd is
-complete by day 8 (first cow milk lands day 7); v9's completed ~day 15 because the
-animal-buy gate demanded cost + reserve + a 4-day whole-herd feed cushion (~$1,900 for
-a $400 cow at herd 8).  That cushion predated the feed-sacred fix (feed buys bypass
-every reserve), so it was double protection.  Change: cushion 4 -> 2 days, and none on
-days 0-1 (the daily fertilizer stream — ~$98/animal/day — starts before the first feed
-bill can hurt).  Each animal still arrives with its 3-wheat dowry.
-A/B: v8d beat v9 42-22 over 64 (65.6% on BOTH seed batches, margin +2.0k/+3.0k).
+STATUS: v8c CANDIDATE — v9 + DEMAND-AWARE STRAWBERRY CAP ONLY (ablation of the rejected
+v8b bundle).  Strawberry demand is shop-dependent (4 of 8 shop types buy it; the market
+floors at just +62 net units without buyers).  Cap = 10 + 6 per strawberry-buying shop
+instance, max 34 (CROP_INFO cap raised 24->34 as the ceiling).  Everything else is v9
+byte-for-byte: PLANT_ORDER still wheat-first, melon cap still 12, seed budget still 3.
+On buyer-less towns this SHRINKS the strawberry field (protective); on hot towns it
+allows a bigger one if tiles and cash permit.
 Base (v9) = v8 rational thresholds + tape-family counter:
   * MELON: its day-20 wave kills the melon market permanently (measured: $246 -> $16 -> $1).
     Sell everything before it lands (threshold 60 from day 15, dump from day 18) and stop
@@ -92,7 +91,7 @@ NEVER_FORCE_SELL = {"WHEAT"}
 CROP_INFO = {
     "MELON":      {"cost": 80,  "first": 10, "ready": 10, "last_plant": 19, "window": (6, 12), "cap": 12},
     "WHEAT":      {"cost": 10,  "first": 2,  "ready": 4,  "last_plant": 24, "window": (2, 4),  "cap": 20},
-    "STRAWBERRY": {"cost": 100, "first": 10, "ready": 10, "last_plant": 17, "window": (0, -1), "cap": 24},
+    "STRAWBERRY": {"cost": 100, "first": 10, "ready": 10, "last_plant": 17, "window": (0, -1), "cap": 34},
     "CARROT":     {"cost": 20,  "first": 2,  "ready": 3,  "last_plant": 26, "window": (2, 3),  "cap": 12},
 }
 # Planting priority when a tile opens up: melon (highest $/tile-day, tiny cap), wheat (feeds
@@ -186,6 +185,13 @@ def _glut_price(item, x):
     return max(1, int(round(base * (1.0 - target * f))))
 
 
+def _straw_cap(shops):
+    """Dynamic strawberry cap: field size follows the town's ACTUAL strawberry demand.
+    Each strawberry-buying shop instance drains 6/day (shared with the opponent)."""
+    instances = sum(1 for s in shops if "STRAWBERRY" in SHOP_DEMAND.get(s, ()))
+    return min(CROP_INFO["STRAWBERRY"]["cap"], 10 + 6 * instances)
+
+
 def _town_drain_per_day(item, shops):
     d = 0 if item == "FERTILIZER" else 1          # town center, 1/day
     for s in shops:
@@ -266,7 +272,7 @@ def _next_tick_day(placed_day, first, interval, after_day):
     return t if t <= LAST_TICK_DAY else None
 
 
-def _build_tasks(tiles, day, seeds, tape_mode=False):
+def _build_tasks(tiles, day, seeds, tape_mode=False, straw_cap=None):
     """Scan the farm -> the turn's task list. Returns (tasks, n_feed_needed)."""
     tasks = []
     crop_counts = {}
@@ -374,7 +380,9 @@ def _build_tasks(tiles, day, seeds, tape_mode=False):
             crop = None
             for c in PLANT_ORDER:
                 info = CROP_INFO[c]
-                if (planned.get(c, 0) < info["cap"] and day <= info["last_plant"]
+                cap = straw_cap if (c == "STRAWBERRY" and straw_cap is not None) \
+                    else info["cap"]
+                if (planned.get(c, 0) < cap and day <= info["last_plant"]
                         and budget.get(c, 0) > 0
                         and not (tape_mode and c == "MELON"
                                  and day > TAPE_MELON_LAST_PLANT)):
@@ -667,10 +675,7 @@ def _market_orders(day, hour, money, seeds, shed, inventories, prices, hires_tod
     # ~$1.7k of animals in v4a before this gate existed). Each arrives with a wheat dowry.
     if day <= 20 and not herd_complete:
         herd_after = sum(owned.values()) + 1
-        # 2-day cushion (feed buys are already sacred; 4 days double-protected and
-        # delayed the herd ~6 days).  Days 0-1: no cushion — the fertilizer stream
-        # (~$98/animal/day) starts before the first feed bill can hurt.
-        feed_cushion = 0 if day <= 1 else herd_after * wheat_price * 2
+        feed_cushion = herd_after * wheat_price * 4
         for sp in BUY_PRIORITY:
             cost = ANIMAL_INFO[sp]["cost"]
             if owned[sp] < ANIMAL_TARGETS[sp] and money >= cost + MONEY_RESERVE + feed_cushion:
@@ -698,6 +703,9 @@ def _market_orders(day, hour, money, seeds, shed, inventories, prices, hires_tod
         if day > info["last_plant"]:
             continue
         want = SEED_WANT[crop]
+        if crop == "STRAWBERRY":
+            # Don't stockpile $100 seeds past what this town's demand cap allows.
+            want = min(want, max(0, _straw_cap(shops) - my_crops.get("STRAWBERRY", 0)))
         have = seeds.get(crop, 0)
         if have < want and spendable >= info["cost"]:
             n = min(want - have, int(spendable // info["cost"]))
@@ -735,7 +743,8 @@ def agent(obs):
             _TAPE_SEEN[player] = True
     tape_mode = _TAPE_SEEN.get(player, False)
 
-    tasks, n_feed = _build_tasks(tiles, day, seeds, tape_mode)
+    shops = (obs.get("town", {}) or {}).get("unlocked_shops", []) or []
+    tasks, n_feed = _build_tasks(tiles, day, seeds, tape_mode, _straw_cap(shops))
     _supply_tasks(tasks, n_feed, units, inventories, shed, tiles, day)
     assignment = _assign(units, tasks, inventories, tiles, day, hour)
 
@@ -751,7 +760,6 @@ def agent(obs):
                 actions[i] = ["PASS"]
 
     market_inv = (obs.get("market", {}) or {}).get("inventory", {}) or {}
-    shops = (obs.get("town", {}) or {}).get("unlocked_shops", []) or []
     market = _market_orders(day, hour, money, seeds, shed, inventories, prices,
                             me.get("hires_today", 0), len(me.get("hands", [])), tiles,
                             len(me.get("unlocked_quadrants", ["NW"])),

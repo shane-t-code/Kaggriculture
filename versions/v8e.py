@@ -1,14 +1,11 @@
 """
 main.py — Kaggriculture agent.  ENTRY POINT (must be at archive root, must be named main.py).
 
-STATUS: v10 — Phase 5: v9 + FASTER HERD (opening speed).  The meta tape's herd is
-complete by day 8 (first cow milk lands day 7); v9's completed ~day 15 because the
-animal-buy gate demanded cost + reserve + a 4-day whole-herd feed cushion (~$1,900 for
-a $400 cow at herd 8).  That cushion predated the feed-sacred fix (feed buys bypass
-every reserve), so it was double protection.  Change: cushion 4 -> 2 days, and none on
-days 0-1 (the daily fertilizer stream — ~$98/animal/day — starts before the first feed
-bill can hurt).  Each animal still arrives with its 3-wheat dowry.
-A/B: v8d beat v9 42-22 over 64 (65.6% on BOTH seed batches, margin +2.0k/+3.0k).
+STATUS: v8e CANDIDATE — v10 + LABOR SCALE: hands 10 -> 12 at 3 quadrants (TARGET_HANDS
+6 -> 8).  The meta tape hires 14/day.  "4 hands saturate" was measured on a 25-tile
+1-quadrant farm (v1c); we now work 75 tiles + 12 animals.  Cost: fib-sum 12 hires =
+$376/day vs $143 for 10 — each extra hand must produce > ~$117/day to pay.
+Base = v10 (faster herd, 42-22 over 64 vs v9).
 Base (v9) = v8 rational thresholds + tape-family counter:
   * MELON: its day-20 wave kills the melon market permanently (measured: $246 -> $16 -> $1).
     Sell everything before it lands (threshold 60 from day 15, dump from day 18) and stop
@@ -50,7 +47,7 @@ DEBUG = False
 # ----------------------------------------------------------------------------------
 # Tunables
 # ----------------------------------------------------------------------------------
-TARGET_HANDS = 6         # scale retest: 10 hands at 3 quadrants ($143/day fib)
+TARGET_HANDS = 8         # v8e: 12 hands at 3 quadrants ($376/day fib; tape runs 14)
 HANDS_PER_EXTRA_QUADRANT = 2
 LAND_MAX_QUADRANTS = 3   # v5b: retry the 3rd quadrant now that fert + cash bugs are fixed
 LAND_PRICES = [1000, 2000, 4000]   # engine LAND_PRICES (ENGINE_NOTES B.1); order NE->SW->SE

@@ -1,14 +1,13 @@
 """
 main.py — Kaggriculture agent.  ENTRY POINT (must be at archive root, must be named main.py).
 
-STATUS: v10 — Phase 5: v9 + FASTER HERD (opening speed).  The meta tape's herd is
-complete by day 8 (first cow milk lands day 7); v9's completed ~day 15 because the
-animal-buy gate demanded cost + reserve + a 4-day whole-herd feed cushion (~$1,900 for
-a $400 cow at herd 8).  That cushion predated the feed-sacred fix (feed buys bypass
-every reserve), so it was double protection.  Change: cushion 4 -> 2 days, and none on
-days 0-1 (the daily fertilizer stream — ~$98/animal/day — starts before the first feed
-bill can hurt).  Each animal still arrives with its 3-wheat dowry.
-A/B: v8d beat v9 42-22 over 64 (65.6% on BOTH seed batches, margin +2.0k/+3.0k).
+STATUS: v8d CANDIDATE — v9 + FASTER HERD (opening speed).  The meta tape's herd is
+complete by day 8 (first cow milk lands day 7); ours completes ~day 15 because the
+animal-buy gate demands cost + reserve + a 4-day whole-herd feed cushion (~$1,900 for a
+$400 cow at herd 8).  That cushion predates the feed-sacred fix (feed buys now bypass
+every reserve), so it is double protection.  Change: cushion 4 -> 2 days, and no cushion
+at all on days 0-1 (the daily fertilizer stream — ~$98/animal/day — starts before the
+first feed bill can hurt).  Each animal still arrives with its 3-wheat dowry.
 Base (v9) = v8 rational thresholds + tape-family counter:
   * MELON: its day-20 wave kills the melon market permanently (measured: $246 -> $16 -> $1).
     Sell everything before it lands (threshold 60 from day 15, dump from day 18) and stop

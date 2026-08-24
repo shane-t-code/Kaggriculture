@@ -1,18 +1,23 @@
 """
 main.py — Kaggriculture agent.  ENTRY POINT (must be at archive root, must be named main.py).
 
-STATUS: v11 — Phase 6 fix #1: v10 + FOCUSED FEEDERS (found by direct measurement).
-Audit of v10: from day 12 on, only 2-8 of 12 animals got fed daily while CARE stayed
-~12 — and an animal unfed on its production day produces base 1 and its WHOLE banked
-care bonus is WIPED (engine B.4), so the care labor was being thrown away exactly in
-the day-18-27 window where our live losses show us being overtaken.  Trace: the farmer
-picks up ALL the feed wheat at hour 0, then greedy assignment sends him across the map
-for P_SAVE crop rescues (prio 0 beats FEED's 1; he wins distance ties as unit 0) —
-13-hour round trips carrying 20 wheat while the 12 FEED tasks only he could perform
-sat waiting.  FIX: while FEED tasks are pending, wheat-carrying units are eligible for
-FEED tasks ONLY (hands handle plant rescues).  Audit after: 10-12/12 fed daily.
-A/B: v11e beat v10 49-15 over 64 (76.6%; 75.0% seeds 0-15, 78.1% fresh 16-31).
-Base (v10) = v9 + faster herd (cushion 4 -> 2 days, none on days 0-1; 65.6% over 64).
+STATUS: v11d CANDIDATE — v10 + WEEK-1 HERD CAPITAL REBALANCE.  Real-loss evidence: in
+9 of 14 live losses we led at day 18 and were overtaken by 14-30-animal farms; v11a
+proved animals bought on days 12-16 cannot repay themselves — the winners build their
+herds in WEEK 1 by converting every early dollar into animals.  Changes as one
+coherent mechanism: (a) ANIMAL_TARGETS 8C/4S -> 10C/6S (16 animals, +4 slots);
+(b) while the herd is incomplete, SKIP melon/strawberry seed purchases (the two big
+capital sinks — $80-100/seed) so early cash becomes animals instead; cheap wheat/
+carrot seeds still bought (cash flow + feed); (c) parallel feed carriers (v11a's
+proven fix — one carrier per turn starves a 16+ herd).
+Base was: v9 + FASTER HERD (opening speed).  The meta tape's herd is
+complete by day 8 (first cow milk lands day 7); v9's completed ~day 15 because the
+animal-buy gate demanded cost + reserve + a 4-day whole-herd feed cushion (~$1,900 for
+a $400 cow at herd 8).  That cushion predated the feed-sacred fix (feed buys bypass
+every reserve), so it was double protection.  Change: cushion 4 -> 2 days, and none on
+days 0-1 (the daily fertilizer stream — ~$98/animal/day — starts before the first feed
+bill can hurt).  Each animal still arrives with its 3-wheat dowry.
+A/B: v8d beat v9 42-22 over 64 (65.6% on BOTH seed batches, margin +2.0k/+3.0k).
 Base (v9) = v8 rational thresholds + tape-family counter:
   * MELON: its day-20 wave kills the melon market permanently (measured: $246 -> $16 -> $1).
     Sell everything before it lands (threshold 60 from day 15, dump from day 18) and stop
@@ -65,7 +70,7 @@ UNLOAD_AT = 8            # a unit carrying this many items runs them to the shed
 
 # Livestock plan: sheep first (slowest payout -> place earliest, CARE stacks highest on it),
 # cows are the meta-proven workhorse. 6 animals ring the shed on one quadrant.
-ANIMAL_TARGETS = {"SHEEP": 4, "COW": 8}
+ANIMAL_TARGETS = {"SHEEP": 6, "COW": 10}
 BUY_PRIORITY = ["SHEEP", "COW"]
 ANIMAL_INFO = {
     "COW":   {"cost": 400, "build": "BUILD_PASTURE", "first": 8, "interval": 2, "product": "MILK"},
@@ -74,7 +79,8 @@ ANIMAL_INFO = {
 # Ring around the shed-access tile (4,4): FEED/CARE/HARVEST/COLLECT all happen standing ON
 # the animal tile and the wheat lives at the shed, so clustering minimizes walking.
 ANIMAL_SLOTS = [(3, 4), (4, 3), (3, 3), (2, 4), (4, 2), (2, 3), (3, 2), (2, 2),
-                (4, 5), (3, 5), (2, 5), (4, 6)]   # +4 SW slots (build when land unlocks)
+                (4, 5), (3, 5), (2, 5), (4, 6),   # SW slots (build when land unlocks)
+                (5, 4), (5, 3), (3, 6), (2, 6)]   # v11d: +4 (NE/SW shed-adjacent)
 MONEY_RESERVE = 150      # keep enough cash for the day's wheat + seeds when buying animals
 
 # (batch, min_price, liquidation_day). Wheat doubles as animal feed: a reserve is held back
@@ -403,10 +409,19 @@ def _supply_tasks(tasks, n_feed, units, inventories, shed, tiles, day):
         return
 
     carried_wheat = sum(inv.get("WHEAT", 0) for inv in inventories)
-    if n_feed > carried_wheat and shed.get("WHEAT", 0) > 0:
-        n = min(n_feed - carried_wheat + 2, shed["WHEAT"])
-        tasks.append({"prio": P_CHAIN, "x": SHED_TILE[0], "y": SHED_TILE[1],
-                      "op": ["PICKUP", "WHEAT", n]})
+    shortfall = n_feed - carried_wheat
+    if shortfall > 0 and shed.get("WHEAT", 0) > 0:
+        # One wheat-carrier per turn starves a 16+ herd (v11a, measured: escapes from
+        # day 16).  Split the load across up to 3 concurrent carriers.
+        remaining = min(shortfall + 2, shed["WHEAT"])
+        carriers = min(3, (shortfall + 5) // 6)
+        for i in range(carriers):
+            n = min(6 + (2 if i == 0 else 0), remaining)
+            if n <= 0:
+                break
+            tasks.append({"prio": P_CHAIN, "x": SHED_TILE[0], "y": SHED_TILE[1],
+                          "op": ["PICKUP", "WHEAT", n]})
+            remaining -= n
 
     # Fertilizer for FERTILIZE tasks: circuit units already carry some from
     # COLLECT_FERTILIZER; top up from the shed only when several plants are waiting.
@@ -475,23 +490,9 @@ def _assign(units, tasks, inventories, tiles, day, hour):
                 assignment[ui] = {"prio": P_SAVE, "x": SHED_TILE[0], "y": SHED_TILE[1],
                                   "op": ["DROP"]}
 
-    def feeds_open():
-        return any(t["op"][0] == "FEED" and not taken[ti]
-                   for ti, t in enumerate(tasks))
-
     def eligible(ui, task):
         req = task.get("require")
-        if req is not None and inv_of(ui).get(req, 0) <= 0:
-            return False
-        # FOCUSED FEEDER (v11e): while FEED tasks are pending, wheat carriers do
-        # feeds ONLY.  Measured failure: the sole wheat carrier was assigned P_SAVE
-        # crop rescues across the map and fed 2-6 of 12 animals/day from day 12 on —
-        # an animal unfed on its production day wipes its whole banked care bonus.
-        # Hands can rescue plants; only wheat carriers can feed.
-        if (task["op"][0] != "FEED" and inv_of(ui).get("WHEAT", 0) > 0
-                and feeds_open()):
-            return False
-        return True
+        return req is None or inv_of(ui).get(req, 0) > 0
 
     # Stickiness: finish the tile you stand on.
     for ui, (ux, uy) in enumerate(units):
@@ -718,6 +719,11 @@ def _market_orders(day, hour, money, seeds, shed, inventories, prices, hires_tod
     for crop in PLANT_ORDER:
         info = CROP_INFO[crop]
         if day > info["last_plant"]:
+            continue
+        if not herd_complete and info["cost"] >= 80:
+            # Week-1 capital rebalance: while the herd is incomplete, $80-100 premium
+            # seeds are deferred — every early dollar becomes an animal instead
+            # (cheap wheat/carrot seeds still bought: cash flow + feed).
             continue
         want = SEED_WANT[crop]
         have = seeds.get(crop, 0)

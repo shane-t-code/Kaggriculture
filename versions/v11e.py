@@ -1,18 +1,22 @@
 """
 main.py — Kaggriculture agent.  ENTRY POINT (must be at archive root, must be named main.py).
 
-STATUS: v11 — Phase 6 fix #1: v10 + FOCUSED FEEDERS (found by direct measurement).
-Audit of v10: from day 12 on, only 2-8 of 12 animals got fed daily while CARE stayed
-~12 — and an animal unfed on its production day produces base 1 and its WHOLE banked
-care bonus is WIPED (engine B.4), so the care labor was being thrown away exactly in
-the day-18-27 window where our live losses show us being overtaken.  Trace: the farmer
-picks up ALL the feed wheat at hour 0, then greedy assignment sends him across the map
-for P_SAVE crop rescues (prio 0 beats FEED's 1; he wins distance ties as unit 0) —
-13-hour round trips carrying 20 wheat while the 12 FEED tasks only he could perform
-sat waiting.  FIX: while FEED tasks are pending, wheat-carrying units are eligible for
-FEED tasks ONLY (hands handle plant rescues).  Audit after: 10-12/12 fed daily.
-A/B: v11e beat v10 49-15 over 64 (76.6%; 75.0% seeds 0-15, 78.1% fresh 16-31).
-Base (v10) = v9 + faster herd (cushion 4 -> 2 days, none on days 0-1; 65.6% over 64).
+STATUS: v11e CANDIDATE — v10 + FOCUSED FEEDERS (Phase 6, from direct measurement).
+Audit of v10: from day 12 on, 3-7 of 12 animals go UNFED most days while CARE stays
+11-12/day — and an animal unfed on its production day produces base 1 and its WHOLE
+banked care bonus is wiped (engine B.4).  Hour-by-hour trace: the farmer (sole wheat
+carrier) is stolen by the STICKINESS rule on every crop tile he crosses en route to an
+animal — ~6 feeds/day instead of 12.  Fix: while FEED tasks are pending, a wheat-
+carrying unit ignores stickiness for anything below feed priority.  (Explains v11b's
+wash: extra carriers were all equally distracted.)
+Base was: v9 + FASTER HERD (opening speed).  The meta tape's herd is
+complete by day 8 (first cow milk lands day 7); v9's completed ~day 15 because the
+animal-buy gate demanded cost + reserve + a 4-day whole-herd feed cushion (~$1,900 for
+a $400 cow at herd 8).  That cushion predated the feed-sacred fix (feed buys bypass
+every reserve), so it was double protection.  Change: cushion 4 -> 2 days, and none on
+days 0-1 (the daily fertilizer stream — ~$98/animal/day — starts before the first feed
+bill can hurt).  Each animal still arrives with its 3-wheat dowry.
+A/B: v8d beat v9 42-22 over 64 (65.6% on BOTH seed batches, margin +2.0k/+3.0k).
 Base (v9) = v8 rational thresholds + tape-family counter:
   * MELON: its day-20 wave kills the melon market permanently (measured: $246 -> $16 -> $1).
     Sell everything before it lands (threshold 60 from day 15, dump from day 18) and stop

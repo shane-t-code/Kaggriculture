@@ -1,12 +1,9 @@
 """
 main.py — Kaggriculture agent.  ENTRY POINT (must be at archive root, must be named main.py).
 
-STATUS: v4 — Phase 5: v3 (scheduler + 6C/2S + NE land + diversified crops) + CROP
-FERTILIZATION: our animals' daily fertilizer stream is applied to strawberries (doubles
-their production ticks) and melons (hit the 6-cap sooner) instead of being sold outright —
-gated so the holdback never starves early-game feed cash (day >= 8), and restock trips
-never outrank watering.  A/B record: v4c beat v3 28-4 (87.5%, +4,260).
-Full lineage and every rejected experiment: docs/PLAN.md.
+STATUS: v3 — Phase 4: v2 (scheduler + 6 cows/2 sheep + CARE + fertilizer) + NE LAND +
+diversified crops (melon 12 / wheat-as-feed 10 / strawberry 10 / carrot 12) + hands scale
+with land.  A/B record: v3a beat v2 30-2 (93.8%).  Full lineage in docs/PLAN.md.
 
 Everything from v1 (task list, greedy assignment, stickiness, 4 hands, melon-12 + carrot mix,
 day-29 endgame) plus the livestock pipeline:
@@ -70,6 +67,32 @@ SELL_RULES = {
 }
 NEVER_FORCE_SELL = {"WHEAT"}
 
+# No-buyer bleed (the one demand rule that survived v3c's wash result): the price-threshold
+# seller is already implicitly demand-aware — price recovery IS the demand signal — but it
+# fails in seasons where a product's shop never spawns (34% have no wool buyer): it holds
+# stock for a recovery that never comes, then dumps on day 28. From NO_BUYER_DAY on, any
+# product none of the town's shops eat is bled out early at a lower floor instead.
+# Melon is exempt: NO shop ever buys melon — its threshold was tuned for that from day 0.
+NO_BUYER_DAY = 12          # ~4 of 8 shop slots drawn by then; absence is strong evidence
+NO_BUYER_MIN_FRAC = 0.35   # bleed above 35% of base rather than hoard
+NO_BUYER_EXEMPT = {"MELON", "FERTILIZER", "WHEAT"}
+BASE_PRICES = {"WHEAT": 25, "CARROT": 35, "STRAWBERRY": 120, "MELON": 250,
+               "MILK": 160, "WOOL": 200, "FERTILIZER": 100}
+SHOPS = {
+    "BAKERY":         ["EGG", "WHEAT"],
+    "PIZZA_SHOP":     ["MILK", "TOMATO", "WHEAT"],
+    "BRUNCH_SPOT":    ["EGG", "WHEAT", "STRAWBERRY"],
+    "YARN_STORE":     ["WOOL"],
+    "ICE_CREAM_SHOP": ["STRAWBERRY", "MILK", "WHEAT"],
+    "PET_CAFE":       ["CARROT"],
+    "SMOOTHIE_SHOP":  ["STRAWBERRY", "MILK"],
+    "FARMERS_MARKET": ["WHEAT", "CARROT", "TOMATO", "STRAWBERRY"],
+}
+
+
+def _has_town_buyer(item, unlocked_shops):
+    return any(item in SHOPS.get(s, []) for s in unlocked_shops)
+
 # cap = max concurrent plants (market- or purpose-bound, not space-bound).
 # Window (0,-1) = "watering never adds instant yield" (ongoing crops bonus only via fertilizer).
 CROP_INFO = {
@@ -85,12 +108,6 @@ PLANT_ORDER = ["MELON", "WHEAT", "STRAWBERRY", "CARROT"]
 SEED_WANT = {"MELON": 3, "WHEAT": 4, "STRAWBERRY": 3, "CARROT": 4}
 WHEAT_FEED_RESERVE_DAYS = 2   # hold animals*this much wheat before selling any surplus
 
-# Fertilize-only addition (v4c): a $90 fertilizer applied to a STRAWBERRY doubles its
-# production ticks while watered (engine-verified) — ~$200+ of berries. Melon: reaches its
-# 6-cap ~2 days earlier. Everything else is byte-identical to v3a.
-FERT_CROPS = {"STRAWBERRY": (7, 15), "MELON": (5, 7)}   # crop -> (min_age, max_age)
-FERT_KEEP = 6            # hold this much fertilizer stock back from selling
-
 SHED_TILE = (4, 4)
 LAST_DAY = 29
 LAST_TICK_DAY = 28       # the game's final end-of-day refresh (ENGINE_NOTES B.4)
@@ -103,7 +120,6 @@ P_CHAIN = 1    # supply-chain steps: PICKUP wheat/animal, PLACE animal
 P_WATER = 2
 P_CARE = 2
 P_COLLECT = 3  # fertilizer: $98/day, but re-offered tomorrow if missed
-P_FERT = 3     # apply fertilizer to a strawberry/melon in its payoff window
 P_PLANT = 3
 P_BUILD = 3
 P_UNLOAD = 3
@@ -221,12 +237,6 @@ def _build_tasks(tiles, day, seeds):
                     else:
                         tasks.append({"prio": P_SAVE if dying else P_WATER, "x": x, "y": y,
                                       "op": ["WATER"]})
-
-                if crop in FERT_CROPS and day < 26:
-                    lo, hi = FERT_CROPS[crop]
-                    if lo <= age <= hi and t.get("fertilized_until_day", -1) < day:
-                        tasks.append({"prio": P_FERT, "x": x, "y": y,
-                                      "op": ["FERTILIZE"], "require": "FERTILIZER"})
                 continue
 
     # ---------------- planting: fill empty tiles by PLANT_ORDER, respecting caps --------
@@ -263,18 +273,6 @@ def _supply_tasks(tasks, n_feed, units, inventories, shed, tiles, day):
         n = min(n_feed - carried_wheat + 2, shed["WHEAT"])
         tasks.append({"prio": P_CHAIN, "x": SHED_TILE[0], "y": SHED_TILE[1],
                       "op": ["PICKUP", "WHEAT", n]})
-
-    # Fertilizer for FERTILIZE tasks: circuit units already carry some from
-    # COLLECT_FERTILIZER; top up from the shed only when several plants are waiting.
-    # PRIORITY MATTERS: at P_CHAIN(1) this errand outranked WATER(2) and the scheduler
-    # yo-yoed units to the shed while crops died — measured: WATER 800->609, wheat
-    # weeded out, 26 melon replants. Fertilizing is a luxury; restock at P_FERT(3).
-    n_fert = sum(1 for t in tasks if t["op"][0] == "FERTILIZE")
-    carried_fert = sum(inv.get("FERTILIZER", 0) for inv in inventories)
-    if n_fert - carried_fert >= 3 and shed.get("FERTILIZER", 0) > 0:
-        n = min(n_fert - carried_fert, shed["FERTILIZER"])
-        tasks.append({"prio": P_FERT, "x": SHED_TILE[0], "y": SHED_TILE[1],
-                      "op": ["PICKUP", "FERTILIZER", n]})
 
     # One animal-pickup per turn: an animal sits in the shed and an empty structure waits.
     empty_pasture = any(
@@ -392,7 +390,7 @@ def _unit_action(unit_pos, task):
 
 
 def _market_orders(day, hour, money, seeds, shed, inventories, prices, hires_today,
-                   n_hands, tiles, n_quadrants):
+                   n_hands, tiles, n_quadrants, unlocked_shops):
     """Queue order: SELL (income), HIRE, wheat, animals, LAND, seeds. Engine cap: 10."""
     orders = []
 
@@ -414,16 +412,15 @@ def _market_orders(day, hour, money, seeds, shed, inventories, prices, hires_tod
         if item == "WHEAT" and day < LAST_DAY:
             # Never sell the herd's next few days of feed.
             stock -= placed_animals * WHEAT_FEED_RESERVE_DAYS
-        if item == "FERTILIZER" and 8 <= day < LAST_DAY:
-            # Hold stock for crop fertilizing — but ONLY once the farm is liquid. In the
-            # $0-bank opening, fertilizer sales are the survival cash that buys feed;
-            # hoarding them starved the sheep that produce them (measured: 0-32 vs v3a).
-            stock -= FERT_KEEP
         if stock <= 0:
             continue
         price = prices.get(item, 0)
         force = shed_total >= SHED_FORCE_SELL and item not in NEVER_FORCE_SELL
-        if day >= liq_day or force or price >= min_price:
+        threshold = min_price
+        if (day >= NO_BUYER_DAY and item not in NO_BUYER_EXEMPT
+                and not _has_town_buyer(item, unlocked_shops)):
+            threshold = int(BASE_PRICES.get(item, min_price) * NO_BUYER_MIN_FRAC)
+        if day >= liq_day or force or price >= threshold:
             orders.append(["SELL", item, min(batch, stock)])
 
     # Wheat feed top-up from the market only if growing hasn't covered it. Bought wheat
@@ -514,9 +511,10 @@ def agent(obs):
             if plant_counts[crop] > seeds.get(crop, 0):
                 actions[i] = ["PASS"]
 
+    unlocked_shops = (obs.get("town", {}) or {}).get("unlocked_shops", []) or []
     market = _market_orders(day, hour, money, seeds, shed, inventories, prices,
                             me.get("hires_today", 0), len(me.get("hands", [])), tiles,
-                            len(me.get("unlocked_quadrants", ["NW"])))
+                            len(me.get("unlocked_quadrants", ["NW"])), unlocked_shops)
 
     if DEBUG:
         print(f"d{day} h{hour} units={len(units)} tasks={len(tasks)} market={market}")

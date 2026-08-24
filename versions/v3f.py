@@ -1,12 +1,9 @@
 """
 main.py — Kaggriculture agent.  ENTRY POINT (must be at archive root, must be named main.py).
 
-STATUS: v4 — Phase 5: v3 (scheduler + 6C/2S + NE land + diversified crops) + CROP
-FERTILIZATION: our animals' daily fertilizer stream is applied to strawberries (doubles
-their production ticks) and melons (hit the 6-cap sooner) instead of being sold outright —
-gated so the holdback never starves early-game feed cash (day >= 8), and restock trips
-never outrank watering.  A/B record: v4c beat v3 28-4 (87.5%, +4,260).
-Full lineage and every rejected experiment: docs/PLAN.md.
+STATUS: v3 — Phase 4: v2 (scheduler + 6 cows/2 sheep + CARE + fertilizer) + NE LAND +
+diversified crops (melon 12 / wheat-as-feed 10 / strawberry 10 / carrot 12) + hands scale
+with land.  A/B record: v3a beat v2 30-2 (93.8%).  Full lineage in docs/PLAN.md.
 
 Everything from v1 (task list, greedy assignment, stickiness, 4 hands, melon-12 + carrot mix,
 day-29 endgame) plus the livestock pipeline:
@@ -45,15 +42,24 @@ UNLOAD_AT = 8            # a unit carrying this many items runs them to the shed
 
 # Livestock plan: sheep first (slowest payout -> place earliest, CARE stacks highest on it),
 # cows are the meta-proven workhorse. 6 animals ring the shed on one quadrant.
-ANIMAL_TARGETS = {"SHEEP": 2, "COW": 6}
-BUY_PRIORITY = ["SHEEP", "COW"]
+ANIMAL_TARGETS = {"SHEEP": 2, "COW": 6, "GOOSE": 4}
+# Sheep first (slowest payout, biggest CARE multiplier), then geese (first yield in 4 days,
+# daily eggs into a glut-immune log-curve market), then cows.
+BUY_PRIORITY = ["SHEEP", "GOOSE", "COW"]
 ANIMAL_INFO = {
-    "COW":   {"cost": 400, "build": "BUILD_PASTURE", "first": 8, "interval": 2, "product": "MILK"},
-    "SHEEP": {"cost": 500, "build": "BUILD_PASTURE", "first": 6, "interval": 3, "product": "WOOL"},
+    "COW":   {"cost": 400, "structure": "PASTURE", "build": "BUILD_PASTURE", "first": 8, "interval": 2, "product": "MILK"},
+    "SHEEP": {"cost": 500, "structure": "PASTURE", "build": "BUILD_PASTURE", "first": 6, "interval": 3, "product": "WOOL"},
+    "GOOSE": {"cost": 300, "structure": "COOP",    "build": "BUILD_COOP",    "first": 4, "interval": 1, "product": "EGG"},
 }
+STRUCT_BUILD = {"PASTURE": "BUILD_PASTURE", "COOP": "BUILD_COOP"}
 # Ring around the shed-access tile (4,4): FEED/CARE/HARVEST/COLLECT all happen standing ON
 # the animal tile and the wheat lives at the shed, so clustering minimizes walking.
-ANIMAL_SLOTS = [(3, 4), (4, 3), (3, 3), (2, 4), (4, 2), (2, 3), (3, 2), (2, 2)]
+ANIMAL_SLOTS = [(3, 4), (4, 3), (3, 3), (2, 4), (4, 2), (2, 3), (3, 2), (2, 2),
+                (1, 4), (4, 1), (1, 3), (3, 1)]
+# Slot i hosts the structure for the i-th animal in expanded BUY_PRIORITY order:
+# 8 pastures (2 sheep + 6 cows) on the inner ring, 4 coops (geese) on the outer.
+SLOT_STRUCTURES = (["PASTURE"] * (ANIMAL_TARGETS["SHEEP"] + ANIMAL_TARGETS["COW"])
+                   + ["COOP"] * ANIMAL_TARGETS["GOOSE"])
 MONEY_RESERVE = 150      # keep enough cash for the day's wheat + seeds when buying animals
 
 # (batch, min_price, liquidation_day). Wheat doubles as animal feed: a reserve is held back
@@ -67,6 +73,7 @@ SELL_RULES = {
     "WOOL":       (3, 90, 28),
     "FERTILIZER": (5, 40, 28),
     "WHEAT":      (6, 30, 29),
+    "EGG":        (4, 35, 28),   # log glut curve: even heavy selling barely moves the price
 }
 NEVER_FORCE_SELL = {"WHEAT"}
 
@@ -74,7 +81,7 @@ NEVER_FORCE_SELL = {"WHEAT"}
 # Window (0,-1) = "watering never adds instant yield" (ongoing crops bonus only via fertilizer).
 CROP_INFO = {
     "MELON":      {"cost": 80,  "first": 10, "ready": 10, "last_plant": 19, "window": (6, 12), "cap": 12},
-    "WHEAT":      {"cost": 10,  "first": 2,  "ready": 4,  "last_plant": 24, "window": (2, 4),  "cap": 10},
+    "WHEAT":      {"cost": 10,  "first": 2,  "ready": 4,  "last_plant": 24, "window": (2, 4),  "cap": 12},
     "STRAWBERRY": {"cost": 100, "first": 10, "ready": 10, "last_plant": 17, "window": (0, -1), "cap": 10},
     "CARROT":     {"cost": 20,  "first": 2,  "ready": 3,  "last_plant": 26, "window": (2, 3),  "cap": 12},
 }
@@ -82,14 +89,8 @@ CROP_INFO = {
 # the herd — replaces market buys at scarcity prices), strawberry (biggest town demand:
 # ~426/season median), carrot (fast filler, capped so we stop glutting our own market).
 PLANT_ORDER = ["MELON", "WHEAT", "STRAWBERRY", "CARROT"]
-SEED_WANT = {"MELON": 3, "WHEAT": 4, "STRAWBERRY": 3, "CARROT": 4}
+SEED_WANT = {"MELON": 3, "WHEAT": 5, "STRAWBERRY": 3, "CARROT": 4}
 WHEAT_FEED_RESERVE_DAYS = 2   # hold animals*this much wheat before selling any surplus
-
-# Fertilize-only addition (v4c): a $90 fertilizer applied to a STRAWBERRY doubles its
-# production ticks while watered (engine-verified) — ~$200+ of berries. Melon: reaches its
-# 6-cap ~2 days earlier. Everything else is byte-identical to v3a.
-FERT_CROPS = {"STRAWBERRY": (7, 15), "MELON": (5, 7)}   # crop -> (min_age, max_age)
-FERT_KEEP = 6            # hold this much fertilizer stock back from selling
 
 SHED_TILE = (4, 4)
 LAST_DAY = 29
@@ -103,7 +104,6 @@ P_CHAIN = 1    # supply-chain steps: PICKUP wheat/animal, PLACE animal
 P_WATER = 2
 P_CARE = 2
 P_COLLECT = 3  # fertilizer: $98/day, but re-offered tomorrow if missed
-P_FERT = 3     # apply fertilizer to a strawberry/melon in its payoff window
 P_PLANT = 3
 P_BUILD = 3
 P_UNLOAD = 3
@@ -138,7 +138,8 @@ def _build_tasks(tiles, day, seeds):
     crop_counts = {}
     empty_tiles = []
     n_feed = 0
-    reserved = set(ANIMAL_SLOTS[:sum(ANIMAL_TARGETS.values())])
+    reserved = {ANIMAL_SLOTS[i]: SLOT_STRUCTURES[i]
+                for i in range(min(len(ANIMAL_SLOTS), sum(ANIMAL_TARGETS.values())))}
 
     for y, row in enumerate(tiles):
         for x, t in enumerate(row):
@@ -148,7 +149,8 @@ def _build_tasks(tiles, day, seeds):
                 if (x, y) in reserved:
                     # Animal slot without a structure yet: build it (free, 1 action).
                     if day < LAST_DAY:
-                        tasks.append({"prio": P_BUILD, "x": x, "y": y, "op": ["BUILD_PASTURE"]})
+                        tasks.append({"prio": P_BUILD, "x": x, "y": y,
+                                      "op": [STRUCT_BUILD[reserved[(x, y)]]]})
                 else:
                     empty_tiles.append((x, y))
                 continue
@@ -221,12 +223,6 @@ def _build_tasks(tiles, day, seeds):
                     else:
                         tasks.append({"prio": P_SAVE if dying else P_WATER, "x": x, "y": y,
                                       "op": ["WATER"]})
-
-                if crop in FERT_CROPS and day < 26:
-                    lo, hi = FERT_CROPS[crop]
-                    if lo <= age <= hi and t.get("fertilized_until_day", -1) < day:
-                        tasks.append({"prio": P_FERT, "x": x, "y": y,
-                                      "op": ["FERTILIZE"], "require": "FERTILIZER"})
                 continue
 
     # ---------------- planting: fill empty tiles by PLANT_ORDER, respecting caps --------
@@ -264,28 +260,19 @@ def _supply_tasks(tasks, n_feed, units, inventories, shed, tiles, day):
         tasks.append({"prio": P_CHAIN, "x": SHED_TILE[0], "y": SHED_TILE[1],
                       "op": ["PICKUP", "WHEAT", n]})
 
-    # Fertilizer for FERTILIZE tasks: circuit units already carry some from
-    # COLLECT_FERTILIZER; top up from the shed only when several plants are waiting.
-    # PRIORITY MATTERS: at P_CHAIN(1) this errand outranked WATER(2) and the scheduler
-    # yo-yoed units to the shed while crops died — measured: WATER 800->609, wheat
-    # weeded out, 26 melon replants. Fertilizing is a luxury; restock at P_FERT(3).
-    n_fert = sum(1 for t in tasks if t["op"][0] == "FERTILIZE")
-    carried_fert = sum(inv.get("FERTILIZER", 0) for inv in inventories)
-    if n_fert - carried_fert >= 3 and shed.get("FERTILIZER", 0) > 0:
-        n = min(n_fert - carried_fert, shed["FERTILIZER"])
-        tasks.append({"prio": P_FERT, "x": SHED_TILE[0], "y": SHED_TILE[1],
-                      "op": ["PICKUP", "FERTILIZER", n]})
-
-    # One animal-pickup per turn: an animal sits in the shed and an empty structure waits.
-    empty_pasture = any(
-        isinstance(t, dict) and t.get("kind") == "PASTURE" and not t.get("animal")
+    # One animal-pickup per turn: an animal sits in the shed and a MATCHING empty
+    # structure (pasture for cow/sheep, coop for goose) waits for it.
+    empty_kinds = {
+        t.get("kind")
         for row in tiles for t in row
-    )
-    if empty_pasture:
+        if isinstance(t, dict) and t.get("kind") in ("PASTURE", "COOP")
+        and not t.get("animal")
+    }
+    if empty_kinds:
         carrying = any(any(sp in inv for sp in ANIMAL_INFO) for inv in inventories)
         if not carrying:
             for sp in BUY_PRIORITY:
-                if shed.get(sp, 0) > 0:
+                if shed.get(sp, 0) > 0 and ANIMAL_INFO[sp]["structure"] in empty_kinds:
                     tasks.append({"prio": P_CHAIN, "x": SHED_TILE[0], "y": SHED_TILE[1],
                                   "op": ["PICKUP", sp, 1]})
                     break
@@ -305,10 +292,11 @@ def _assign(units, tasks, inventories, tiles, day, hour):
         species = next((sp for sp in ANIMAL_INFO if inv.get(sp, 0) > 0), None)
         if species is None:
             continue
+        needed_kind = ANIMAL_INFO[species]["structure"]
         best, best_d = None, 10**9
         for y, row in enumerate(tiles):
             for x, t in enumerate(row):
-                if isinstance(t, dict) and t.get("kind") == "PASTURE" and not t.get("animal"):
+                if isinstance(t, dict) and t.get("kind") == needed_kind and not t.get("animal"):
                     d = abs(x - ux) + abs(y - uy)
                     if d < best_d:
                         best, best_d = (x, y), d
@@ -414,11 +402,6 @@ def _market_orders(day, hour, money, seeds, shed, inventories, prices, hires_tod
         if item == "WHEAT" and day < LAST_DAY:
             # Never sell the herd's next few days of feed.
             stock -= placed_animals * WHEAT_FEED_RESERVE_DAYS
-        if item == "FERTILIZER" and 8 <= day < LAST_DAY:
-            # Hold stock for crop fertilizing — but ONLY once the farm is liquid. In the
-            # $0-bank opening, fertilizer sales are the survival cash that buys feed;
-            # hoarding them starved the sheep that produce them (measured: 0-32 vs v3a).
-            stock -= FERT_KEEP
         if stock <= 0:
             continue
         price = prices.get(item, 0)

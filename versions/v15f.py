@@ -1,16 +1,10 @@
 """
 main.py — Kaggriculture agent.  ENTRY POINT (must be at archive root, must be named main.py).
 
-STATUS: v16 — Phase 6 fix #6: v15 + DOOMED-CROP TRIAGE (MELON+CARROT only).
-Action-mix diff vs the strongest live loss (Hem, 116.8k, same walk share, same
-productive-action count, +$30k revenue): we spent 105 more WATERS — 11 melons
-watered daily days 17-24 into a $1 market.  When melon/carrot's 3-day projected
-price <= $15, generate no water/rescue tasks and stop planting them; harvests
-continue (free the tile).  STRAWBERRY deliberately excluded: its gluts are
-transient (biggest drain in the game) and v15e, which could skip it, lost its
-out-of-sample batch (53.1%, fat tails) to strawberry abandonment.
-A/B: v15f beat v15 41-23 over 64 (64.1%: 65.6% +461 seeds 0-15, 62.5% +596 fresh
-16-31 — both batches positive).  Action-mix diff vs the Hem loss (their 116.8k, same walk share 59-60%,
+STATUS: v15f CANDIDATE — v15e restricted to MELON+CARROT (strawberry excluded from
+triage; see comment in _crop_skip).  v15e: 65.6% batch 1 but 53.1% batch 2 with fat
+negative tails — suspected transient-strawberry-glut abandonment.  Original v15e:
+v15 + DOOMED-CROP TRIAGE (care-skip logic extended to crops).  Action-mix diff vs the Hem loss (their 116.8k, same walk share 59-60%,
 nearly same productive actions, +$30k revenue): we spent 105 MORE waters — measured
 destination: 11 melons watered daily through days 17-24 into a FLOORED melon market
 ($1).  Watering, rescuing, replanting crops whose product is dead is the labor leak

@@ -1,7 +1,18 @@
 """
 main.py — Kaggriculture agent.  ENTRY POINT (must be at archive root, must be named main.py).
 
-STATUS: v16 — Phase 6 fix #6: v15 + DOOMED-CROP TRIAGE (MELON+CARROT only).
+STATUS: v16a REJECTED (15.6% — WORSE than the same card on v15, 21.9%).  Triage's
+freed labor exists only in floored-melon games; the fertilize labor cost is
+universal.  Continuous fertilization as implemented is wrong for our architecture:
+FERTILIZE needs fert carried from the animal ring to crop tiles — a long walk per
+application.  Remaining hypothesis for the Hem strawberry gap: LAYOUT — cluster
+strawberries adjacent to the animal ring so application is a 1-2 step detour
+(routing project, not a constant tweak).  Card closed in this form.
+Was: v16a CANDIDATE — v16 + the parked FERT card, retested with triage's labor
+headroom.  Continuous strawberry fertilization (window (7,99), herd-gated KEEP 18)
+lost 21.9% on v15 because fertilize labor cannibalized care/water; v16's triage
+frees the dead-market watering labor it starved for.  Chain test.
+Base: v16 — Phase 6 fix #6: v15 + DOOMED-CROP TRIAGE (MELON+CARROT only).
 Action-mix diff vs the strongest live loss (Hem, 116.8k, same walk share, same
 productive-action count, +$30k revenue): we spent 105 more WATERS — 11 melons
 watered daily days 17-24 into a $1 market.  When melon/carrot's 3-day projected
@@ -163,8 +174,8 @@ WHEAT_FACTORY_SEED_WANT = 10  # replaces SEED_WANT 4 from factory day
 # Fertilize-only addition (v4c): a $90 fertilizer applied to a STRAWBERRY doubles its
 # production ticks while watered (engine-verified) — ~$200+ of berries. Melon: reaches its
 # 6-cap ~2 days earlier. Everything else is byte-identical to v3a.
-FERT_CROPS = {"STRAWBERRY": (7, 15), "MELON": (5, 7)}   # crop -> (min_age, max_age)
-FERT_KEEP = 6            # hold this much fertilizer stock back from selling
+FERT_CROPS = {"STRAWBERRY": (7, 99), "MELON": (5, 7)}   # crop -> (min_age, max_age)
+FERT_KEEP = 18           # holdback once herd complete (6 before; see sell loop)
 
 # Opponent-pressure-aware selling (Phase 5, v6a). The opponent's farm is PUBLIC every
 # turn. When their visible capacity in a premium product is large, their dump is coming:
@@ -736,7 +747,9 @@ def _market_orders(day, hour, money, seeds, shed, inventories, prices, hires_tod
             # Hold stock for crop fertilizing — but ONLY once the farm is liquid. In the
             # $0-bank opening, fertilizer sales are the survival cash that buys feed;
             # hoarding them starved the sheep that produce them (measured: 0-32 vs v3a).
-            stock -= FERT_KEEP
+            # Small holdback until the herd is bought (fert sales fund cows 5-8).
+            full_herd = placed_animals >= sum(ANIMAL_TARGETS.values())
+            stock -= FERT_KEEP if full_herd else 6
         if stock <= 0:
             continue
         price = prices.get(item, 0)

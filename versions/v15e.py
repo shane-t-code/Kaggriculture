@@ -1,16 +1,8 @@
 """
 main.py — Kaggriculture agent.  ENTRY POINT (must be at archive root, must be named main.py).
 
-STATUS: v16 — Phase 6 fix #6: v15 + DOOMED-CROP TRIAGE (MELON+CARROT only).
-Action-mix diff vs the strongest live loss (Hem, 116.8k, same walk share, same
-productive-action count, +$30k revenue): we spent 105 more WATERS — 11 melons
-watered daily days 17-24 into a $1 market.  When melon/carrot's 3-day projected
-price <= $15, generate no water/rescue tasks and stop planting them; harvests
-continue (free the tile).  STRAWBERRY deliberately excluded: its gluts are
-transient (biggest drain in the game) and v15e, which could skip it, lost its
-out-of-sample batch (53.1%, fat tails) to strawberry abandonment.
-A/B: v15f beat v15 41-23 over 64 (64.1%: 65.6% +461 seeds 0-15, 62.5% +596 fresh
-16-31 — both batches positive).  Action-mix diff vs the Hem loss (their 116.8k, same walk share 59-60%,
+STATUS: v15e CANDIDATE — v15 + DOOMED-CROP TRIAGE (care-skip logic extended to
+crops).  Action-mix diff vs the Hem loss (their 116.8k, same walk share 59-60%,
 nearly same productive actions, +$30k revenue): we spent 105 MORE waters — measured
 destination: 11 melons watered daily through days 17-24 into a FLOORED melon market
 ($1).  Watering, rescuing, replanting crops whose product is dead is the labor leak
@@ -345,12 +337,7 @@ def _crop_skip(tiles, opp_tiles, market_inv, shops):
     skip = set()
     my_crops, my_animals = _opp_capacity(tiles)
     opp_crops, opp_animals = _opp_capacity(opp_tiles)
-    # MELON/CARROT only: melon's town drain is ~1/day so a floored melon market
-    # never recovers (safe to abandon); carrot is cheap filler.  STRAWBERRY is
-    # excluded — its drain is the biggest in the game, gluts PASS, and v15e
-    # (which could skip it) lost its out-of-sample batch 17-15 with -1.2k/5.6k sd:
-    # abandoning 35 strawberries during a transient dip is catastrophic.
-    for crop in ("MELON", "CARROT"):
+    for crop in ("MELON", "STRAWBERRY", "CARROT"):
         if crop not in MARKET_ABOVE:
             continue
         x = market_inv.get(crop, MARKET_I0) - MARKET_I0

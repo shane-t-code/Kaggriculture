@@ -1,23 +1,16 @@
 """
 main.py — Kaggriculture agent.  ENTRY POINT (must be at archive root, must be named main.py).
 
-STATUS: v16 — Phase 6 fix #6: v15 + DOOMED-CROP TRIAGE (MELON+CARROT only).
-Action-mix diff vs the strongest live loss (Hem, 116.8k, same walk share, same
-productive-action count, +$30k revenue): we spent 105 more WATERS — 11 melons
-watered daily days 17-24 into a $1 market.  When melon/carrot's 3-day projected
-price <= $15, generate no water/rescue tasks and stop planting them; harvests
-continue (free the tile).  STRAWBERRY deliberately excluded: its gluts are
-transient (biggest drain in the game) and v15e, which could skip it, lost its
-out-of-sample batch (53.1%, fat tails) to strawberry abandonment.
-A/B: v15f beat v15 41-23 over 64 (64.1%: 65.6% +461 seeds 0-15, 62.5% +596 fresh
-16-31 — both batches positive).  Action-mix diff vs the Hem loss (their 116.8k, same walk share 59-60%,
-nearly same productive actions, +$30k revenue): we spent 105 MORE waters — measured
-destination: 11 melons watered daily through days 17-24 into a FLOORED melon market
-($1).  Watering, rescuing, replanting crops whose product is dead is the labor leak
-that starves care (5-8/12) and fertilize (56 vs their 103).  Fix: when a crop's
-3-day projected price <= $15 (same forecast as care-skip), generate NO water/rescue
-tasks for its plants and stop planting it; harvests continue (they free the tile
-for a live crop).  Labor-only reallocation.
+STATUS: v15d REJECTED (43.8%, -1.5k) — lifting care above watering just moved the
+shortage; the labor budget is saturated, so intra-budget priority shuffles lose as
+much as they gain.  The real fix is REMOVING waste labor (v15e doomed-crop triage).
+Original hypothesis: v15 + PRICE-AWARE CARE PRIORITY.  Ops audit of the Hem
+loss (their 116.8k vs our 90.8k, same 8 cows): our CARE ran 5-8 of 12 from day 10
+(FEED held 11-12 — the v11 fix is fine) while milk sold at $218.  A missed cow care
+forfeits ~2 milk x $218 = $400-650; a missed watering costs far less — but CARE and
+WATER share priority 2, so the bigger, closer watering pool crowds care out under
+late-game load.  Fix: when a species' product price >= $150 (and it is not
+care-skipped), its CARE tasks get P_FEED priority (1).  Labor-only, no new demand.
 Base: v15 — Phase 6 fix #5: v14 + DAY-0 FOURTH SHEEP.  Opening decode (tape vs
 v12, same game, days 0-8): tape out-earns us $9.2k to $5.9k; biggest single cause is
 sheep timing — tape owns 4 sheep at hour 0, we bought #4 on day 4.  Sheep first-tick
@@ -190,6 +183,9 @@ PRESSURE_BATCH_BONUS = 3
 # resumes the moment the market recovers.
 CARE_SKIP_PRICE = 15     # projected price at/below this = care not worth the turn
 CARE_SKIP_HORIZON = 3    # days until a banked care bonus typically pays out
+CARE_URGENT_PRICE = 150  # product at/above this: CARE outranks routine watering
+                         # (missed cow care at $218 milk = ~$400-650 forfeited;
+                         # audit: only 5-8/12 cared daily under late-game load)
 
 # Tape-family counter (v7c).  Fingerprint: the meta tape places exactly 4 SHEEP and
 # its first COW on day 0 (visible from day 1); we field 3 sheep and no cow then, so
@@ -337,32 +333,6 @@ def _next_tick_day(placed_day, first, interval, after_day):
     return t if t <= LAST_TICK_DAY else None
 
 
-CROP_SKIP_PRICE = 15     # crop's 3-day projected price at/below this = its labor
-                         # (water/rescue/replant) is spent on worthless goods
-
-def _crop_skip(tiles, opp_tiles, market_inv, shops):
-    """Crops whose market is projected dead — stop watering/planting them."""
-    skip = set()
-    my_crops, my_animals = _opp_capacity(tiles)
-    opp_crops, opp_animals = _opp_capacity(opp_tiles)
-    # MELON/CARROT only: melon's town drain is ~1/day so a floored melon market
-    # never recovers (safe to abandon); carrot is cheap filler.  STRAWBERRY is
-    # excluded — its drain is the biggest in the game, gluts PASS, and v15e
-    # (which could skip it) lost its out-of-sample batch 17-15 with -1.2k/5.6k sd:
-    # abandoning 35 strawberries during a transient dip is catastrophic.
-    for crop in ("MELON", "CARROT"):
-        if crop not in MARKET_ABOVE:
-            continue
-        x = market_inv.get(crop, MARKET_I0) - MARKET_I0
-        net = (_town_drain_per_day(crop, shops)
-               - _inflow_per_day(crop, my_crops, my_animals)
-               - _inflow_per_day(crop, opp_crops, opp_animals))
-        proj = _glut_price(crop, max(0, x - net * CARE_SKIP_HORIZON))
-        if proj <= CROP_SKIP_PRICE:
-            skip.add(crop)
-    return skip
-
-
 def _care_skip_species(tiles, opp_tiles, market_inv, shops):
     """Species whose product market is projected dead when a care bonus would land."""
     skip = set()
@@ -382,7 +352,7 @@ def _care_skip_species(tiles, opp_tiles, market_inv, shops):
     return skip
 
 
-def _build_tasks(tiles, day, seeds, tape_mode=False, care_skip=(), crop_skip=()):
+def _build_tasks(tiles, day, seeds, tape_mode=False, care_skip=(), care_urgent=()):
     """Scan the farm -> the turn's task list. Returns (tasks, n_feed_needed)."""
     tasks = []
     crop_counts = {}
@@ -438,7 +408,8 @@ def _build_tasks(tiles, day, seeds, tape_mode=False, care_skip=(), crop_skip=())
                 if not t.get("cared_today", False) and t["animal"] not in care_skip:
                     # CARE banked on day d pays on the first tick AFTER d (must be <= 28).
                     if _next_tick_day(placed, info["first"], info["interval"], day) is not None:
-                        tasks.append({"prio": P_CARE, "x": x, "y": y, "op": ["CARE"]})
+                        prio = P_FEED if t["animal"] in care_urgent else P_CARE
+                        tasks.append({"prio": prio, "x": x, "y": y, "op": ["CARE"]})
                 continue
 
             # Empty structure (no animal yet): nothing to do here; PLACE is handled by
@@ -462,13 +433,6 @@ def _build_tasks(tiles, day, seeds, tape_mode=False, care_skip=(), crop_skip=())
                 if harvestable:
                     tasks.append({"prio": P_SAVE if dying else P_HARVEST, "x": x, "y": y,
                                   "op": ["HARVEST"]})
-                    continue
-
-                # Doomed-crop triage (v15e): its market is projected dead, so its
-                # water/rescue labor buys $1 goods — spend those unit-turns on live
-                # crops and animals instead.  Harvests above still run (they free
-                # the tile); the plant may weed and gets dug at leisure (P_DIG).
-                if crop in crop_skip:
                     continue
 
                 if not t.get("watered_today", False):
@@ -502,7 +466,6 @@ def _build_tasks(tiles, day, seeds, tape_mode=False, care_skip=(), crop_skip=())
                     cap = WHEAT_FACTORY_CAP
                 if (planned.get(c, 0) < cap and day <= info["last_plant"]
                         and budget.get(c, 0) > 0
-                        and c not in crop_skip
                         and not (tape_mode and c == "MELON"
                                  and day > TAPE_MELON_LAST_PLANT)):
                     crop = c
@@ -897,9 +860,11 @@ def agent(obs):
     market_inv = (obs.get("market", {}) or {}).get("inventory", {}) or {}
     shops = (obs.get("town", {}) or {}).get("unlocked_shops", []) or []
     care_skip = _care_skip_species(tiles, opp.get("tiles", []), market_inv, shops)
-    crop_skip = _crop_skip(tiles, opp.get("tiles", []), market_inv, shops)
+    care_urgent = {sp for sp, info in ANIMAL_INFO.items()
+                   if sp not in care_skip
+                   and prices.get(info["product"], 0) >= CARE_URGENT_PRICE}
 
-    tasks, n_feed = _build_tasks(tiles, day, seeds, tape_mode, care_skip, crop_skip)
+    tasks, n_feed = _build_tasks(tiles, day, seeds, tape_mode, care_skip, care_urgent)
     _supply_tasks(tasks, n_feed, units, inventories, shed, tiles, day)
     assignment = _assign(units, tasks, inventories, tiles, day, hour)
 

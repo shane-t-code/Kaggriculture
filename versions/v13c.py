@@ -1,15 +1,17 @@
 """
 main.py — Kaggriculture agent.  ENTRY POINT (must be at archive root, must be named main.py).
 
-STATUS: v14 — Phase 6 fix #4: v13 + HERD-GATED STRAWBERRY RAMP.  PLANT_ORDER puts
-STRAWBERRY ahead of WHEAT for tiles (cap 35) but STR seed buying stays at 3/turn
-until herd_complete, 5/turn after — cows always outrank berries for cash.  Found by
-falsifying two wrong forms first: v13b (cap raise alone, 56.2% — cap was never the
-constraint) and v13c (priority + early seed burst, 37.5% — the $500+/turn day-0 seed
-spend delayed every cow 1-2 days and marginal strawberry revenue at 35 mirror-plants
-is ~$385/tile net, not the $1,100 average at 23).
-A/B: v13d beat v13 42-22 over 64 (65.6% BOTH batches: +2.5k seeds 0-15, +1.2k fresh
-16-31).
+STATUS: v13c REJECTED (37.5%, -1.9k) — the ramp WORKED (STR35 by d15, 179 sold vs
+118) and still lost: day-0 seed burst delayed every cow 1-2 days (milk -2.6k, fert
+-1.8k + care), marginal STR tile at 35 mirror-plants ~$385 net not $1,100 avg, +$1.2k
+seed spend.  Fixed by v13d's herd_complete gate (promoted as v14 at 65.6%).
+Original hypothesis: v13 + STRAWBERRY PRIORITY RAMP.  v13b (carrot cap 0, STR
+cap 35) came in at 56.2% — diagnostic: STR never passed 21 because the cap was never
+the constraint.  Freed tiles went to WHEAT (ranked above STR in PLANT_ORDER) and the
+ramp is seed-throttled (3/turn at $100 vs the tape's 30 strawberries by day 10).
+Fix the actual bottlenecks: PLANT_ORDER puts STRAWBERRY ahead of WHEAT, STR seed
+buy 3 -> 5/turn, cap 35 kept, carrots restored to 12 (real $2k endgame filler; with
+STR ranked first they can no longer steal mid-game tiles).
 Base: v13 — v12 + endgame wheat factory (62.5% both batches over 64).  Live-loss analysis of
 all 64 v10/v11 Kaggle episodes: floored WOOL/MILK games bank 68k vs 88k clean; ~25%
 of our wool+milk sold at <=$5.  v12a (sell-timing rules) was a 50.0% wash and proved
@@ -781,10 +783,6 @@ def _market_orders(day, hour, money, seeds, shed, inventories, prices, hires_tod
         want = SEED_WANT[crop]
         if crop == "WHEAT" and day >= WHEAT_FACTORY_DAY:
             want = WHEAT_FACTORY_SEED_WANT
-        if crop == "STRAWBERRY" and not herd_complete:
-            # Cows before berries: v13c's day-0 seed burst ($500+) delayed the
-            # first cow by days and lost every downstream milk/fert/care dollar.
-            want = 3
         have = seeds.get(crop, 0)
         if have < want and spendable >= info["cost"]:
             n = min(want - have, int(spendable // info["cost"]))

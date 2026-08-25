@@ -1,15 +1,15 @@
 """
 main.py — Kaggriculture agent.  ENTRY POINT (must be at archive root, must be named main.py).
 
-STATUS: v14 — Phase 6 fix #4: v13 + HERD-GATED STRAWBERRY RAMP.  PLANT_ORDER puts
-STRAWBERRY ahead of WHEAT for tiles (cap 35) but STR seed buying stays at 3/turn
-until herd_complete, 5/turn after — cows always outrank berries for cash.  Found by
-falsifying two wrong forms first: v13b (cap raise alone, 56.2% — cap was never the
-constraint) and v13c (priority + early seed burst, 37.5% — the $500+/turn day-0 seed
-spend delayed every cow 1-2 days and marginal strawberry revenue at 35 mirror-plants
-is ~$385/tile net, not the $1,100 average at 23).
-A/B: v13d beat v13 42-22 over 64 (65.6% BOTH batches: +2.5k seeds 0-15, +1.2k fresh
-16-31).
+STATUS: v13d PROMOTED as v14 (2026-08-24) — 65.6% in BOTH batches (42-22/64, +2.5k
+and +1.2k).  Regressions: 16-0 +16.6k vs v6a; tape -53.0k (noise vs -48.5k baseline).
+Original hypothesis: v13c minus the early seed burst.  v13c (37.5%, -1.9k)
+reached STR35 by d15 and STILL lost: the day-0/early $500+/turn strawberry seed
+spending delayed every cow ~1-2 days (milk -2.6k, fert -1.8k + care), marginal
+strawberry revenue at 35 plants in a mirror is ~$385/tile net (price impact: $97
+avg at combined ~300 units, not $200), and the extra seed spend ate the rest.
+Fix kept: PLANT_ORDER STR before WHEAT (tiles are free).  Fix changed: STR seed
+want stays 3 until herd_complete, 5 after — cows always outrank berries for cash.
 Base: v13 — v12 + endgame wheat factory (62.5% both batches over 64).  Live-loss analysis of
 all 64 v10/v11 Kaggle episodes: floored WOOL/MILK games bank 68k vs 88k clean; ~25%
 of our wool+milk sold at <=$5.  v12a (sell-timing rules) was a 50.0% wash and proved

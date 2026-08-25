@@ -1,15 +1,16 @@
 """
 main.py — Kaggriculture agent.  ENTRY POINT (must be at archive root, must be named main.py).
 
-STATUS: v14 — Phase 6 fix #4: v13 + HERD-GATED STRAWBERRY RAMP.  PLANT_ORDER puts
-STRAWBERRY ahead of WHEAT for tiles (cap 35) but STR seed buying stays at 3/turn
-until herd_complete, 5/turn after — cows always outrank berries for cash.  Found by
-falsifying two wrong forms first: v13b (cap raise alone, 56.2% — cap was never the
-constraint) and v13c (priority + early seed burst, 37.5% — the $500+/turn day-0 seed
-spend delayed every cow 1-2 days and marginal strawberry revenue at 35 mirror-plants
-is ~$385/tile net, not the $1,100 average at 23).
-A/B: v13d beat v13 42-22 over 64 (65.6% BOTH batches: +2.5k seeds 0-15, +1.2k fresh
-16-31).
+STATUS: v13b NOT PROMOTED (56.2%, +616) — diagnostic: STR never passed 21; the cap
+was never the constraint (baseline WITH carrots fielded 24).  Freed tiles went to
+WHEAT (outranked STR in PLANT_ORDER); ramp is seed-throttled.  Led to v13c/v13d.
+Original hypothesis: v13 + CARROT->STRAWBERRY SWAP.  Per-tile season revenue
+measured in the seed-40 diagnostic: STRAWBERRY ~$1,100/tile, MELON ~$1,260, CARROT
+~$200 — carrots consume ~10 tiles of daily watering labor (the true ceiling: ~55-60
+crops max) for a tenth of strawberry's return.  The tape grows ZERO carrots and 35
+strawberries (we peak at 23) — its biggest revenue line, $29k vs our $9.2k in the
+milestone diff.  Swap: CARROT cap 12 -> 0, STRAWBERRY cap 24 -> 35.  Same labor,
+pointed at the crop that pays 5x.  Seed buying skips cap-0 crops.
 Base: v13 — v12 + endgame wheat factory (62.5% both batches over 64).  Live-loss analysis of
 all 64 v10/v11 Kaggle episodes: floored WOOL/MILK games bank 68k vs 88k clean; ~25%
 of our wool+milk sold at <=$5.  v12a (sell-timing rules) was a 50.0% wash and proved
@@ -117,13 +118,13 @@ CROP_INFO = {
     "MELON":      {"cost": 80,  "first": 10, "ready": 10, "last_plant": 19, "window": (6, 12), "cap": 12},
     "WHEAT":      {"cost": 10,  "first": 2,  "ready": 4,  "last_plant": 24, "window": (2, 4),  "cap": 20},
     "STRAWBERRY": {"cost": 100, "first": 10, "ready": 10, "last_plant": 17, "window": (0, -1), "cap": 35},
-    "CARROT":     {"cost": 20,  "first": 2,  "ready": 3,  "last_plant": 26, "window": (2, 3),  "cap": 12},
+    "CARROT":     {"cost": 20,  "first": 2,  "ready": 3,  "last_plant": 26, "window": (2, 3),  "cap": 0},
 }
 # Planting priority when a tile opens up: melon (highest $/tile-day, tiny cap), wheat (feeds
 # the herd — replaces market buys at scarcity prices), strawberry (biggest town demand:
 # ~426/season median), carrot (fast filler, capped so we stop glutting our own market).
-PLANT_ORDER = ["MELON", "STRAWBERRY", "WHEAT", "CARROT"]
-SEED_WANT = {"MELON": 3, "WHEAT": 4, "STRAWBERRY": 5, "CARROT": 4}
+PLANT_ORDER = ["MELON", "WHEAT", "STRAWBERRY", "CARROT"]
+SEED_WANT = {"MELON": 3, "WHEAT": 4, "STRAWBERRY": 3, "CARROT": 4}
 WHEAT_FEED_RESERVE_DAYS = 2   # hold animals*this much wheat before selling any surplus
 
 # Endgame wheat factory (v13a).  Milestone diff vs the tape: it sells ~479 wheat at
@@ -781,10 +782,6 @@ def _market_orders(day, hour, money, seeds, shed, inventories, prices, hires_tod
         want = SEED_WANT[crop]
         if crop == "WHEAT" and day >= WHEAT_FACTORY_DAY:
             want = WHEAT_FACTORY_SEED_WANT
-        if crop == "STRAWBERRY" and not herd_complete:
-            # Cows before berries: v13c's day-0 seed burst ($500+) delayed the
-            # first cow by days and lost every downstream milk/fert/care dollar.
-            want = 3
         have = seeds.get(crop, 0)
         if have < want and spendable >= info["cost"]:
             n = min(want - have, int(spendable // info["cost"]))

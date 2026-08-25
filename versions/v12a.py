@@ -1,17 +1,23 @@
 """
 main.py — Kaggriculture agent.  ENTRY POINT (must be at archive root, must be named main.py).
 
-STATUS: v12 — Phase 6 fix #2: v11 + DOOMED-MARKET CARE SKIP.  Live-loss analysis of
-all 64 v10/v11 Kaggle episodes: floored WOOL/MILK games bank 68k vs 88k clean; ~25%
-of our wool+milk sold at <=$5.  v12a (sell-timing rules) was a 50.0% wash and proved
-the leak is NOT timing — we already sell on arrival; the back half of production
-lands after the market dies.  CARE multiplies output (cared = 1+interval units vs 1),
-so when the product's projected price ~3 days out (glut curve, combined inflow vs
-town drain) is <=$15, the care turn buys nearly nothing and deepens the glut.  Skip
-CARE for that species while doomed (FEED/COLLECT/HARVEST unchanged); care resumes on
-recovery; freed unit-turns flow to crops.  Labor-only -> occupancy unchanged.
-A/B: v12b beat v11 46-18 over 64 (71.9%; 71.9% seeds 0-15 +1.7k, 71.9% fresh 16-31
-+2.2k — held out-of-sample).
+STATUS: v12a REJECTED (2026-08-24 evening) — 50.0% (16-16, +13) vs v11 over 32 games
+seeds 0-15, banks nearly byte-identical: the rules almost never fire.  Diagnosis: v11's
+static thresholds (WOOL/MILK $90) already sell on arrival at any decent price; the live
+"zero sold at $206" was PRODUCTION LAG (~4 wool/day), not holding — the back half of
+production lands after the market dies, and no sell-schedule can fix that.  vs tape:
+-51.0k (v11 -48.5k, sd ~10k, within noise).  Lesson: the glut leak is a PRODUCTION /
+LABOR problem -> v12b (care skip).  Original hypothesis follows.
+--- v11 + GLUT FRONT-RUNNING + FLOOR-HOLD (Phase 6 evening,
+from live-loss analysis of all 64 v10/v11 episodes: floored WOOL/MILK/FERT games bank
+68k vs 88k clean; 1,017 wool + 1,484 milk units sold at <=$5 across 32 games; traces
+show wool at $206+ days 0-8 with sales metered into a crashing market, then dumped at
+the floor).  Rule 1 FRONT-RUN: when combined inflow (ours + opponent's public farm)
+exceeds town drain, the price only falls — sell at the CURRENT price immediately, max
+batches, instead of waiting for a static threshold the market will never pay again.
+Rule 2 FLOOR-HOLD: when the price is already <=$8 but town drain (minus the opponent's
+inflow) would lift it above $30 before liquidation day, hold instead of dumping —
+UNLESS the shed is near force-sell pressure (overflow is destroyed).
 Base: v11 — Phase 6 fix #1: v10 + FOCUSED FEEDERS (found by direct measurement).
 Audit of v10: from day 12 on, only 2-8 of 12 animals got fed daily while CARE stayed
 ~12 — and an animal unfed on its production day produces base 1 and its WHOLE banked
@@ -139,14 +145,15 @@ OPP_PRESSURE = {
 PRESSURE_THRESHOLD_MULT = 0.65
 PRESSURE_BATCH_BONUS = 3
 
-# Doomed-market care skip (v12b).  A cared animal yields 1+interval units vs 1 —
-# but if the product's market is projected at/near the floor when those units
-# land (~3 days out), the care action is labor spent deepening a glut.  Skip CARE
-# for that species while the projection stays doomed; everything else (FEED,
-# COLLECT_FERTILIZER, HARVEST) continues.  Checked fresh every turn, so care
-# resumes the moment the market recovers.
-CARE_SKIP_PRICE = 15     # projected price at/below this = care not worth the turn
-CARE_SKIP_HORIZON = 3    # days until a banked care bonus typically pays out
+# Glut front-running / floor-hold (v12a).  Measured across 32 live v11 games:
+# floored-animal-market games banked 68k vs 88k clean, ~25% of our wool+milk went
+# at <=$5.  When BOTH farms feed a market faster than the town drains it, the
+# price is monotonically falling — the only good price is the current one.
+FRONTRUN_NET = -0.5      # net recovery below this (units/day) = glut incoming
+FRONTRUN_MIN_PRICE = 12  # never front-run INTO the floor; rule 2 governs there
+FLOOR_HOLD_PRICE = 8     # at or below this the sale is nearly worthless...
+FLOOR_HOLD_WORTH = 30    # ...so hold if drain can lift price above this by liq day
+FLOOR_HOLD_SHED_MAX = 80 # but never hold into shed-overflow territory (cap 100)
 
 # Tape-family counter (v7c).  Fingerprint: the meta tape places exactly 4 SHEEP and
 # its first COW on day 0 (visible from day 1); we field 3 sheep and no cow then, so
@@ -294,26 +301,7 @@ def _next_tick_day(placed_day, first, interval, after_day):
     return t if t <= LAST_TICK_DAY else None
 
 
-def _care_skip_species(tiles, opp_tiles, market_inv, shops):
-    """Species whose product market is projected dead when a care bonus would land."""
-    skip = set()
-    my_crops, my_animals = _opp_capacity(tiles)
-    opp_crops, opp_animals = _opp_capacity(opp_tiles)
-    for sp, info in ANIMAL_INFO.items():
-        item = info["product"]
-        if item not in MARKET_ABOVE:
-            continue
-        x = market_inv.get(item, MARKET_I0) - MARKET_I0
-        net = (_town_drain_per_day(item, shops)
-               - _inflow_per_day(item, my_crops, my_animals)
-               - _inflow_per_day(item, opp_crops, opp_animals))
-        proj = _glut_price(item, max(0, x - net * CARE_SKIP_HORIZON))
-        if proj <= CARE_SKIP_PRICE:
-            skip.add(sp)
-    return skip
-
-
-def _build_tasks(tiles, day, seeds, tape_mode=False, care_skip=()):
+def _build_tasks(tiles, day, seeds, tape_mode=False):
     """Scan the farm -> the turn's task list. Returns (tasks, n_feed_needed)."""
     tasks = []
     crop_counts = {}
@@ -366,7 +354,7 @@ def _build_tasks(tiles, day, seeds, tape_mode=False, care_skip=()):
                         tasks.append({"prio": P_SAVE if cu >= 1 else P_FEED, "x": x, "y": y,
                                       "op": ["FEED"], "require": "WHEAT"})
 
-                if not t.get("cared_today", False) and t["animal"] not in care_skip:
+                if not t.get("cared_today", False):
                     # CARE banked on day d pays on the first tick AFTER d (must be <= 28).
                     if _next_tick_day(placed, info["first"], info["interval"], day) is not None:
                         tasks.append({"prio": P_CARE, "x": x, "y": y, "op": ["CARE"]})
@@ -670,14 +658,33 @@ def _market_orders(day, hour, money, seeds, shed, inventories, prices, hires_tod
             # threshold, that threshold is a fantasy — accept the reachable price
             # now and dump faster (the first seller gets the better price).
             x = market_inv.get(item, MARKET_I0) - MARKET_I0
+            net = (_town_drain_per_day(item, shops)
+                   - _inflow_per_day(item, my_crops, my_animals)
+                   - _inflow_per_day(item, opp_crops, opp_animals))
             if x > 0:
-                net = (_town_drain_per_day(item, shops)
-                       - _inflow_per_day(item, my_crops, my_animals)
-                       - _inflow_per_day(item, opp_crops, opp_animals))
                 reachable = _glut_price(item, x - net * (liq_day - day))
                 if reachable < threshold:
                     threshold = max(3, reachable)
                     n = batch + PRESSURE_BATCH_BONUS
+            # v12a rule 1 — FRONT-RUN: both farms together outproduce the town's
+            # drain, so this price is the best we will ever see.  Sell at it now,
+            # max batches, even before the market shows a glut (x <= 0).
+            if net < FRONTRUN_NET and price >= FRONTRUN_MIN_PRICE:
+                threshold = min(threshold, price)
+                n = batch + PRESSURE_BATCH_BONUS
+            # v12a rule 2 — FLOOR-HOLD: the price has already collapsed.  If the
+            # town's drain net of the OPPONENT's inflow (ours stops if we hold)
+            # can lift it to a price worth having before liquidation day, holding
+            # beats dumping — unless the shed is close to overflow (destroyed).
+            if (price <= FLOOR_HOLD_PRICE and not force
+                    and shed_total < FLOOR_HOLD_SHED_MAX):
+                recover_net = (_town_drain_per_day(item, shops)
+                               - _inflow_per_day(item, opp_crops, opp_animals))
+                if recover_net > 0:
+                    recovered = _glut_price(
+                        item, max(0, x) - recover_net * (liq_day - day))
+                    if recovered > FLOOR_HOLD_WORTH:
+                        continue
         if item in OPP_PRESSURE and day < liq_day:
             kind, source, trigger = OPP_PRESSURE[item]
             count = (opp_animals if kind == "animal" else opp_crops).get(source, 0)
@@ -796,11 +803,7 @@ def agent(obs):
             _TAPE_SEEN[player] = True
     tape_mode = _TAPE_SEEN.get(player, False)
 
-    market_inv = (obs.get("market", {}) or {}).get("inventory", {}) or {}
-    shops = (obs.get("town", {}) or {}).get("unlocked_shops", []) or []
-    care_skip = _care_skip_species(tiles, opp.get("tiles", []), market_inv, shops)
-
-    tasks, n_feed = _build_tasks(tiles, day, seeds, tape_mode, care_skip)
+    tasks, n_feed = _build_tasks(tiles, day, seeds, tape_mode)
     _supply_tasks(tasks, n_feed, units, inventories, shed, tiles, day)
     assignment = _assign(units, tasks, inventories, tiles, day, hour)
 
@@ -815,6 +818,8 @@ def agent(obs):
             if plant_counts[crop] > seeds.get(crop, 0):
                 actions[i] = ["PASS"]
 
+    market_inv = (obs.get("market", {}) or {}).get("inventory", {}) or {}
+    shops = (obs.get("town", {}) or {}).get("unlocked_shops", []) or []
     market = _market_orders(day, hour, money, seeds, shed, inventories, prices,
                             me.get("hires_today", 0), len(me.get("hands", [])), tiles,
                             len(me.get("unlocked_quadrants", ["NW"])),

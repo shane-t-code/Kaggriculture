@@ -1,17 +1,16 @@
 """
 main.py — Kaggriculture agent.  ENTRY POINT (must be at archive root, must be named main.py).
 
-STATUS: v12 — Phase 6 fix #2: v11 + DOOMED-MARKET CARE SKIP.  Live-loss analysis of
-all 64 v10/v11 Kaggle episodes: floored WOOL/MILK games bank 68k vs 88k clean; ~25%
-of our wool+milk sold at <=$5.  v12a (sell-timing rules) was a 50.0% wash and proved
-the leak is NOT timing — we already sell on arrival; the back half of production
-lands after the market dies.  CARE multiplies output (cared = 1+interval units vs 1),
-so when the product's projected price ~3 days out (glut curve, combined inflow vs
-town drain) is <=$15, the care turn buys nearly nothing and deepens the glut.  Skip
-CARE for that species while doomed (FEED/COLLECT/HARVEST unchanged); care resumes on
-recovery; freed unit-turns flow to crops.  Labor-only -> occupancy unchanged.
-A/B: v12b beat v11 46-18 over 64 (71.9%; 71.9% seeds 0-15 +1.7k, 71.9% fresh 16-31
-+2.2k — held out-of-sample).
+STATUS: v12b PROMOTED as v12 (2026-08-24 evening) — beat v11 46-18 over 64 (71.9%;
+71.9% seeds 0-15 +1.7k, 71.9% fresh seeds 16-31 +2.2k, held out-of-sample).
+Original hypothesis: v11 + DOOMED-MARKET CARE SKIP (Phase 6 evening).  Live-loss
+analysis (64 episodes): floored WOOL/MILK games bank 68k vs 88k clean; ~25% of our
+wool+milk sold at <=$5.  v12a (sell-timing) was a 50.0% wash — the leak is NOT timing:
+we already sell on arrival; the back half of production lands after the market dies.
+CARE multiplies output (cared = 1+interval units vs 1) — when the product's projected
+price 3 days out is <=$15, that labor buys nearly nothing and the extra units deepen
+the glut.  Skip CARE for that species while doomed (FEED/COLLECT/HARVEST unchanged);
+freed unit-turns flow to crops.  Labor-only change -> occupancy unchanged -> clean A/B.
 Base: v11 — Phase 6 fix #1: v10 + FOCUSED FEEDERS (found by direct measurement).
 Audit of v10: from day 12 on, only 2-8 of 12 animals got fed daily while CARE stayed
 ~12 — and an animal unfed on its production day produces base 1 and its WHOLE banked

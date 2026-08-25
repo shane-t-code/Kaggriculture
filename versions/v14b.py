@@ -1,15 +1,16 @@
 """
 main.py — Kaggriculture agent.  ENTRY POINT (must be at archive root, must be named main.py).
 
-STATUS: v15 — Phase 6 fix #5: v14 + DAY-0 FOURTH SHEEP.  Opening decode (tape vs
-v12, same game, days 0-8): tape out-earns us $9.2k to $5.9k; biggest single cause is
-sheep timing — tape owns 4 sheep at hour 0, we bought #4 on day 4.  Sheep first-tick
-is 6 days, so all four of theirs pay days 5-6 (the $4.6k wool spike that funds cows
-3-8) while ours started day 10.  We missed it because day 0 spent $380 on
-strawberry+carrot seeds that yield nothing before day 10 anyway.  Fix: on day 0,
-defer STRAWBERRY/CARROT seed buys until the day-0 herd (4 sheep + 1 cow) is owned.
-A/B: v14b beat v14 56-8 over 64 (87.5%!! — 84.4% +3.0k seeds 0-15, 90.6% +3.4k
-fresh 16-31; STRONGEST promotion in the project).
+STATUS: v14b PROMOTED as v15 (2026-08-25 ~1am) — 56-8 over 64 (87.5%: 84.4% +3.0k
+seeds 0-15, 90.6% +3.4k fresh 16-31). STRONGEST promotion in the project.
+Original hypothesis: v14 + DAY-0 FOURTH SHEEP.  Opening decode (tape vs v12,
+same game, days 0-8): tape out-earns us $9.2k to $5.9k, and the biggest single cause
+is sheep timing — tape owns 4 sheep at hour 0, we buy #4 on day 4.  Sheep first-tick
+is 6 days, so all four of theirs pay on days 5-6 (the $4.6k wool spike that funds
+cows 3-8) while ours starts day 10.  We miss it because day 0 spends $380 on
+strawberry+carrot seeds (which yield nothing before day 10 anyway), leaving the bank
+$425 short of the sheep.  Fix: on day 0, defer STRAWBERRY and CARROT seed buys until
+the day-0 herd target (4 sheep + 1 cow) is owned — the tape's exact allocation.
 Base: v14 — Phase 6 fix #4: v13 + HERD-GATED STRAWBERRY RAMP.  PLANT_ORDER puts
 STRAWBERRY ahead of WHEAT for tiles (cap 35) but STR seed buying stays at 3/turn
 until herd_complete, 5/turn after — cows always outrank berries for cash.  Found by
@@ -831,15 +832,9 @@ def agent(obs):
     step = obs.get("step", day * 24 + hour)
     if step == 0:
         _TAPE_SEEN[player] = False
-    if not _TAPE_SEEN.get(player, False) and 1 <= day <= 2:
+    if not _TAPE_SEEN.get(player, False) and 1 <= day <= 3:
         _oc, _oa = _opp_capacity(opp.get("tiles", []))
-        # Self-exclusion (v15 copies the tape's 4-sheep opening): the tape shows
-        # 4 SHEEP + COW + exactly 5 MELONS from day 1 (byte-identical opening);
-        # our lineage has no placed cow on days 1-2 and at most 3 melons before
-        # day 3.  Both extra conditions + the day-2 cutoff keep us from false-
-        # latching tape counters against our own versions in self-matches.
-        if (_oa.get("SHEEP", 0) == 4 and _oa.get("COW", 0) >= 1
-                and _oc.get("MELON", 0) == 5):
+        if _oa.get("SHEEP", 0) == 4 and _oa.get("COW", 0) >= 1:
             _TAPE_SEEN[player] = True
     tape_mode = _TAPE_SEEN.get(player, False)
 

@@ -1,24 +1,15 @@
 """
 main.py — Kaggriculture agent.  ENTRY POINT (must be at archive root, must be named main.py).
 
-STATUS: v15 — Phase 6 fix #5: v14 + DAY-0 FOURTH SHEEP.  Opening decode (tape vs
-v12, same game, days 0-8): tape out-earns us $9.2k to $5.9k; biggest single cause is
-sheep timing — tape owns 4 sheep at hour 0, we bought #4 on day 4.  Sheep first-tick
-is 6 days, so all four of theirs pay days 5-6 (the $4.6k wool spike that funds cows
-3-8) while ours started day 10.  We missed it because day 0 spent $380 on
-strawberry+carrot seeds that yield nothing before day 10 anyway.  Fix: on day 0,
-defer STRAWBERRY/CARROT seed buys until the day-0 herd (4 sheep + 1 cow) is owned.
-A/B: v14b beat v14 56-8 over 64 (87.5%!! — 84.4% +3.0k seeds 0-15, 90.6% +3.4k
-fresh 16-31; STRONGEST promotion in the project).
-Base: v14 — Phase 6 fix #4: v13 + HERD-GATED STRAWBERRY RAMP.  PLANT_ORDER puts
-STRAWBERRY ahead of WHEAT for tiles (cap 35) but STR seed buying stays at 3/turn
-until herd_complete, 5/turn after — cows always outrank berries for cash.  Found by
-falsifying two wrong forms first: v13b (cap raise alone, 56.2% — cap was never the
-constraint) and v13c (priority + early seed burst, 37.5% — the $500+/turn day-0 seed
-spend delayed every cow 1-2 days and marginal strawberry revenue at 35 mirror-plants
-is ~$385/tile net, not the $1,100 average at 23).
-A/B: v13d beat v13 42-22 over 64 (65.6% BOTH batches: +2.5k seeds 0-15, +1.2k fresh
-16-31).
+STATUS: v14f = v14 + fingerprint self-exclusion ONLY (clean A/B baseline for v15). Was: v13d PROMOTED as v14 (2026-08-24) — 65.6% in BOTH batches (42-22/64, +2.5k
+and +1.2k).  Regressions: 16-0 +16.6k vs v6a; tape -53.0k (noise vs -48.5k baseline).
+Original hypothesis: v13c minus the early seed burst.  v13c (37.5%, -1.9k)
+reached STR35 by d15 and STILL lost: the day-0/early $500+/turn strawberry seed
+spending delayed every cow ~1-2 days (milk -2.6k, fert -1.8k + care), marginal
+strawberry revenue at 35 plants in a mirror is ~$385/tile net (price impact: $97
+avg at combined ~300 units, not $200), and the extra seed spend ate the rest.
+Fix kept: PLANT_ORDER STR before WHEAT (tiles are free).  Fix changed: STR seed
+want stays 3 until herd_complete, 5 after — cows always outrank berries for cash.
 Base: v13 — v12 + endgame wheat factory (62.5% both batches over 64).  Live-loss analysis of
 all 64 v10/v11 Kaggle episodes: floored WOOL/MILK games bank 68k vs 88k clean; ~25%
 of our wool+milk sold at <=$5.  v12a (sell-timing rules) was a 50.0% wash and proved
@@ -794,12 +785,6 @@ def _market_orders(day, hour, money, seeds, shed, inventories, prices, hires_tod
             # Cows before berries: v13c's day-0 seed burst ($500+) delayed the
             # first cow by days and lost every downstream milk/fert/care dollar.
             want = 3
-        if (day == 0 and crop in ("STRAWBERRY", "CARROT")
-                and (owned["SHEEP"] < ANIMAL_TARGETS["SHEEP"] or owned["COW"] < 1)):
-            # Day-0 fourth sheep (v14b): premium seeds yield nothing before day
-            # 10, but a sheep bought day 0 vs day 4 moves its whole wool stream
-            # up 4 days — the tape's day-0 allocation, decoded and copied.
-            continue
         have = seeds.get(crop, 0)
         if have < want and spendable >= info["cost"]:
             n = min(want - have, int(spendable // info["cost"]))
@@ -831,13 +816,8 @@ def agent(obs):
     step = obs.get("step", day * 24 + hour)
     if step == 0:
         _TAPE_SEEN[player] = False
-    if not _TAPE_SEEN.get(player, False) and 1 <= day <= 2:
+    if not _TAPE_SEEN.get(player, False) and 1 <= day <= 3:
         _oc, _oa = _opp_capacity(opp.get("tiles", []))
-        # Self-exclusion (v15 copies the tape's 4-sheep opening): the tape shows
-        # 4 SHEEP + COW + exactly 5 MELONS from day 1 (byte-identical opening);
-        # our lineage has no placed cow on days 1-2 and at most 3 melons before
-        # day 3.  Both extra conditions + the day-2 cutoff keep us from false-
-        # latching tape counters against our own versions in self-matches.
         if (_oa.get("SHEEP", 0) == 4 and _oa.get("COW", 0) >= 1
                 and _oc.get("MELON", 0) == 5):
             _TAPE_SEEN[player] = True

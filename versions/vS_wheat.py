@@ -1,7 +1,7 @@
 """
 main.py — Kaggriculture agent.  ENTRY POINT (must be at archive root, must be named main.py).
 
-STATUS: v17 — Phase 6 fix #7: v16 + DEMAND-CONDITIONED HERD TAIL.  First true
+STATUS: vS_wheat — v17 + WHEAT_FACTORY_DAY=15 only (search decomposition; UNTESTED - composite vSEARCH rejected at 64 seeds/leg, and testing this alone needs a 24+ seed battery because it changes occupancy) — Phase 6 fix #7: v16 + DEMAND-CONDITIONED HERD TAIL.  First true
 shop-draw-adaptive production decision (the margin a replay tape cannot copy).  Variance decomp of
 77 live games: our bank swings ~$20k on the MILK SHOP DRAW alone (0 outlets: 55.7k,
 1: 77.2k, 2: 81.7k, 3: 94.2k) because the herd is fixed while market capacity is
@@ -170,8 +170,8 @@ WHEAT_FEED_RESERVE_DAYS = 2   # hold animals*this much wheat before selling any 
 # ~$40 ($19.4k) by converting freed premium tiles to wheat wall-to-wall late-game;
 # wheat demand never gluts (6 shop types).  From this day, wheat stops being
 # feed-sized and becomes the default cash crop for open land.
-WHEAT_FACTORY_DAY = 18
-WHEAT_FACTORY_CAP = 35        # replaces CROP_INFO cap 20 from factory day
+WHEAT_FACTORY_DAY = 15
+WHEAT_FACTORY_CAP = 45        # replaces CROP_INFO cap 20 from factory day
 WHEAT_FACTORY_SEED_WANT = 10  # replaces SEED_WANT 4 from factory day
 
 # Fertilize-only addition (v4c): a $90 fertilizer applied to a STRAWBERRY doubles its

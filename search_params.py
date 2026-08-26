@@ -33,7 +33,12 @@ WORK = os.path.join(HERE, "versions", "vSEARCH_work.py")   # patched candidate
 OUT = os.path.join(HERE, "versions", "vSEARCH.py")         # best config found
 STATE = os.path.join(HERE, "search_state.json")
 OPPONENTS = ["versions/v6a.py", "versions/v12b.py"]
-SEEDS = 8
+# 24 seeds/eval, not 8: the first run's winner (TARGET_HANDS=7 +
+# WHEAT_FACTORY_DAY=15, "32/32") was REJECTED at 64 held-out seeds — 8-seed
+# evals cannot measure occupancy-changing constants because the changed farm
+# consumes RNG differently and every town draw shifts (seed-20 autopsy: same
+# seed rolled 4 milk outlets for baseline, 2 for the candidate — a 47k swing).
+SEEDS = 24
 START_SEED = 100    # disjoint from promotion seeds 0-31 (held out)
 
 # (name, regex with ONE capture group ending right before the number, values).
@@ -99,7 +104,10 @@ def evaluate(src: str, label: str, cache: dict):
 
 
 def accept(cand, best):
-    return cand[0] > best[0] or (cand[0] == best[0] and cand[1] > best[1] + 300)
+    # Strict: occupancy noise means SE of mean bank is ~1k even at 96
+    # games/eval.  Require a wins edge of >= 3, or equal wins and a bank edge
+    # comfortably above noise.
+    return cand[0] >= best[0] + 3 or (cand[0] >= best[0] and cand[1] > best[1] + 1500)
 
 
 def main():
@@ -107,10 +115,15 @@ def main():
     ap.add_argument("--sweeps", type=int, default=2)
     args = ap.parse_args()
 
-    state = {"values": {}, "cache": {}}
+    state = {"seeds": SEEDS, "values": {}, "cache": {}}
     if os.path.exists(STATE):
-        state = json.load(open(STATE, encoding="utf-8"))
-        print(f"resuming: {len(state['cache'])} evals cached")
+        loaded = json.load(open(STATE, encoding="utf-8"))
+        if loaded.get("seeds") == SEEDS:
+            state = loaded
+            print(f"resuming: {len(state['cache'])} evals cached")
+        else:
+            print(f"discarding stale state (was {loaded.get('seeds')} seeds/eval, "
+                  f"now {SEEDS}) — scores are not comparable across eval sizes")
 
     base_src = open(BASE, encoding="utf-8").read()
     values = state["values"]        # name -> chosen value (only when != baseline)

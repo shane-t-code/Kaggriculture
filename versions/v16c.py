@@ -1,8 +1,7 @@
 """
 main.py — Kaggriculture agent.  ENTRY POINT (must be at archive root, must be named main.py).
 
-STATUS: v17 — Phase 6 fix #7: v16 + DEMAND-CONDITIONED HERD TAIL.  First true
-shop-draw-adaptive production decision (the margin a replay tape cannot copy).  Variance decomp of
+STATUS: v16c CANDIDATE — v16 + DEMAND-CONDITIONED HERD TAIL.  Variance decomp of
 77 live games: our bank swings ~$20k on the MILK SHOP DRAW alone (0 outlets: 55.7k,
 1: 77.2k, 2: 81.7k, 3: 94.2k) because the herd is fixed while market capacity is
 rolled per game.  Engine (L867-891, verified): one shop unlocks every 3 days, drawn
@@ -12,9 +11,6 @@ projected final milk outlets >= 2.0 (seen instances + remaining draws x 3/8);
 otherwise the herd caps at 6 cows and the cash flows to strawberry seeds (existing
 herd-gated ramp logic).  First true shop-draw-adaptive PRODUCTION decision — the
 margin a replay tape structurally cannot copy.
-A/B: conditional mechanism — fired in 9/48 towns (~19%); in fired games
-15W-3L (83.3%), mean +2,022 (pre-stated criterion: positive record AND margin in
-fired games; unfired games are byte-identical mirrors). p~0.004 binomial.
 Base: v16 — Phase 6 fix #6: v15 + DOOMED-CROP TRIAGE (MELON+CARROT only).
 Action-mix diff vs the strongest live loss (Hem, 116.8k, same walk share, same
 productive-action count, +$30k revenue): we spent 105 more WATERS — 11 melons

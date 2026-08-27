@@ -1,33 +1,15 @@
 """
 main.py — Kaggriculture agent.  ENTRY POINT (must be at archive root, must be named main.py).
 
-STATUS: v18 — Phase 6 fix #8: v17 + EARLY-INTERLEAVED STRAWBERRY RAMP
-(the staged-herd family: v18c fast-ramp planting prio + v18d parity seeds +
-v18e staged herd).  Cows pause at 5 until 20 strawberries are planted (or day
-11); from day 4 surplus cash buys berry seeds with the next cow's $550 always
-reserved; post-herd, STRAWBERRY planting runs at P_WATER and the seed buffer
-is 8.  Cows 6-8 arrive d11-14 and still repay ($450 vs ~$40-70/day milk to
-d29); ~20 strawberries gain 4-6 producing days each.
-A/B (4-batch 64-seed pool battery, the hardened occupancy protocol):
-head-to-head vs v17 55/64 (86%), margin positive EVERY batch (+3,290/+3,245/
-+1,875/+3,800); pool dWins +12/+12/+8/+12 = +44 over 256 games (never
-negative); mean dBank +1,804.  Strongest promotion since v15.
-Source: day-4 field audit (101 live games, every 110k+ opponent dissected):
-winners hold 5-7 animals + ~20 strawberries at day 8 on the same 75 tiles; we
-held 10 animals + 2 berries.  Their strawberry revenue 43-104k vs our 22-43k
-was the single biggest line item separating us from the winning field.
-Base: v18c CANDIDATE — v17 + FAST STRAWBERRY RAMP (post-herd).
-Field audit (101 live games; every 110k+ opponent economy dissected): winners
-sit on the SAME 75 tiles with the SAME 12-19 animals, but have 25-42
-strawberries in the ground by day 12 vs our 9 — their ramp runs 6-7 plants/day,
-ours 4, and each week earlier a strawberry exists is ~7 producing days x
-~$25/day.  Their strawberry revenue: 43-104k; ours 22-43k — the single biggest
-line item separating us from the winning field.  Root cause measured: planting
-sits at P_PLANT(3) BEHIND watering(2), so it runs only in afternoon slack;
-watering only matters by end-of-day (tasks regenerate hourly) while planting
-today starts the 10-day clock today.  Change (post-herd_complete ONLY — the
-cows-before-berries law stays untouched): STRAWBERRY planting tasks run at
-P_WATER, and the post-herd seed buffer rises 5 -> 8.  Base: v17 — Phase 6 fix #7: v16 + DEMAND-CONDITIONED HERD TAIL.  First true
+STATUS: v18a CANDIDATE — v17 + FOURTH QUADRANT (LAND_MAX_QUADRANTS 3 -> 4).
+Live-field audit (101 games, every 110k+ opponent economy dissected): winners
+run STR 33-62 + WHE 30-57 + 13-25 animals — ~90-100 tiles of production; we
+farm 75 in EVERY live game because LAND_MAX_QUADRANTS=3 (set in v5b) was never
+revisited after v13/v14 grew our caps to ~91 tiles.  Measured symptom: wheat
+factory (A/B-proven +19.4k) sells only $1.5-3k live — land-starved (peak wheat
+17-34 vs cap 45; 35 ongoing strawberries never release tiles).  SE costs $4k,
+pays back <1 week at $25/tile-day; shed (4,4) borders all quadrants; hands
+auto-scale +2.  Base: v17 — Phase 6 fix #7: v16 + DEMAND-CONDITIONED HERD TAIL.  First true
 shop-draw-adaptive production decision (the margin a replay tape cannot copy).  Variance decomp of
 77 live games: our bank swings ~$20k on the MILK SHOP DRAW alone (0 outlets: 55.7k,
 1: 77.2k, 2: 81.7k, 3: 94.2k) because the herd is fixed while market capacity is
@@ -142,7 +124,7 @@ DEBUG = False
 # ----------------------------------------------------------------------------------
 TARGET_HANDS = 6         # scale retest: 10 hands at 3 quadrants ($143/day fib)
 HANDS_PER_EXTRA_QUADRANT = 2
-LAND_MAX_QUADRANTS = 3   # v5b: retry the 3rd quadrant now that fert + cash bugs are fixed
+LAND_MAX_QUADRANTS = 4   # v18a: the field audit showed every 110k+ economy needs ~90-100 tiles; our caps sum to ~91 and collide at 75
 LAND_PRICES = [1000, 2000, 4000]   # engine LAND_PRICES (ENGINE_NOTES B.1); order NE->SW->SE
 # (crop mix now lives in CROP_INFO caps + PLANT_ORDER + SEED_WANT below)
 LIQUIDATE_FROM_DAY = 28  # unsold inventory is worth $0 at the end — sell everything late
@@ -189,7 +171,7 @@ CROP_INFO = {
 # the herd — replaces market buys at scarcity prices), strawberry (biggest town demand:
 # ~426/season median), carrot (fast filler, capped so we stop glutting our own market).
 PLANT_ORDER = ["MELON", "STRAWBERRY", "WHEAT", "CARROT"]
-SEED_WANT = {"MELON": 3, "WHEAT": 4, "STRAWBERRY": 8, "CARROT": 4}
+SEED_WANT = {"MELON": 3, "WHEAT": 4, "STRAWBERRY": 5, "CARROT": 4}
 WHEAT_FEED_RESERVE_DAYS = 2   # hold animals*this much wheat before selling any surplus
 
 # Endgame wheat factory (v13a).  Milestone diff vs the tape: it sells ~479 wheat at
@@ -422,8 +404,7 @@ def _care_skip_species(tiles, opp_tiles, market_inv, shops):
     return skip
 
 
-def _build_tasks(tiles, day, seeds, tape_mode=False, care_skip=(), crop_skip=(),
-                 ramp_fast=False):
+def _build_tasks(tiles, day, seeds, tape_mode=False, care_skip=(), crop_skip=()):
     """Scan the farm -> the turn's task list. Returns (tasks, n_feed_needed)."""
     tasks = []
     crop_counts = {}
@@ -552,10 +533,7 @@ def _build_tasks(tiles, day, seeds, tape_mode=False, care_skip=(), crop_skip=(),
                 continue
             planned[crop] = planned.get(crop, 0) + 1
             budget[crop] -= 1
-            # Fast ramp (v18c): post-herd, a strawberry planted this hour starts
-            # its 10-day clock this hour; watering only matters by nightfall.
-            prio = P_WATER if (ramp_fast and crop == "STRAWBERRY") else P_PLANT
-            tasks.append({"prio": prio, "x": x, "y": y, "op": ["PLANT", crop]})
+            tasks.append({"prio": P_PLANT, "x": x, "y": y, "op": ["PLANT", crop]})
 
     return tasks, n_feed
 
@@ -857,24 +835,13 @@ def _market_orders(day, hour, money, seeds, shed, inventories, prices, hires_tod
     # Animals: buy toward targets (sheep first), one per turn — ONLY if the bank can also
     # carry ~4 days of feed for the herd this animal joins (pre-income starvation destroyed
     # ~$1.7k of animals in v4a before this gate existed). Each arrives with a wheat dowry.
-    if day <= 20 and not herd_complete and (day <= 3 or hour < 8):
-        # v18d parity window: from day 4, animal buys fire only in the morning
-        # third of the day.  Field audit: winners hold 5-7 animals at day 8 but
-        # ~20 strawberries; we held 10 animals and 2 strawberries.  Cows still
-        # complete by d10-12; afternoon cash buys berries instead of waiting.
+    if day <= 20 and not herd_complete:
         herd_after = sum(owned.values()) + 1
         # 2-day cushion (feed buys are already sacred; 4 days double-protected and
         # delayed the herd ~6 days).  Days 0-1: no cushion — the fertilizer stream
         # (~$98/animal/day) starts before the first feed bill can hurt.
         feed_cushion = 0 if day <= 1 else herd_after * wheat_price * 2
         for sp in BUY_PRIORITY:
-            # v18e staged herd: the field audit's winners hold 5-7 animals at
-            # day 8 with ~20 strawberries planted; cows 6-8 arrive d11-14 and
-            # still repay (~$450 vs ~$40-70/day milk to d29).  Pause the cow
-            # tail so its cash plants the berries 4-6 days earlier.
-            if (sp == "COW" and owned.get("COW", 0) >= 5 and day < 11
-                    and my_crops.get("STRAWBERRY", 0) < 20):
-                continue
             cost = ANIMAL_INFO[sp]["cost"]
             if sp == "COW" and owned["COW"] >= cow_target:
                 continue
@@ -906,12 +873,9 @@ def _market_orders(day, hour, money, seeds, shed, inventories, prices, hires_tod
         if crop == "WHEAT" and day >= WHEAT_FACTORY_DAY:
             want = WHEAT_FACTORY_SEED_WANT
         if crop == "STRAWBERRY" and not herd_complete:
-            # v18d: days 0-3 stay cow-only (v13c's day-0 burst failed at 37.5%);
-            # from day 4 surplus cash flows to berries at want 6, with the next
-            # cow's price always reserved below.
-            if day < 4:
-                continue
-            want = 6
+            # Cows before berries: v13c's day-0 seed burst ($500+) delayed the
+            # first cow by days and lost every downstream milk/fert/care dollar.
+            want = 3
         if (day == 0 and crop in ("STRAWBERRY", "CARROT")
                 and (owned["SHEEP"] < ANIMAL_TARGETS["SHEEP"] or owned["COW"] < 1)):
             # Day-0 fourth sheep (v14b): premium seeds yield nothing before day
@@ -919,9 +883,8 @@ def _market_orders(day, hour, money, seeds, shed, inventories, prices, hires_tod
             # up 4 days — the tape's day-0 allocation, decoded and copied.
             continue
         have = seeds.get(crop, 0)
-        _res = 550 if (crop == "STRAWBERRY" and not herd_complete) else 0
-        if have < want and spendable - _res >= info["cost"]:
-            n = min(want - have, int((spendable - _res) // info["cost"]))
+        if have < want and spendable >= info["cost"]:
+            n = min(want - have, int(spendable // info["cost"]))
             if n > 0:
                 orders.append(["BUY_SEED", crop, n])
                 spendable -= n * info["cost"]
@@ -967,20 +930,7 @@ def agent(obs):
     care_skip = _care_skip_species(tiles, opp.get("tiles", []), market_inv, shops)
     crop_skip = _crop_skip(tiles, opp.get("tiles", []), market_inv, shops)
 
-    # ramp_fast (v18c): same herd-complete test the market code uses (total owned
-    # animals vs sheep target + demand-conditioned cow target).
-    _owned_n = sum(1 for row in tiles for t in row
-                   if isinstance(t, dict) and t.get("animal") in ANIMAL_INFO)
-    _owned_n += sum(inv.get(sp, 0) for inv in inventories for sp in ANIMAL_INFO)
-    _owned_n += sum(shed.get(sp, 0) for sp in ANIMAL_INFO)
-    _milk_seen = sum(1 for s in shops if s in ("PIZZA_SHOP", "ICE_CREAM_SHOP",
-                                               "SMOOTHIE_SHOP"))
-    _milk_proj = _milk_seen + max(0, 8 - len(shops)) * 0.375
-    _cow_t = 6 if _milk_proj < 2.0 else ANIMAL_TARGETS["COW"]
-    ramp_fast = _owned_n >= ANIMAL_TARGETS["SHEEP"] + _cow_t
-
-    tasks, n_feed = _build_tasks(tiles, day, seeds, tape_mode, care_skip, crop_skip,
-                                 ramp_fast)
+    tasks, n_feed = _build_tasks(tiles, day, seeds, tape_mode, care_skip, crop_skip)
     _supply_tasks(tasks, n_feed, units, inventories, shed, tiles, day)
     assignment = _assign(units, tasks, inventories, tiles, day, hour)
 

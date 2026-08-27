@@ -1,7 +1,18 @@
 """
 main.py — Kaggriculture agent.  ENTRY POINT (must be at archive root, must be named main.py).
 
-STATUS: v18 — Phase 6 fix #8: v17 + EARLY-INTERLEAVED STRAWBERRY RAMP
+STATUS: v19b REJECTED (1 batch, uniformly negative all 4 legs): mirror 5/16
+(-1,638), tape -804, v6a -1,129, v12 -654; dWins -7, dBank -1,056.  Late wheat
+is not free: each plant costs ~6-8 unit-ops (plant + daily waters + harvest +
+haul) during d24-29 when those ops are doing liquidation logistics on premium
+goods, and a d29 harvest that misses the shed by h22 is worth $0.  The v18
+endgame's empty tiles are empty RATIONALLY.  LAW: late-game tile revenue must
+be priced in unit-ops near liquidation, not in coins alone.
+Original hypothesis: v19b CANDIDATE — v18 + WHEAT TAIL (last_plant 24 -> 27).  Measured at
+v18 equilibrium: empty tiles grow 4 -> 12 over days 22-28 while wheat's
+last_plant 24 forbids refilling them (winners convert freed melon tiles to
+wheat walls of 48-57).  A $10 wheat planted d27 harvests at age 2 on day 29;
+~12 tiles x ~$150 ≈ +$1.5-2k, near-free.  Base: v18 — Phase 6 fix #8: v17 + EARLY-INTERLEAVED STRAWBERRY RAMP
 (the staged-herd family: v18c fast-ramp planting prio + v18d parity seeds +
 v18e staged herd).  Cows pause at 5 until 20 strawberries are planted (or day
 11); from day 4 surplus cash buys berry seeds with the next cow's $550 always
@@ -181,7 +192,7 @@ NEVER_FORCE_SELL = {"WHEAT"}
 # Window (0,-1) = "watering never adds instant yield" (ongoing crops bonus only via fertilizer).
 CROP_INFO = {
     "MELON":      {"cost": 80,  "first": 10, "ready": 10, "last_plant": 19, "window": (6, 12), "cap": 12},
-    "WHEAT":      {"cost": 10,  "first": 2,  "ready": 4,  "last_plant": 24, "window": (2, 4),  "cap": 20},
+    "WHEAT":      {"cost": 10,  "first": 2,  "ready": 4,  "last_plant": 27, "window": (2, 4),  "cap": 20},
     "STRAWBERRY": {"cost": 100, "first": 10, "ready": 10, "last_plant": 17, "window": (0, -1), "cap": 35},
     "CARROT":     {"cost": 20,  "first": 2,  "ready": 3,  "last_plant": 26, "window": (2, 3),  "cap": 12},
 }

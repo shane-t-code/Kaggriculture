@@ -1,21 +1,7 @@
 """
 main.py — Kaggriculture agent.  ENTRY POINT (must be at archive root, must be named main.py).
 
-STATUS: v18 — Phase 6 fix #8: v17 + EARLY-INTERLEAVED STRAWBERRY RAMP
-(the staged-herd family: v18c fast-ramp planting prio + v18d parity seeds +
-v18e staged herd).  Cows pause at 5 until 20 strawberries are planted (or day
-11); from day 4 surplus cash buys berry seeds with the next cow's $550 always
-reserved; post-herd, STRAWBERRY planting runs at P_WATER and the seed buffer
-is 8.  Cows 6-8 arrive d11-14 and still repay ($450 vs ~$40-70/day milk to
-d29); ~20 strawberries gain 4-6 producing days each.
-A/B (4-batch 64-seed pool battery, the hardened occupancy protocol):
-head-to-head vs v17 55/64 (86%), margin positive EVERY batch (+3,290/+3,245/
-+1,875/+3,800); pool dWins +12/+12/+8/+12 = +44 over 256 games (never
-negative); mean dBank +1,804.  Strongest promotion since v15.
-Source: day-4 field audit (101 live games, every 110k+ opponent dissected):
-winners hold 5-7 animals + ~20 strawberries at day 8 on the same 75 tiles; we
-held 10 animals + 2 berries.  Their strawberry revenue 43-104k vs our 22-43k
-was the single biggest line item separating us from the winning field.
+STATUS: v18d CANDIDATE — v18c + STRAWBERRY PARITY WINDOW (see below).
 Base: v18c CANDIDATE — v17 + FAST STRAWBERRY RAMP (post-herd).
 Field audit (101 live games; every 110k+ opponent economy dissected): winners
 sit on the SAME 75 tiles with the SAME 12-19 animals, but have 25-42
@@ -868,13 +854,6 @@ def _market_orders(day, hour, money, seeds, shed, inventories, prices, hires_tod
         # (~$98/animal/day) starts before the first feed bill can hurt.
         feed_cushion = 0 if day <= 1 else herd_after * wheat_price * 2
         for sp in BUY_PRIORITY:
-            # v18e staged herd: the field audit's winners hold 5-7 animals at
-            # day 8 with ~20 strawberries planted; cows 6-8 arrive d11-14 and
-            # still repay (~$450 vs ~$40-70/day milk to d29).  Pause the cow
-            # tail so its cash plants the berries 4-6 days earlier.
-            if (sp == "COW" and owned.get("COW", 0) >= 5 and day < 11
-                    and my_crops.get("STRAWBERRY", 0) < 20):
-                continue
             cost = ANIMAL_INFO[sp]["cost"]
             if sp == "COW" and owned["COW"] >= cow_target:
                 continue

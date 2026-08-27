@@ -1,7 +1,18 @@
 """
 main.py — Kaggriculture agent.  ENTRY POINT (must be at archive root, must be named main.py).
 
-STATUS: v18 — Phase 6 fix #8: v17 + EARLY-INTERLEAVED STRAWBERRY RAMP
+STATUS: v19a REJECTED (early-stop, 2 batches): mirror 6/16 then 3/16 = 9/32
+(28%), dWins -4/-12 = -16, dBank -2,008/-4,388; v12 leg -9,568 (wool-hinge
+signature).  The field's 6-13-sheep winners build that shape from the opening
+as a different whole economy; bolting sheep 5-6 on at day 11 steals cash from
+the ramp + cow tail (both measured better uses) and gluts wool vs near-peers.
+Wool scarcity ($244 endgame) was real in seed 0 but does not generalize.
+Original hypothesis: v19a CANDIDATE — v18 + STAGED SHEEP TAIL (SHEEP 4 -> 6, sheep 5-6 from day 11).
+Field audit: every 110k+ winner runs 6-13 sheep (wool 13-88k vs our 3-31k);
+the day-0 four-sheep opening (v15, 87.5%) and the v18 ramp gates stay keyed to
+SHEEP_CORE=4 so nothing upstream moves; sheep 5-6 buy from day 11 with ramp
+cash (sheep $500 repays in ~6-8 days of wool+fert; care stacks highest on it).
+Base: v18 — Phase 6 fix #8: v17 + EARLY-INTERLEAVED STRAWBERRY RAMP
 (the staged-herd family: v18c fast-ramp planting prio + v18d parity seeds +
 v18e staged herd).  Cows pause at 5 until 20 strawberries are planted (or day
 11); from day 4 surplus cash buys berry seeds with the next cow's $550 always
@@ -151,7 +162,8 @@ UNLOAD_AT = 8            # a unit carrying this many items runs them to the shed
 
 # Livestock plan: sheep first (slowest payout -> place earliest, CARE stacks highest on it),
 # cows are the meta-proven workhorse. 6 animals ring the shed on one quadrant.
-ANIMAL_TARGETS = {"SHEEP": 4, "COW": 8}
+ANIMAL_TARGETS = {"SHEEP": 6, "COW": 8}
+SHEEP_CORE = 4           # day-0 opening + all herd gates key off this, not the 6
 BUY_PRIORITY = ["SHEEP", "COW"]
 ANIMAL_INFO = {
     "COW":   {"cost": 400, "build": "BUILD_PASTURE", "first": 8, "interval": 2, "product": "MILK"},
@@ -160,7 +172,7 @@ ANIMAL_INFO = {
 # Ring around the shed-access tile (4,4): FEED/CARE/HARVEST/COLLECT all happen standing ON
 # the animal tile and the wheat lives at the shed, so clustering minimizes walking.
 ANIMAL_SLOTS = [(3, 4), (4, 3), (3, 3), (2, 4), (4, 2), (2, 3), (3, 2), (2, 2),
-                (4, 5), (3, 5), (2, 5), (4, 6)]   # +4 SW slots (build when land unlocks)
+                (4, 5), (3, 5), (2, 5), (4, 6), (3, 6), (2, 6)]   # +6 SW slots (built as land unlocks)
 MONEY_RESERVE = 150      # keep enough cash for the day's wheat + seeds when buying animals
 
 # (batch, min_price, liquidation_day). Wheat doubles as animal feed: a reserve is held back
@@ -851,13 +863,15 @@ def _market_orders(day, hour, money, seeds, shed, inventories, prices, hires_tod
                                               "SMOOTHIE_SHOP"))
     milk_proj = milk_seen + max(0, 8 - len(shops)) * 0.375
     cow_target = 6 if milk_proj < 2.0 else ANIMAL_TARGETS["COW"]
-    herd_complete = (owned["SHEEP"] >= ANIMAL_TARGETS["SHEEP"]
-                     and owned["COW"] >= cow_target)
+    herd_complete = (owned["SHEEP"] >= SHEEP_CORE
+                     and owned["COW"] >= cow_target)   # CORE herd: gates for seeds/ramp
 
     # Animals: buy toward targets (sheep first), one per turn — ONLY if the bank can also
     # carry ~4 days of feed for the herd this animal joins (pre-income starvation destroyed
     # ~$1.7k of animals in v4a before this gate existed). Each arrives with a wheat dowry.
-    if day <= 20 and not herd_complete and (day <= 3 or hour < 8):
+    buying_open = (owned["SHEEP"] < ANIMAL_TARGETS["SHEEP"]
+                   or owned["COW"] < cow_target)
+    if day <= 20 and buying_open and (day <= 3 or hour < 8):
         # v18d parity window: from day 4, animal buys fire only in the morning
         # third of the day.  Field audit: winners hold 5-7 animals at day 8 but
         # ~20 strawberries; we held 10 animals and 2 strawberries.  Cows still
@@ -872,6 +886,12 @@ def _market_orders(day, hour, money, seeds, shed, inventories, prices, hires_tod
             # day 8 with ~20 strawberries planted; cows 6-8 arrive d11-14 and
             # still repay (~$450 vs ~$40-70/day milk to d29).  Pause the cow
             # tail so its cash plants the berries 4-6 days earlier.
+            # v19a: sheep 5-6 wait for day 11 — the early cash belongs to the
+            # core herd and the strawberry ramp (v18); a sheep bought d11-13
+            # still repays by ~d18-21 and its care bonus stacks highest.
+            if (sp == "SHEEP" and owned.get("SHEEP", 0) >= SHEEP_CORE
+                    and day < 11):
+                continue
             if (sp == "COW" and owned.get("COW", 0) >= 5 and day < 11
                     and my_crops.get("STRAWBERRY", 0) < 20):
                 continue
@@ -913,7 +933,7 @@ def _market_orders(day, hour, money, seeds, shed, inventories, prices, hires_tod
                 continue
             want = 6
         if (day == 0 and crop in ("STRAWBERRY", "CARROT")
-                and (owned["SHEEP"] < ANIMAL_TARGETS["SHEEP"] or owned["COW"] < 1)):
+                and (owned["SHEEP"] < SHEEP_CORE or owned["COW"] < 1)):
             # Day-0 fourth sheep (v14b): premium seeds yield nothing before day
             # 10, but a sheep bought day 0 vs day 4 moves its whole wool stream
             # up 4 days — the tape's day-0 allocation, decoded and copied.
@@ -977,7 +997,7 @@ def agent(obs):
                                                "SMOOTHIE_SHOP"))
     _milk_proj = _milk_seen + max(0, 8 - len(shops)) * 0.375
     _cow_t = 6 if _milk_proj < 2.0 else ANIMAL_TARGETS["COW"]
-    ramp_fast = _owned_n >= ANIMAL_TARGETS["SHEEP"] + _cow_t
+    ramp_fast = _owned_n >= SHEEP_CORE + _cow_t
 
     tasks, n_feed = _build_tasks(tiles, day, seeds, tape_mode, care_skip, crop_skip,
                                  ramp_fast)

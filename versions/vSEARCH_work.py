@@ -169,7 +169,7 @@ MONEY_RESERVE = 150      # keep enough cash for the day's wheat + seeds when buy
 SELL_RULES = {
     "MELON":      (6, 120, 28),
     "CARROT":     (10, 25, 28),
-    "STRAWBERRY": (4, 100, 28),
+    "STRAWBERRY": (4, 110, 28),
     "MILK":       (3, 90, 28),
     "WOOL":       (3, 90, 28),
     "FERTILIZER": (5, 40, 28),
@@ -182,7 +182,7 @@ NEVER_FORCE_SELL = {"WHEAT"}
 CROP_INFO = {
     "MELON":      {"cost": 80,  "first": 10, "ready": 10, "last_plant": 19, "window": (6, 12), "cap": 12},
     "WHEAT":      {"cost": 10,  "first": 2,  "ready": 4,  "last_plant": 24, "window": (2, 4),  "cap": 20},
-    "STRAWBERRY": {"cost": 100, "first": 10, "ready": 10, "last_plant": 17, "window": (0, -1), "cap": 35},
+    "STRAWBERRY": {"cost": 100, "first": 10, "ready": 10, "last_plant": 17, "window": (0, -1), "cap": 30},
     "CARROT":     {"cost": 20,  "first": 2,  "ready": 3,  "last_plant": 26, "window": (2, 3),  "cap": 12},
 }
 # Planting priority when a tile opens up: melon (highest $/tile-day, tiny cap), wheat (feeds

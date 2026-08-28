@@ -1,0 +1,12 @@
+# Replay data: huge (28-30MB each, dump zips 500MB+), re-downloadable from
+# Kaggle or regenerable via run_local.py --replay. Never belongs in git.
+replays/
+
+# Local environment and caches
+.venv/
+__pycache__/
+*.pyc
+
+# Search/runner state
+search_state.json
+logs/

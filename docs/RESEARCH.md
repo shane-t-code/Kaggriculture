@@ -438,3 +438,37 @@ seed at a time, walks to nearest open tile, plants/waters/harvests, sells only w
 
 **Where the edge is NOT:** end-to-end RL (unanimous failure), copying the tape (no adaptation, no
 ownership), or chasing live rating (±50 noise, up to 1400 path-dependence).
+
+## 13. ⭐⭐ Top-of-ladder anatomy — official daily dump, 2026-08-27 (top 120 games)
+
+**[OURS]** Scanned the 120 highest-avg-score episodes of the official daily dump
+(`kaggle/kaggriculture-episodes-2026-08-27`, in-zip manifest is sorted by avg_score desc; ~3070
+avg ≈ the 2,900+ band). Method: exact money-delta revenue attribution + tile-count timelines
+(scan_top_dump.py / rps_analysis.py / dusta_decode.py in the session scratchpad). Order counts
+are UNUSABLE — top teams spam ~284-310 HIRE orders per game as silent no-ops; real hand counts
+come from `farms[i]["hands"]`.
+
+**The elite profile (games ≥5 in sample):** median banks 81-104k; **every team ends at 3
+quadrants** (nobody buys SE — consistent with our two rejections); final hands 8-12; openings are
+near-deterministic per team (the "S4C0-mel7str2-whe11" family is shared by ≥6 different teams —
+the cloned meta-tape).
+
+**Crop Dusta (#1, 28W-8L in sample, median 103.8k) decoded — 36 games:**
+- **The economy is a wheat plantation.** WHEAT is their top revenue product: $57k-121k per game
+  (money-delta attributed), from a 13-wheat opening scaled all game across 3 quadrants, worked
+  by hands ramping 4 → ~9-10 (day 10) → 12 (day 15) in every single game.
+- **Conditional tomato: 10/36 games, ALWAYS at day 17 exactly,** at tomato price 69-80 two days
+  prior, planting 11-22 at once (8W-2L fired). By day 17 the strawberry ramp is done, so the
+  displacement cost that kills early tomato speculation is gone.
+- **Conditional carrot: 23/36 games, ALWAYS day 22-27,** expanding 0 → 8-55 concurrent carrots at
+  carrot price 43-66 (21W-2L fired). Reading: endgame tile conversion — carrot matures in 3 days
+  at base $35 vs wheat 4 days at $25, so freed premium tiles convert to carrots while the carrot
+  market still has demand.
+- **Conditional goose: 10/36 games, day 7-12, at egg price 50-53 = AT base** (9W-1L fired). The
+  trigger is therefore the egg OUTLET drawn (BAKERY/BRUNCH_SPOT), not price scarcity. 1-10 geese.
+- Adoption across all 240 elite seats: tomato ever planted 30/240, geese 28/240, carrot >12
+  expansions ~60/240 — **conditional play exists at the very top but is thin**; the middle of the
+  top-150 (our band) has none of it. Our reactive-hinge line (v21) is the right race.
+
+Candidates derived: v23a (wheat factory day 18→12), v22c (tomato day-15/≥70 second trigger),
+v22d (late carrot conversion), v22b (shop-triggered goose). See PLAN.md experiments.

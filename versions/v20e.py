@@ -1,19 +1,7 @@
 """
 main.py — Kaggriculture agent.  ENTRY POINT (must be at archive root, must be named main.py).
 
-STATUS: v21 — Phase 6 fix #9 (PROMOTED).  Confirmation battery: mirror vs v18
-47/64 (73%), margin positive ALL FOUR batches (+2,473/+1,210/+1,217/+2,312);
-pool dWins +5/-1/+6/+9 = +19 over 256; v12-leg counterweight -9 (stable, known,
-from the wheat component; outweighed by its +13 pool dWins alone).  THE STACK: v18 + WHEAT UNBLOCK + TOMATO HINGE
-REACTION + seat-1 step robustness.  Components, each separately validated:
-(1) WHEAT unblock (= v19i: SELL min 30->18 — was above wheat's $25 base so we
-never sold in non-scarce markets; feed reserve 2->1 day): battery mirror
-44/64 (69%), margin positive all 4 batches, pool +13 dWins (v12 leg −9 noted;
-v19j's season-reserve variant changed nothing and was dropped).  (2) TOMATO
-pure hinge reaction (v20e): fired 5/48 seeds, 5W-0L mean +9,680; with v20d's
-confirmed-stage games the branch is 8W-0L ≈ +10k; byte-identical when
-unfired.  (3) obs["step"] can be None in seat 1 (community find): guarded.
-Base: v20e CANDIDATE — v20d MINUS the speculation stage (pure hinge
+STATUS: v20e CANDIDATE — v20d MINUS the speculation stage (pure hinge
 reaction).  Stratified decode over 19 fired games: speculation-only games
 (peak 4 toms, hinge never confirmed) went 3W-7L mean −1,201 — the spec
 plants displace better crops and sell at break-even; hinge-confirmed games
@@ -231,7 +219,7 @@ SELL_RULES = {
     "MILK":       (3, 90, 28),
     "WOOL":       (3, 90, 28),
     "FERTILIZER": (5, 40, 28),
-    "WHEAT":      (6, 18, 29),
+    "WHEAT":      (6, 30, 29),
     "TOMATO":     (4, 50, 28),
 }
 NEVER_FORCE_SELL = {"WHEAT"}
@@ -254,7 +242,7 @@ TOMATO_HINGE_CONFIRM = 85    # full commitment only above clear base-noise
 # ~426/season median), carrot (fast filler, capped so we stop glutting our own market).
 PLANT_ORDER = ["MELON", "STRAWBERRY", "TOMATO", "WHEAT", "CARROT"]
 SEED_WANT = {"MELON": 3, "WHEAT": 4, "STRAWBERRY": 8, "CARROT": 4, "TOMATO": 4}
-WHEAT_FEED_RESERVE_DAYS = 1   # hold animals*this much wheat before selling any surplus
+WHEAT_FEED_RESERVE_DAYS = 2   # hold animals*this much wheat before selling any surplus
 
 # Endgame wheat factory (v13a).  Milestone diff vs the tape: it sells ~479 wheat at
 # ~$40 ($19.4k) by converting freed premium tiles to wheat wall-to-wall late-game;
@@ -1023,9 +1011,7 @@ def agent(obs):
 
     # Tape-family fingerprint: evaluated on days 1-3, latched for the episode.
     opp = obs["farms"][1 - player]
-    step = obs.get("step")
-    if step is None:          # seat-1 bug: key present with value None
-        step = day * 24 + hour
+    step = obs.get("step", day * 24 + hour)
     if step == 0:
         _TAPE_SEEN[player] = False
     if not _TAPE_SEEN.get(player, False) and 1 <= day <= 2:

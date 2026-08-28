@@ -1,64 +1,18 @@
 """
 main.py — Kaggriculture agent.  ENTRY POINT (must be at archive root, must be named main.py).
 
-STATUS: v21 — Phase 6 fix #9 (PROMOTED).  Confirmation battery: mirror vs v18
-47/64 (73%), margin positive ALL FOUR batches (+2,473/+1,210/+1,217/+2,312);
-pool dWins +5/-1/+6/+9 = +19 over 256; v12-leg counterweight -9 (stable, known,
-from the wheat component; outweighed by its +13 pool dWins alone).  THE STACK: v18 + WHEAT UNBLOCK + TOMATO HINGE
-REACTION + seat-1 step robustness.  Components, each separately validated:
-(1) WHEAT unblock (= v19i: SELL min 30->18 — was above wheat's $25 base so we
-never sold in non-scarce markets; feed reserve 2->1 day): battery mirror
-44/64 (69%), margin positive all 4 batches, pool +13 dWins (v12 leg −9 noted;
-v19j's season-reserve variant changed nothing and was dropped).  (2) TOMATO
-pure hinge reaction (v20e): fired 5/48 seeds, 5W-0L mean +9,680; with v20d's
-confirmed-stage games the branch is 8W-0L ≈ +10k; byte-identical when
-unfired.  (3) obs["step"] can be None in seat 1 (community find): guarded.
-Base: v20e CANDIDATE — v20d MINUS the speculation stage (pure hinge
-reaction).  Stratified decode over 19 fired games: speculation-only games
-(peak 4 toms, hinge never confirmed) went 3W-7L mean −1,201 — the spec
-plants displace better crops and sell at break-even; hinge-confirmed games
-(full 10-12 toms) went 3W-0L mean +10,483 (+357/+8,982/+22,109).  So: plant
-NOTHING until price >= 85 proves the hinge, then commit fully.  Rare, large,
-and byte-identical everywhere else.
-Base: v20d CANDIDATE — v20c + STAGED REACTION (fixed premature trigger).
-v20b/c autopsy: MIN_SIGNAL 55 is BELOW base-price noise (tomato idles 60-72
-all game), so 12 speculative tomatoes went in at d6-12 — displacing the
-strawberry ramp's tiles, labor, and seed money in the game's most valuable
-window — while the actual hinge fired at d19+.  Staging: NOTHING before the
-herd completes (ramp_fast); with 2+ tomato shops drawn, a small 4-plant
-speculation; full 6-per-shop commitment (and fast-plant priority) only when
-price >= 85 CONFIRMS the hinge.  React to the hinge, don't front-run base.
-Base: v20c CANDIDATE — v20b + tomato REPLANT cycle (last_plant 18 -> 20).
-Tile-tracking autopsy + engine L786-802: "ongoing" crops die after exactly
-max_yield(=4) production ticks — tomatoes complete at age ~12 (ticks at ages
-8-11) and weed out; they were never thirsty.  (Same rule explains our
-late-season strawberry decline 35->29: lifespan, not neglect.)  Tomato is a
-REPLANT-CYCLE crop: $50 -> 4 units/cycle, ~$240-280 at median scarcity and
-$600+ in hinge towns; last_plant 18 forbade replacing the died-off first wave
-exactly as prices peaked (12 plants -> 1 while price ran 106 -> 248).  A d20
-plant still ticks twice by d29 — +EV at scarcity prices; triage still stops
-planting when the price sags.
-Base: v20b CANDIDATE — v20a + labor budget for the tomatoes.  v20a seed-1
-autopsy: mechanism fired perfectly (12 toms by d12, +$5.5k, ahead at d16-18)
-then the tomatoes DIED OF THIRST as the hinge fired (12 -> 1 plants while
-price ran 106 -> 248; the one survivor showed the lost prize: $144-248/unit
-through the endgame).  12 extra daily waters had no budget.  Fix: (1) CARROT
-cap shrinks by the tomato cap (tomatoes take the filler niche's water share,
-~8/day freed vs 12 needed); (2) TOMATO gets fast-plant prio while the signal
-is live (same v18c logic).
-Base: v20a CANDIDATE — v18 + REACTIVE TOMATO (the disclosed white space).
-Three independent sources (host Bovard 735311; destbreso; Georgy Mamarin
-33/37,343 episodes): the 1.32.7 scarcity hinge fires for TOMATO in ~50% of
-games (p99 $786, base $60) and the field measurably has NOT adapted ("zero
-flipped whether they plant carrots").  Engine: TOMATO seed $50, first yield
-day 8, ONGOING with interval 1 — a DAILY producer (2x strawberry cadence);
-eaten by PIZZA_SHOP + FARMERS_MARKET (2/8 draws, visible days 2-8 — the info
-timeline works, unlike cow-depth conditioning).  Mechanism (redirect-form,
-per our conditional laws): plant tomatoes ONLY when a tomato shop is drawn
-AND price >= ~base; cap 6 per tomato shop (max 12); they take the CARROT
-filler niche (carrot yields to tomato in PLANT_ORDER when the signal fires);
-triage covers TOMATO like melon/carrot.  Tape-proof: a replay tape cannot
-condition on the shop draw.
+STATUS: v19c CANDIDATE — v18 + WHEAT QUADRANT (LAND_MAX_QUADRANTS 3->4; SE
+tiles flow to WHEAT immediately: factory cap 45 + seed want 10 activate when
+quadrant 4 exists, not at day 18).  Exact money-delta accounting of every
+110k+ live opponent (order-count revenue was WRONG — sells execute from the
+shed only, invalid orders are silent no-ops): the one UNIVERSAL gap is WHEAT
++5-18k in every single game (they gross 5.5-20k, we gross 2.0-2.6k — 8x).
+Engine (MARKET_PARAMS L42): wheat has the gentlest glut curve in the game
+(above=log, target 0.20 — +400 net units barely dents $25) and scarcity sqrt
+to $45: structurally glut-proof.  Our 75 tiles are full (35 STR + 12 MEL +
+animals), so wheat starves at 14-20 plants vs winners' 23-48.  v18a failed
+because SE land arrived d13-16 and was filled with too-late strawberries;
+wheat is the RIGHT filler: $10 seeds, 4-day cycles, ~300+ units in 14 days.
 Base: v18 — Phase 6 fix #8: v17 + EARLY-INTERLEAVED STRAWBERRY RAMP
 (the staged-herd family: v18c fast-ramp planting prio + v18d parity seeds +
 v18e staged herd).  Cows pause at 5 until 20 strawberries are planted (or day
@@ -200,7 +154,7 @@ DEBUG = False
 # ----------------------------------------------------------------------------------
 TARGET_HANDS = 6         # scale retest: 10 hands at 3 quadrants ($143/day fib)
 HANDS_PER_EXTRA_QUADRANT = 2
-LAND_MAX_QUADRANTS = 3   # v5b: retry the 3rd quadrant now that fert + cash bugs are fixed
+LAND_MAX_QUADRANTS = 4   # v19c: SE = wheat land (see header)
 LAND_PRICES = [1000, 2000, 4000]   # engine LAND_PRICES (ENGINE_NOTES B.1); order NE->SW->SE
 # (crop mix now lives in CROP_INFO caps + PLANT_ORDER + SEED_WANT below)
 LIQUIDATE_FROM_DAY = 28  # unsold inventory is worth $0 at the end — sell everything late
@@ -231,8 +185,7 @@ SELL_RULES = {
     "MILK":       (3, 90, 28),
     "WOOL":       (3, 90, 28),
     "FERTILIZER": (5, 40, 28),
-    "WHEAT":      (6, 18, 29),
-    "TOMATO":     (4, 50, 28),
+    "WHEAT":      (6, 30, 29),
 }
 NEVER_FORCE_SELL = {"WHEAT"}
 
@@ -243,18 +196,13 @@ CROP_INFO = {
     "WHEAT":      {"cost": 10,  "first": 2,  "ready": 4,  "last_plant": 24, "window": (2, 4),  "cap": 20},
     "STRAWBERRY": {"cost": 100, "first": 10, "ready": 10, "last_plant": 17, "window": (0, -1), "cap": 35},
     "CARROT":     {"cost": 20,  "first": 2,  "ready": 3,  "last_plant": 26, "window": (2, 3),  "cap": 12},
-    "TOMATO":     {"cost": 50,  "first": 8,  "ready": 8,  "last_plant": 20, "window": (0, -1), "cap": 0},
 }
-TOMATO_SHOPS = ("PIZZA_SHOP", "FARMERS_MARKET")
-TOMATO_CAP_PER_SHOP = 6      # cap = 6 per drawn tomato shop (max 12)
-TOMATO_MIN_SIGNAL_PRICE = 55 # speculation floor (with 2+ shops drawn)
-TOMATO_HINGE_CONFIRM = 85    # full commitment only above clear base-noise
 # Planting priority when a tile opens up: melon (highest $/tile-day, tiny cap), wheat (feeds
 # the herd — replaces market buys at scarcity prices), strawberry (biggest town demand:
 # ~426/season median), carrot (fast filler, capped so we stop glutting our own market).
-PLANT_ORDER = ["MELON", "STRAWBERRY", "TOMATO", "WHEAT", "CARROT"]
-SEED_WANT = {"MELON": 3, "WHEAT": 4, "STRAWBERRY": 8, "CARROT": 4, "TOMATO": 4}
-WHEAT_FEED_RESERVE_DAYS = 1   # hold animals*this much wheat before selling any surplus
+PLANT_ORDER = ["MELON", "STRAWBERRY", "WHEAT", "CARROT"]
+SEED_WANT = {"MELON": 3, "WHEAT": 4, "STRAWBERRY": 8, "CARROT": 4}
+WHEAT_FEED_RESERVE_DAYS = 2   # hold animals*this much wheat before selling any surplus
 
 # Endgame wheat factory (v13a).  Milestone diff vs the tape: it sells ~479 wheat at
 # ~$40 ($19.4k) by converting freed premium tiles to wheat wall-to-wall late-game;
@@ -327,7 +275,6 @@ MARKET_ABOVE = {
     "MELON":      (250, 300, "sq",     3.6),
     "STRAWBERRY": (120, 100, "linear", 1.6),
     "CARROT":     (35,  450, "sqrt",   0.7),
-    "TOMATO":     (60,  200, "sqrt",   0.6),
     "FERTILIZER": (100, 200, "linear", 0.4),
 }
 
@@ -455,7 +402,7 @@ def _crop_skip(tiles, opp_tiles, market_inv, shops):
     # excluded — its drain is the biggest in the game, gluts PASS, and v15e
     # (which could skip it) lost its out-of-sample batch 17-15 with -1.2k/5.6k sd:
     # abandoning 35 strawberries during a transient dip is catastrophic.
-    for crop in ("MELON", "CARROT", "TOMATO"):
+    for crop in ("MELON", "CARROT"):
         if crop not in MARKET_ABOVE:
             continue
         x = market_inv.get(crop, MARKET_I0) - MARKET_I0
@@ -488,18 +435,20 @@ def _care_skip_species(tiles, opp_tiles, market_inv, shops):
 
 
 def _build_tasks(tiles, day, seeds, tape_mode=False, care_skip=(), crop_skip=(),
-                 ramp_fast=False, tomato_cap=0):
+                 ramp_fast=False):
     """Scan the farm -> the turn's task list. Returns (tasks, n_feed_needed)."""
     tasks = []
     crop_counts = {}
     empty_tiles = []
     n_feed = 0
+    n_unlocked = 0
     reserved = set(ANIMAL_SLOTS[:sum(ANIMAL_TARGETS.values())])
 
     for y, row in enumerate(tiles):
         for x, t in enumerate(row):
             if t == "LOCKED":
                 continue
+            n_unlocked += 1
             if t is None:
                 if (x, y) in reserved:
                     # Animal slot without a structure yet: build it (free, 1 action).
@@ -604,12 +553,8 @@ def _build_tasks(tiles, day, seeds, tape_mode=False, care_skip=(), crop_skip=(),
             for c in PLANT_ORDER:
                 info = CROP_INFO[c]
                 cap = info["cap"]
-                if c == "WHEAT" and day >= WHEAT_FACTORY_DAY:
+                if c == "WHEAT" and (day >= WHEAT_FACTORY_DAY or n_unlocked > 75):
                     cap = WHEAT_FACTORY_CAP
-                if c == "TOMATO":
-                    cap = tomato_cap
-                if c == "CARROT":
-                    cap = max(0, cap - tomato_cap)
                 if (planned.get(c, 0) < cap and day <= info["last_plant"]
                         and budget.get(c, 0) > 0
                         and c not in crop_skip
@@ -623,9 +568,7 @@ def _build_tasks(tiles, day, seeds, tape_mode=False, care_skip=(), crop_skip=(),
             budget[crop] -= 1
             # Fast ramp (v18c): post-herd, a strawberry planted this hour starts
             # its 10-day clock this hour; watering only matters by nightfall.
-            prio = (P_WATER if ((ramp_fast and crop == "STRAWBERRY")
-                                or (crop == "TOMATO" and tomato_cap > 4))
-                    else P_PLANT)
+            prio = P_WATER if (ramp_fast and crop == "STRAWBERRY") else P_PLANT
             tasks.append({"prio": prio, "x": x, "y": y, "op": ["PLANT", crop]})
 
     return tasks, n_feed
@@ -971,15 +914,10 @@ def _market_orders(day, hour, money, seeds, shed, inventories, prices, hires_tod
     spendable = money - feed_hold
     for crop in PLANT_ORDER:
         info = CROP_INFO[crop]
-        if day > info["last_plant"]:
-            continue
-        if crop == "TOMATO":
-            if not herd_complete or prices.get("TOMATO", 0) < TOMATO_HINGE_CONFIRM:
-                continue
-        elif info["cap"] <= 0:
+        if day > info["last_plant"] or info["cap"] <= 0:
             continue
         want = SEED_WANT[crop]
-        if crop == "WHEAT" and day >= WHEAT_FACTORY_DAY:
+        if crop == "WHEAT" and (day >= WHEAT_FACTORY_DAY or n_quadrants >= 4):
             want = WHEAT_FACTORY_SEED_WANT
         if crop == "STRAWBERRY" and not herd_complete:
             # v18d: days 0-3 stay cow-only (v13c's day-0 burst failed at 37.5%);
@@ -1023,9 +961,7 @@ def agent(obs):
 
     # Tape-family fingerprint: evaluated on days 1-3, latched for the episode.
     opp = obs["farms"][1 - player]
-    step = obs.get("step")
-    if step is None:          # seat-1 bug: key present with value None
-        step = day * 24 + hour
+    step = obs.get("step", day * 24 + hour)
     if step == 0:
         _TAPE_SEEN[player] = False
     if not _TAPE_SEEN.get(player, False) and 1 <= day <= 2:
@@ -1057,17 +993,8 @@ def agent(obs):
     _cow_t = 6 if _milk_proj < 2.0 else ANIMAL_TARGETS["COW"]
     ramp_fast = _owned_n >= ANIMAL_TARGETS["SHEEP"] + _cow_t
 
-    # Reactive tomato (v20d, staged): none pre-herd; small speculation on a
-    # 2+-shop draw; full commitment only when price >= 85 confirms the hinge.
-    _tom_shops = sum(1 for s in shops if s in TOMATO_SHOPS)
-    _tom_px = prices.get("TOMATO", 0)
-    if ramp_fast and _tom_px >= TOMATO_HINGE_CONFIRM:
-        tomato_cap = min(12, TOMATO_CAP_PER_SHOP * max(1, _tom_shops))
-    else:
-        tomato_cap = 0
-
     tasks, n_feed = _build_tasks(tiles, day, seeds, tape_mode, care_skip, crop_skip,
-                                 ramp_fast, tomato_cap)
+                                 ramp_fast)
     _supply_tasks(tasks, n_feed, units, inventories, shed, tiles, day)
     assignment = _assign(units, tasks, inventories, tiles, day, hour)
 

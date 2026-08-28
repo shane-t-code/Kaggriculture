@@ -1,7 +1,17 @@
 """
 main.py — Kaggriculture agent.  ENTRY POINT (must be at archive root, must be named main.py).
 
-STATUS: v22c CANDIDATE — TOMATO SECOND TRIGGER (Crop Dusta's day-17 batch).
+STATUS: v22c REJECTED (2 batches: dWins -3/-4, mirror 38%/38%, margins
+-687/-201).  Diagnosis: tomato idles 60-72, so "day>=15 AND >=70" fires in
+a large share of games at merely-mild prices — 12 tomatoes planted at ~70
+sell near breakeven while their planting/watering displaces late
+strawberry/wheat value (same economics as v20a's failed speculation, moved
+later).  Dusta's d17 batch pays inside THEIR spare-capacity farm.  Third
+confirmation of the transplant law — even a trigger transplants badly when
+the THRESHOLD imports their economics.  Our own measured bar stands:
+>= 85 = confirmed hinge = the only tomato worth planting for us.
+Original design below.
+--- original --- TOMATO SECOND TRIGGER (Crop Dusta's day-17 batch).
 Dump decode: Crop Dusta fires tomato in 10/36 games, ALWAYS at day 17, at
 prices 69-80 (16-22 plants; 8W-2L when fired).  Day-17 tomatoes fruit d25+
 (first_yield 8) and tick daily to d29.  Our v21 trigger (>=85 anytime

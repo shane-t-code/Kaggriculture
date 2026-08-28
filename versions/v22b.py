@@ -1,7 +1,18 @@
 """
 main.py — Kaggriculture agent.  ENTRY POINT (must be at archive root, must be named main.py).
 
-STATUS: v22b CANDIDATE — REACTIVE GOOSE (shop-draw-triggered egg line).
+STATUS: v22b REJECTED (2 batches: dWins -11/-5; v12 leg -5/-3 wins with
+-2.5k both batches; mirror margins -1,191/-3,576).  Diagnosis: 1-3 geese
+bought day 6-14 land in the exact window of the v18 strawberry ramp — the
+$300-900 + coop + daily FEED/CARE ops come out of the ramp's cash and the
+SATURATED labor budget (goose = 2 more must-do tasks/day forever), and the
+egg stream (~$50/day/goose gross) does not cover what the ramp loses.
+Dusta's 9W-1L geese ride on 12 hands with slack.  Fourth transplant-law
+confirmation.  If ever revisited: geese must be an OPENING-shape choice
+(replacing a herd animal), not a mid-game addition.  Mechanism code is
+sound (sanity-clean) — keep as reference for animal-machinery generality.
+Original design below.
+--- original --- REACTIVE GOOSE (shop-draw-triggered egg line).
 Source: dump decode of the 2026-08-27 top-120 games — 28/240 elite seats run
 geese conditionally (Crop Dusta up to 10); Crop Dusta's trigger decode: buys
 at day 7-12 with egg price 50-53 = AT base, i.e. the signal is the egg

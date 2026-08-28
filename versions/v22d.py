@@ -1,7 +1,17 @@
 """
 main.py — Kaggriculture agent.  ENTRY POINT (must be at archive root, must be named main.py).
 
-STATUS: v22d CANDIDATE — LATE CARROT CONVERSION (Crop Dusta's endgame).
+STATUS: v22d REJECTED (2 batches: dWins +0/-6, dBank -557/-492, mirror
+50%/31%, EVERY leg's bank negative in BOTH batches — uniform).  Diagnosis:
+late carrots cost ~5 unit-ops each (plant + 3 waters + harvest) exactly
+where the v19b law prices tile revenue in OPS, not coins (near liquidation
+every op is contested), and putting carrot ahead of wheat starved the
+validated v13a wheat factory.  Dusta's 21W-2L carrot conversion works
+inside a 12-hand wheat-shaped farm with spare endgame labor; ours has none.
+Second confirmation (with v23a) of the transplant law: their production
+shapes don't graft onto our economy — only TRIGGER-style market reactions
+transplant.  Original design below.
+--- original --- LATE CARROT CONVERSION (Crop Dusta's endgame).
 Dump decode: Crop Dusta expands carrots in 23/36 top games, ALWAYS day
 22-27, to 8-55 concurrent plants, with carrot price 43-66 two days before
 (21W-2L when fired).  Reading: it is endgame tile conversion — carrot

@@ -1,7 +1,19 @@
 """
 main.py — Kaggriculture agent.  ENTRY POINT (must be at archive root, must be named main.py).
 
-STATUS: v23a CANDIDATE — EARLY WHEAT PLANTATION.  Source: Crop Dusta decode
+STATUS: v23a REJECTED (2 batches: dWins -6/+0, dBank +298/-1,000, mirror
+31%/50% — no win signal, bank flat-to-negative).  Diagnosis: Crop Dusta's
+wheat plantation is not a bolt-on — their economy is built AROUND wheat
+from the opening (13 wheat seeds day 0, 12 hands whose labor plan exists to
+water wheat at scale).  Grafting an early factory onto our premium-heavy
+shape (35 straw + 12 melon) just adds 50 wheat plants whose watering steals
+saturated labor from higher-value crops, and our own 70-cap supply gluts
+the price we sell into.  Same law as the sheep bolt-on (v19a): WINNING
+SHAPES ARE BUILT FROM THE OPENING, NOT BOLTED ON.  A real test of the
+plantation thesis would be a ground-up wheat-first opening — a different
+agent, not a patch (parked; RunPod-scale opening search territory).
+Original design below.
+--- original --- EARLY WHEAT PLANTATION.  Source: Crop Dusta decode
 (36 dump games, 2026-08-27): the #1 agent's top revenue product is WHEAT
 ($57k-121k per game, money-delta attributed), from a 13-wheat-seed opening
 scaled across 3 quadrants all game — their whole economy is a wheat

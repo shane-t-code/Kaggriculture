@@ -1,7 +1,18 @@
 """
 main.py — Kaggriculture agent.  ENTRY POINT (must be at archive root, must be named main.py).
 
-STATUS: v24c CANDIDATE — HERD-TAIL SUBSTITUTION: geese INSTEAD OF cows 7-8
+STATUS: v24c PARKED — UNRESOLVABLE AT LOCAL SCALE (pod-battery candidate
+#1).  48 mirror seeds probed: fires in ~12% of games (6/48 seat-games:
+milk-poor town + egg shop + egg >= 48 at day 11-13, always 2 geese);
+fired record 3W-3L; counterfactual bank deltas on the first three fired
+seeds: +9,629 / -3,833 / +1,728 (2/3 positive, mean +2.5k).  FULL pool
+battery (4 batches, 256 games): dWins +0/-3/-5(+tie-artifact)/+2 with the
+v12 leg +2 net and dBank positive in 7 of 8 leg-batches — leans mildly
+positive, ZERO negative signals, but the fired sample (~12% of games) is
+far too small locally.  A ~12%-fire, ~+2.5k-bank mechanism needs ~500
+seeds (= ~60 fired games) for a verdict: queued for the RunPod harness.  Rebased onto v24 (gamble ported) so the
+diff vs main.py is ONLY the goose swap.  Design below.
+--- design --- HERD-TAIL SUBSTITUTION: geese INSTEAD OF cows 7-8
 in milk-poor towns (the legal form of v22b, which was REJECTED as an
 ADDITION).  v22b's diagnosis: geese bought on top of the full plan bite the
 ramp's cash and the saturated labor budget.  The swap avoids both: the v17

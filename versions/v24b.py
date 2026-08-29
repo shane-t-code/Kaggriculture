@@ -1,31 +1,27 @@
 """
 main.py — Kaggriculture agent.  ENTRY POINT (must be at archive root, must be named main.py).
 
-STATUS: v24 — Phase 6 fix #10 (PROMOTED, = v21 + v24a bank-differential
-tomato gamble).  Validation:  Four pool batches (256 games): v12 leg +2 dWins / +737
-dBank; every other leg 0 dWins; mirror = 5W-5L-6T with seat-symmetric
-banks = FULLY INERT (pool_ab's mirror "-10" was tie-counting artifact —
-HARNESS NOTE: mirror ties count as A-losses in POOL TOTAL; check margins
-+0 -> run run_local for the true W-L-T).  Stratified probe vs v12 (16
-seeds, replays): fired 10/16 games at d16-18, deficits -5.5k..-11.2k,
-tomato 70-72 -> 8/10 WINS FROM BEHIND; counterfactual on both fired
-losses: baseline lost those games WORSE (-4,915 -> -3,037 and -2,640 ->
--328).  Zero measured downside anywhere.  First live bank-differential
-mechanism (destbreso sign-flip).  Original design below.
---- design --- BANK-DIFFERENTIAL TOMATO GAMBLE (first ell-aware
-mechanism).  Theory (destbreso, RESEARCH 3): ratings count wins only, so
-Pr[win] = Phi(mu/sigma) — extra VARIANCE helps when behind (ell + mu < 0)
-and hurts when ahead.  Both banks are public every turn.  Evidence for the
-lever: v22c measured that "day>=15, tomato >=70" planting is ~EV-neutral in
-bank (dBank -205/+560) but swingy — i.e. A FAIR COIN.  Unconditionally a
-fair coin is worthless (v22c rejected, dWins -3/-4); flipped ONLY WHEN
-LOSING it buys win probability with variance we'd otherwise waste.
-Mechanism: if bank deficit >= 5,000 at day >= 15 and tomato >= 70, fire the
-(validated) tomato machinery at the lower bar; the >=85 confirmed-hinge
-trigger stays unconditional.  Sticky once fired (a started batch gets
-finished even if ell recovers).  Byte-identical when never behind — the
-stratified decode must show: fired games = losing positions converted at
-above-baseline rate; unfired games identical.  Base: v21 (below).  Confirmation battery: mirror vs v18
+STATUS: v24b REJECTED at 4 batches/256 games (dWins -5/+0/-5/-4, dBank
++199/-42/-1,858/+60; v12 leg net 0; mirror margins nonzero = it FIRED and
+mildly lost).  Diagnosis: the projection gate (>=80 with both farms'
+inflow) opens in healthy-demand games, but +10 berries still (a) glut the
+market the MIRROR also supplies (mirror-law) and (b) cost +10 daily
+waters/fert from a saturated labor budget — the live winners who run 40-56
+strawberries carry different shapes (fewer cows, 11-15 hands).  Fifth
+data point for the shape law from the demand side.  STR cap 35 stays.
+Original design below.
+--- original --- ABSORPTION-GATED STRAWBERRY CAP RAISE (35 -> 45).
+Source: v21 live loss decode (18 losses, exact revenue attribution) — in ~7
+losses the opponent ran 40-56 concurrent strawberries and out-earned our
+capped 35 by $8-30k (their STR revenue 35-49k vs our 15-29k), while OUR
+str count is EXACTLY 35 in all 36 games: the cap binds always, including in
+games where the market demonstrably absorbed 20 more plants (4 of 8 shop
+types eat strawberry — biggest drain in the game).  Laws respected: v17i
+(never CUT baseline) untouched; "absorption law gates NEW boosts" is
+exactly this form — the raise only applies when the 3-day projected
+strawberry price (existing _glut_price machinery, both farms' inflow
+counted) stays >= 80.  Post-herd only.  Occupancy change => 64-seed
+battery + stratified decode.  Base: v21 (below).  Confirmation battery: mirror vs v18
 47/64 (73%), margin positive ALL FOUR batches (+2,473/+1,210/+1,217/+2,312);
 pool dWins +5/-1/+6/+9 = +19 over 256; v12-leg counterweight -9 (stable, known,
 from the wheat component; outweighed by its +13 pool dWins alone).  THE STACK: v18 + WHEAT UNBLOCK + TOMATO HINGE
@@ -273,12 +269,10 @@ TOMATO_SHOPS = ("PIZZA_SHOP", "FARMERS_MARKET")
 TOMATO_CAP_PER_SHOP = 6      # cap = 6 per drawn tomato shop (max 12)
 TOMATO_MIN_SIGNAL_PRICE = 55 # speculation floor (with 2+ shops drawn)
 TOMATO_HINGE_CONFIRM = 85    # full commitment only above clear base-noise
-# Bank-differential gamble (v24a): when losing by this much, take the
-# EV-neutral tomato coin-flip that v22c measured (day>=15, price>=70).
-BEHIND_GAMBLE_DEFICIT = 5000
-BEHIND_TOMATO_DAY = 15
-BEHIND_TOMATO_PRICE = 70
-_GAMBLE_ON = {}              # per-seat sticky latch, reset at step 0
+# Absorption-gated strawberry boost (v24b): cap 35 -> 45 only while the
+# 3-day projected price stays healthy (winners run 40-56 in absorbing towns).
+STR_BOOST_CAP = 45
+STR_BOOST_MIN_PROJ = 80
 # Planting priority when a tile opens up: melon (highest $/tile-day, tiny cap), wheat (feeds
 # the herd — replaces market buys at scarcity prices), strawberry (biggest town demand:
 # ~426/season median), carrot (fast filler, capped so we stop glutting our own market).
@@ -518,7 +512,7 @@ def _care_skip_species(tiles, opp_tiles, market_inv, shops):
 
 
 def _build_tasks(tiles, day, seeds, tape_mode=False, care_skip=(), crop_skip=(),
-                 ramp_fast=False, tomato_cap=0):
+                 ramp_fast=False, tomato_cap=0, str_cap=None):
     """Scan the farm -> the turn's task list. Returns (tasks, n_feed_needed)."""
     tasks = []
     crop_counts = {}
@@ -638,6 +632,8 @@ def _build_tasks(tiles, day, seeds, tape_mode=False, care_skip=(), crop_skip=(),
                     cap = WHEAT_FACTORY_CAP
                 if c == "TOMATO":
                     cap = tomato_cap
+                if c == "STRAWBERRY" and str_cap is not None:
+                    cap = str_cap
                 if c == "CARROT":
                     cap = max(0, cap - tomato_cap)
                 if (planned.get(c, 0) < cap and day <= info["last_plant"]
@@ -853,8 +849,7 @@ def _unit_action(unit_pos, task):
 
 
 def _market_orders(day, hour, money, seeds, shed, inventories, prices, hires_today,
-                   n_hands, tiles, n_quadrants, opp_tiles, market_inv, shops, tape_mode,
-                   gamble=False):
+                   n_hands, tiles, n_quadrants, opp_tiles, market_inv, shops, tape_mode):
     opp_crops, opp_animals = _opp_capacity(opp_tiles)
     my_crops, my_animals = _opp_capacity(tiles)
     """Queue order: SELL (income), HIRE, wheat, animals, LAND, seeds. Engine cap: 10."""
@@ -1005,9 +1000,7 @@ def _market_orders(day, hour, money, seeds, shed, inventories, prices, hires_tod
         if day > info["last_plant"]:
             continue
         if crop == "TOMATO":
-            _tpx = prices.get("TOMATO", 0)
-            _bar = BEHIND_TOMATO_PRICE if gamble else TOMATO_HINGE_CONFIRM
-            if not herd_complete or _tpx < _bar:
+            if not herd_complete or prices.get("TOMATO", 0) < TOMATO_HINGE_CONFIRM:
                 continue
         elif info["cap"] <= 0:
             continue
@@ -1061,7 +1054,6 @@ def agent(obs):
         step = day * 24 + hour
     if step == 0:
         _TAPE_SEEN[player] = False
-        _GAMBLE_ON[player] = False
     if not _TAPE_SEEN.get(player, False) and 1 <= day <= 2:
         _oc, _oa = _opp_capacity(opp.get("tiles", []))
         # Self-exclusion (v15 copies the tape's 4-sheep opening): the tape shows
@@ -1095,23 +1087,26 @@ def agent(obs):
     # 2+-shop draw; full commitment only when price >= 85 confirms the hinge.
     _tom_shops = sum(1 for s in shops if s in TOMATO_SHOPS)
     _tom_px = prices.get("TOMATO", 0)
-    # Bank-differential gamble (v24a): when clearly losing, flip the
-    # EV-neutral late-tomato coin (variance buys win probability only from
-    # behind).  Sticky once latched so a started batch gets finished.
-    if (not _GAMBLE_ON.get(player, False)
-            and day >= BEHIND_TOMATO_DAY
-            and money - opp.get("money", 0) <= -BEHIND_GAMBLE_DEFICIT
-            and _tom_px >= BEHIND_TOMATO_PRICE):
-        _GAMBLE_ON[player] = True
-    gamble = _GAMBLE_ON.get(player, False)
-    if ramp_fast and (_tom_px >= TOMATO_HINGE_CONFIRM
-                      or (gamble and _tom_px >= BEHIND_TOMATO_PRICE)):
+    if ramp_fast and _tom_px >= TOMATO_HINGE_CONFIRM:
         tomato_cap = min(12, TOMATO_CAP_PER_SHOP * max(1, _tom_shops))
     else:
         tomato_cap = 0
 
+    # Absorption-gated strawberry boost (v24b): same projection machinery as
+    # _crop_skip, applied to the raise side.  Both farms' inflow counted, so
+    # the projection already prices in our own extra berries' glut pressure.
+    _my_c, _my_a = _opp_capacity(tiles)
+    _op_c, _op_a = _opp_capacity(opp.get("tiles", []))
+    _sx = market_inv.get("STRAWBERRY", MARKET_I0) - MARKET_I0
+    _snet = (_town_drain_per_day("STRAWBERRY", shops)
+             - _inflow_per_day("STRAWBERRY", _my_c, _my_a)
+             - _inflow_per_day("STRAWBERRY", _op_c, _op_a))
+    _sproj = _glut_price("STRAWBERRY", max(0, _sx - _snet * CARE_SKIP_HORIZON))
+    str_cap = (STR_BOOST_CAP if (ramp_fast and _sproj >= STR_BOOST_MIN_PROJ)
+               else CROP_INFO["STRAWBERRY"]["cap"])
+
     tasks, n_feed = _build_tasks(tiles, day, seeds, tape_mode, care_skip, crop_skip,
-                                 ramp_fast, tomato_cap)
+                                 ramp_fast, tomato_cap, str_cap)
     _supply_tasks(tasks, n_feed, units, inventories, shed, tiles, day)
     assignment = _assign(units, tasks, inventories, tiles, day, hour)
 
@@ -1129,8 +1124,7 @@ def agent(obs):
     market = _market_orders(day, hour, money, seeds, shed, inventories, prices,
                             me.get("hires_today", 0), len(me.get("hands", [])), tiles,
                             len(me.get("unlocked_quadrants", ["NW"])),
-                            opp.get("tiles", []), market_inv, shops, tape_mode,
-                            gamble)
+                            opp.get("tiles", []), market_inv, shops, tape_mode)
 
     if DEBUG:
         print(f"d{day} h{hour} units={len(units)} tasks={len(tasks)} market={market}")

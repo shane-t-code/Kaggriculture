@@ -1,8 +1,8 @@
 """
 main.py — Kaggriculture agent.  ENTRY POINT (must be at archive root, must be named main.py).
 
-STATUS: v24 — Phase 6 fix #10 (PROMOTED, = v21 + v24a bank-differential
-tomato gamble).  Validation:  Four pool batches (256 games): v12 leg +2 dWins / +737
+STATUS: v24a VALIDATED — PROMOTION PENDING (awaiting v24b battery finish to
+swap main.py).  Four pool batches (256 games): v12 leg +2 dWins / +737
 dBank; every other leg 0 dWins; mirror = 5W-5L-6T with seat-symmetric
 banks = FULLY INERT (pool_ab's mirror "-10" was tie-counting artifact —
 HARNESS NOTE: mirror ties count as A-losses in POOL TOTAL; check margins

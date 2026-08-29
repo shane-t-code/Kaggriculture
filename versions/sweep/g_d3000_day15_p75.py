@@ -1,48 +1,31 @@
 """
 main.py — Kaggriculture agent.  ENTRY POINT (must be at archive root, must be named main.py).
 
-STATUS: v24c REJECTED at pod scale — the definitive verdict (7,000 games,
-500 seeds, 20 min, $0.45; first pod battery).  Correct same-seat
-stratification: fired 172/1000 mirror seat-games (17%), bank delta −831
-per fired game, outcome flips 36 for / 68 AGAINST (net −32 wins).  The
-local +2.5k counterfactual lean (n=3) was sample luck.  Even funded by the
-freed cow-7-8 budget, geese lose in our shape — the egg stream can't cover
-the ops+glut cost.  SIXTH shape-law confirmation; goose/egg is closed in
-ALL bolt-on and substitution forms (only a ground-up egg-farm opening
-remains conceivable — opening-search territory).  Local-scale history
-below.  48 mirror seeds probed: fires in ~12% of games (6/48 seat-games:
-milk-poor town + egg shop + egg >= 48 at day 11-13, always 2 geese);
-fired record 3W-3L; counterfactual bank deltas on the first three fired
-seeds: +9,629 / -3,833 / +1,728 (2/3 positive, mean +2.5k).  FULL pool
-battery (4 batches, 256 games): dWins +0/-3/-5(+tie-artifact)/+2 with the
-v12 leg +2 net and dBank positive in 7 of 8 leg-batches — leans mildly
-positive, ZERO negative signals, but the fired sample (~12% of games) is
-far too small locally.  A ~12%-fire, ~+2.5k-bank mechanism needs ~500
-seeds (= ~60 fired games) for a verdict: queued for the RunPod harness.  Rebased onto v24 (gamble ported) so the
-diff vs main.py is ONLY the goose swap.  Design below.
---- design --- HERD-TAIL SUBSTITUTION: geese INSTEAD OF cows 7-8
-in milk-poor towns (the legal form of v22b, which was REJECTED as an
-ADDITION).  v22b's diagnosis: geese bought on top of the full plan bite the
-ramp's cash and the saturated labor budget.  The swap avoids both: the v17
-demand-conditioned herd already caps cows at 6 when projected milk outlets
-< 2.0 — that branch FREES ~$800 of capital and ~2 animals' worth of daily
-FEED/CARE ops which currently go unused.  v24c spends exactly that freed
-budget on up to 2 geese, only when an egg outlet (BAKERY/BRUNCH_SPOT) is
-drawn and egg price >= 48.  Targets our worst live bucket (3 milk outlets:
-5W-8L in v21's 36 games).  Byte-identical whenever milk_proj >= 2.0 (cows
-7-8 bought as usual) or no egg outlet.  Gate diff vs v22b: requires
-cow_target < 8, GOOSE_MAX 3 -> 2.  Machinery unchanged (sanity-clean).
-Base: v21 + v22b machinery (below).
-Source: dump decode of the 2026-08-27 top-120 games — 28/240 elite seats run
-geese conditionally (Crop Dusta up to 10); Crop Dusta's trigger decode: buys
-at day 7-12 with egg price 50-53 = AT base, i.e. the signal is the egg
-OUTLET drawn (BAKERY/BRUNCH_SPOT), not deep scarcity (9W-1L fired).  Engine:
-GOOSE $300, COOP (free build), first egg 4 days after placement then daily —
-cared = 2 eggs/day; egg base $50 with the 1.32.7 hinge (community: scarce in
-22% of games).  Payback < 4 days at base while an outlet is drawn.  Gate:
-herd complete AND day 6-14 AND an egg shop drawn AND egg price >= 48; up to
-3 geese; coop built dynamically on the empty tile nearest the shed (no
-reserved slots — byte-identical when unfired).  Base: v21 (below).  Confirmation battery: mirror vs v18
+STATUS: v24 — Phase 6 fix #10 (PROMOTED, = v21 + v24a bank-differential
+tomato gamble).  Validation:  Four pool batches (256 games): v12 leg +2 dWins / +737
+dBank; every other leg 0 dWins; mirror = 5W-5L-6T with seat-symmetric
+banks = FULLY INERT (pool_ab's mirror "-10" was tie-counting artifact —
+HARNESS NOTE: mirror ties count as A-losses in POOL TOTAL; check margins
++0 -> run run_local for the true W-L-T).  Stratified probe vs v12 (16
+seeds, replays): fired 10/16 games at d16-18, deficits -5.5k..-11.2k,
+tomato 70-72 -> 8/10 WINS FROM BEHIND; counterfactual on both fired
+losses: baseline lost those games WORSE (-4,915 -> -3,037 and -2,640 ->
+-328).  Zero measured downside anywhere.  First live bank-differential
+mechanism (destbreso sign-flip).  Original design below.
+--- design --- BANK-DIFFERENTIAL TOMATO GAMBLE (first ell-aware
+mechanism).  Theory (destbreso, RESEARCH 3): ratings count wins only, so
+Pr[win] = Phi(mu/sigma) — extra VARIANCE helps when behind (ell + mu < 0)
+and hurts when ahead.  Both banks are public every turn.  Evidence for the
+lever: v22c measured that "day>=15, tomato >=70" planting is ~EV-neutral in
+bank (dBank -205/+560) but swingy — i.e. A FAIR COIN.  Unconditionally a
+fair coin is worthless (v22c rejected, dWins -3/-4); flipped ONLY WHEN
+LOSING it buys win probability with variance we'd otherwise waste.
+Mechanism: if bank deficit >= 5,000 at day >= 15 and tomato >= 70, fire the
+(validated) tomato machinery at the lower bar; the >=85 confirmed-hinge
+trigger stays unconditional.  Sticky once fired (a started batch gets
+finished even if ell recovers).  Byte-identical when never behind — the
+stratified decode must show: fired games = losing positions converted at
+above-baseline rate; unfired games identical.  Base: v21 (below).  Confirmation battery: mirror vs v18
 47/64 (73%), margin positive ALL FOUR batches (+2,473/+1,210/+1,217/+2,312);
 pool dWins +5/-1/+6/+9 = +19 over 256; v12-leg counterweight -9 (stable, known,
 from the wheat component; outweighed by its +13 pool dWins alone).  THE STACK: v18 + WHEAT UNBLOCK + TOMATO HINGE
@@ -255,15 +238,7 @@ BUY_PRIORITY = ["SHEEP", "COW"]
 ANIMAL_INFO = {
     "COW":   {"cost": 400, "build": "BUILD_PASTURE", "first": 8, "interval": 2, "product": "MILK"},
     "SHEEP": {"cost": 500, "build": "BUILD_PASTURE", "first": 6, "interval": 3, "product": "WOOL"},
-    "GOOSE": {"cost": 300, "build": "BUILD_COOP",    "first": 4, "interval": 1, "product": "EGG"},
 }
-HERD_SPECIES = ("SHEEP", "COW")   # the fixed herd; GOOSE is reactive, never counted
-# Reactive goose (v22b): trigger is the egg OUTLET, not scarcity (Crop Dusta
-# buys at base price when BAKERY/BRUNCH_SPOT is drawn).
-EGG_SHOPS = ("BAKERY", "BRUNCH_SPOT")
-EGG_MIN_PRICE = 48
-GOOSE_MAX = 2                # v24c: sized to the freed cow-7-8 budget
-GOOSE_LAST_BUY_DAY = 14
 # Ring around the shed-access tile (4,4): FEED/CARE/HARVEST/COLLECT all happen standing ON
 # the animal tile and the wheat lives at the shed, so clustering minimizes walking.
 ANIMAL_SLOTS = [(3, 4), (4, 3), (3, 3), (2, 4), (4, 2), (2, 3), (3, 2), (2, 2),
@@ -282,7 +257,6 @@ SELL_RULES = {
     "FERTILIZER": (5, 40, 28),
     "WHEAT":      (6, 18, 29),
     "TOMATO":     (4, 50, 28),
-    "EGG":        (4, 40, 28),
 }
 NEVER_FORCE_SELL = {"WHEAT"}
 
@@ -299,11 +273,11 @@ TOMATO_SHOPS = ("PIZZA_SHOP", "FARMERS_MARKET")
 TOMATO_CAP_PER_SHOP = 6      # cap = 6 per drawn tomato shop (max 12)
 TOMATO_MIN_SIGNAL_PRICE = 55 # speculation floor (with 2+ shops drawn)
 TOMATO_HINGE_CONFIRM = 85    # full commitment only above clear base-noise
-# Bank-differential gamble (v24a, promoted in v24 — ported so this candidate
-# diffs from main.py ONLY by the goose swap).
-BEHIND_GAMBLE_DEFICIT = 5000
+# Bank-differential gamble (v24a): when losing by this much, take the
+# EV-neutral tomato coin-flip that v22c measured (day>=15, price>=70).
+BEHIND_GAMBLE_DEFICIT = 3000
 BEHIND_TOMATO_DAY = 15
-BEHIND_TOMATO_PRICE = 70
+BEHIND_TOMATO_PRICE = 75
 _GAMBLE_ON = {}              # per-seat sticky latch, reset at step 0
 # Planting priority when a tile opens up: melon (highest $/tile-day, tiny cap), wheat (feeds
 # the herd — replaces market buys at scarcity prices), strawberry (biggest town demand:
@@ -384,7 +358,6 @@ MARKET_ABOVE = {
     "STRAWBERRY": (120, 100, "linear", 1.6),
     "CARROT":     (35,  450, "sqrt",   0.7),
     "TOMATO":     (60,  200, "sqrt",   0.6),
-    "EGG":        (50,  332, "log",    0.2),
     "FERTILIZER": (100, 200, "linear", 0.4),
 }
 
@@ -442,8 +415,6 @@ def _inflow_per_day(item, crops, animals):
         return crops.get("STRAWBERRY", 0) * 0.75  # fertilized ongoing ~1.5 / 2 days
     if item == "CARROT":
         return crops.get("CARROT", 0) * 1.0       # 3 units / 3-day cycle
-    if item == "EGG":
-        return animals.get("GOOSE", 0) * 2.0      # cared goose: 2 eggs / day
     return 0.0
 
 
@@ -547,13 +518,12 @@ def _care_skip_species(tiles, opp_tiles, market_inv, shops):
 
 
 def _build_tasks(tiles, day, seeds, tape_mode=False, care_skip=(), crop_skip=(),
-                 ramp_fast=False, tomato_cap=0, goose_coops=0):
+                 ramp_fast=False, tomato_cap=0):
     """Scan the farm -> the turn's task list. Returns (tasks, n_feed_needed)."""
     tasks = []
     crop_counts = {}
     empty_tiles = []
     n_feed = 0
-    n_coops = 0
     reserved = set(ANIMAL_SLOTS[:sum(ANIMAL_TARGETS.values())])
 
     for y, row in enumerate(tiles):
@@ -571,8 +541,6 @@ def _build_tasks(tiles, day, seeds, tape_mode=False, care_skip=(), crop_skip=(),
             if not isinstance(t, dict):
                 continue
             kind = t.get("kind")
-            if kind == "COOP":
-                n_coops += 1
 
             if kind == "WEED":
                 if day < LAST_DAY:
@@ -690,16 +658,6 @@ def _build_tasks(tiles, day, seeds, tape_mode=False, care_skip=(), crop_skip=(),
                     else P_PLANT)
             tasks.append({"prio": prio, "x": x, "y": y, "op": ["PLANT", crop]})
 
-    # Reactive goose (v22b): a bought goose needs a coop (free, 1 action).
-    # Build on the empty tile nearest the shed — no reserved slots, so the
-    # base agent is byte-identical while no goose is owned.
-    if goose_coops > n_coops and empty_tiles and day < LAST_DAY:
-        bx, by = min(empty_tiles,
-                     key=lambda p: abs(p[0] - SHED_TILE[0]) + abs(p[1] - SHED_TILE[1]))
-        tasks = [t for t in tasks
-                 if not (t["x"] == bx and t["y"] == by and t["op"][0] == "PLANT")]
-        tasks.append({"prio": P_BUILD, "x": bx, "y": by, "op": ["BUILD_COOP"]})
-
     return tasks, n_feed
 
 
@@ -727,17 +685,15 @@ def _supply_tasks(tasks, n_feed, units, inventories, shed, tiles, day):
                       "op": ["PICKUP", "FERTILIZER", n]})
 
     # One animal-pickup per turn: an animal sits in the shed and an empty structure waits.
-    empty_kinds = {
-        t.get("kind") for row in tiles for t in row
-        if isinstance(t, dict) and t.get("kind") in ("PASTURE", "COOP")
-        and not t.get("animal")
-    }
-    if empty_kinds:
+    empty_pasture = any(
+        isinstance(t, dict) and t.get("kind") == "PASTURE" and not t.get("animal")
+        for row in tiles for t in row
+    )
+    if empty_pasture:
         carrying = any(any(sp in inv for sp in ANIMAL_INFO) for inv in inventories)
         if not carrying:
-            for sp in list(BUY_PRIORITY) + ["GOOSE"]:
-                need = "COOP" if sp == "GOOSE" else "PASTURE"
-                if need in empty_kinds and shed.get(sp, 0) > 0:
+            for sp in BUY_PRIORITY:
+                if shed.get(sp, 0) > 0:
                     tasks.append({"prio": P_CHAIN, "x": SHED_TILE[0], "y": SHED_TILE[1],
                                   "op": ["PICKUP", sp, 1]})
                     break
@@ -757,11 +713,10 @@ def _assign(units, tasks, inventories, tiles, day, hour):
         species = next((sp for sp in ANIMAL_INFO if inv.get(sp, 0) > 0), None)
         if species is None:
             continue
-        need_kind = "COOP" if species == "GOOSE" else "PASTURE"
         best, best_d = None, 10**9
         for y, row in enumerate(tiles):
             for x, t in enumerate(row):
-                if isinstance(t, dict) and t.get("kind") == need_kind and not t.get("animal"):
+                if isinstance(t, dict) and t.get("kind") == "PASTURE" and not t.get("animal"):
                     d = abs(x - ux) + abs(y - uy)
                     if d < best_d:
                         best, best_d = (x, y), d
@@ -1032,21 +987,6 @@ def _market_orders(day, hour, money, seeds, shed, inventories, prices, hires_tod
                 money -= 3 * wheat_price
                 break
 
-    # Reactive goose (v22b): the herd never contains geese — this fires only
-    # AFTER herd completion, when an egg outlet is drawn and the price holds
-    # at/above base.  $300, first egg 4 days after placement, then 2/day
-    # cared: payback < 4 days while the outlet drains the market.
-    if (herd_complete and 6 <= day <= GOOSE_LAST_BUY_DAY and hour < 8
-            and cow_target < ANIMAL_TARGETS["COW"]     # v24c: milk-poor town —
-            and owned.get("GOOSE", 0) < GOOSE_MAX      # cows 7-8 budget is free
-            and prices.get("EGG", 0) >= EGG_MIN_PRICE
-            and any(s in EGG_SHOPS for s in shops)
-            and money >= ANIMAL_INFO["GOOSE"]["cost"] + MONEY_RESERVE + 200):
-        orders.append(["BUY_ANIMAL", "GOOSE", 1])
-        money -= ANIMAL_INFO["GOOSE"]["cost"]
-        orders.append(["BUY_PRODUCT", "WHEAT", 2])
-        money -= 2 * wheat_price
-
     # Land: NE after 6 animals owned, SW after 8 (waiting for the full 12-herd would
     # deadlock — animals 9-12 place on SW slots that need the land first).
     land_ready = sum(owned.values()) >= (6 if n_quadrants == 1 else 8)
@@ -1142,9 +1082,9 @@ def agent(obs):
     # ramp_fast (v18c): same herd-complete test the market code uses (total owned
     # animals vs sheep target + demand-conditioned cow target).
     _owned_n = sum(1 for row in tiles for t in row
-                   if isinstance(t, dict) and t.get("animal") in HERD_SPECIES)
-    _owned_n += sum(inv.get(sp, 0) for inv in inventories for sp in HERD_SPECIES)
-    _owned_n += sum(shed.get(sp, 0) for sp in HERD_SPECIES)
+                   if isinstance(t, dict) and t.get("animal") in ANIMAL_INFO)
+    _owned_n += sum(inv.get(sp, 0) for inv in inventories for sp in ANIMAL_INFO)
+    _owned_n += sum(shed.get(sp, 0) for sp in ANIMAL_INFO)
     _milk_seen = sum(1 for s in shops if s in ("PIZZA_SHOP", "ICE_CREAM_SHOP",
                                                "SMOOTHIE_SHOP"))
     _milk_proj = _milk_seen + max(0, 8 - len(shops)) * 0.375
@@ -1155,6 +1095,9 @@ def agent(obs):
     # 2+-shop draw; full commitment only when price >= 85 confirms the hinge.
     _tom_shops = sum(1 for s in shops if s in TOMATO_SHOPS)
     _tom_px = prices.get("TOMATO", 0)
+    # Bank-differential gamble (v24a): when clearly losing, flip the
+    # EV-neutral late-tomato coin (variance buys win probability only from
+    # behind).  Sticky once latched so a started batch gets finished.
     if (not _GAMBLE_ON.get(player, False)
             and day >= BEHIND_TOMATO_DAY
             and money - opp.get("money", 0) <= -BEHIND_GAMBLE_DEFICIT
@@ -1167,13 +1110,8 @@ def agent(obs):
     else:
         tomato_cap = 0
 
-    # v22b: geese owned anywhere -> how many coops the farm must hold.
-    _geese = sum(1 for row in tiles for t in row
-                 if isinstance(t, dict) and t.get("animal") == "GOOSE")
-    _geese += sum(inv.get("GOOSE", 0) for inv in inventories) + shed.get("GOOSE", 0)
-
     tasks, n_feed = _build_tasks(tiles, day, seeds, tape_mode, care_skip, crop_skip,
-                                 ramp_fast, tomato_cap, _geese)
+                                 ramp_fast, tomato_cap)
     _supply_tasks(tasks, n_feed, units, inventories, shed, tiles, day)
     assignment = _assign(units, tasks, inventories, tiles, day, hour)
 

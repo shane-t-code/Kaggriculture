@@ -1,22 +1,8 @@
 """
 main.py — Kaggriculture agent.  ENTRY POINT (must be at archive root, must be named main.py).
 
-STATUS: v25 — Phase 6 fix #11 (PROMOTED, = v24 + SEARCHED OPENING).  The
-first search-discovered shape change (Exp 47: 29-generation pod search
-over 14 opening dials, honest gate = dWins>=+10 AND dBank>0 AND
-field-legs>=0 on 200 held-out seeds).  Six genes moved vs v24: cow_pause
-5->3, resume_day 11->9, str_want 6->7, wheat_cap 20->22, TARGET_HANDS
-6->8 (= 12 hands at 3 quadrants — the elite labor level), factory_day
-18->22.  The shape story: berries interleave from the 3rd cow (not 5th),
-two more hands carry the bigger premium workload, wheat conversion waits
-4 more days because the labor now sustains premium tiles longer.
-hands=7 ALONE failed twice historically — the synergy needed joint
-search.  Evidence: pod FINAL vs v24 on fresh seeds 700-999: +159 dWins
-(field +87, mirror +72), dBank +1,173; local full-pool 4 batches: +9/256
-with the v12 leg positive ALL FOUR batches (+3/+1/+2/+3, 63/64 games)
-and NO harm on the tape leg (which the search never saw).  Below: the
-v24 header this build inherits everything else from.
---- v24 (prior) ---  Validation:  Four pool batches (256 games): v12 leg +2 dWins / +737
+STATUS: v24 — Phase 6 fix #10 (PROMOTED, = v21 + v24a bank-differential
+tomato gamble).  Validation:  Four pool batches (256 games): v12 leg +2 dWins / +737
 dBank; every other leg 0 dWins; mirror = 5W-5L-6T with seat-symmetric
 banks = FULLY INERT (pool_ab's mirror "-10" was tie-counting artifact —
 HARNESS NOTE: mirror ties count as A-losses in POOL TOTAL; check margins

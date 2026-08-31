@@ -1,7 +1,30 @@
 """
 main.py — Kaggriculture agent.  ENTRY POINT (must be at archive root, must be named main.py).
 
-STATUS: v25 — Phase 6 fix #11 (PROMOTED, = v24 + SEARCHED OPENING).  The
+STATUS: v31b — Phase 6 fix #12 (PROMOTED, = v25 + CONDITIONAL DEAD-TOWN
+REALLOCATION).  Pod-validated at scale : 74/2000 towns fire
+(3.7%), fired A/B 115W-33L (78%), mean +6,144/game, 61/74 towns
+net-positive, zero crashes; field legs clean (tape/v6a/v12 dWins +0,
+direct H2H vs v25 +8 wins); non-fired games byte-identical to v25.
+v31a (early factory alone) was REJECTED 2W-8L on fired seeds: the wheat
+cap was never binding (v25 runs 12-16 wheat tiles vs cap 22) — tiles,
+not caps, are the constraint, and premium crops keep taking them.  v31b
+does the real reallocation: on latch, STRAWBERRY cap drops 35 -> 15
+(stop new premium planting; freed tiles flow to wheat via PLANT_ORDER)
+and strawberry seed purchases stop.  Check moved day 6 -> 9 (3 draws):
+the observed false-positive class (2 bakeries then a premium run,
+probe seed 0) no longer fires; day-9 fire set is a strict subset.
+Exp 48-49 found the herd family's worst towns are dead-premium draws
+(no strawberry/milk-eating shop early) — exactly where the wheat-native
+v30a prototype WINS (wheat demand never gluts: 6 shop types eat it).
+The shop draw is public, one shop unlocks every 3 days, and the day-6
+draw separates these towns cleanly (seed 2: BAKERY+BAKERY vs seeds 0/1:
+FARMERS_MARKET/ICE_CREAM/BRUNCH).  So: when the draw shows no premium
+eater and at least one wheat eater, start the existing day-22 wheat
+factory at the latch day instead.  Trigger reads shops only; games
+where it never fires are byte-identical to v25.
+
+Underlying: v25 — Phase 6 fix #11 (PROMOTED, = v24 + SEARCHED OPENING).  The
 first search-discovered shape change (Exp 47: 29-generation pod search
 over 14 opening dials, honest gate = dWins>=+10 AND dBank>0 AND
 field-legs>=0 on 200 held-out seeds).  Six genes moved vs v24: cow_pause
@@ -293,6 +316,22 @@ BEHIND_GAMBLE_DEFICIT = 5000
 BEHIND_TOMATO_DAY = 15
 BEHIND_TOMATO_PRICE = 70
 _GAMBLE_ON = {}              # per-seat sticky latch, reset at step 0
+
+# Conditional early wheat factory (v31a).  The shop draw is public and one shop
+# unlocks every 3 days (engine L867-891).  When the visible draw has NO
+# strawberry eater and NO milk eater but at least one wheat eater, this is a
+# dead-premium town — the herd family's worst bucket and exactly where the
+# wheat-native prototype won .  Latch and start the wheat factory
+# now instead of day 22.  Drain units: town center 1/day, multi-product shop
+# 6/day, single-product 12/day — so <=1 means "no shop eats it at all" and
+# >=7 means "at least one shop eats it".
+WHEAT_TOWN_CHECK_DAY = 9     # first evaluation (3 draws visible; v31b — day 6
+                             # fired on 2-bakery towns that turned premium)
+WHEAT_TOWN_STR_CAP = 15      # latched: stop NEW strawberry planting above this
+                             # (v30a evidence: freed tiles -> wheat is the win)
+_WHEAT_TOWN = {}             # per-seat sticky latch, reset at step 0
+_FACTORY_NOW = False         # set per agent() call: wheat factory active this turn
+_DEAD_TOWN_NOW = False       # set per agent() call: dead-town latch this turn
 # Planting priority when a tile opens up: melon (highest $/tile-day, tiny cap), wheat (feeds
 # the herd — replaces market buys at scarcity prices), strawberry (biggest town demand:
 # ~426/season median), carrot (fast filler, capped so we stop glutting our own market).
@@ -648,8 +687,10 @@ def _build_tasks(tiles, day, seeds, tape_mode=False, care_skip=(), crop_skip=(),
             for c in PLANT_ORDER:
                 info = CROP_INFO[c]
                 cap = info["cap"]
-                if c == "WHEAT" and day >= WHEAT_FACTORY_DAY:
+                if c == "WHEAT" and _FACTORY_NOW:
                     cap = WHEAT_FACTORY_CAP
+                if c == "STRAWBERRY" and _DEAD_TOWN_NOW:
+                    cap = min(cap, WHEAT_TOWN_STR_CAP)
                 if c == "TOMATO":
                     cap = tomato_cap
                 if c == "CARROT":
@@ -1026,8 +1067,10 @@ def _market_orders(day, hour, money, seeds, shed, inventories, prices, hires_tod
         elif info["cap"] <= 0:
             continue
         want = SEED_WANT[crop]
-        if crop == "WHEAT" and day >= WHEAT_FACTORY_DAY:
+        if crop == "WHEAT" and _FACTORY_NOW:
             want = WHEAT_FACTORY_SEED_WANT
+        if crop == "STRAWBERRY" and _DEAD_TOWN_NOW:
+            continue
         if crop == "STRAWBERRY" and not herd_complete:
             # v18d: days 0-3 stay cow-only (v13c's day-0 burst failed at 37.5%);
             # from day 4 surplus cash flows to berries at want 6, with the next
@@ -1076,6 +1119,7 @@ def agent(obs):
     if step == 0:
         _TAPE_SEEN[player] = False
         _GAMBLE_ON[player] = False
+        _WHEAT_TOWN[player] = False
     if not _TAPE_SEEN.get(player, False) and 1 <= day <= 2:
         _oc, _oa = _opp_capacity(opp.get("tiles", []))
         # Self-exclusion (v15 copies the tape's 4-sheep opening): the tape shows
@@ -1118,6 +1162,17 @@ def agent(obs):
             and _tom_px >= BEHIND_TOMATO_PRICE):
         _GAMBLE_ON[player] = True
     gamble = _GAMBLE_ON.get(player, False)
+    # Dead-premium town -> early wheat factory (v31a).  Sticky once latched
+    # (a started conversion gets finished even if a premium shop lands later).
+    global _FACTORY_NOW, _DEAD_TOWN_NOW
+    if (not _WHEAT_TOWN.get(player, False)
+            and day >= WHEAT_TOWN_CHECK_DAY
+            and _town_drain_per_day("STRAWBERRY", shops) <= 1
+            and _town_drain_per_day("MILK", shops) <= 1
+            and _town_drain_per_day("WHEAT", shops) >= 7):
+        _WHEAT_TOWN[player] = True
+    _DEAD_TOWN_NOW = _WHEAT_TOWN.get(player, False)
+    _FACTORY_NOW = day >= WHEAT_FACTORY_DAY or _DEAD_TOWN_NOW
     if ramp_fast and (_tom_px >= TOMATO_HINGE_CONFIRM
                       or (gamble and _tom_px >= BEHIND_TOMATO_PRICE)):
         tomato_cap = min(12, TOMATO_CAP_PER_SHOP * max(1, _tom_shops))

@@ -1,0 +1,7 @@
+POOL A/B: A=versions/v31b.py  B=main.py  seeds=32 from 32
+  mirror   A-vs-B direct: 27/64 wins (42%), margin +366
+  tape     A: 0/64 wins vs opp | B: 0/64 | dWins +0 | dBank +1,333
+  v6a      A: 64/64 wins vs opp | B: 64/64 | dWins +0 | dBank +0
+  v12      A: 64/64 wins vs opp | B: 64/64 | dWins +0 | dBank +0
+
+POOL TOTAL: dWins -10 over 256 games/opponent-pairs, mean dBank +425

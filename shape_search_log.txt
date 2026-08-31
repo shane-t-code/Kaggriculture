@@ -1,1 +1,2 @@
 [13:29:21] gen1 S1: best [('cand_16.py', 27), ('cand_19.py', 11), ('cand_10.py', 10)]
+[14:48:08] gen1 S2: best cand_16.py dWins +66 (mirror +40) dBank +3,029 genome {'d0_sheep': 2, 'd0_cow': 2, 'd0_melon': 10, 'd0_feed': 8, 'sheep': 4, 'cow': 6, 'str_cap': 40, 'flood': 3000, 'convert_day': 18, 'feed_mult10': 15, 'hands': 8, 'factory_day': 22, 'land1': 6, 'land2': 10, 'res': 150}

@@ -1,0 +1,26 @@
+kaggle-environments version: 1.32.7
+
+A = versions/champ_live.py
+B = versions/v12b.py
+8 seeds x 2 seats = 16 games
+
+  seed   0  seat0: A    63,989 vs B    51,129   seat1: A    66,664 vs B    52,889
+  seed   1  seat0: A    88,577 vs B    81,199   seat1: A    88,577 vs B    81,199
+  seed   2  seat0: A    77,703 vs B    62,149   seat1: A    79,232 vs B    53,372
+  seed   3  seat0: A   116,126 vs B    98,957   seat1: A   129,853 vs B   108,750
+  seed   4  seat0: A   127,549 vs B   110,259   seat1: A   127,494 vs B   108,659
+  seed   5  seat0: A    87,153 vs B    71,921   seat1: A    88,025 vs B    80,306
+  seed   6  seat0: A    95,270 vs B    77,187   seat1: A    95,720 vs B    80,270
+  seed   7  seat0: A    87,994 vs B    78,846   seat1: A    87,994 vs B    78,846
+
+==============================================================
+  WIN RATE (A)        100.0%     <-- the number that matters
+  record            16W - 0L - 0T   (n=16)
+  mean margin          +14,499   (informative, NOT the objective)
+  sd of margin           5,182
+  mu/sigma               2.798   (Pr[win] ~= Phi(mu/sigma))
+  wall clock             120.5s
+==============================================================
+
+  Reminder: if your change alters TILE OCCUPANCY (hands, land, plant count),
+  the town shop draw changes too and the seed is no longer a control (~77 seeds needed).

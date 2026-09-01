@@ -188,11 +188,13 @@ def main():
         f.write(base_src)
     gen = 0
     history = []
+    rejected = []   # genomes that failed the S3 gate — banned from future gens
     if os.path.exists(STATE):
         st = json.load(open(STATE))
         champion_genome = st["champion_genome"]
         gen = st["gen"]
         history = st["history"]
+        rejected = st.get("rejected", [])
         rng.setstate(tuple(st["rng"][0:1] + [tuple(st["rng"][1])] + st["rng"][2:]))
         with open(champ_path, "w") as f:
             f.write(apply_genome(base_src, champion_genome)
@@ -206,50 +208,71 @@ def main():
 
     while (time.time() - t0) / 3600 < args.hours:
         gen += 1
-        pop = [mutate(champion_genome, rng) for _ in range(18)]
-        elites = [h["genome"] for h in history[-4:] if h.get("genome")]
+        # Never re-test the champion itself or anything the S3 gate rejected:
+        # a mirror-specialist that repeatedly tops S2 would otherwise block the
+        # gate every generation (observed: gens 3-4 re-selected one genome).
+        banned = rejected + [champion_genome]
+        pop = []
+        tries = 0
+        while len(pop) < 18 and tries < 400:
+            g = mutate(champion_genome, rng); tries += 1
+            if g not in banned and g not in pop:
+                pop.append(g)
+        # elites = confirmed champions only (champ flag), never rejects
+        elites = [h["genome"] for h in history[-4:] if h.get("champ")]
         for i in range(4):
             if len(elites) >= 2:
-                pop.append(crossover(rng.choice(elites), rng.choice(elites), rng))
+                g = crossover(rng.choice(elites), rng.choice(elites), rng)
             else:
-                pop.append(mutate(champion_genome, rng, n_genes=4))
+                g = mutate(champion_genome, rng, n_genes=4)
+            if g not in banned and g not in pop:
+                pop.append(g)
         paths = {}
         for i, g in enumerate(pop):
             try:
                 paths[write_candidate(base_src, g, i)] = g
             except ValueError as e:
                 log(f"gen{gen} cand{i} genome rejected: {e}")
-        # S1 screen: candidate-vs-champion + the flagship leg
+        # S1 screen: candidate-vs-champion + the flagship leg.
+        # FIELD-PRIMARY (Shane 2026-08-31): rank by wins vs outside opponents
+        # (dw - dw_mirror); mirror is logged, never ranked on — the ladder is
+        # the field, not ourselves.
+        fld = lambda v: v[0] - v[2]
         s1 = eval_stage(list(paths), champ_path, S1_SEEDS, ("mirror", "v31b"))
-        top = sorted(s1.items(), key=lambda x: (-x[1][0], -x[1][1]))[:6]
-        log(f"gen{gen} S1: best {[(os.path.basename(p), v[0]) for p, v in top[:3]]}")
+        top = sorted(s1.items(), key=lambda x: (-fld(x[1]), -x[1][0]))[:6]
+        log(f"gen{gen} S1: best(field) "
+            f"{[(os.path.basename(p), fld(v)) for p, v in top[:3]]}")
         # S2 confirm (adds the tape leg)
         s2 = eval_stage([p for p, _ in top], champ_path, S2_SEEDS,
                         ("mirror", "v31b", "tape"))
         best_path, (best_dw, best_db, best_dwm) = sorted(
-            s2.items(), key=lambda x: (-x[1][0], -x[1][1]))[0]
+            s2.items(), key=lambda x: (-fld(x[1]), -x[1][0]))[0]
         log(f"gen{gen} S2: best {os.path.basename(best_path)} "
-            f"dWins {best_dw:+d} (mirror {best_dwm:+d}) dBank {best_db:+,.0f} "
-            f"genome {paths[best_path]}")
-        history.append({"gen": gen, "genome": paths[best_path],
-                        "s2": [best_dw, best_db]})
-        # S3 held-out gate
-        if best_dw >= 6:
+            f"field {best_dw-best_dwm:+d} (mirror {best_dwm:+d}) "
+            f"dBank {best_db:+,.0f} genome {paths[best_path]}")
+        # S3 held-out gate — FIELD-PRIMARY: promote only on outside-opponent
+        # wins (>= +8 on 200 held-out seeds); mirror logged, never gates.
+        promoted = False
+        if (best_dw - best_dwm) >= 4:
             s3 = eval_stage([best_path], champ_path, S3_SEEDS,
                             ("mirror", "v31b", "tape", "v12"))
             dw3, db3, dwm3 = s3[best_path]
-            log(f"gen{gen} S3 HELD-OUT: dWins {dw3:+d} (mirror {dwm3:+d}, "
-                f"field {dw3-dwm3:+d}) dBank {db3:+,.0f}")
-            # Gate reform : dWins-primary; dBank logged, not gating.
-            # Field legs non-negative stays (mirror-law guard).
-            if dw3 >= 10 and (dw3 - dwm3) >= 0:
+            log(f"gen{gen} S3 HELD-OUT: field {dw3-dwm3:+d} (mirror {dwm3:+d}, "
+                f"total {dw3:+d}) dBank {db3:+,.0f}")
+            if (dw3 - dwm3) >= 8:
+                promoted = True
                 champion_genome = paths[best_path]
                 champion_new = apply_genome(base_src, champion_genome)
                 with open(champ_path, "w") as f:
                     f.write(champion_new)
                 log(f"gen{gen} *** NEW CHAMPION *** {champion_genome}")
+            else:
+                rejected.append(paths[best_path])
+                log(f"gen{gen} S3 gate FAILED -> genome banned")
+        history.append({"gen": gen, "genome": paths[best_path],
+                        "s2": [best_dw, best_db], "champ": promoted})
         st = {"gen": gen, "champion_genome": champion_genome,
-              "history": history,
+              "history": history, "rejected": rejected,
               "rng": [rng.getstate()[0], list(rng.getstate()[1]),
                       rng.getstate()[2]]}
         with open(STATE, "w") as f:

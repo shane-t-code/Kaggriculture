@@ -1,0 +1,91 @@
+[19:37:16] gen1 S1: best [('cand_16.py', 27), ('cand_19.py', 11), ('cand_10.py', 10)]
+[19:42:30] gen1 S2: best cand_16.py dWins +66 (mirror +40) dBank +3,029 genome {'d0_sheep': 2, 'd0_cow': 2, 'd0_melon': 10, 'd0_feed': 8, 'sheep': 4, 'cow': 6, 'str_cap': 40, 'flood': 3000, 'convert_day': 18, 'feed_mult10': 15, 'hands': 8, 'factory_day': 22, 'land1': 6, 'land2': 10, 'res': 150}
+[19:49:54] gen1 S3 HELD-OUT: dWins +328 (mirror +214, field +114) dBank +3,280
+[19:49:54] gen1 *** NEW CHAMPION *** {'d0_sheep': 2, 'd0_cow': 2, 'd0_melon': 10, 'd0_feed': 8, 'sheep': 4, 'cow': 6, 'str_cap': 40, 'flood': 3000, 'convert_day': 18, 'feed_mult10': 15, 'hands': 8, 'factory_day': 22, 'land1': 6, 'land2': 10, 'res': 150}
+[19:49:54] gen1 done | elapsed 0.28h
+[19:54:01] gen2 S1: best [('cand_17.py', 18), ('cand_19.py', 18), ('cand_21.py', 10)]
+[19:59:20] gen2 S2: best cand_17.py dWins +52 (mirror +50) dBank +966 genome {'d0_sheep': 2, 'd0_cow': 2, 'd0_melon': 10, 'd0_feed': 7, 'sheep': 4, 'cow': 6, 'str_cap': 40, 'flood': 3000, 'convert_day': 18, 'feed_mult10': 15, 'hands': 8, 'factory_day': 22, 'land1': 6, 'land2': 10, 'res': 150}
+[20:06:59] gen2 S3 HELD-OUT: dWins +166 (mirror +160, field +6) dBank +361
+[20:06:59] gen2 *** NEW CHAMPION *** {'d0_sheep': 2, 'd0_cow': 2, 'd0_melon': 10, 'd0_feed': 7, 'sheep': 4, 'cow': 6, 'str_cap': 40, 'flood': 3000, 'convert_day': 18, 'feed_mult10': 15, 'hands': 8, 'factory_day': 22, 'land1': 6, 'land2': 10, 'res': 150}
+[20:06:59] gen2 done | elapsed 0.56h
+[20:11:03] gen3 S1: best [('cand_0.py', 18), ('cand_1.py', 13), ('cand_15.py', 11)]
+[20:16:14] gen3 S2: best cand_1.py dWins +50 (mirror +52) dBank +139 genome {'d0_sheep': 2, 'd0_cow': 2, 'd0_melon': 10, 'd0_feed': 6, 'sheep': 4, 'cow': 6, 'str_cap': 40, 'flood': 3000, 'convert_day': 18, 'feed_mult10': 15, 'hands': 8, 'factory_day': 21, 'land1': 6, 'land2': 10, 'res': 150}
+[20:23:42] gen3 S3 HELD-OUT: dWins +151 (mirror +156, field -5) dBank +44
+[20:23:42] gen3 done | elapsed 0.84h
+[20:27:47] gen4 S1: best [('cand_20.py', 13), ('cand_7.py', 6), ('cand_15.py', 6)]
+[20:33:05] gen4 S2: best cand_20.py dWins +50 (mirror +52) dBank +139 genome {'d0_sheep': 2, 'd0_cow': 2, 'd0_melon': 10, 'd0_feed': 6, 'sheep': 4, 'cow': 6, 'str_cap': 40, 'flood': 3000, 'convert_day': 18, 'feed_mult10': 15, 'hands': 8, 'factory_day': 21, 'land1': 6, 'land2': 10, 'res': 150}
+[20:40:18] gen4 S3 HELD-OUT: dWins +151 (mirror +156, field -5) dBank +44
+[20:40:18] gen4 done | elapsed 1.12h
+[20:44:06] gen5 S1: best [('cand_17.py', 20), ('cand_7.py', 16), ('cand_18.py', 14)]
+[20:46:19] RESUMED at gen 4
+[20:49:35] gen5 S1: best [('cand_17.py', 20), ('cand_7.py', 16), ('cand_12.py', 8)]
+[20:54:33] gen5 S2: best cand_7.py dWins +54 (mirror +48) dBank -206 genome {'d0_sheep': 2, 'd0_cow': 2, 'd0_melon': 10, 'd0_feed': 4, 'sheep': 4, 'cow': 6, 'str_cap': 40, 'flood': 3000, 'convert_day': 18, 'feed_mult10': 15, 'hands': 8, 'factory_day': 22, 'land1': 6, 'land2': 10, 'res': 150}
+[21:01:42] gen5 S3 HELD-OUT: dWins +158 (mirror +164, field -6) dBank -264
+[21:01:42] gen5 S3 gate FAILED -> genome banned
+[21:01:42] gen5 done | elapsed 0.26h
+[21:05:31] gen6 S1: best [('cand_21.py', 19), ('cand_6.py', 18), ('cand_3.py', 12)]
+[21:10:31] gen6 S2: best cand_21.py dWins +66 (mirror +62) dBank +854 genome {'d0_sheep': 1, 'd0_cow': 2, 'd0_melon': 10, 'd0_feed': 7, 'sheep': 5, 'cow': 6, 'str_cap': 40, 'flood': 3000, 'convert_day': 18, 'feed_mult10': 13, 'hands': 8, 'factory_day': 22, 'land1': 6, 'land2': 10, 'res': 21}
+[21:15:22] RESUMED at gen 5
+[21:19:10] gen6 S1: best(field) [('cand_21.py', 1), ('cand_5.py', -1), ('cand_13.py', -1)]
+[21:24:11] gen6 S2: best cand_21.py field +4 (mirror +62) dBank +854 genome {'d0_sheep': 1, 'd0_cow': 2, 'd0_melon': 10, 'd0_feed': 7, 'sheep': 5, 'cow': 6, 'str_cap': 40, 'flood': 3000, 'convert_day': 18, 'feed_mult10': 13, 'hands': 8, 'factory_day': 22, 'land1': 6, 'land2': 10, 'res': 21}
+[21:31:18] gen6 S3 HELD-OUT: field +22 (mirror +182, total +204) dBank +320
+[21:31:18] gen6 *** NEW CHAMPION *** {'d0_sheep': 1, 'd0_cow': 2, 'd0_melon': 10, 'd0_feed': 7, 'sheep': 5, 'cow': 6, 'str_cap': 40, 'flood': 3000, 'convert_day': 18, 'feed_mult10': 13, 'hands': 8, 'factory_day': 22, 'land1': 6, 'land2': 10, 'res': 21}
+[21:31:18] gen6 done | elapsed 0.27h
+[21:35:08] gen7 S1: best(field) [('cand_13.py', 4), ('cand_17.py', 3), ('cand_12.py', 3)]
+[21:40:37] gen7 S2: best cand_5.py field +10 (mirror +0) dBank +695 genome {'d0_sheep': 1, 'd0_cow': 2, 'd0_melon': 10, 'd0_feed': 8, 'sheep': 5, 'cow': 6, 'str_cap': 40, 'flood': 3000, 'convert_day': 18, 'feed_mult10': 13, 'hands': 8, 'factory_day': 22, 'land1': 6, 'land2': 10, 'res': 21}
+[21:48:41] gen7 S3 HELD-OUT: field +10 (mirror +0, total +10) dBank -8
+[21:48:41] gen7 *** NEW CHAMPION *** {'d0_sheep': 1, 'd0_cow': 2, 'd0_melon': 10, 'd0_feed': 8, 'sheep': 5, 'cow': 6, 'str_cap': 40, 'flood': 3000, 'convert_day': 18, 'feed_mult10': 13, 'hands': 8, 'factory_day': 22, 'land1': 6, 'land2': 10, 'res': 21}
+[21:48:41] gen7 done | elapsed 0.56h
+[21:52:20] gen8 S1: best(field) [('cand_12.py', 2), ('cand_8.py', 1), ('cand_3.py', 1)]
+[21:58:00] gen8 S2: best cand_17.py field +0 (mirror -16) dBank -84 genome {'d0_sheep': 1, 'd0_cow': 2, 'd0_melon': 10, 'd0_feed': 8, 'sheep': 5, 'cow': 6, 'str_cap': 40, 'flood': 3000, 'convert_day': 17, 'feed_mult10': 13, 'hands': 8, 'factory_day': 22, 'land1': 6, 'land2': 10, 'res': 21}
+[21:58:00] gen8 done | elapsed 0.71h
+[22:01:50] gen9 S1: best(field) [('cand_13.py', 2), ('cand_5.py', 2), ('cand_2.py', 2)]
+[22:07:33] gen9 S2: best cand_2.py field +0 (mirror -8) dBank -61 genome {'d0_sheep': 1, 'd0_cow': 2, 'd0_melon': 10, 'd0_feed': 8, 'sheep': 5, 'cow': 6, 'str_cap': 40, 'flood': 3000, 'convert_day': 18, 'feed_mult10': 13, 'hands': 8, 'factory_day': 22, 'land1': 6, 'land2': 10, 'res': 71}
+[22:07:33] gen9 done | elapsed 0.87h
+[22:11:22] gen10 S1: best(field) [('cand_5.py', 2), ('cand_7.py', 2), ('cand_16.py', 1)]
+[22:17:12] gen10 S2: best cand_12.py field +6 (mirror +40) dBank +2,800 genome {'d0_sheep': 1, 'd0_cow': 3, 'd0_melon': 6, 'd0_feed': 8, 'sheep': 5, 'cow': 6, 'str_cap': 40, 'flood': 3000, 'convert_day': 19, 'feed_mult10': 13, 'hands': 8, 'factory_day': 22, 'land1': 6, 'land2': 10, 'res': 21}
+[22:25:31] gen10 S3 HELD-OUT: field +54 (mirror +108, total +162) dBank +2,771
+[22:25:31] gen10 *** NEW CHAMPION *** {'d0_sheep': 1, 'd0_cow': 3, 'd0_melon': 6, 'd0_feed': 8, 'sheep': 5, 'cow': 6, 'str_cap': 40, 'flood': 3000, 'convert_day': 19, 'feed_mult10': 13, 'hands': 8, 'factory_day': 22, 'land1': 6, 'land2': 10, 'res': 21}
+[22:25:31] gen10 done | elapsed 1.17h
+[22:29:38] gen11 S1: best(field) [('cand_9.py', 3), ('cand_14.py', 0), ('cand_4.py', 0)]
+[22:35:27] gen11 S2: best cand_8.py field +0 (mirror +0) dBank +533 genome {'d0_sheep': 1, 'd0_cow': 3, 'd0_melon': 6, 'd0_feed': 8, 'sheep': 5, 'cow': 6, 'str_cap': 40, 'flood': 3000, 'convert_day': 19, 'feed_mult10': 13, 'hands': 8, 'factory_day': 22, 'land1': 6, 'land2': 10, 'res': 0}
+[22:35:27] gen11 done | elapsed 1.33h
+[22:40:00] gen12 S1: best(field) [('cand_10.py', 5), ('cand_2.py', 5), ('cand_3.py', 0)]
+[22:45:52] gen12 S2: best cand_3.py field +0 (mirror +0) dBank +0 genome {'d0_sheep': 1, 'd0_cow': 3, 'd0_melon': 6, 'd0_feed': 8, 'sheep': 5, 'cow': 6, 'str_cap': 40, 'flood': 3375, 'convert_day': 19, 'feed_mult10': 13, 'hands': 8, 'factory_day': 22, 'land1': 6, 'land2': 10, 'res': 21}
+[22:45:52] gen12 done | elapsed 1.51h
+[22:50:17] gen13 S1: best(field) [('cand_10.py', 1), ('cand_21.py', 0), ('cand_1.py', 0)]
+[22:55:50] gen13 S2: best cand_3.py field +0 (mirror +0) dBank +0 genome {'d0_sheep': 1, 'd0_cow': 3, 'd0_melon': 6, 'd0_feed': 8, 'sheep': 5, 'cow': 6, 'str_cap': 40, 'flood': 3676, 'convert_day': 19, 'feed_mult10': 13, 'hands': 8, 'factory_day': 22, 'land1': 6, 'land2': 10, 'res': 21}
+[22:55:50] gen13 done | elapsed 1.67h
+[23:00:14] gen14 S1: best(field) [('cand_15.py', 6), ('cand_9.py', 0), ('cand_17.py', 0)]
+[23:06:04] gen14 S2: best cand_17.py field +0 (mirror +0) dBank +0 genome {'d0_sheep': 1, 'd0_cow': 3, 'd0_melon': 6, 'd0_feed': 8, 'sheep': 5, 'cow': 6, 'str_cap': 40, 'flood': 3000, 'convert_day': 19, 'feed_mult10': 13, 'hands': 8, 'factory_day': 22, 'land1': 7, 'land2': 10, 'res': 21}
+[23:06:04] gen14 done | elapsed 1.84h
+[23:10:35] gen15 S1: best(field) [('cand_14.py', 3), ('cand_0.py', 2), ('cand_5.py', 1)]
+[23:16:23] gen15 S2: best cand_12.py field +0 (mirror -22) dBank -337 genome {'d0_sheep': 1, 'd0_cow': 3, 'd0_melon': 6, 'd0_feed': 8, 'sheep': 5, 'cow': 6, 'str_cap': 40, 'flood': 3000, 'convert_day': 16, 'feed_mult10': 13, 'hands': 8, 'factory_day': 22, 'land1': 5, 'land2': 10, 'res': 21}
+[23:16:23] gen15 done | elapsed 2.02h
+[23:20:47] gen16 S1: best(field) [('cand_1.py', 4), ('cand_7.py', 2), ('cand_15.py', 1)]
+[23:26:20] gen16 S2: best cand_5.py field +0 (mirror +0) dBank -45 genome {'d0_sheep': 1, 'd0_cow': 3, 'd0_melon': 6, 'd0_feed': 8, 'sheep': 5, 'cow': 6, 'str_cap': 40, 'flood': 3000, 'convert_day': 19, 'feed_mult10': 13, 'hands': 8, 'factory_day': 23, 'land1': 6, 'land2': 10, 'res': 21}
+[23:26:20] gen16 done | elapsed 2.18h
+[23:30:39] gen17 S1: best(field) [('cand_16.py', 5), ('cand_9.py', 2), ('cand_3.py', 0)]
+[23:36:00] gen17 S2: best cand_1.py field +0 (mirror +0) dBank +0 genome {'d0_sheep': 1, 'd0_cow': 3, 'd0_melon': 6, 'd0_feed': 8, 'sheep': 5, 'cow': 6, 'str_cap': 40, 'flood': 3000, 'convert_day': 19, 'feed_mult10': 13, 'hands': 8, 'factory_day': 22, 'land1': 6, 'land2': 9, 'res': 21}
+[23:36:00] gen17 done | elapsed 2.34h
+[23:39:50] gen18 S1: best(field) [('cand_18.py', 3), ('cand_19.py', 2), ('cand_6.py', 1)]
+[23:44:50] gen18 S2: best cand_4.py field +0 (mirror -22) dBank -385 genome {'d0_sheep': 1, 'd0_cow': 3, 'd0_melon': 6, 'd0_feed': 9, 'sheep': 5, 'cow': 6, 'str_cap': 40, 'flood': 3000, 'convert_day': 19, 'feed_mult10': 13, 'hands': 8, 'factory_day': 22, 'land1': 5, 'land2': 10, 'res': 21}
+[23:44:50] gen18 done | elapsed 2.49h
+[23:48:44] gen19 S1: best(field) [('cand_20.py', 1), ('cand_19.py', 0), ('cand_7.py', 0)]
+[23:53:51] gen19 S2: best cand_19.py field +0 (mirror +0) dBank -657 genome {'d0_sheep': 1, 'd0_cow': 3, 'd0_melon': 6, 'd0_feed': 8, 'sheep': 4, 'cow': 6, 'str_cap': 40, 'flood': 3000, 'convert_day': 19, 'feed_mult10': 13, 'hands': 8, 'factory_day': 24, 'land1': 7, 'land2': 10, 'res': 21}
+[23:53:51] gen19 done | elapsed 2.64h
+[23:57:42] gen20 S1: best(field) [('cand_12.py', 5), ('cand_5.py', 4), ('cand_1.py', 1)]
+[00:02:41] gen20 S2: best cand_1.py field -1 (mirror -2) dBank +329 genome {'d0_sheep': 1, 'd0_cow': 3, 'd0_melon': 6, 'd0_feed': 8, 'sheep': 5, 'cow': 6, 'str_cap': 39, 'flood': 3000, 'convert_day': 19, 'feed_mult10': 13, 'hands': 8, 'factory_day': 22, 'land1': 6, 'land2': 9, 'res': 21}
+[00:02:41] gen20 done | elapsed 2.79h
+[00:06:33] gen21 S1: best(field) [('cand_2.py', 2), ('cand_13.py', 2), ('cand_3.py', 0)]
+[00:11:31] gen21 S2: best cand_2.py field +0 (mirror +14) dBank +249 genome {'d0_sheep': 1, 'd0_cow': 3, 'd0_melon': 6, 'd0_feed': 8, 'sheep': 5, 'cow': 6, 'str_cap': 36, 'flood': 3000, 'convert_day': 19, 'feed_mult10': 13, 'hands': 8, 'factory_day': 18, 'land1': 6, 'land2': 10, 'res': 21}
+[00:11:31] gen21 done | elapsed 2.94h
+[00:15:22] gen22 S1: best(field) [('cand_8.py', 2), ('cand_1.py', 1), ('cand_12.py', 1)]
+[00:20:20] gen22 S2: best cand_10.py field -1 (mirror +6) dBank -542 genome {'d0_sheep': 1, 'd0_cow': 3, 'd0_melon': 6, 'd0_feed': 8, 'sheep': 4, 'cow': 6, 'str_cap': 40, 'flood': 3000, 'convert_day': 19, 'feed_mult10': 13, 'hands': 8, 'factory_day': 22, 'land1': 6, 'land2': 10, 'res': 21}
+[00:20:20] gen22 done | elapsed 3.08h
+[00:24:14] gen23 S1: best(field) [('cand_7.py', 4), ('cand_14.py', 1), ('cand_12.py', 1)]
+[00:29:11] gen23 S2: best cand_15.py field +0 (mirror -22) dBank -337 genome {'d0_sheep': 1, 'd0_cow': 3, 'd0_melon': 6, 'd0_feed': 8, 'sheep': 5, 'cow': 6, 'str_cap': 40, 'flood': 3000, 'convert_day': 16, 'feed_mult10': 13, 'hands': 8, 'factory_day': 22, 'land1': 7, 'land2': 9, 'res': 21}
+[00:29:11] gen23 done | elapsed 3.23h
+[00:33:00] gen24 S1: best(field) [('cand_9.py', 2), ('cand_11.py', 1), ('cand_7.py', 0)]
+[00:37:57] gen24 S2: best cand_3.py field +0 (mirror +0) dBank -45 genome {'d0_sheep': 1, 'd0_cow': 3, 'd0_melon': 6, 'd0_feed': 8, 'sheep': 5, 'cow': 6, 'str_cap': 40, 'flood': 3000, 'convert_day': 19, 'feed_mult10': 13, 'hands': 8, 'factory_day': 23, 'land1': 6, 'land2': 10, 'res': 21}
+[00:37:57] gen24 done | elapsed 3.38h

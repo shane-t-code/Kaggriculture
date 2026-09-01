@@ -1,0 +1,34 @@
+kaggle-environments version: 1.32.7
+
+A = versions/v45a.py
+B = versions/proxy_strglut.py
+16 seeds x 2 seats = 32 games
+
+  seed   0  seat0: A    75,618 vs B    65,811   seat1: A    75,618 vs B    65,811
+  seed   1  seat0: A    81,414 vs B    59,680   seat1: A    81,414 vs B    59,680
+  seed   2  seat0: A    52,646 vs B    45,455   seat1: A    50,842 vs B    42,017
+  seed   3  seat0: A    69,555 vs B    58,945   seat1: A    71,868 vs B    60,697
+  seed   4  seat0: A    72,001 vs B    59,535   seat1: A    79,570 vs B    67,018
+  seed   5  seat0: A    75,005 vs B    68,374   seat1: A    71,413 vs B    60,170
+  seed   6  seat0: A    90,990 vs B    85,223   seat1: A    91,038 vs B    85,635
+  seed   7  seat0: A    58,162 vs B    57,660   seat1: A    58,807 vs B    56,850
+  seed   8  seat0: A    49,493 vs B    34,541   seat1: A    53,285 vs B    42,912
+  seed   9  seat0: A    76,123 vs B    69,567   seat1: A    98,984 vs B    86,926
+  seed  10  seat0: A    60,090 vs B    60,200   seat1: A    76,729 vs B    68,118
+  seed  11  seat0: A    50,912 vs B    39,123   seat1: A    50,912 vs B    39,123
+  seed  12  seat0: A    67,711 vs B    61,327   seat1: A    65,087 vs B    60,726
+  seed  13  seat0: A    99,135 vs B    91,846   seat1: A    99,135 vs B    91,846
+  seed  14  seat0: A    89,431 vs B    77,113   seat1: A    89,431 vs B    77,113
+  seed  15  seat0: A    93,614 vs B    80,730   seat1: A    93,809 vs B    80,732
+
+==============================================================
+  WIN RATE (A)         96.9%     <-- the number that matters
+  record            31W - 1L - 0T   (n=32)
+  mean margin           +9,667   (informative, NOT the objective)
+  sd of margin           4,815
+  mu/sigma               2.008   (Pr[win] ~= Phi(mu/sigma))
+  wall clock             306.1s
+==============================================================
+
+  Reminder: if your change alters TILE OCCUPANCY (hands, land, plant count),
+  the town shop draw changes too and the seed is no longer a control (~77 seeds needed).

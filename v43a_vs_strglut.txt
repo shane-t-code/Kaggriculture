@@ -1,0 +1,34 @@
+kaggle-environments version: 1.32.7
+
+A = main.py
+B = versions/proxy_strglut.py
+16 seeds x 2 seats = 32 games
+
+  seed   0  seat0: A    70,777 vs B    66,367   seat1: A    74,569 vs B    66,364
+  seed   1  seat0: A    44,992 vs B    34,247   seat1: A    44,992 vs B    34,247
+  seed   2  seat0: A    98,706 vs B    93,687   seat1: A    88,061 vs B    85,730
+  seed   3  seat0: A    77,982 vs B    65,170   seat1: A    79,891 vs B    64,026
+  seed   4  seat0: A    63,456 vs B    57,410   seat1: A    63,456 vs B    57,410
+  seed   5  seat0: A    72,687 vs B    70,444   seat1: A    72,687 vs B    70,444
+  seed   6  seat0: A    97,593 vs B    83,408   seat1: A   104,338 vs B    89,455
+  seed   7  seat0: A    69,791 vs B    60,771   seat1: A    70,268 vs B    62,481
+  seed   8  seat0: A    80,830 vs B    69,757   seat1: A    80,767 vs B    69,699
+  seed   9  seat0: A   105,585 vs B    93,419   seat1: A    76,044 vs B    64,955
+  seed  10  seat0: A    86,236 vs B    83,514   seat1: A    85,948 vs B    84,153
+  seed  11  seat0: A    57,120 vs B    50,298   seat1: A    38,268 vs B    38,860
+  seed  12  seat0: A    77,699 vs B    63,539   seat1: A    66,886 vs B    54,286
+  seed  13  seat0: A   105,454 vs B    94,906   seat1: A   105,454 vs B    94,906
+  seed  14  seat0: A    81,064 vs B    76,711   seat1: A    81,064 vs B    76,711
+  seed  15  seat0: A    81,306 vs B    68,213   seat1: A    81,359 vs B    68,134
+
+==============================================================
+  WIN RATE (A)         96.9%     <-- the number that matters
+  record            31W - 1L - 0T   (n=32)
+  mean margin           +8,488   (informative, NOT the objective)
+  sd of margin           4,494
+  mu/sigma               1.889   (Pr[win] ~= Phi(mu/sigma))
+  wall clock             280.8s
+==============================================================
+
+  Reminder: if your change alters TILE OCCUPANCY (hands, land, plant count),
+  the town shop draw changes too and the seed is no longer a control (~77 seeds needed).

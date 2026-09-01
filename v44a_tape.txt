@@ -1,0 +1,26 @@
+kaggle-environments version: 1.32.7
+
+A = versions/v44a.py
+B = versions/meta_boatlee.py
+8 seeds x 2 seats = 16 games
+
+  seed   0  seat0: A    73,849 vs B   115,480   seat1: A    63,713 vs B   105,158
+  seed   1  seat0: A    45,526 vs B    74,498   seat1: A    45,526 vs B    74,498
+  seed   2  seat0: A    65,424 vs B    97,387   seat1: A    60,490 vs B    92,513
+  seed   3  seat0: A    72,204 vs B   108,797   seat1: A    72,204 vs B   108,797
+  seed   4  seat0: A    51,744 vs B    92,968   seat1: A    51,744 vs B    92,968
+  seed   5  seat0: A    49,400 vs B    85,910   seat1: A    45,088 vs B    82,621
+  seed   6  seat0: A    79,253 vs B   123,162   seat1: A    79,253 vs B   123,162
+  seed   7  seat0: A    52,370 vs B    81,484   seat1: A    52,370 vs B    81,484
+
+==============================================================
+  WIN RATE (A)          0.0%     <-- the number that matters
+  record            0W - 16L - 0T   (n=16)
+  mean margin          -36,296   (informative, NOT the objective)
+  sd of margin           5,412
+  mu/sigma              -6.706   (Pr[win] ~= Phi(mu/sigma))
+  wall clock             122.4s
+==============================================================
+
+  Reminder: if your change alters TILE OCCUPANCY (hands, land, plant count),
+  the town shop draw changes too and the seed is no longer a control (~77 seeds needed).

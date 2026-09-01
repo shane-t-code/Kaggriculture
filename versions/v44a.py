@@ -1,36 +1,10 @@
 """
 main.py — Kaggriculture agent.  ENTRY POINT (must be at archive root, must be named main.py).
 
-STATUS: v45a — PROMOTED 2026-09-01 night (layout clustering).
-VALIDATION: vs v43a 16-seed 21W-11L (65.6%); **77-seed 93W-61L
-(60.4%) +1,427 mu/sigma 0.36** (occupancy unchanged -> town is a
-control, so these are clean).  FIELD GATE: 4 proxy legs paired vs
-v43a on same seeds — v45a 120W-8L vs v43a 120W-8L (identical wins,
-margins up on 3/4: wool +2.4k strglut +1.2k eggmilk +1.0k, wheat
--1.9k).  Tape leg: own bank +3,566 but tape banks +7,508 MORE
-(harvest bursts lump our sells -> market headroom gifted) — costs
-zero wins vs proxies; SELL-SIDE DE-LUMPING is the flagged follow-up.
-Fingerprint: day-12 map shows solid per-crop blocks vs raster
-scatter; walk audit n=2 inconclusive (1.89/1.57 vs 1.75/1.69
-moves/job), pass share +2.5pp — the win came anyway.
-
-Was: CANDIDATE 2026-09-01 (layout clustering).
-= v43a + CLUSTERED PLANT ASSIGNMENT.  The v40b autopsy showed walking
-sits at the density floor of a SCATTERED layout (2.3 moves/job is the
-geometry, not the assignment) — the remaining walking budget is WHERE
-we plant.  Mechanism: the per-turn plant multiset is computed exactly
-as before (the cap/budget loop never reads tile position, so counts
-are order-independent), then crops are assigned to empty tiles by
-Manhattan distance to each crop's anchor — centroid of its live
-plants, else a fixed zone seed (melon W of the herd, wheat SW below
-it, strawberry NE, carrot NW top, tomato deep NE).  Same counts, same
-tile OCCUPANCY -> the town shop draw stays a control (cheap A/B).
-Harvest/replant/fertilize passes then sweep contiguous blocks, which
-is what v40a sticky routing wants.  FALSIFICATION: if the day-12 farm
-map shows no contiguous blocks, or moves/job does not drop, mechanism
-is inert -> discard.  If banks are byte-identical to v43a the reorder
-never fired -> bug.
-
+STATUS: v44a — CANDIDATE (= v43a + PAYROLL FUNDING for daily hands).
+Mechanism check required: max hands should rise 10 -> 12 (q3 target)
+and hires fill at dawn.  Falsification: if funded 12 hands LOSE the
+A/B, ~10 was the economic optimum and targets get re-searched.
 Was: v43a — PROMOTED 2026-09-01 (round-2 search champion).
 = v42b base (dynamic demand STR cap VALIDATED at scale: STRdead towns
 4-0 +8,774, STRweak 64W-33L +1,070, no-harm elsewhere, 1,500-game
@@ -480,27 +454,6 @@ _CUR_SEAT = 0                # v40a: set per agent() call so _assign can key _ST
 # the herd — replaces market buys at scarcity prices), strawberry (biggest town demand:
 # ~426/season median), carrot (fast filler, capped so we stop glutting our own market).
 PLANT_ORDER = ["MELON", "STRAWBERRY", "TOMATO", "WHEAT", "CARROT"]
-
-# v45a zone seeds: where a crop's FIRST plant anchors (afterwards the anchor is
-# the centroid of its live plants, so blocks grow onto themselves).  The herd
-# ring owns (2-4, 2-4) + (2-4, 5-6) + (4,7); melon sits W of it (fertilizer
-# walks stay short), wheat below toward SW (feed flows to the shed), strawberry
-# owns NE (unlocks d6, exactly when the ramp starts), carrot NW top, tomato
-# deep NE beside the strawberries.
-CROP_SEED_ANCHOR = {
-    "MELON":      (0, 3),
-    "WHEAT":      (1, 6),
-    "STRAWBERRY": (7, 2),
-    "CARROT":     (1, 0),
-    "TOMATO":     (9, 2),
-}
-
-def _crop_anchor(crop, crop_pos):
-    pts = crop_pos.get(crop)
-    if pts:
-        return (sum(p[0] for p in pts) / len(pts),
-                sum(p[1] for p in pts) / len(pts))
-    return CROP_SEED_ANCHOR.get(crop, SHED_TILE)
 SEED_WANT = {"MELON": 3, "WHEAT": 4, "STRAWBERRY": 8, "CARROT": 4, "TOMATO": 4}
 WHEAT_FEED_RESERVE_DAYS = 1   # hold animals*this much wheat before selling any surplus
 
@@ -776,7 +729,6 @@ def _build_tasks(tiles, day, seeds, tape_mode=False, care_skip=(), crop_skip=(),
     """Scan the farm -> the turn's task list. Returns (tasks, n_feed_needed)."""
     tasks = []
     crop_counts = {}
-    crop_pos = {}      # v45a: live plant positions per crop -> cluster centroids
     empty_tiles = []
     n_feed = 0
     reserved = set(ANIMAL_SLOTS[:sum(ANIMAL_TARGETS.values()) + _GOOSE_TARGET.get(_CUR_SEAT, 0)])
@@ -844,7 +796,6 @@ def _build_tasks(tiles, day, seeds, tape_mode=False, care_skip=(), crop_skip=(),
                 age = day - t.get("planted_day", day)
                 dying = t.get("consecutive_unwatered", 0) >= 1 and not t.get("watered_today", False)
                 crop_counts[crop] = crop_counts.get(crop, 0) + 1
-                crop_pos.setdefault(crop, []).append((x, y))
 
                 ready_age = info["ready"] if info else 10
                 first_age = info["first"] if info else ready_age
@@ -890,9 +841,8 @@ def _build_tasks(tiles, day, seeds, tape_mode=False, care_skip=(), crop_skip=(),
     if day < LAST_DAY:
         budget = dict(seeds)
         planned = dict(crop_counts)
-        want = []              # this turn's plant multiset — the conditions
-        for _ in empty_tiles:  # below never read tile coords, so the multiset
-            crop = None        # is identical to the old raster-order loop's
+        for (x, y) in empty_tiles:
+            crop = None
             for c in PLANT_ORDER:
                 info = CROP_INFO[c]
                 cap = info["cap"]
@@ -915,26 +865,12 @@ def _build_tasks(tiles, day, seeds, tape_mode=False, care_skip=(), crop_skip=(),
                 continue
             planned[crop] = planned.get(crop, 0) + 1
             budget[crop] -= 1
-            want.append(crop)
-        # v45a CLUSTERED ASSIGNMENT: each crop takes the free tiles nearest its
-        # anchor (centroid of its live plants, else its zone seed), so same-crop
-        # plants grow as contiguous blocks and replants land back inside their
-        # own block (a harvested tile is nearest its own crop's centroid).
-        free = list(empty_tiles)
-        for c in PLANT_ORDER:
-            n = sum(1 for w in want if w == c)
-            if n == 0 or not free:
-                continue
-            ax, ay = _crop_anchor(c, crop_pos)
-            free.sort(key=lambda p: abs(p[0] - ax) + abs(p[1] - ay))
             # Fast ramp (v18c): post-herd, a strawberry planted this hour starts
             # its 10-day clock this hour; watering only matters by nightfall.
-            prio = (P_WATER if ((ramp_fast and c == "STRAWBERRY")
-                                or (c == "TOMATO" and tomato_cap > 4))
+            prio = (P_WATER if ((ramp_fast and crop == "STRAWBERRY")
+                                or (crop == "TOMATO" and tomato_cap > 4))
                     else P_PLANT)
-            for (x, y) in free[:n]:
-                tasks.append({"prio": prio, "x": x, "y": y, "op": ["PLANT", c]})
-            free = free[n:]
+            tasks.append({"prio": prio, "x": x, "y": y, "op": ["PLANT", crop]})
 
     return tasks, n_feed
 
@@ -1170,12 +1106,43 @@ def _market_orders(day, hour, money, seeds, shed, inventories, prices, hires_tod
     # HIREs first: with 7 sellable products the 10-order cap could starve hour-0 hiring,
     # and a lost hand costs a whole day of labor while a delayed sale costs one turn.
     hands_target = TARGET_HANDS + HANDS_PER_EXTRA_QUADRANT * (n_quadrants - 1)
-    if hour == 0 and day < LAST_DAY:
-        want_hires = max(0, hands_target - n_hands - hires_today)
-        if day == 0:
+    if hour <= 2 and day < LAST_DAY:
+        # v44a iter2: the engine truncates each turn's queue to 10 orders, so a
+        # 12-hand dawn CANNOT fit in one turn (hands expire nightly => 12 fresh
+        # HIREs needed daily).  Hire in WAVES across hours 0-2 — the fib ladder
+        # keys on hires_today, which persists within the day, so wave hiring
+        # costs exactly the same as one-shot hiring.
+        # n_hands already counts every successfully filled hire (hands appear
+        # next turn); subtracting hires_today double-counted them and killed
+        # the hour-1 wave (12-10-10 = -8).
+        want_hires = max(0, hands_target - n_hands)
+        if day == 0 and hour == 0:
             # v37a: leave order slots for the day-0 basket below (10-order cap).
             want_hires = min(want_hires, 5)
-        for _ in range(want_hires):
+        # v44a PAYROLL FUNDING.  Engine facts (kaggriculture.py L96-101, L698-707,
+        # L881, L562-577): hands are DAILY workers — all expire nightly, rehired
+        # each dawn at fib cost (1,1,2,3,5,8,... => 10 hands = $143/day, 12 =
+        # $376/day), and market orders execute IN LIST ORDER, so a HIRE placed
+        # before any SELL is attempted against overnight cash only.  Measured:
+        # 269 HIREs ordered per game, ~10 filled, targets 10/12/14 byte-identical
+        # (morning cash, not the target, decided staffing).  Fix: pre-sell shed
+        # stock AT THE FRONT of the queue so the payroll clears before the HIREs
+        # are processed.  Wheat excluded (feed is sacred).
+        _FIB_CUM = [0, 1, 2, 4, 7, 12, 20, 33, 54, 88, 143, 232, 376, 609, 986]
+        payroll_need = _FIB_CUM[min(hires_today + want_hires, 14)] \
+            - _FIB_CUM[min(hires_today, 14)] - max(0, money)
+        if payroll_need > 0 and day > 0:
+            for it in ("FERTILIZER", "MILK", "WOOL", "EGG", "CARROT"):
+                if payroll_need <= 0 or len(orders) >= 2:
+                    break
+                stock = shed.get(it, 0)
+                if stock <= 0:
+                    continue
+                px = max(1, prices.get(it, 1))
+                n = min(stock, payroll_need // px + 1)
+                orders.append(["SELL", it, n])
+                payroll_need -= int(n * px * 0.8)   # conservative vs slippage
+        for _ in range(min(want_hires, 10 - len(orders))):
             orders.append(["HIRE"])
 
     # v37a day-0 all-in (monster blueprint, Exp 53): deploy nearly all
@@ -1325,7 +1292,12 @@ def _market_orders(day, hour, money, seeds, shed, inventories, prices, hires_tod
     # Seeds spend only what the herd's feed budget doesn't claim (the day-0 seed burst
     # once drained the bank to $0 and freshly placed sheep starved before any income).
     feed_hold = int(sum(owned.values()) * wheat_price * 1.3)  # v37c: was *4
-    spendable = money - feed_hold
+    # v44a: evening payroll hold — the shed is often empty at dawn, so
+    # tomorrow's hire ladder must survive tonight as CASH.  Applied from
+    # hour 16 so daytime spending stays all-in.
+    _FIBC = [0, 1, 2, 4, 7, 12, 20, 33, 54, 88, 143, 232, 376, 609, 986]
+    payroll_hold = _FIBC[min(hands_target, 14)] if hour >= 16 else 0
+    spendable = money - feed_hold - payroll_hold
     for crop in PLANT_ORDER:
         info = CROP_INFO[crop]
         if day > info["last_plant"]:

@@ -1,7 +1,64 @@
 """
 main.py — Kaggriculture agent.  ENTRY POINT (must be at archive root, must be named main.py).
 
-STATUS: v31b — Phase 6 fix #12 (PROMOTED, = v25 + CONDITIONAL DEAD-TOWN
+STATUS: v39a — PROMOTED 2026-08-31 (pod shape-search champion).
+= v37d base + the gen-10 genome from the 24-generation field-primary
+evolutionary search (32-vCPU pod, ~4,300 games/gen, 3-stage filter,
+promotion gate = field wins >= +8 on 200 held-out seeds vs v31b/tape/
+v12).  Six gene edits vs v37d: herd 4s/11c -> 5s/6c; day-0 basket
+2s/2c/10melon -> 1s/3c/6melon (feed 8 kept); ENDGAME_CONVERT 18->19;
+feed_hold x1.5 -> x1.3; berry reserve $150 -> $21.
+VALIDATION (all field-primary): vs v31b 77 seeds both seats
+**128W-26L (83.1%), mean +5,131, mu/sigma 0.93** — banks median
+83.9k / p75 99.2k / max 126.2k (v31b same seeds: 78.8k / 93.8k /
+117.1k); vs tape seeds 0-7 margin −35,301 vs v31b's −43,163
+(+7,862); vs v12 both 16-0, margins +43% bigger; 300 FRESH seeds
+final: dWins +712, field +232, dBank +6,480.  Zero crashes in 500+
+games.  Full search log: search_runs/2026-08-31_shape/.
+
+Was: v37d — PROTOTYPE iteration 4.  v37c at 16 seeds: 10W-22L mean
+−1,162 (vs v37b's 4W-28L −8,341 — leaner reserves confirmed).  Seed-0
+decode: deficit is diffuse (TOM −7k, STR timing −4k, WOO −3k; the 11th
+cow adds no milk in poor-absorption towns — town-dependent, fine).
+v37d closes the TOMATO leak: both tomato gates keyed on herd_complete/
+ramp_fast, which the 11-cow target pushes to d12-13 (v31b enters d9
+and banks ~7k).  Fix: the gates also open when money >= 3000 — in this
+shape "economy ramped" = herd done OR detonation landed.
+
+Was: v37c — PROTOTYPE iteration 3.  v37b jumped +30-44k/game over
+v37a (banks 75-98k, margins −0.2k to −10k vs v31b) — but the decode
+shows the farm sits nearly EMPTY days 5-9 (10 melons + nothing): the
+4-day feed_hold (~$900) plus the $550 berry reserve block ALL seed
+purchases at monster-economy cash levels.  The blueprint holds nothing
+and feeds day-to-day.  v37c: feed_hold 4 days -> 1.5, berry reserve
+550 -> 150.  Same reserve-philosophy bug, third location.
+
+Was: v37b — PROTOTYPE iteration 2.  v37a probe (0-6, −10 to −22k)
+leak-decoded against the blueprint: (1) both day-0 cows STARVED by day
+2 ($800 lost — basket left $24 and wheat seeds don't yield until d2)
+→ feed bridge: basket buys 8 market wheat, melons 12→10; (2) STR
+fatally late (18@d14 vs blueprint 40@d12; last_plant 17) — berry ramp
+was gated on herd_complete which an 11-cow target pushes to d13 →
+decoupled: berries plant from day 4 alongside the cow ramp (the melon
+money funds both); (3) land was animal-gated and the cow deaths
+delayed it → day-clock gates (q2 from d6, q3 from d10).  The melon
+detonation WORKED in the probe ($368@d10 → $9,155@d11, cows 4→11 in
+two days) — the engine is alive, the plumbing killed it.
+
+Was: v37a — PROTOTYPE: MONSTER-NATIVE ECONOMY (from the Exp 53/54
+blueprints, built as SHAPE — no actions copied).  The decoded 115-160k
+farms run a day-0 ALL-IN (start money is $3,000, engine L252): Prashant
+d0 = 2 cows + 2 sheep + 12 melons + 7 wheat + 5 hands, ending day 0
+with $21 — zero reserves ever, cow +1 every ~2 days to 10-11 by d10-12,
+funded by the day-10 melon detonation (12 x ~$260), STR to 40 by d12,
+q2 day 6 / q3 day 10, 12-13 hands, late conversion + full liquidation.
+Four dial-nudges toward this shape FAILED on our base (v31a/v33a/v35a/
+v36a) — this is the other hill built natively, our adaptive branches
+carried.  Changes vs v31b: day-0 override basket; COW target 11 (+3
+slots); cow pause REMOVED; feed cushion halved; MONEY_RESERVE 150->50;
+STR cap 40; late dig-conversion organ.
+
+Underlying: v31b — Phase 6 fix #12 (PROMOTED, = v25 + CONDITIONAL DEAD-TOWN
 REALLOCATION).  Pod-validated at scale : 74/2000 towns fire
 (3.7%), fired A/B 115W-33L (78%), mean +6,144/game, 61/74 towns
 net-positive, zero crashes; field legs clean (tape/v6a/v12 dWins +0,
@@ -270,7 +327,13 @@ UNLOAD_AT = 8            # a unit carrying this many items runs them to the shed
 
 # Livestock plan: sheep first (slowest payout -> place earliest, CARE stacks highest on it),
 # cows are the meta-proven workhorse. 6 animals ring the shed on one quadrant.
-ANIMAL_TARGETS = {"SHEEP": 4, "COW": 8}
+ANIMAL_TARGETS = {"SHEEP": 5, "COW": 6}
+# Day-0 all-in basket (v37d refactor: named so the shape search can move them).
+D0_SHEEP = 1
+D0_COW = 3
+D0_MELON = 6
+D0_WHEAT_SEED = 7
+D0_FEED = 8
 BUY_PRIORITY = ["SHEEP", "COW"]
 ANIMAL_INFO = {
     "COW":   {"cost": 400, "build": "BUILD_PASTURE", "first": 8, "interval": 2, "product": "MILK"},
@@ -279,8 +342,9 @@ ANIMAL_INFO = {
 # Ring around the shed-access tile (4,4): FEED/CARE/HARVEST/COLLECT all happen standing ON
 # the animal tile and the wheat lives at the shed, so clustering minimizes walking.
 ANIMAL_SLOTS = [(3, 4), (4, 3), (3, 3), (2, 4), (4, 2), (2, 3), (3, 2), (2, 2),
-                (4, 5), (3, 5), (2, 5), (4, 6)]   # +4 SW slots (build when land unlocks)
-MONEY_RESERVE = 150      # keep enough cash for the day's wheat + seeds when buying animals
+                (4, 5), (3, 5), (2, 5), (4, 6),
+                (3, 6), (2, 6), (4, 7)]   # +7 SW slots (v37a: 15-animal herd)
+MONEY_RESERVE = 50       # v37a: monsters hold zero reserves — assets compound, cash doesn't
 
 # (batch, min_price, liquidation_day). Wheat doubles as animal feed: a reserve is held back
 # (see WHEAT_FEED_RESERVE_DAYS) and the min price 30 (> base 25) means surplus only sells
@@ -302,7 +366,7 @@ NEVER_FORCE_SELL = {"WHEAT"}
 CROP_INFO = {
     "MELON":      {"cost": 80,  "first": 10, "ready": 10, "last_plant": 19, "window": (6, 12), "cap": 12},
     "WHEAT":      {"cost": 10,  "first": 2,  "ready": 4,  "last_plant": 24, "window": (2, 4),  "cap": 22},
-    "STRAWBERRY": {"cost": 100, "first": 10, "ready": 10, "last_plant": 17, "window": (0, -1), "cap": 35},
+    "STRAWBERRY": {"cost": 100, "first": 10, "ready": 10, "last_plant": 17, "window": (0, -1), "cap": 40},
     "CARROT":     {"cost": 20,  "first": 2,  "ready": 3,  "last_plant": 26, "window": (2, 3),  "cap": 12},
     "TOMATO":     {"cost": 50,  "first": 8,  "ready": 8,  "last_plant": 20, "window": (0, -1), "cap": 0},
 }
@@ -343,6 +407,11 @@ WHEAT_FEED_RESERVE_DAYS = 1   # hold animals*this much wheat before selling any 
 # ~$40 ($19.4k) by converting freed premium tiles to wheat wall-to-wall late-game;
 # wheat demand never gluts (6 shop types).  From this day, wheat stops being
 # feed-sized and becomes the default cash crop for open land.
+# Late premium->wheat conversion (v35a organ): dig dead-market premium
+# plants from this day so the tile earns wheat/carrot instead.
+ENDGAME_CONVERT_DAY = 19
+ENDGAME_CONVERT_CROPS = ("STRAWBERRY", "MELON")
+
 WHEAT_FACTORY_DAY = 22
 WHEAT_FACTORY_CAP = 45        # replaces CROP_INFO cap 20 from factory day
 WHEAT_FACTORY_SEED_WANT = 10  # replaces SEED_WANT 4 from factory day
@@ -658,6 +727,11 @@ def _build_tasks(tiles, day, seeds, tape_mode=False, care_skip=(), crop_skip=(),
                 # crops and animals instead.  Harvests above still run (they free
                 # the tile); the plant may weed and gets dug at leisure (P_DIG).
                 if crop in crop_skip:
+                    # Late conversion (v35a organ): dig the abandoned plant
+                    # now instead of letting it weed out over days.
+                    if (day >= ENDGAME_CONVERT_DAY and day < LAST_DAY
+                            and crop in ENDGAME_CONVERT_CROPS):
+                        tasks.append({"prio": P_DIG, "x": x, "y": y, "op": ["DIG"]})
                     continue
 
                 if not t.get("watered_today", False):
@@ -924,8 +998,27 @@ def _market_orders(day, hour, money, seeds, shed, inventories, prices, hires_tod
     # and a lost hand costs a whole day of labor while a delayed sale costs one turn.
     hands_target = TARGET_HANDS + HANDS_PER_EXTRA_QUADRANT * (n_quadrants - 1)
     if hour == 0 and day < LAST_DAY:
-        for _ in range(max(0, hands_target - n_hands - hires_today)):
+        want_hires = max(0, hands_target - n_hands - hires_today)
+        if day == 0:
+            # v37a: leave order slots for the day-0 basket below (10-order cap).
+            want_hires = min(want_hires, 5)
+        for _ in range(want_hires):
             orders.append(["HIRE"])
+
+    # v37a day-0 all-in (monster blueprint, Exp 53): deploy nearly all
+    # $3,000 starting cash into compounding assets in the first hour —
+    # the 12 melons detonate at day 10-12 and fund the cow tail.
+    if day == 0 and hour == 0:
+        orders.append(["BUY_ANIMAL", "SHEEP", D0_SHEEP])
+        orders.append(["BUY_ANIMAL", "COW", D0_COW])
+        orders.append(["BUY_SEED", "MELON", D0_MELON])
+        orders.append(["BUY_SEED", "WHEAT", D0_WHEAT_SEED])
+        # Feed bridge (v37b): planted wheat yields from day 2; without it
+        # the day-0 cows starved by day 2 in the v37a probe ($800 lost).
+        orders.append(["BUY_PRODUCT", "WHEAT", D0_FEED])
+        money -= (D0_SHEEP * 500 + D0_COW * 400 + D0_MELON * 80
+                  + D0_WHEAT_SEED * 10
+                  + D0_FEED * max(1, prices.get("WHEAT", 25)))
 
     shed_total = sum(shed.values())
     for item, (batch, min_price, liq_day) in SELL_RULES.items():
@@ -1023,15 +1116,14 @@ def _market_orders(day, hour, money, seeds, shed, inventories, prices, hires_tod
         # 2-day cushion (feed buys are already sacred; 4 days double-protected and
         # delayed the herd ~6 days).  Days 0-1: no cushion — the fertilizer stream
         # (~$98/animal/day) starts before the first feed bill can hurt.
-        feed_cushion = 0 if day <= 1 else herd_after * wheat_price * 2
+        feed_cushion = 0 if day <= 1 else herd_after * wheat_price * 1  # v37a: halved
         for sp in BUY_PRIORITY:
             # v18e staged herd: the field audit's winners hold 5-7 animals at
             # day 8 with ~20 strawberries planted; cows 6-8 arrive d11-14 and
             # still repay (~$450 vs ~$40-70/day milk to d29).  Pause the cow
             # tail so its cash plants the berries 4-6 days earlier.
-            if (sp == "COW" and owned.get("COW", 0) >= 3 and day < 9
-                    and my_crops.get("STRAWBERRY", 0) < 20):
-                continue
+            # v37a: staged-herd pause REMOVED — the monster ramp buys a cow
+            # whenever cash allows; the day-0 melon block funds the tail.
             cost = ANIMAL_INFO[sp]["cost"]
             if sp == "COW" and owned["COW"] >= cow_target:
                 continue
@@ -1044,7 +1136,9 @@ def _market_orders(day, hour, money, seeds, shed, inventories, prices, hires_tod
 
     # Land: NE after 6 animals owned, SW after 8 (waiting for the full 12-herd would
     # deadlock — animals 9-12 place on SW slots that need the land first).
-    land_ready = sum(owned.values()) >= (6 if n_quadrants == 1 else 8)
+    # v37b: day-clock land (blueprint: q2 day 6, q3 day 10) — the old
+    # animal-count gate deadlocked when day-0 losses slowed the herd.
+    land_ready = day >= (6 if n_quadrants == 1 else 10)
     if (n_quadrants < LAND_MAX_QUADRANTS and day <= 20 and land_ready):
         land_cost = LAND_PRICES[n_quadrants - 1]
         if money >= land_cost + MONEY_RESERVE + 200:
@@ -1053,7 +1147,7 @@ def _market_orders(day, hour, money, seeds, shed, inventories, prices, hires_tod
 
     # Seeds spend only what the herd's feed budget doesn't claim (the day-0 seed burst
     # once drained the bank to $0 and freshly placed sheep starved before any income).
-    feed_hold = sum(owned.values()) * wheat_price * 4
+    feed_hold = int(sum(owned.values()) * wheat_price * 1.3)  # v37c: was *4
     spendable = money - feed_hold
     for crop in PLANT_ORDER:
         info = CROP_INFO[crop]
@@ -1062,8 +1156,8 @@ def _market_orders(day, hour, money, seeds, shed, inventories, prices, hires_tod
         if crop == "TOMATO":
             _tpx = prices.get("TOMATO", 0)
             _bar = BEHIND_TOMATO_PRICE if gamble else TOMATO_HINGE_CONFIRM
-            if not herd_complete or _tpx < _bar:
-                continue
+            if not (herd_complete or money >= 3000) or _tpx < _bar:
+                continue  # v37d: detonation cash also opens the tomato gate
         elif info["cap"] <= 0:
             continue
         want = SEED_WANT[crop]
@@ -1077,7 +1171,9 @@ def _market_orders(day, hour, money, seeds, shed, inventories, prices, hires_tod
             # cow's price always reserved below.
             if day < 4:
                 continue
-            want = 7
+            # v37b: when the melon detonation lands, flood the berry pipeline
+            # (blueprint: STR 9 -> 37 in the two days after the burst).
+            want = 12 if money >= 3000 else 7
         if (day == 0 and crop in ("STRAWBERRY", "CARROT")
                 and (owned["SHEEP"] < ANIMAL_TARGETS["SHEEP"] or owned["COW"] < 1)):
             # Day-0 fourth sheep (v14b): premium seeds yield nothing before day
@@ -1085,7 +1181,7 @@ def _market_orders(day, hour, money, seeds, shed, inventories, prices, hires_tod
             # up 4 days — the tape's day-0 allocation, decoded and copied.
             continue
         have = seeds.get(crop, 0)
-        _res = 550 if (crop == "STRAWBERRY" and not herd_complete) else 0
+        _res = 21 if (crop == "STRAWBERRY" and not herd_complete) else 0  # v37c: was 550
         if have < want and spendable - _res >= info["cost"]:
             n = min(want - have, int((spendable - _res) // info["cost"]))
             if n > 0:
@@ -1147,7 +1243,8 @@ def agent(obs):
                                                "SMOOTHIE_SHOP"))
     _milk_proj = _milk_seen + max(0, 8 - len(shops)) * 0.375
     _cow_t = 6 if _milk_proj < 2.0 else ANIMAL_TARGETS["COW"]
-    ramp_fast = _owned_n >= ANIMAL_TARGETS["SHEEP"] + _cow_t
+    ramp_fast = (_owned_n >= ANIMAL_TARGETS["SHEEP"] + _cow_t
+                 or money >= 3000)  # v37d: detonation counts as ramped
 
     # Reactive tomato (v20d, staged): none pre-herd; small speculation on a
     # 2+-shop draw; full commitment only when price >= 85 confirms the hinge.

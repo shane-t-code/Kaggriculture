@@ -47,9 +47,15 @@ def _play(job):
     env.run([_load_agent(p0), _load_agent(p1)])
     farms = env.steps[-1][0]["observation"]["farms"]
     statuses = [s["status"] for s in env.steps[-1]]
+    # day-14 shop draw: lets analyses bucket paired results by town scenario
+    # (STR-dead towns, egg towns, wheat towns...) without rerunning games
+    try:
+        shops14 = env.steps[min(336, len(env.steps) - 1)][0]["observation"]["town"]["unlocked_shops"]
+    except Exception:
+        shops14 = []
     return {"leg": leg, "p0": p0, "p1": p1, "seed": seed,
             "banks": [farms[0]["money"], farms[1]["money"]],
-            "statuses": statuses}
+            "statuses": statuses, "shops14": shops14}
 
 def main():
     ap = argparse.ArgumentParser()

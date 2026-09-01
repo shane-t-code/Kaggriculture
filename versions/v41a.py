@@ -1,17 +1,16 @@
 """
 main.py — Kaggriculture agent.  ENTRY POINT (must be at archive root, must be named main.py).
 
-STATUS: v43a — PROMOTED 2026-09-01 (round-2 search champion).
-= v42b base (dynamic demand STR cap VALIDATED at scale: STRdead towns
-4-0 +8,774, STRweak 64W-33L +1,070, no-harm elsewhere, 1,500-game
-Stage A; goose plumbing present but default-off after adaptive geese
-measured -3,490) + the gen-1 genome: d0_feed 8 -> 6.  Pod S3 held-out
-(150 seeds x 7 field legs incl. meta tape + 4 live-archetype proxies):
-field +414, dBank +4,857.  Local gauntlet: vs v40a 77 seeds
-**133W-21L (86.4%) +4,750 mu/sigma 1.01**; tape leg flat (-813 = noise).
-Scale bundles all NEGATIVE (hands dial proven INERT - hiring machinery
-is the bottleneck, see PLAN Exp 60); SE land and early geese confirmed
-losses.  Was:
+STATUS: v41a — CANDIDATE (= v40a + PER-PRODUCT DEMAND PIVOT).
+The 26k live disaster : wheat/egg town, STR drain dead but MILK
+alive — the both-dead latch never fired, we planted 40 STR nobody
+bought.  v41a splits the latch: STR-dead ALONE (drain <= 1, day >= 9)
+caps STR at 15 + stops STR seed buys; the both-dead condition still
+gates the early factory (milk alive = cows keep earning).  Fires only
+in STR-dead towns -> occupancy changes there -> needs v31b-style
+conditional mass A/B (pod) for promotion; local 16-seed = no-harm.
+
+Was: v40a — PROMOTED 2026-08-31 night (= v39a + CROSS-TURN STICKY
 ROUTING, ported from v33a).  VALIDATION (field-primary): vs v39a 77
 seeds both seats **122W-32L (79.2%), +3,227, mu/sigma 0.76**; vs tape
 seeds 8-23 (32 games) margin −30,657 vs v39a's −37,718 = **+7,061
@@ -344,8 +343,7 @@ DEBUG = False
 # ----------------------------------------------------------------------------------
 TARGET_HANDS = 8         # scale retest: 10 hands at 3 quadrants ($143/day fib)
 HANDS_PER_EXTRA_QUADRANT = 2
-LAND_MAX_QUADRANTS = 4
-LAND_DAYS = [6, 10, 99]   # v5b: retry the 3rd quadrant now that fert + cash bugs are fixed
+LAND_MAX_QUADRANTS = 3   # v5b: retry the 3rd quadrant now that fert + cash bugs are fixed
 LAND_PRICES = [1000, 2000, 4000]   # engine LAND_PRICES (ENGINE_NOTES B.1); order NE->SW->SE
 # (crop mix now lives in CROP_INFO caps + PLANT_ORDER + SEED_WANT below)
 LIQUIDATE_FROM_DAY = 28  # unsold inventory is worth $0 at the end — sell everything late
@@ -360,10 +358,9 @@ D0_SHEEP = 1
 D0_COW = 3
 D0_MELON = 6
 D0_WHEAT_SEED = 7
-D0_FEED = 6
-BUY_PRIORITY = ["GOOSE", "SHEEP", "COW"]
+D0_FEED = 8
+BUY_PRIORITY = ["SHEEP", "COW"]
 ANIMAL_INFO = {
-    "GOOSE": {"cost": 300, "build": "BUILD_COOP", "first": 4, "interval": 1, "product": "EGG"},
     "COW":   {"cost": 400, "build": "BUILD_PASTURE", "first": 8, "interval": 2, "product": "MILK"},
     "SHEEP": {"cost": 500, "build": "BUILD_PASTURE", "first": 6, "interval": 3, "product": "WOOL"},
 }
@@ -372,25 +369,6 @@ ANIMAL_INFO = {
 ANIMAL_SLOTS = [(3, 4), (4, 3), (3, 3), (2, 4), (4, 2), (2, 3), (3, 2), (2, 2),
                 (4, 5), (3, 5), (2, 5), (4, 6),
                 (3, 6), (2, 6), (4, 7)]   # +7 SW slots (v37a: 15-animal herd)
-# v42b geese: slots are species-aware; adaptive target set per game in agent()
-# once an egg shop is seen.  D0_GOOSE > 0 = blind day-0 goose bet (search gene;
-# first egg day 4) — day-0 geese take the FRONT slots (nothing built yet),
-# late-latched geese take the unbuilt TAIL (front pastures already stand).
-D0_GOOSE = 0
-_GOOSE_TARGET = {0: 0, 1: 0}
-def _slot_species():
-    order = ("GOOSE", "SHEEP", "COW") if D0_GOOSE else ("SHEEP", "COW", "GOOSE")
-    out = []
-    for _sp in order:
-        n = _GOOSE_TARGET.get(_CUR_SEAT, 0) if _sp == "GOOSE" else ANIMAL_TARGETS.get(_sp, 0)
-        out += [_sp] * n
-    return out
-def _slot_build(x, y):
-    sl = _slot_species()
-    i = ANIMAL_SLOTS.index((x, y)) if (x, y) in ANIMAL_SLOTS else 99
-    return ANIMAL_INFO[sl[i] if i < len(sl) else "COW"]["build"]
-def _home_kind(sp):
-    return "COOP" if sp == "GOOSE" else "PASTURE"
 MONEY_RESERVE = 50       # v37a: monsters hold zero reserves — assets compound, cash doesn't
 
 # (batch, min_price, liquidation_day). Wheat doubles as animal feed: a reserve is held back
@@ -405,7 +383,6 @@ SELL_RULES = {
     "FERTILIZER": (5, 40, 28),
     "WHEAT":      (6, 18, 29),
     "TOMATO":     (4, 50, 28),
-    "EGG":        (4, 30, 28),
 }
 NEVER_FORCE_SELL = {"WHEAT"}
 
@@ -442,6 +419,8 @@ WHEAT_TOWN_CHECK_DAY = 9     # first evaluation (3 draws visible; v31b — day 6
 WHEAT_TOWN_STR_CAP = 15      # latched: stop NEW strawberry planting above this
                              # (v30a evidence: freed tiles -> wheat is the win)
 _WHEAT_TOWN = {}             # per-seat sticky latch, reset at step 0
+_STR_DEAD = {}               # v41a: per-seat latch — STR demand alone is dead
+_STR_DEAD_NOW = False        # v41a: set per agent() call
 _FACTORY_NOW = False         # set per agent() call: wheat factory active this turn
 _DEAD_TOWN_NOW = False       # set per agent() call: dead-town latch this turn
 _STICKY = {}                 # v40a: per-seat {unit_index: (x, y, op0)}, reset at step 0
@@ -573,37 +552,6 @@ def _town_drain_per_day(item, shops):
     return d
 
 
-
-# v42a: expected FUTURE demand.  Any future shop is a uniform draw over the 8
-# types (with replacement, engine L891), so E[drain gain] per remaining unlock
-# for item P = (types carrying P / 8) * 6 * multiplier.  This is what stops the
-# premature kills v41a showed: at day 9 five shops are still unseen and a
-# strawberry buyer arrives later with prob 1-(1-4/8)^5.
-_PROJ_GAIN = {}   # item -> expected drain/day contributed by ONE future unlock
-for _it in ("WHEAT", "STRAWBERRY", "MILK", "EGG", "TOMATO", "CARROT", "WOOL", "MELON"):
-    _g = 0.0
-    for _prods in SHOP_DEMAND.values():
-        if _it in _prods:
-            _g += 6 * (2 if len(_prods) == 1 else 1)
-    _PROJ_GAIN[_it] = _g / 8.0
-
-def _proj_drain_per_day(item, shops, day):
-    remaining = max(0, min(8, (30 - day) // 3 + (0 if day % 3 else 0)) )
-    remaining = min(remaining, 8 - len(shops))
-    return _town_drain_per_day(item, shops) + remaining * _PROJ_GAIN.get(item, 0)
-
-# Dynamic STR cap: scale the tuned default (40 @ typical projected drain ~25/day)
-# by this town's projection.  Ratchet: only recomputed at hour 0; never above 48
-# (search bound), never below 12; and it can only DROP from day 6 (2+ shops seen).
-def _dyn_str_cap(shops, day):
-    proj = _proj_drain_per_day("STRAWBERRY", shops, day)
-    cap = int(round(40 * proj / 25.0))
-    cap = max(12, min(40, cap))
-    if day < 6:
-        cap = max(cap, 40)
-    return cap
-_DYN_STR_CAP = {0: 40, 1: 40}   # per seat, refreshed at hour 0
-
 def _inflow_per_day(item, crops, animals):
     """Rough units/day BOTH-farms production feeding this market (cared/watered rates)."""
     if item == "WOOL":
@@ -727,7 +675,7 @@ def _build_tasks(tiles, day, seeds, tape_mode=False, care_skip=(), crop_skip=(),
     crop_counts = {}
     empty_tiles = []
     n_feed = 0
-    reserved = set(ANIMAL_SLOTS[:sum(ANIMAL_TARGETS.values()) + _GOOSE_TARGET.get(_CUR_SEAT, 0)])
+    reserved = set(ANIMAL_SLOTS[:sum(ANIMAL_TARGETS.values())])
 
     for y, row in enumerate(tiles):
         for x, t in enumerate(row):
@@ -737,7 +685,7 @@ def _build_tasks(tiles, day, seeds, tape_mode=False, care_skip=(), crop_skip=(),
                 if (x, y) in reserved:
                     # Animal slot without a structure yet: build it (free, 1 action).
                     if day < LAST_DAY:
-                        tasks.append({"prio": P_BUILD, "x": x, "y": y, "op": [_slot_build(x, y)]})
+                        tasks.append({"prio": P_BUILD, "x": x, "y": y, "op": ["BUILD_PASTURE"]})
                 else:
                     empty_tiles.append((x, y))
                 continue
@@ -844,8 +792,8 @@ def _build_tasks(tiles, day, seeds, tape_mode=False, care_skip=(), crop_skip=(),
                 cap = info["cap"]
                 if c == "WHEAT" and _FACTORY_NOW:
                     cap = WHEAT_FACTORY_CAP
-                if c == "STRAWBERRY":
-                    cap = min(cap, _DYN_STR_CAP.get(_CUR_SEAT, 40))
+                if c == "STRAWBERRY" and _STR_DEAD_NOW:
+                    cap = min(cap, WHEAT_TOWN_STR_CAP)
                 if c == "TOMATO":
                     cap = tomato_cap
                 if c == "CARROT":
@@ -895,14 +843,15 @@ def _supply_tasks(tasks, n_feed, units, inventories, shed, tiles, day):
                       "op": ["PICKUP", "FERTILIZER", n]})
 
     # One animal-pickup per turn: an animal sits in the shed and an empty structure waits.
-    _empties = set(t.get("kind") for row in tiles for t in row
-                   if isinstance(t, dict) and t.get("kind") in ("PASTURE", "COOP")
-                   and not t.get("animal"))
-    if _empties:
+    empty_pasture = any(
+        isinstance(t, dict) and t.get("kind") == "PASTURE" and not t.get("animal")
+        for row in tiles for t in row
+    )
+    if empty_pasture:
         carrying = any(any(sp in inv for sp in ANIMAL_INFO) for inv in inventories)
         if not carrying:
             for sp in BUY_PRIORITY:
-                if shed.get(sp, 0) > 0 and _home_kind(sp) in _empties:
+                if shed.get(sp, 0) > 0:
                     tasks.append({"prio": P_CHAIN, "x": SHED_TILE[0], "y": SHED_TILE[1],
                                   "op": ["PICKUP", sp, 1]})
                     break
@@ -925,7 +874,7 @@ def _assign(units, tasks, inventories, tiles, day, hour):
         best, best_d = None, 10**9
         for y, row in enumerate(tiles):
             for x, t in enumerate(row):
-                if isinstance(t, dict) and t.get("kind") == _home_kind(species) and not t.get("animal"):
+                if isinstance(t, dict) and t.get("kind") == "PASTURE" and not t.get("animal"):
                     d = abs(x - ux) + abs(y - uy)
                     if d < best_d:
                         best, best_d = (x, y), d
@@ -1114,9 +1063,6 @@ def _market_orders(day, hour, money, seeds, shed, inventories, prices, hires_tod
     # $3,000 starting cash into compounding assets in the first hour —
     # the 12 melons detonate at day 10-12 and fund the cow tail.
     if day == 0 and hour == 0:
-        if D0_GOOSE:
-            orders.append(["BUY_ANIMAL", "GOOSE", D0_GOOSE])
-            money -= 300 * D0_GOOSE
         orders.append(["BUY_ANIMAL", "SHEEP", D0_SHEEP])
         orders.append(["BUY_ANIMAL", "COW", D0_COW])
         orders.append(["BUY_SEED", "MELON", D0_MELON])
@@ -1235,8 +1181,7 @@ def _market_orders(day, hour, money, seeds, shed, inventories, prices, hires_tod
             cost = ANIMAL_INFO[sp]["cost"]
             if sp == "COW" and owned["COW"] >= cow_target:
                 continue
-            sp_target = _GOOSE_TARGET.get(_CUR_SEAT, 0) if sp == "GOOSE" else ANIMAL_TARGETS[sp]
-            if owned.get(sp, 0) < sp_target and money >= cost + MONEY_RESERVE + feed_cushion:
+            if owned[sp] < ANIMAL_TARGETS[sp] and money >= cost + MONEY_RESERVE + feed_cushion:
                 orders.append(["BUY_ANIMAL", sp, 1])
                 money -= cost
                 orders.append(["BUY_PRODUCT", "WHEAT", 3])
@@ -1247,7 +1192,7 @@ def _market_orders(day, hour, money, seeds, shed, inventories, prices, hires_tod
     # deadlock — animals 9-12 place on SW slots that need the land first).
     # v37b: day-clock land (blueprint: q2 day 6, q3 day 10) — the old
     # animal-count gate deadlocked when day-0 losses slowed the herd.
-    land_ready = day >= LAND_DAYS[min(n_quadrants - 1, 2)]
+    land_ready = day >= (6 if n_quadrants == 1 else 10)
     if (n_quadrants < LAND_MAX_QUADRANTS and day <= 20 and land_ready):
         land_cost = LAND_PRICES[n_quadrants - 1]
         if money >= land_cost + MONEY_RESERVE + 200:
@@ -1272,7 +1217,7 @@ def _market_orders(day, hour, money, seeds, shed, inventories, prices, hires_tod
         want = SEED_WANT[crop]
         if crop == "WHEAT" and _FACTORY_NOW:
             want = WHEAT_FACTORY_SEED_WANT
-        if crop == "STRAWBERRY" and _DYN_STR_CAP.get(_CUR_SEAT, 40) <= 20:
+        if crop == "STRAWBERRY" and _STR_DEAD_NOW:
             continue
         if crop == "STRAWBERRY" and not herd_complete:
             # v18d: days 0-3 stay cow-only (v13c's day-0 burst failed at 37.5%);
@@ -1325,7 +1270,7 @@ def agent(obs):
         _TAPE_SEEN[player] = False
         _GAMBLE_ON[player] = False
         _WHEAT_TOWN[player] = False
-        _GOOSE_TARGET[player] = D0_GOOSE
+        _STR_DEAD[player] = False
         _STICKY[player] = {}
     if not _TAPE_SEEN.get(player, False) and 1 <= day <= 2:
         _oc, _oa = _opp_capacity(opp.get("tiles", []))
@@ -1372,19 +1317,25 @@ def agent(obs):
     gamble = _GAMBLE_ON.get(player, False)
     # Dead-premium town -> early wheat factory (v31a).  Sticky once latched
     # (a started conversion gets finished even if a premium shop lands later).
-    global _FACTORY_NOW, _DEAD_TOWN_NOW, _CUR_SEAT
+    global _FACTORY_NOW, _DEAD_TOWN_NOW, _STR_DEAD_NOW, _CUR_SEAT
     _CUR_SEAT = player   # v40a: key for _assign's cross-turn sticky memory
+    # v41a: PER-PRODUCT demand pivot.  The 26k live disaster: a wheat/egg
+    # town with dead STR demand but live MILK demand — the both-dead latch
+    # never fired and we planted 40 strawberries nobody bought.  Now STR-dead
+    # ALONE (drain <= 1 from day 9) caps STR and stops STR seed buys; the
+    # full both-dead condition still gates the early wheat FACTORY (milk
+    # demand alive = cows keep earning, so no factory in that case).
+    if (not _STR_DEAD.get(player, False)
+            and day >= WHEAT_TOWN_CHECK_DAY
+            and _town_drain_per_day("STRAWBERRY", shops) <= 1):
+        _STR_DEAD[player] = True
+    _STR_DEAD_NOW = _STR_DEAD.get(player, False)
     if (not _WHEAT_TOWN.get(player, False)
             and day >= WHEAT_TOWN_CHECK_DAY
             and _town_drain_per_day("STRAWBERRY", shops) <= 1
             and _town_drain_per_day("MILK", shops) <= 1
             and _town_drain_per_day("WHEAT", shops) >= 7):
         _WHEAT_TOWN[player] = True
-    if hour == 0:
-        _DYN_STR_CAP[player] = _dyn_str_cap(shops, day)
-        if (_GOOSE_TARGET.get(player, 0) < 1 and day <= 10
-                and _town_drain_per_day("EGG", shops) >= 7):
-            _GOOSE_TARGET[player] = 0
     _DEAD_TOWN_NOW = _WHEAT_TOWN.get(player, False)
     _FACTORY_NOW = day >= WHEAT_FACTORY_DAY or _DEAD_TOWN_NOW
     if ramp_fast and (_tom_px >= TOMATO_HINGE_CONFIRM

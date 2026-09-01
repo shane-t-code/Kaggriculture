@@ -1,0 +1,40 @@
+[15:57:29] gen1 S1 best(field): [('cand_8.py', 28), ('cand_9.py', 27), ('cand_4.py', 22)]
+[16:05:25] gen1 S2 best cand_8.py field +56 (mirror +56) dBank +4,920 genome {'d0_sheep': 1, 'd0_cow': 3, 'd0_melon': 6, 'd0_feed': 6, 'd0_goose': 0, 'sheep': 5, 'cow': 6, 'goose_max': 0, 'goose_day': 10, 'egg_bar': 7, 'str_base': 40, 'str_typ': 25, 'hands': 8, 'hands_q': 2, 'land1': 6, 'land2': 10, 'land3': 26, 'feed_mult10': 13, 'res': 21, 'convert_day': 19, 'factory_day': 22, 'care_skip': 15, 'seed_mel': 3}
+[16:18:26] gen1 S3 HELD-OUT: field +414 (mirror +252) dBank +4,857
+[16:18:26] gen1 *** NEW CHAMPION *** {'d0_sheep': 1, 'd0_cow': 3, 'd0_melon': 6, 'd0_feed': 6, 'd0_goose': 0, 'sheep': 5, 'cow': 6, 'goose_max': 0, 'goose_day': 10, 'egg_bar': 7, 'str_base': 40, 'str_typ': 25, 'hands': 8, 'hands_q': 2, 'land1': 6, 'land2': 10, 'land3': 26, 'feed_mult10': 13, 'res': 21, 'convert_day': 19, 'factory_day': 22, 'care_skip': 15, 'seed_mel': 3}
+[16:18:26] gen1 done | elapsed 0.45h
+[16:24:47] gen2 S1 best(field): [('cand_0.py', 0), ('cand_1.py', 0), ('cand_4.py', 0)]
+[16:32:45] gen2 S2 best cand_13.py field +17 (mirror -4) dBank -547 genome {'d0_sheep': 1, 'd0_cow': 3, 'd0_melon': 6, 'd0_feed': 6, 'd0_goose': 0, 'sheep': 5, 'cow': 6, 'goose_max': 0, 'goose_day': 10, 'egg_bar': 7, 'str_base': 40, 'str_typ': 25, 'hands': 8, 'hands_q': 2, 'land1': 6, 'land2': 10, 'land3': 26, 'feed_mult10': 15, 'res': 21, 'convert_day': 19, 'factory_day': 22, 'care_skip': 15, 'seed_mel': 3}
+[16:45:52] gen2 S3 HELD-OUT: field -14 (mirror -88) dBank -615
+[16:45:52] gen2 S3 gate FAILED -> genome banned
+[16:45:52] gen2 done | elapsed 0.91h
+[16:52:14] gen3 S1 best(field): [('cand_3.py', 0), ('cand_4.py', 0), ('cand_15.py', 0)]
+[17:00:13] gen3 S2 best cand_3.py field +2 (mirror -12) dBank -63 genome {'d0_sheep': 1, 'd0_cow': 3, 'd0_melon': 6, 'd0_feed': 6, 'd0_goose': 0, 'sheep': 5, 'cow': 6, 'goose_max': 0, 'goose_day': 12, 'egg_bar': 7, 'str_base': 40, 'str_typ': 25, 'hands': 8, 'hands_q': 2, 'land1': 6, 'land2': 10, 'land3': 26, 'feed_mult10': 13, 'res': 21, 'convert_day': 19, 'factory_day': 24, 'care_skip': 15, 'seed_mel': 3}
+[17:00:13] gen3 done | elapsed 1.15h
+[17:06:34] gen4 S1 best(field): [('cand_17.py', 0), ('cand_1.py', 0), ('cand_2.py', 0)]
+[17:14:35] gen4 S2 best cand_5.py field +3 (mirror +16) dBank +303 genome {'d0_sheep': 1, 'd0_cow': 3, 'd0_melon': 6, 'd0_feed': 6, 'd0_goose': 0, 'sheep': 5, 'cow': 6, 'goose_max': 0, 'goose_day': 10, 'egg_bar': 7, 'str_base': 40, 'str_typ': 25, 'hands': 8, 'hands_q': 2, 'land1': 6, 'land2': 10, 'land3': 26, 'feed_mult10': 13, 'res': 21, 'convert_day': 21, 'factory_day': 22, 'care_skip': 15, 'seed_mel': 3}
+[17:14:35] gen4 done | elapsed 1.39h
+[17:20:56] gen5 S1 best(field): [('cand_0.py', 0), ('cand_8.py', 0), ('cand_9.py', 0)]
+[17:28:55] gen5 S2 best cand_4.py field +10 (mirror +16) dBank +268 genome {'d0_sheep': 1, 'd0_cow': 3, 'd0_melon': 6, 'd0_feed': 6, 'd0_goose': 0, 'sheep': 5, 'cow': 8, 'goose_max': 0, 'goose_day': 10, 'egg_bar': 7, 'str_base': 40, 'str_typ': 25, 'hands': 8, 'hands_q': 2, 'land1': 6, 'land2': 10, 'land3': 26, 'feed_mult10': 13, 'res': 53, 'convert_day': 19, 'factory_day': 22, 'care_skip': 15, 'seed_mel': 3}
+[17:42:00] gen5 S3 HELD-OUT: field -12 (mirror +28) dBank +215
+[17:42:00] gen5 S3 gate FAILED -> genome banned
+[17:42:00] gen5 done | elapsed 1.85h
+[17:48:20] gen6 S1 best(field): [('cand_9.py', 0), ('cand_12.py', 0), ('cand_11.py', -1)]
+[17:50:09] BUNDLE GRID: 14 coordinated bundles vs champion
+[18:07:55]   h10_se12_s46       field  -43 (mirror  -72) dBank -6,637
+[18:07:55]   h12_se12_s46       field  -43 (mirror  -72) dBank -6,637
+[18:07:55]   h14_se12_s46       field  -43 (mirror  -72) dBank -6,637
+[18:07:55]   h10_se12_s40       field  -44 (mirror  -76) dBank -6,496
+[18:07:55]   h12_se12_s40       field  -44 (mirror  -76) dBank -6,496
+[18:07:55]   h14_se12_s40       field  -44 (mirror  -76) dBank -6,496
+[18:07:55]   h10_se14_s40       field  -45 (mirror  -74) dBank -6,810
+[18:07:55]   h12_se14_s40       field  -45 (mirror  -74) dBank -6,810
+[18:07:55]   h14_se14_s40       field  -45 (mirror  -74) dBank -6,810
+[18:07:55]   h10_se14_s46       field  -56 (mirror  -74) dBank -7,444
+[18:07:55]   h12_se14_s46       field  -56 (mirror  -74) dBank -7,444
+[18:07:55]   h14_se14_s46       field  -56 (mirror  -74) dBank -7,444
+[18:07:55]   h10_se12_goose     field -132 (mirror  -72) dBank -13,288
+[18:07:55]   h12_se12_goose     field -132 (mirror  -72) dBank -13,288
+[18:07:55] BUNDLE h10_se12_s46: below S3 bar (field -43), skipping
+[18:07:55] BUNDLE h12_se12_s46: below S3 bar (field -43), skipping
+[18:07:55] BUNDLE GRID DONE

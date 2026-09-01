@@ -1,17 +1,7 @@
 """
 main.py — Kaggriculture agent.  ENTRY POINT (must be at archive root, must be named main.py).
 
-STATUS: v43a — PROMOTED 2026-09-01 (round-2 search champion).
-= v42b base (dynamic demand STR cap VALIDATED at scale: STRdead towns
-4-0 +8,774, STRweak 64W-33L +1,070, no-harm elsewhere, 1,500-game
-Stage A; goose plumbing present but default-off after adaptive geese
-measured -3,490) + the gen-1 genome: d0_feed 8 -> 6.  Pod S3 held-out
-(150 seeds x 7 field legs incl. meta tape + 4 live-archetype proxies):
-field +414, dBank +4,857.  Local gauntlet: vs v40a 77 seeds
-**133W-21L (86.4%) +4,750 mu/sigma 1.01**; tape leg flat (-813 = noise).
-Scale bundles all NEGATIVE (hands dial proven INERT - hiring machinery
-is the bottleneck, see PLAN Exp 60); SE land and early geese confirmed
-losses.  Was:
+STATUS: v42b — CANDIDATE (demand-driven allocator layer b).  (= v39a + CROSS-TURN STICKY
 ROUTING, ported from v33a).  VALIDATION (field-primary): vs v39a 77
 seeds both seats **122W-32L (79.2%), +3,227, mu/sigma 0.76**; vs tape
 seeds 8-23 (32 games) margin −30,657 vs v39a's −37,718 = **+7,061
@@ -360,7 +350,7 @@ D0_SHEEP = 1
 D0_COW = 3
 D0_MELON = 6
 D0_WHEAT_SEED = 7
-D0_FEED = 6
+D0_FEED = 5
 BUY_PRIORITY = ["GOOSE", "SHEEP", "COW"]
 ANIMAL_INFO = {
     "GOOSE": {"cost": 300, "build": "BUILD_COOP", "first": 4, "interval": 1, "product": "EGG"},

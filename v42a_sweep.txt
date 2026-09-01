@@ -1,0 +1,33 @@
+kaggle-environments version: 1.32.7
+
+A = versions/v42a.py
+B = main.py
+15 seeds x 2 seats = 30 games
+
+  seed  20  seat0: A    62,026 vs B    62,026   seat1: A    62,026 vs B    62,026
+  seed  21  seat0: A    67,184 vs B    60,216   seat1: A    67,184 vs B    60,216
+  seed  22  seat0: A    59,182 vs B    66,562   seat1: A    72,873 vs B    67,388
+  seed  23  seat0: A    95,571 vs B    92,632   seat1: A    95,571 vs B    92,632
+  seed  24  seat0: A    67,317 vs B    67,317   seat1: A    67,317 vs B    67,317
+  seed  25  seat0: A   116,909 vs B   116,666   seat1: A   116,666 vs B   116,909
+  seed  26  seat0: A   102,956 vs B   106,707   seat1: A   106,707 vs B   102,956
+  seed  27  seat0: A    75,395 vs B    79,068   seat1: A    79,068 vs B    75,395
+  seed  28  seat0: A    76,546 vs B    73,867   seat1: A    75,436 vs B    74,221
+  seed  29  seat0: A    64,384 vs B    60,950   seat1: A    60,950 vs B    64,384
+  seed  30  seat0: A    73,607 vs B    69,661   seat1: A    66,692 vs B    72,482
+  seed  31  seat0: A   121,903 vs B   124,755   seat1: A   124,755 vs B   121,903
+  seed  32  seat0: A    75,101 vs B    78,396   seat1: A    75,101 vs B    78,396
+  seed  33  seat0: A    50,321 vs B    48,650   seat1: A    50,321 vs B    48,650
+  seed  34  seat0: A    96,775 vs B    92,612   seat1: A    92,612 vs B    96,775
+
+==============================================================
+  WIN RATE (A)         53.3%     <-- the number that matters
+  record            16W - 10L - 4T   (n=30)
+  mean margin             +557   (informative, NOT the objective)
+  sd of margin           3,672
+  mu/sigma               0.152   (Pr[win] ~= Phi(mu/sigma))
+  wall clock             233.2s
+==============================================================
+
+  Reminder: if your change alters TILE OCCUPANCY (hands, land, plant count),
+  the town shop draw changes too and the seed is no longer a control (~77 seeds needed).

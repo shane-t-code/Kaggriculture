@@ -1,0 +1,69 @@
+POD BATTERY: A=versions/v42a.py B=main.py seeds=150 from 0 | 1500 games on 32 procs
+  50/1500 games done
+  100/1500 games done
+  150/1500 games done
+  200/1500 games done
+  250/1500 games done
+  300/1500 games done
+  350/1500 games done
+  400/1500 games done
+  450/1500 games done
+  500/1500 games done
+  550/1500 games done
+  600/1500 games done
+  650/1500 games done
+  700/1500 games done
+  750/1500 games done
+  800/1500 games done
+  850/1500 games done
+  900/1500 games done
+  950/1500 games done
+  1000/1500 games done
+  1050/1500 games done
+  1100/1500 games done
+  1150/1500 games done
+  1200/1500 games done
+  1250/1500 games done
+  1300/1500 games done
+  1350/1500 games done
+  1400/1500 games done
+  1450/1500 games done
+  1500/1500 games done
+Loading environment cabt failed: /lib/x86_64-linux-gnu/libstdc++.so.6: version `GLIBCXX_3.4.29' not found (required by /usr/local/lib/python3.13/dist-packages/kaggle_environments/envs/cabt/cg/libcg.so)
+Loading environment cabt failed: /lib/x86_64-linux-gnu/libstdc++.so.6: version `GLIBCXX_3.4.29' not found (required by /usr/local/lib/python3.13/dist-packages/kaggle_environments/envs/cabt/cg/libcg.so)
+Loading environment cabt failed: /lib/x86_64-linux-gnu/libstdc++.so.6: version `GLIBCXX_3.4.29' not found (required by /usr/local/lib/python3.13/dist-packages/kaggle_environments/envs/cabt/cg/libcg.so)
+Loading environment cabt failed: /lib/x86_64-linux-gnu/libstdc++.so.6: version `GLIBCXX_3.4.29' not found (required by /usr/local/lib/python3.13/dist-packages/kaggle_environments/envs/cabt/cg/libcg.so)
+Loading environment cabt failed: /lib/x86_64-linux-gnu/libstdc++.so.6: version `GLIBCXX_3.4.29' not found (required by /usr/local/lib/python3.13/dist-packages/kaggle_environments/envs/cabt/cg/libcg.so)
+Loading environment cabt failed: /lib/x86_64-linux-gnu/libstdc++.so.6: version `GLIBCXX_3.4.29' not found (required by /usr/local/lib/python3.13/dist-packages/kaggle_environments/envs/cabt/cg/libcg.so)
+Loading environment cabt failed: /lib/x86_64-linux-gnu/libstdc++.so.6: version `GLIBCXX_3.4.29' not found (required by /usr/local/lib/python3.13/dist-packages/kaggle_environments/envs/cabt/cg/libcg.so)
+Loading environment cabt failed: /lib/x86_64-linux-gnu/libstdc++.so.6: version `GLIBCXX_3.4.29' not found (required by /usr/local/lib/python3.13/dist-packages/kaggle_environments/envs/cabt/cg/libcg.so)
+Loading environment cabt failed: /lib/x86_64-linux-gnu/libstdc++.so.6: version `GLIBCXX_3.4.29' not found (required by /usr/local/lib/python3.13/dist-packages/kaggle_environments/envs/cabt/cg/libcg.so)
+Loading environment cabt failed: /lib/x86_64-linux-gnu/libstdc++.so.6: version `GLIBCXX_3.4.29' not found (required by /usr/local/lib/python3.13/dist-packages/kaggle_environments/envs/cabt/cg/libcg.so)
+Loading environment cabt failed: /lib/x86_64-linux-gnu/libstdc++.so.6: version `GLIBCXX_3.4.29' not found (required by /usr/local/lib/python3.13/dist-packages/kaggle_environments/envs/cabt/cg/libcg.so)
+Loading environment cabt failed: /lib/x86_64-linux-gnu/libstdc++.so.6: version `GLIBCXX_3.4.29' not found (required by /usr/local/lib/python3.13/dist-packages/kaggle_environments/envs/cabt/cg/libcg.so)
+Loading environment cabt failed: /lib/x86_64-linux-gnu/libstdc++.so.6: version `GLIBCXX_3.4.29' not found (required by /usr/local/lib/python3.13/dist-packages/kaggle_environments/envs/cabt/cg/libcg.so)
+Loading environment cabt failed: /lib/x86_64-linux-gnu/libstdc++.so.6: version `GLIBCXX_3.4.29' not found (required by /usr/local/lib/python3.13/dist-packages/kaggle_environments/envs/cabt/cg/libcg.so)
+Loading environment cabt failed: /lib/x86_64-linux-gnu/libstdc++.so.6: version `GLIBCXX_3.4.29' not found (required by /usr/local/lib/python3.13/dist-packages/kaggle_environments/envs/cabt/cg/libcg.so)
+Loading environment cabt failed: /lib/x86_64-linux-gnu/libstdc++.so.6: version `GLIBCXX_3.4.29' not found (required by /usr/local/lib/python3.13/dist-packages/kaggle_environments/envs/cabt/cg/libcg.so)
+Loading environment cabt failed: /lib/x86_64-linux-gnu/libstdc++.so.6: version `GLIBCXX_3.4.29' not found (required by /usr/local/lib/python3.13/dist-packages/kaggle_environments/envs/cabt/cg/libcg.so)
+Loading environment cabt failed: /lib/x86_64-linux-gnu/libstdc++.so.6: version `GLIBCXX_3.4.29' not found (required by /usr/local/lib/python3.13/dist-packages/kaggle_environments/envs/cabt/cg/libcg.so)
+Loading environment cabt failed: /lib/x86_64-linux-gnu/libstdc++.so.6: version `GLIBCXX_3.4.29' not found (required by /usr/local/lib/python3.13/dist-packages/kaggle_environments/envs/cabt/cg/libcg.so)
+Loading environment cabt failed: /lib/x86_64-linux-gnu/libstdc++.so.6: version `GLIBCXX_3.4.29' not found (required by /usr/local/lib/python3.13/dist-packages/kaggle_environments/envs/cabt/cg/libcg.so)
+Loading environment cabt failed: /lib/x86_64-linux-gnu/libstdc++.so.6: version `GLIBCXX_3.4.29' not found (required by /usr/local/lib/python3.13/dist-packages/kaggle_environments/envs/cabt/cg/libcg.so)
+Loading environment cabt failed: /lib/x86_64-linux-gnu/libstdc++.so.6: version `GLIBCXX_3.4.29' not found (required by /usr/local/lib/python3.13/dist-packages/kaggle_environments/envs/cabt/cg/libcg.so)
+Loading environment cabt failed: /lib/x86_64-linux-gnu/libstdc++.so.6: version `GLIBCXX_3.4.29' not found (required by /usr/local/lib/python3.13/dist-packages/kaggle_environments/envs/cabt/cg/libcg.so)
+Loading environment cabt failed: /lib/x86_64-linux-gnu/libstdc++.so.6: version `GLIBCXX_3.4.29' not found (required by /usr/local/lib/python3.13/dist-packages/kaggle_environments/envs/cabt/cg/libcg.so)
+Loading environment cabt failed: /lib/x86_64-linux-gnu/libstdc++.so.6: version `GLIBCXX_3.4.29' not found (required by /usr/local/lib/python3.13/dist-packages/kaggle_environments/envs/cabt/cg/libcg.so)
+Loading environment cabt failed: /lib/x86_64-linux-gnu/libstdc++.so.6: version `GLIBCXX_3.4.29' not found (required by /usr/local/lib/python3.13/dist-packages/kaggle_environments/envs/cabt/cg/libcg.so)
+Loading environment cabt failed: /lib/x86_64-linux-gnu/libstdc++.so.6: version `GLIBCXX_3.4.29' not found (required by /usr/local/lib/python3.13/dist-packages/kaggle_environments/envs/cabt/cg/libcg.so)
+Loading environment cabt failed: /lib/x86_64-linux-gnu/libstdc++.so.6: version `GLIBCXX_3.4.29' not found (required by /usr/local/lib/python3.13/dist-packages/kaggle_environments/envs/cabt/cg/libcg.so)
+Loading environment cabt failed: /lib/x86_64-linux-gnu/libstdc++.so.6: version `GLIBCXX_3.4.29' not found (required by /usr/local/lib/python3.13/dist-packages/kaggle_environments/envs/cabt/cg/libcg.so)
+Loading environment cabt failed: /lib/x86_64-linux-gnu/libstdc++.so.6: version `GLIBCXX_3.4.29' not found (required by /usr/local/lib/python3.13/dist-packages/kaggle_environments/envs/cabt/cg/libcg.so)
+Loading environment cabt failed: /lib/x86_64-linux-gnu/libstdc++.so.6: version `GLIBCXX_3.4.29' not found (required by /usr/local/lib/python3.13/dist-packages/kaggle_environments/envs/cabt/cg/libcg.so)
+Loading environment cabt failed: /lib/x86_64-linux-gnu/libstdc++.so.6: version `GLIBCXX_3.4.29' not found (required by /usr/local/lib/python3.13/dist-packages/kaggle_environments/envs/cabt/cg/libcg.so)
+
+  mirror   A 136W-98L-66T of 300, margin +416 (ties excluded from dWins)
+  tape     A 0/300 | B 0/300 | dWins +0 | dBank +544
+  v12      A 298/300 | B 297/300 | dWins +1 | dBank +469
+
+TOTAL dWins +39 over 1500 games

@@ -1,17 +1,7 @@
 """
 main.py — Kaggriculture agent.  ENTRY POINT (must be at archive root, must be named main.py).
 
-STATUS: v43a — PROMOTED 2026-09-01 (round-2 search champion).
-= v42b base (dynamic demand STR cap VALIDATED at scale: STRdead towns
-4-0 +8,774, STRweak 64W-33L +1,070, no-harm elsewhere, 1,500-game
-Stage A; goose plumbing present but default-off after adaptive geese
-measured -3,490) + the gen-1 genome: d0_feed 8 -> 6.  Pod S3 held-out
-(150 seeds x 7 field legs incl. meta tape + 4 live-archetype proxies):
-field +414, dBank +4,857.  Local gauntlet: vs v40a 77 seeds
-**133W-21L (86.4%) +4,750 mu/sigma 1.01**; tape leg flat (-813 = noise).
-Scale bundles all NEGATIVE (hands dial proven INERT - hiring machinery
-is the bottleneck, see PLAN Exp 60); SE land and early geese confirmed
-losses.  Was:
+STATUS: v42b — CANDIDATE (demand-driven allocator layer b).  (= v39a + CROSS-TURN STICKY
 ROUTING, ported from v33a).  VALIDATION (field-primary): vs v39a 77
 seeds both seats **122W-32L (79.2%), +3,227, mu/sigma 0.76**; vs tape
 seeds 8-23 (32 games) margin −30,657 vs v39a's −37,718 = **+7,061
@@ -360,7 +350,7 @@ D0_SHEEP = 1
 D0_COW = 3
 D0_MELON = 6
 D0_WHEAT_SEED = 7
-D0_FEED = 6
+D0_FEED = 8
 BUY_PRIORITY = ["GOOSE", "SHEEP", "COW"]
 ANIMAL_INFO = {
     "GOOSE": {"cost": 300, "build": "BUILD_COOP", "first": 4, "interval": 1, "product": "EGG"},
@@ -450,7 +440,7 @@ _CUR_SEAT = 0                # v40a: set per agent() call so _assign can key _ST
 # the herd — replaces market buys at scarcity prices), strawberry (biggest town demand:
 # ~426/season median), carrot (fast filler, capped so we stop glutting our own market).
 PLANT_ORDER = ["MELON", "STRAWBERRY", "TOMATO", "WHEAT", "CARROT"]
-SEED_WANT = {"MELON": 3, "WHEAT": 4, "STRAWBERRY": 8, "CARROT": 4, "TOMATO": 4}
+SEED_WANT = {"MELON": 5, "WHEAT": 4, "STRAWBERRY": 8, "CARROT": 4, "TOMATO": 4}
 WHEAT_FEED_RESERVE_DAYS = 1   # hold animals*this much wheat before selling any surplus
 
 # Endgame wheat factory (v13a).  Milestone diff vs the tape: it sells ~479 wheat at
@@ -494,7 +484,7 @@ PRESSURE_BATCH_BONUS = 3
 # for that species while the projection stays doomed; everything else (FEED,
 # COLLECT_FERTILIZER, HARVEST) continues.  Checked fresh every turn, so care
 # resumes the moment the market recovers.
-CARE_SKIP_PRICE = 15     # projected price at/below this = care not worth the turn
+CARE_SKIP_PRICE = 6     # projected price at/below this = care not worth the turn
 CARE_SKIP_HORIZON = 3    # days until a banked care bonus typically pays out
 
 # Tape-family counter (v7c).  Fingerprint: the meta tape places exactly 4 SHEEP and
@@ -1382,9 +1372,9 @@ def agent(obs):
         _WHEAT_TOWN[player] = True
     if hour == 0:
         _DYN_STR_CAP[player] = _dyn_str_cap(shops, day)
-        if (_GOOSE_TARGET.get(player, 0) < 1 and day <= 10
+        if (_GOOSE_TARGET.get(player, 0) < 4 and day <= 14
                 and _town_drain_per_day("EGG", shops) >= 7):
-            _GOOSE_TARGET[player] = 0
+            _GOOSE_TARGET[player] = 4
     _DEAD_TOWN_NOW = _WHEAT_TOWN.get(player, False)
     _FACTORY_NOW = day >= WHEAT_FACTORY_DAY or _DEAD_TOWN_NOW
     if ramp_fast and (_tom_px >= TOMATO_HINGE_CONFIRM

@@ -1,0 +1,34 @@
+kaggle-environments version: 1.32.7
+
+A = versions/v40a.py
+B = main.py
+16 seeds x 2 seats = 32 games
+
+  seed   0  seat0: A    44,417 vs B    40,684   seat1: A    44,417 vs B    40,684
+  seed   1  seat0: A   103,849 vs B   103,603   seat1: A   103,849 vs B   103,603
+  seed   2  seat0: A    84,178 vs B    75,212   seat1: A    87,166 vs B    84,355
+  seed   3  seat0: A    80,868 vs B    81,026   seat1: A    81,167 vs B    81,217
+  seed   4  seat0: A    91,732 vs B    87,806   seat1: A    91,753 vs B    87,810
+  seed   5  seat0: A    69,092 vs B    61,043   seat1: A    69,092 vs B    61,043
+  seed   6  seat0: A    81,181 vs B    79,153   seat1: A    82,159 vs B    82,361
+  seed   7  seat0: A    96,708 vs B    97,629   seat1: A    96,708 vs B    97,629
+  seed   8  seat0: A    74,092 vs B    70,561   seat1: A    73,877 vs B    70,561
+  seed   9  seat0: A    81,536 vs B    81,338   seat1: A    93,483 vs B    93,114
+  seed  10  seat0: A    84,671 vs B    73,238   seat1: A    81,341 vs B    76,269
+  seed  11  seat0: A    58,918 vs B    61,618   seat1: A    39,752 vs B    39,370
+  seed  12  seat0: A    60,999 vs B    50,119   seat1: A    60,999 vs B    50,119
+  seed  13  seat0: A   100,386 vs B    97,729   seat1: A   107,856 vs B   107,597
+  seed  14  seat0: A    91,272 vs B    93,392   seat1: A    91,272 vs B    93,392
+  seed  15  seat0: A    72,437 vs B    68,889   seat1: A    81,084 vs B    74,081
+
+==============================================================
+  WIN RATE (A)         75.0%     <-- the number that matters
+  record            24W - 8L - 0T   (n=32)
+  mean margin           +3,002   (informative, NOT the objective)
+  sd of margin           3,938
+  mu/sigma               0.762   (Pr[win] ~= Phi(mu/sigma))
+  wall clock             240.5s
+==============================================================
+
+  Reminder: if your change alters TILE OCCUPANCY (hands, land, plant count),
+  the town shop draw changes too and the seed is no longer a control (~77 seeds needed).

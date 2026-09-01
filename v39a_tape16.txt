@@ -1,0 +1,34 @@
+kaggle-environments version: 1.32.7
+
+A = main.py
+B = versions/meta_boatlee.py
+16 seeds x 2 seats = 32 games
+
+  seed   8  seat0: A    52,387 vs B    93,632   seat1: A    52,387 vs B    93,632
+  seed   9  seat0: A    70,013 vs B   100,290   seat1: A    83,679 vs B   115,417
+  seed  10  seat0: A    66,570 vs B   100,747   seat1: A    57,277 vs B    92,567
+  seed  11  seat0: A    48,826 vs B    80,643   seat1: A    48,826 vs B    80,643
+  seed  12  seat0: A    30,096 vs B    67,389   seat1: A    30,096 vs B    67,389
+  seed  13  seat0: A    95,519 vs B   141,841   seat1: A    95,519 vs B   141,841
+  seed  14  seat0: A    83,235 vs B   133,100   seat1: A    83,235 vs B   133,100
+  seed  15  seat0: A   116,996 vs B   165,206   seat1: A   116,974 vs B   165,207
+  seed  16  seat0: A    99,895 vs B   153,056   seat1: A    99,487 vs B   149,300
+  seed  17  seat0: A    49,618 vs B    66,023   seat1: A    62,251 vs B    98,936
+  seed  18  seat0: A    63,917 vs B    70,470   seat1: A    63,218 vs B    67,533
+  seed  19  seat0: A    80,478 vs B   117,482   seat1: A    80,478 vs B   117,482
+  seed  20  seat0: A    67,367 vs B   119,354   seat1: A    67,367 vs B   119,354
+  seed  21  seat0: A    48,995 vs B    69,547   seat1: A    48,995 vs B    69,547
+  seed  22  seat0: A    57,207 vs B    95,825   seat1: A    57,207 vs B    95,825
+  seed  23  seat0: A    95,593 vs B   146,950   seat1: A    95,593 vs B   146,950
+
+==============================================================
+  WIN RATE (A)          0.0%     <-- the number that matters
+  record            0W - 32L - 0T   (n=32)
+  mean margin          -37,718   (informative, NOT the objective)
+  sd of margin          12,707
+  mu/sigma              -2.968   (Pr[win] ~= Phi(mu/sigma))
+  wall clock             357.8s
+==============================================================
+
+  Reminder: if your change alters TILE OCCUPANCY (hands, land, plant count),
+  the town shop draw changes too and the seed is no longer a control (~77 seeds needed).

@@ -1,0 +1,101 @@
+live_v43 ep104851871 L    54,730 vs   110,447 (  -55,717) div_d  10 hands 10/12 opp[C8S4|S38W20] Amy Yuan
+live_v43 ep104611353 L    56,119 vs   107,512 (  -51,393) div_d  10 hands 10/11 opp[C11G1S3|M2S40W15] meryol
+live_v43 ep104788959 L    86,331 vs   136,453 (  -50,122) div_d  10 hands 10/12 opp[C9S4|S38W20] Ignat
+live_v43 ep104829080 L    50,470 vs    95,812 (  -45,342) div_d  10 hands 10/12 opp[C8S4|S37W20] Kurokawa
+live_v43 ep104608120 L    99,561 vs   137,615 (  -38,054) div_d  17 hands 10/12 opp[C8S6|M6S27W5] dominyellow
+live_v43 ep104623119 L    88,042 vs   124,873 (  -36,831) div_d  21 hands 10/11 opp[C11S1|S25] Abhi Kumar Agrawal
+live_v43 ep104612297 L    94,574 vs   128,440 (  -33,866) div_d  19 hands 10/14 opp[C12S4|M10S37W11] Lê Ngọc Lâm
+live_v43 ep104940617 L    98,269 vs   126,360 (  -28,091) div_d  22 hands 10/10 opp[C4S2|M10S43] Bushel Seed
+live_v43 ep104604773 L    77,036 vs   104,386 (  -27,350) div_d  20 hands 10/13 opp[C6S6|M7S40] diet1236364
+live_v43 ep104756537 L   104,350 vs   130,412 (  -26,062) div_d  21 hands 10/12 opp[C8G3S2|C1M8S32T4W12] bndang
+live_v43 ep104613969 L   112,887 vs   138,842 (  -25,955) div_d  25 hands 10/12 opp[C8G2S7|M11S32T4W1] Vidushiii
+live_v43 ep104603120 L    61,144 vs    86,956 (  -25,812) div_d  18 hands 10/12 opp[C8S6|M6S27W5] Dante Dyches-Chandler
+live_v43 ep104846995 L   102,666 vs   127,665 (  -24,999) div_d  20 hands 10/12 opp[C14S2|M2S35W1] MAT
+live_v43 ep104615642 L    83,627 vs   108,434 (  -24,807) div_d  18 hands 10/12 opp[C8S6|M6S27W5] Chakrabhuana V  Deva
+live_v43 ep104677050 L   100,745 vs   119,593 (  -18,848) div_d  16 hands 10/12 opp[C8S2|M12S31W6] radozaprazny
+live_v43 ep104618961 L   107,886 vs   126,694 (  -18,808) div_d  20 hands 10/12 opp[C7S5|M5S23W5] Teddy McBride
+live_v43 ep104610607 L    93,258 vs   110,597 (  -17,339) div_d  23 hands 10/12 opp[C10G2S3|M3S29W12] luca fregona
+live_v43 ep104603941 L    57,383 vs    66,433 (   -9,050) div_d  26 hands 10/11 opp[C5G2S2|S23] Abhi Kumar Agrawal
+live_v43 ep104613144 L    90,676 vs    99,185 (   -8,509) div_d  19 hands 10/13 opp[C8S4|M12S30W4] Hawkeye
+live_v43 ep104609776 L    34,380 vs    42,202 (   -7,822) div_d  19 hands 10/13 opp[C7S8|M9S28W2] Poojan
+live_v43 ep104739031 L    53,317 vs    59,983 (   -6,666) div_d  29 hands 10/12 opp[C6G1S2|M1S31W17] Tim McGarvey
+live_v43 ep104620626 L    93,375 vs    98,793 (   -5,418) div_d  29 hands 10/11 opp[C7G4S2|S27W13] suzy su
+live_v43 ep104636411 L   100,999 vs   103,633 (   -2,634) div_d  30 hands 10/12 opp[C6S6|M20S32W1] Matthew Huang
+live_v43 ep104798392 L    77,270 vs    78,503 (   -1,233) div_d  30 hands 10/12 opp[C9S6|C10M8S21W8] hatata
+live_v43 ep104623956 L    66,848 vs    66,992 (     -144) div_d  30 hands 10/11 opp[C4G2S2|M15S12W36] IsaacJinyu
+live_v43 ep104617304 W    65,907 vs    65,018 (     +889) div_d  30 hands 10/12 opp[C7S4|M5S31W19] José Daniel Ara
+live_v43 ep104608960 W    88,287 vs    86,812 (   +1,475) div_d  30 hands 10/14 opp[C4G3S11|M4S24T1] Lorenzo Regalado
+live_v43 ep104655512 W    73,136 vs    71,191 (   +1,945) div_d  30 hands 10/12 opp[C5S1|C22M6S18W14] KIsXcl
+live_v43 ep104606455 W    72,379 vs    68,368 (   +4,011) div_d  30 hands 10/10 opp[C8S4|M12S19] gabrielep09
+live_v43 ep104611460 W    91,131 vs    86,749 (   +4,382) div_d  30 hands 10/13 opp[C6S2|C4M10S32W12] Ratna Raj Singh
+live_v43 ep104781446 W    91,932 vs    87,203 (   +4,729) div_d  30 hands 10/12 opp[C5|M5S38W1] Nerozud
+live_v43 ep104599757 W   100,527 vs    93,967 (   +6,560) div_d  26 hands 10/10 opp[C6S5|C3M12S38W7] Shane Thivaharraja
+live_v43 ep104770732 W   121,251 vs   113,811 (   +7,440) div_d  29 hands 10/10 opp[C6S6|M8S30W7] Agricroporation
+live_v43 ep104621467 W   118,859 vs   108,984 (   +9,875) div_d  29 hands 10/12 opp[C9S4|S38W19] XD tsui
+live_v43 ep104601501 W    56,128 vs    45,712 (  +10,416) div_d  23 hands 10/13 opp[C5S8|] Comet19
+live_v43 ep104600672 W   105,254 vs    91,079 (  +14,175) div_d  13 hands 10/13 opp[C10|S43] Artur Sakhiullin
+live_v43 ep104614801 W    68,040 vs    51,513 (  +16,527) div_d  14 hands 10/11 opp[C8S6|S25W10] XLX
+live_v43 ep104619824 W    52,429 vs    35,747 (  +16,682) div_d  22 hands 10/12 opp[C14S2|M19S35W1] mannogun
+live_v43 ep104759050 W    88,777 vs    69,842 (  +18,935) div_d  21 hands 10/8 opp[C4S4|C22S16] Yendrew Y
+live_v43 ep104759726 W   102,012 vs    82,750 (  +19,262) div_d  25 hands 10/11 opp[C4S4|S29W21] Ben Hamilton
+live_v43 ep104622287 W    91,784 vs    71,606 (  +20,178) div_d  22 hands 10/10 opp[C8|S16W2] Morpheus0303003
+live_v43 ep104625110 W   124,924 vs   104,332 (  +20,592) div_d  21 hands 10/10 opp[C4S5|M14S16] Santhana
+live_v43 ep104616460 W    96,273 vs    71,397 (  +24,876) div_d  22 hands 10/13 opp[C8S4|M8S20W5] ashsah
+live_v43 ep104607293 W   107,485 vs    80,552 (  +26,933) div_d  11 hands 10/12 opp[C10S2|M7S14W17] Yannik Schiffner
+live_v43 ep104605610 W    97,840 vs    58,157 (  +39,683) div_d  11 hands 10/10 opp[C8S2|M9S23W6] irisV11
+live_v43 ep104602305 W    90,928 vs    51,007 (  +39,921) div_d  23 hands 10/10 opp[C6G1S8|M8S1] Bugra Cinar
+live_v43 ep104897009 W   122,907 vs    82,682 (  +40,225) div_d  11 hands 10/10 opp[C9S2|M9S22W6] irisV11
+live_v43 ep104618133 W   118,627 vs    77,687 (  +40,940) div_d  19 hands 10/11 opp[C6S4|M10S20W6] ADITYA BEECHA
+live_v43 ep104854872 W   108,863 vs    67,915 (  +40,948) div_d  19 hands 10/11 opp[C2G13S1|M3S10W2] VIVEK JAMI
+live_v43 ep104702648 W    86,999 vs    39,524 (  +47,475) div_d  22 hands 10/12 opp[C6S4|M13S12W15] SKYisSKYisSKY
+live_v43 ep104721342 W   132,832 vs    29,205 ( +103,627) div_d  16 hands 10/7 opp[C2|M2S2W2] Kotaro Furuno
+live_v45 ep104778108 L    93,890 vs   164,164 (  -70,274) div_d  10 hands 10/12 opp[C9S4|S38W20] 2
+live_v45 ep104631157 L    55,638 vs   117,730 (  -62,092) div_d  12 hands 10/12 opp[C8S9|S33W21] RngRng
+live_v45 ep104872936 L    98,584 vs   157,518 (  -58,934) div_d  10 hands 10/12 opp[C8S4|S38W20] Aleksandr Ulianin
+live_v45 ep104623693 L    64,280 vs   109,273 (  -44,993) div_d  17 hands 10/14 opp[C8S6|M12S41W7] Martin Konôpka
+live_v45 ep104747224 L    94,814 vs   137,057 (  -42,243) div_d  18 hands 10/13 opp[C8S6|M13S34W2] Hawkeye
+live_v45 ep104856762 L    95,235 vs   135,757 (  -40,522) div_d  17 hands 10/11 opp[C14S1|S35] BJFC
+live_v45 ep104641167 L   108,362 vs   132,193 (  -23,831) div_d  16 hands 10/12 opp[C8S4|M5S28W25] getalife();
+live_v45 ep104664935 L    53,686 vs    74,626 (  -20,940) div_d  16 hands 10/16 opp[C12S3|S23W9] Khalid Bin Hethlain
+live_v45 ep104636970 L    67,314 vs    82,017 (  -14,703) div_d  23 hands 10/12 opp[C6S4|M12S40W3] victor souza
+live_v45 ep104926704 L    94,109 vs   108,215 (  -14,106) div_d  27 hands 10/9 opp[C10S2|S34] Netanel Keidar
+live_v45 ep104629485 L    66,432 vs    78,992 (  -12,560) div_d  18 hands 10/13 opp[C5S3|M9S32W7] Divyansh Agrawal
+live_v45 ep104902426 L    72,450 vs    82,455 (  -10,005) div_d  23 hands 10/10 opp[C5G4S4|S30] Gabriel othávio
+live_v45 ep104646961 L    95,653 vs   104,449 (   -8,796) div_d  24 hands 10/12 opp[C10G1S4|M3S30W10] luca fregona
+live_v45 ep104626192 L    98,003 vs   106,703 (   -8,700) div_d  29 hands 10/12 opp[C7S5|M5S53] diet1236364
+live_v45 ep104628655 L    88,416 vs    96,477 (   -8,061) div_d  28 hands 10/12 opp[C12S6|S24W8] Raagav Anand
+live_v45 ep104932920 L    92,589 vs    97,621 (   -5,032) div_d  28 hands 10/12 opp[C8S4|M8S40] xfhdh1
+live_v45 ep104644474 L    56,481 vs    61,016 (   -4,535) div_d  30 hands 10/12 opp[C7S8|M8S29T3W3] Gopal Krishna Gundumalla
+live_v45 ep104800338 L    78,019 vs    81,662 (   -3,643) div_d  30 hands 10/12 opp[C8S5|S32W1] Dmitry Volovikov
+live_v45 ep104632814 L    86,297 vs    89,716 (   -3,419) div_d  30 hands 10/9 opp[C8S2|S15] Yugoawawa
+live_v45 ep104638655 L    63,774 vs    65,816 (   -2,042) div_d  30 hands 10/12 opp[C8S3|M6S18W11] chch
+live_v45 ep104935330 L    89,794 vs    91,359 (   -1,565) div_d  30 hands 10/13 opp[C6G4S2|M2S15W9] Alexander Sokolov
+live_v45 ep104639488 L   116,658 vs   117,166 (     -508) div_d  30 hands 10/11 opp[C6S4|M16S41W1] Mihir Argulkar
+live_v45 ep104627839 L    64,657 vs    64,783 (     -126) div_d  30 hands 10/12 opp[C5S6|M5S27W5] sansm1
+live_v45 ep104685949 W    83,071 vs    82,953 (     +118) div_d  30 hands 10/10 opp[C7S6|C4M2S24W6] Xinyi
+live_v45 ep104641996 W    73,159 vs    72,602 (     +557) div_d  30 hands 10/12 opp[C8S5|M3S25W8] zyvren
+live_v45 ep104643642 W   110,715 vs   109,818 (     +897) div_d  30 hands 10/18 opp[C6S3|M6S19W12] arminhej96
+live_v45 ep104621169 W    70,719 vs    67,713 (   +3,006) div_d  30 hands 10/10 opp[C6S5|C3M12S26W10] Shane Thivaharraja
+live_v45 ep104634546 W    52,769 vs    48,596 (   +4,173) div_d  30 hands 10/12 opp[C10S4|M5S14W3] Jeel Gajera
+live_v45 ep104637820 W    94,224 vs    89,525 (   +4,699) div_d  30 hands 10/10 opp[C8S4|M12S28W2] Louis @ tradeInsight.ai
+live_v45 ep104734267 W    80,333 vs    75,355 (   +4,978) div_d  30 hands 10/12 opp[C4S6|M7S28T5W6] Meshwa
+live_v45 ep104622066 W   113,051 vs   106,691 (   +6,360) div_d  27 hands 10/11 opp[C6S3|M6S35] Masih Pemula Beneran
+live_v45 ep104656960 W    86,409 vs    79,779 (   +6,630) div_d  29 hands 10/10 opp[C7S1|M3S19W4] Aniketh2k7
+live_v45 ep104633649 W    85,240 vs    78,297 (   +6,943) div_d  29 hands 10/12 opp[S12|M6S16] JJN8825
+live_v45 ep104645312 W    83,204 vs    75,923 (   +7,281) div_d  23 hands 10/13 opp[C8S6|M2S17W7] Adrien Secondaire
+live_v45 ep104640338 W    85,752 vs    77,521 (   +8,231) div_d  28 hands 10/10 opp[C8S4|M9S22W17] Pascal
+live_v45 ep104627046 W    91,236 vs    81,446 (   +9,790) div_d  27 hands 10/10 opp[C8S4|M4S6T3W3] github/shepsci/kaggle-sk
+live_v45 ep104636158 W    79,982 vs    69,035 (  +10,947) div_d  23 hands 10/11 opp[C2S3|S35W8] Tomeiser
+live_v45 ep104646125 W    74,728 vs    62,153 (  +12,575) div_d  25 hands 10/11 opp[C3S9|C2M7S21] Phoebe Lin
+live_v45 ep104709262 W    72,071 vs    56,430 (  +15,641) div_d  24 hands 10/11 opp[C10S4|M15S13] huanxian chen
+live_v45 ep104630331 W    66,875 vs    50,318 (  +16,557) div_d  25 hands 10/12 opp[C6S4|M2S11W7] Vincent Pan
+live_v45 ep104635330 W    85,193 vs    65,596 (  +19,597) div_d  27 hands 10/8 opp[C8G2|M15S4W4] Kaito Ichikawa
+live_v45 ep104642817 W    65,496 vs    44,448 (  +21,048) div_d  14 hands 10/12 opp[C8S1|S40] Shaun Andrade
+live_v45 ep104776810 W    68,207 vs    44,260 (  +23,947) div_d  11 hands 10/13 opp[C8S8|M4S20W2] payoon
+live_v45 ep104825234 W    87,848 vs    59,492 (  +28,356) div_d  24 hands 10/9 opp[C6G9|M3W16] yamy893
+live_v45 ep104625470 W   108,533 vs    79,899 (  +28,634) div_d  19 hands 10/12 opp[C6S6|C2M5S11W3] Rafea Almejrab2025
+live_v45 ep104624535 W    92,092 vs    60,625 (  +31,467) div_d  14 hands 10/11 opp[C4|M11S4W13] Jacob Joy
+live_v45 ep104631990 W   126,777 vs    79,792 (  +46,985) div_d  20 hands 10/15 opp[C5G2S1|M8W23] Joshua Fernando
+live_v45 ep104622882 W    93,989 vs    20,186 (  +73,803) div_d  14 hands 10/7 opp[C3S3|M14] James Patounas
+
+TOTAL 99 episodes, 51W-48L

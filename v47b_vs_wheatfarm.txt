@@ -1,0 +1,34 @@
+kaggle-environments version: 1.32.7
+
+A = versions/v47b.py
+B = versions/proxy_wheatfarm.py
+16 seeds x 2 seats = 32 games
+
+  seed   0  seat0: A    73,964 vs B    66,764   seat1: A    73,812 vs B    66,777
+  seed   1  seat0: A    98,131 vs B    71,609   seat1: A    98,131 vs B    71,609
+  seed   2  seat0: A    99,390 vs B    78,751   seat1: A   117,386 vs B   101,793
+  seed   3  seat0: A    38,071 vs B    41,323   seat1: A    36,655 vs B    35,515
+  seed   4  seat0: A    84,234 vs B    57,503   seat1: A    86,030 vs B    58,979
+  seed   5  seat0: A   108,432 vs B    87,726   seat1: A   108,432 vs B    87,726
+  seed   6  seat0: A    70,355 vs B    62,518   seat1: A    81,530 vs B    69,571
+  seed   7  seat0: A    61,671 vs B    54,671   seat1: A    57,373 vs B    54,044
+  seed   8  seat0: A    99,057 vs B    70,793   seat1: A    99,199 vs B    70,806
+  seed   9  seat0: A    83,123 vs B    69,941   seat1: A    78,129 vs B    64,487
+  seed  10  seat0: A    94,284 vs B    62,307   seat1: A    90,958 vs B    58,551
+  seed  11  seat0: A   102,183 vs B   105,869   seat1: A   102,183 vs B   105,869
+  seed  12  seat0: A    79,912 vs B    58,295   seat1: A    79,843 vs B    58,263
+  seed  13  seat0: A    92,528 vs B    62,884   seat1: A    92,950 vs B    63,883
+  seed  14  seat0: A   104,640 vs B    83,859   seat1: A   104,640 vs B    83,859
+  seed  15  seat0: A    76,624 vs B    60,934   seat1: A    76,614 vs B    60,934
+
+==============================================================
+  WIN RATE (A)         90.6%     <-- the number that matters
+  record            29W - 3L - 0T   (n=32)
+  mean margin          +16,939   (informative, NOT the objective)
+  sd of margin          10,684
+  mu/sigma               1.585   (Pr[win] ~= Phi(mu/sigma))
+  wall clock             304.1s
+==============================================================
+
+  Reminder: if your change alters TILE OCCUPANCY (hands, land, plant count),
+  the town shop draw changes too and the seed is no longer a control (~77 seeds needed).

@@ -1,7 +1,19 @@
 """
 main.py — Kaggriculture agent.  ENTRY POINT (must be at archive root, must be named main.py).
 
-STATUS: v47b — CANDIDATE 2026-09-02 (= v47a + DYNAMIC CARROT CAP).
+STATUS: v48b — CANDIDATE 2026-09-02 (= v47b + LATE-PLANT CUTOFF only).
+v48a carried two weed fixes; its field legs regressed (proxies
+102-26 vs v47b's 115-13, wool 18-14) and the cause was fix 2: the
+near-payout override watered CROP_SKIP plants, i.e. dead-market
+plants whose harvest is ~worthless — misaimed (the live age-9 deaths
+were healthy-market capacity losses, already P_SAVE).  v48b keeps
+only fix 1: no new PLANT tasks after hour 17 (planting day counts
+as unwatered, no grace — a late seed in a labor crunch is a dead
+seed; seeds keep overnight; 236 same-day deaths/40 live games).
+GATES: weed fingerprint, screen vs v47b, wool+strglut proxy legs
+must recover to ~v47b levels, held-out 77 vs v45a.
+
+Was: v47b — CANDIDATE 2026-09-02 (= v47a + DYNAMIC CARROT CAP).
 v47a 16-seed screen 21W-11L (65.6%) +3,745; losses cluster in weak
 towns.  Seed-12 autopsy: 3x PET_CAFE = 36 carrots/day and v47a
 plants ZERO carrots (blueprint default) while v45a's 12 carrots won
@@ -816,7 +828,7 @@ def _care_skip_species(tiles, opp_tiles, market_inv, shops):
 
 
 def _build_tasks(tiles, day, seeds, tape_mode=False, care_skip=(), crop_skip=(),
-                 ramp_fast=False, tomato_cap=0):
+                 ramp_fast=False, tomato_cap=0, hour=0):
     """Scan the farm -> the turn's task list. Returns (tasks, n_feed_needed)."""
     tasks = []
     crop_counts = {}
@@ -915,6 +927,12 @@ def _build_tasks(tiles, day, seeds, tape_mode=False, care_skip=(), crop_skip=(),
                 # crops and animals instead.  Harvests above still run (they free
                 # the tile); the plant may weed and gets dug at leisure (P_DIG).
                 if crop in crop_skip:
+                    # v48b: the v48a near-payout override here was REVERTED —
+                    # crop_skip plants are DEAD-MARKET plants (harvest ~worthless
+                    # by definition); watering them cost labor and dropped the
+                    # wool/strglut proxy legs 6 games each.  The live age-9
+                    # deaths were healthy-market CAPACITY losses (already
+                    # P_SAVE), a different problem.
                     # Late conversion (v35a organ): dig the abandoned plant
                     # now instead of letting it weed out over days.
                     if (day >= ENDGAME_CONVERT_DAY and day < LAST_DAY
@@ -941,7 +959,11 @@ def _build_tasks(tiles, day, seeds, tape_mode=False, care_skip=(), crop_skip=(),
     # Caps are market-bound (melon/carrot glut their price) or purpose-bound (wheat = feed),
     # so extra land raises variety, not just volume. Capped by seeds actually held (the
     # PLANT collective-validation trap) so no unit ever walks to an unplantable tile.
-    if day < LAST_DAY:
+    # v48a: a seed planted after ~hour 17 often cannot be watered before
+    # nightfall in a labor crunch (planting day counts as unwatered — no grace
+    # period) — live decode: 236 planted-and-died-same-day events in 40 games.
+    # Seeds keep overnight; plant at dawn instead.
+    if day < LAST_DAY and hour < 18:
         budget = dict(seeds)
         planned = dict(crop_counts)
         want = []              # this turn's plant multiset — the conditions
@@ -1588,7 +1610,7 @@ def agent(obs):
         tomato_cap = 0
 
     tasks, n_feed = _build_tasks(tiles, day, seeds, tape_mode, care_skip, crop_skip,
-                                 ramp_fast, tomato_cap)
+                                 ramp_fast, tomato_cap, hour)
     _supply_tasks(tasks, n_feed, units, inventories, shed, tiles, day)
     assignment = _assign(units, tasks, inventories, tiles, day, hour)
 

@@ -1,7 +1,17 @@
 """
 main.py — Kaggriculture agent.  ENTRY POINT (must be at archive root, must be named main.py).
 
-STATUS: v47b — CANDIDATE 2026-09-02 (= v47a + DYNAMIC CARROT CAP).
+STATUS: v48a — CANDIDATE 2026-09-02 (= v47b + WEED ELIMINATION).
+Live decode: ~22 weed events/game (369 strawberries dead at AGE 9 —
+one day before first payout; 236 planted-and-died-same-day; spikes
+on harvest-crunch days 10-13/17 and endgame 25-29).  Two fixes:
+(1) no new PLANT tasks after hour 17 (planting day counts as
+unwatered, no grace — a late seed in a labor crunch is a dead seed;
+seeds keep overnight); (2) crop_skip never abandons a plant within
+2 days of payout that can still pay by day 29.  FINGERPRINT: weed
+events/game must drop hard vs v47b on same seeds.
+
+Was: v47b — CANDIDATE 2026-09-02 (= v47a + DYNAMIC CARROT CAP).
 v47a 16-seed screen 21W-11L (65.6%) +3,745; losses cluster in weak
 towns.  Seed-12 autopsy: 3x PET_CAFE = 36 carrots/day and v47a
 plants ZERO carrots (blueprint default) while v45a's 12 carrots won
@@ -816,7 +826,7 @@ def _care_skip_species(tiles, opp_tiles, market_inv, shops):
 
 
 def _build_tasks(tiles, day, seeds, tape_mode=False, care_skip=(), crop_skip=(),
-                 ramp_fast=False, tomato_cap=0):
+                 ramp_fast=False, tomato_cap=0, hour=0):
     """Scan the farm -> the turn's task list. Returns (tasks, n_feed_needed)."""
     tasks = []
     crop_counts = {}
@@ -915,12 +925,19 @@ def _build_tasks(tiles, day, seeds, tape_mode=False, care_skip=(), crop_skip=(),
                 # crops and animals instead.  Harvests above still run (they free
                 # the tile); the plant may weed and gets dug at leisure (P_DIG).
                 if crop in crop_skip:
-                    # Late conversion (v35a organ): dig the abandoned plant
-                    # now instead of letting it weed out over days.
-                    if (day >= ENDGAME_CONVERT_DAY and day < LAST_DAY
-                            and crop in ENDGAME_CONVERT_CROPS):
-                        tasks.append({"prio": P_DIG, "x": x, "y": y, "op": ["DIG"]})
-                    continue
+                    # v48a: NEVER abandon a plant about to pay — live decode
+                    # found 369 strawberries dead at age 9, ONE day before
+                    # first yield.  Within 2 days of payout the water is
+                    # cheaper than the loss even in a weak market.
+                    near_pay = (info and age >= info["first"] - 2
+                                and day + (info["first"] - age) <= LAST_DAY)
+                    if not near_pay:
+                        # Late conversion (v35a organ): dig the abandoned plant
+                        # now instead of letting it weed out over days.
+                        if (day >= ENDGAME_CONVERT_DAY and day < LAST_DAY
+                                and crop in ENDGAME_CONVERT_CROPS):
+                            tasks.append({"prio": P_DIG, "x": x, "y": y, "op": ["DIG"]})
+                        continue
 
                 if not t.get("watered_today", False):
                     if day == LAST_DAY:
@@ -941,7 +958,11 @@ def _build_tasks(tiles, day, seeds, tape_mode=False, care_skip=(), crop_skip=(),
     # Caps are market-bound (melon/carrot glut their price) or purpose-bound (wheat = feed),
     # so extra land raises variety, not just volume. Capped by seeds actually held (the
     # PLANT collective-validation trap) so no unit ever walks to an unplantable tile.
-    if day < LAST_DAY:
+    # v48a: a seed planted after ~hour 17 often cannot be watered before
+    # nightfall in a labor crunch (planting day counts as unwatered — no grace
+    # period) — live decode: 236 planted-and-died-same-day events in 40 games.
+    # Seeds keep overnight; plant at dawn instead.
+    if day < LAST_DAY and hour < 18:
         budget = dict(seeds)
         planned = dict(crop_counts)
         want = []              # this turn's plant multiset — the conditions
@@ -1588,7 +1609,7 @@ def agent(obs):
         tomato_cap = 0
 
     tasks, n_feed = _build_tasks(tiles, day, seeds, tape_mode, care_skip, crop_skip,
-                                 ramp_fast, tomato_cap)
+                                 ramp_fast, tomato_cap, hour)
     _supply_tasks(tasks, n_feed, units, inventories, shed, tiles, day)
     assignment = _assign(units, tasks, inventories, tiles, day, hour)
 

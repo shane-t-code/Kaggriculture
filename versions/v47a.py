@@ -1,14 +1,7 @@
 """
 main.py — Kaggriculture agent.  ENTRY POINT (must be at archive root, must be named main.py).
 
-STATUS: v47b — CANDIDATE 2026-09-02 (= v47a + DYNAMIC CARROT CAP).
-v47a 16-seed screen 21W-11L (65.6%) +3,745; losses cluster in weak
-towns.  Seed-12 autopsy: 3x PET_CAFE = 36 carrots/day and v47a
-plants ZERO carrots (blueprint default) while v45a's 12 carrots won
-the town.  Fix: _DYN_CARROT_CAP 12 when carrot drain >= 8/day, else
-0 — blueprint stays the default, carrots return where they pay.
-
-Was: v47a — CANDIDATE 2026-09-02 (BLUEPRINT PORT, Exp 64).
+STATUS: v47a — CANDIDATE 2026-09-02 (BLUEPRINT PORT, Exp 64).
 = v45a + the live 150-165k winners' coordinated shape, decoded from
 99 live episodes (0W-14L vs the 120k+ class; 4 exact copies of one
 public blueprint at 110-164k).  The bundle — deliberately coordinated,
@@ -690,14 +683,6 @@ def _dyn_str_cap(shops, day):
         cap = max(cap, 40)
     return cap
 _DYN_STR_CAP = {0: 40, 1: 40}   # per seat, refreshed at hour 0
-# v47b: the blueprint drops carrots by DEFAULT (most towns barely drain them),
-# but a PET_CAFE town eats 12-36/day — seed-12 disaster: 3x PET_CAFE, we
-# planted zero carrots, v45a monetized the town's only demand and won.
-_DYN_CARROT_CAP = {0: 0, 1: 0}  # per seat, refreshed at hour 0
-# v47b: YARN_STORE towns (12-24 wool/day) reward a bigger flock than the
-# blueprint's 4 — all three remaining screen losses were yarn towns.
-_DYN_SHEEP = {0: 4, 1: 4}       # per seat, refreshed at hour 0
-_SLOT_NEED = {0: 13, 1: 13}     # live cow+sheep+goose target sum, set per call
 
 def _inflow_per_day(item, crops, animals):
     """Rough units/day BOTH-farms production feeding this market (cared/watered rates)."""
@@ -828,8 +813,7 @@ def _build_tasks(tiles, day, seeds, tape_mode=False, care_skip=(), crop_skip=(),
     # Blueprint choreography: day-0 melons PLANT on the unreserved tail slots
     # and detonate d10 exactly as cows 5-9 arrive to take those tiles (a slot
     # still carrying a plant simply defers its build until the harvest).
-    _n_slots_total = _SLOT_NEED.get(_CUR_SEAT,
-                                    sum(ANIMAL_TARGETS.values()) + _GOOSE_TARGET.get(_CUR_SEAT, 0))
+    _n_slots_total = sum(ANIMAL_TARGETS.values()) + _GOOSE_TARGET.get(_CUR_SEAT, 0)
     _placed_now = sum(1 for row in tiles for t in row
                       if isinstance(t, dict)
                       and (t.get("animal") or t.get("kind") in ("COOP", "PASTURE")))
@@ -957,7 +941,7 @@ def _build_tasks(tiles, day, seeds, tape_mode=False, care_skip=(), crop_skip=(),
                 if c == "TOMATO":
                     cap = tomato_cap
                 if c == "CARROT":
-                    cap = max(0, _DYN_CARROT_CAP.get(_CUR_SEAT, 0) - tomato_cap)
+                    cap = max(0, cap - tomato_cap)
                 if (planned.get(c, 0) < cap and day <= info["last_plant"]
                         and budget.get(c, 0) > 0
                         and c not in crop_skip
@@ -1367,13 +1351,8 @@ def _market_orders(day, hour, money, seeds, shed, inventories, prices, hires_tod
     milk_seen = sum(1 for s in shops if s in ("PIZZA_SHOP", "ICE_CREAM_SHOP",
                                               "SMOOTHIE_SHOP"))
     milk_proj = milk_seen + max(0, 8 - len(shops)) * 0.375
-    # v47b NOTE: a d8+ REAL-drain cow cut was tried and REVERTED — cutting
-    # 9 -> 6 cows in a dead-milk town raised our bank +12k but gifted the
-    # 6-cow opponent +21.8k (milk market recovered for THEM; Exp 63
-    # principle).  Head-to-head, the 9-cow dump keeps mutual pressure.
     cow_target = 6 if milk_proj < 2.0 else ANIMAL_TARGETS["COW"]
-    sheep_target = _DYN_SHEEP.get(_CUR_SEAT, ANIMAL_TARGETS["SHEEP"])
-    herd_complete = (owned["SHEEP"] >= sheep_target
+    herd_complete = (owned["SHEEP"] >= ANIMAL_TARGETS["SHEEP"]
                      and owned["COW"] >= cow_target)
 
     # Animals: buy toward targets (sheep first), one per turn — ONLY if the bank can also
@@ -1408,9 +1387,7 @@ def _market_orders(day, hour, money, seeds, shed, inventories, prices, hires_tod
             cost = ANIMAL_INFO[sp]["cost"]
             if sp == "COW" and owned["COW"] >= cow_target:
                 continue
-            sp_target = (_GOOSE_TARGET.get(_CUR_SEAT, 0) if sp == "GOOSE"
-                         else sheep_target if sp == "SHEEP"
-                         else cow_target)
+            sp_target = _GOOSE_TARGET.get(_CUR_SEAT, 0) if sp == "GOOSE" else ANIMAL_TARGETS[sp]
             if owned.get(sp, 0) < sp_target and money >= cost + MONEY_RESERVE + feed_cushion + land_hold:
                 orders.append(["BUY_ANIMAL", sp, 1])
                 money -= cost
@@ -1445,14 +1422,9 @@ def _market_orders(day, hour, money, seeds, shed, inventories, prices, hires_tod
             _bar = BEHIND_TOMATO_PRICE if gamble else TOMATO_HINGE_CONFIRM
             if not (herd_complete or money >= 3000) or _tpx < _bar:
                 continue  # v37d: detonation cash also opens the tomato gate
-        elif crop == "CARROT":
-            if _DYN_CARROT_CAP.get(_CUR_SEAT, 0) <= 0:
-                continue   # v47b: carrots exist only in towns that drain them
         elif info["cap"] <= 0:
             continue
         want = SEED_WANT[crop]
-        if crop == "CARROT":
-            want = 4
         if crop == "WHEAT" and _FACTORY_NOW:
             want = WHEAT_FACTORY_SEED_WANT
         if crop == "STRAWBERRY" and _DYN_STR_CAP.get(_CUR_SEAT, 40) <= 20:
@@ -1538,12 +1510,7 @@ def agent(obs):
                                                "SMOOTHIE_SHOP"))
     _milk_proj = _milk_seen + max(0, 8 - len(shops)) * 0.375
     _cow_t = 6 if _milk_proj < 2.0 else ANIMAL_TARGETS["COW"]
-    _shp_t = _DYN_SHEEP.get(player, ANIMAL_TARGETS["SHEEP"])
-    # v47b: _SLOT_NEED stays STATIC — feeding the live (guarded) targets in
-    # shrank the ongoing-crop ban to 10 slots in weak towns and chaotically
-    # reshaped whole games (seed-12 flip-flop).  Layout stability wins.
-    _SLOT_NEED[player] = sum(ANIMAL_TARGETS.values()) + _GOOSE_TARGET.get(player, 0)
-    ramp_fast = (_owned_n >= _shp_t + _cow_t
+    ramp_fast = (_owned_n >= ANIMAL_TARGETS["SHEEP"] + _cow_t
                  or money >= 3000)  # v37d: detonation counts as ramped
 
     # Reactive tomato (v20d, staged): none pre-herd; small speculation on a
@@ -1571,11 +1538,6 @@ def agent(obs):
         _WHEAT_TOWN[player] = True
     if hour == 0:
         _DYN_STR_CAP[player] = _dyn_str_cap(shops, day)
-        _DYN_CARROT_CAP[player] = 12 if _town_drain_per_day("CARROT", shops) >= 8 else 0
-        # v47b: a yarn-town sheep 4 -> 6 bump was tried and REVERTED — wool's
-        # market is the game's smallest (T=105, sq glut curve): 2 extra sheep
-        # crashed the price for both sides and cost us 8k on the yarn seed.
-        _DYN_SHEEP[player] = 4
         if (_GOOSE_TARGET.get(player, 0) < 1 and day <= 10
                 and _town_drain_per_day("EGG", shops) >= 7):
             _GOOSE_TARGET[player] = 0

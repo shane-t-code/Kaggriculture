@@ -1,7 +1,15 @@
 """
 main.py — Kaggriculture agent.  ENTRY POINT (must be at archive root, must be named main.py).
 
-STATUS: v47b — CANDIDATE 2026-09-02 (= v47a + DYNAMIC CARROT CAP).
+STATUS: proxy_meta150 — FROZEN SPARRING BOT 2026-09-02 (= v47b).
+Stand-in for the live 150-165k public blueprint (Exp 64: 4 exact
+copies at 110-164k, 0W-14L against us pre-port).  CAVEAT: this is
+our engine's approximation — the real thing still out-paces it
+(their d20 ~74k vs our ~26-31k); treat beating this proxy as
+NECESSARY, not sufficient.  Do not edit; rebuild from a newer
+champion if the gap closes further.
+
+Was: v47b — CANDIDATE 2026-09-02 (= v47a + DYNAMIC CARROT CAP).
 v47a 16-seed screen 21W-11L (65.6%) +3,745; losses cluster in weak
 towns.  Seed-12 autopsy: 3x PET_CAFE = 36 carrots/day and v47a
 plants ZERO carrots (blueprint default) while v45a's 12 carrots won

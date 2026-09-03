@@ -1,7 +1,16 @@
 """
 main.py — Kaggriculture agent.  ENTRY POINT (must be at archive root, must be named main.py).
 
-STATUS: v47b — CANDIDATE 2026-09-02 (= v47a + DYNAMIC CARROT CAP).
+STATUS: v47b — PROMOTED 2026-09-02 night (blueprint port, Exp 64).
+HELD-OUT 77 (seeds 100-176, tuning seeds excluded): **105W-49L
+(68.2%) +5,028 mu/sigma 0.625** vs v45a.  Screen 22W-10L (68.8%).
+Field: proxies 115W-13L (v45a 120W-8L — trades ~5 weak-tier games
+in bad towns for reaching the 120k+ tier); tape flat.  v48a/b weed
+variants tested and NOT shipped: the hour-17 plant cutoff wins
+mirrors but drops wool/strglut legs 6 games each (tempo subsidy to
+flooders); smarter planter-waters-own-tile fix queued.
+
+Was: v47b — CANDIDATE 2026-09-02 (= v47a + DYNAMIC CARROT CAP).
 v47a 16-seed screen 21W-11L (65.6%) +3,745; losses cluster in weak
 towns.  Seed-12 autopsy: 3x PET_CAFE = 36 carrots/day and v47a
 plants ZERO carrots (blueprint default) while v45a's 12 carrots won

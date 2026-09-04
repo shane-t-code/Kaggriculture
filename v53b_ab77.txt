@@ -1,0 +1,95 @@
+kaggle-environments version: 1.32.7
+
+A = versions/v53b.py
+B = versions/v52b.py
+77 seeds x 2 seats = 154 games
+
+  seed 100  seat0: A    64,718 vs B    65,377   seat1: A    64,718 vs B    65,377
+  seed 101  seat0: A    58,218 vs B    59,958   seat1: A    58,218 vs B    59,958
+  seed 102  seat0: A    96,398 vs B    96,398   seat1: A    96,398 vs B    96,398
+  seed 103  seat0: A    83,522 vs B    82,805   seat1: A    84,981 vs B    83,049
+  seed 104  seat0: A    81,385 vs B    86,200   seat1: A    81,684 vs B    85,049
+  seed 105  seat0: A    78,996 vs B    78,996   seat1: A    78,996 vs B    78,996
+  seed 106  seat0: A    58,414 vs B    58,414   seat1: A    58,414 vs B    58,414
+  seed 107  seat0: A    92,579 vs B    93,029   seat1: A    93,029 vs B    92,579
+  seed 108  seat0: A    86,602 vs B    86,471   seat1: A    86,743 vs B    86,708
+  seed 109  seat0: A    66,208 vs B    66,821   seat1: A    66,492 vs B    66,361
+  seed 110  seat0: A   145,285 vs B   145,285   seat1: A   145,285 vs B   145,285
+  seed 111  seat0: A    45,827 vs B    45,747   seat1: A    45,746 vs B    45,861
+  seed 112  seat0: A   108,469 vs B   108,298   seat1: A   108,294 vs B   108,462
+  seed 113  seat0: A    66,060 vs B    65,868   seat1: A    66,060 vs B    65,868
+  seed 114  seat0: A    57,715 vs B    57,715   seat1: A    57,715 vs B    57,715
+  seed 115  seat0: A    50,289 vs B    49,223   seat1: A    50,260 vs B    50,021
+  seed 116  seat0: A    53,736 vs B    50,726   seat1: A    64,979 vs B    69,082
+  seed 117  seat0: A    85,499 vs B    84,547   seat1: A    79,104 vs B    77,462
+  seed 118  seat0: A    66,788 vs B    66,533   seat1: A    56,862 vs B    55,736
+  seed 119  seat0: A    82,117 vs B    82,117   seat1: A    82,117 vs B    82,117
+  seed 120  seat0: A    74,190 vs B    72,713   seat1: A    74,206 vs B    72,647
+  seed 121  seat0: A    62,081 vs B    63,911   seat1: A    64,473 vs B    61,543
+  seed 122  seat0: A    90,339 vs B    89,981   seat1: A    89,981 vs B    90,339
+  seed 123  seat0: A    88,399 vs B    85,240   seat1: A    88,399 vs B    85,240
+  seed 124  seat0: A    68,456 vs B    65,222   seat1: A    65,222 vs B    68,456
+  seed 125  seat0: A    67,560 vs B    67,560   seat1: A    67,560 vs B    67,560
+  seed 126  seat0: A    47,283 vs B    46,136   seat1: A    47,283 vs B    46,136
+  seed 127  seat0: A    86,936 vs B    83,186   seat1: A    83,186 vs B    86,936
+  seed 128  seat0: A    56,169 vs B    57,212   seat1: A    56,169 vs B    57,212
+  seed 129  seat0: A    67,667 vs B    63,188   seat1: A    67,667 vs B    63,188
+  seed 130  seat0: A    70,394 vs B    70,825   seat1: A    70,825 vs B    70,394
+  seed 131  seat0: A    64,515 vs B    69,499   seat1: A    64,698 vs B    69,371
+  seed 132  seat0: A    42,385 vs B    42,073   seat1: A    42,385 vs B    42,073
+  seed 133  seat0: A    54,551 vs B    54,625   seat1: A    56,502 vs B    56,551
+  seed 134  seat0: A   116,714 vs B   118,380   seat1: A   116,714 vs B   118,380
+  seed 135  seat0: A    49,714 vs B    50,164   seat1: A    49,714 vs B    50,164
+  seed 136  seat0: A    49,281 vs B    48,848   seat1: A    49,281 vs B    48,848
+  seed 137  seat0: A   113,530 vs B   113,808   seat1: A   113,808 vs B   113,530
+  seed 138  seat0: A    73,155 vs B    67,663   seat1: A    72,681 vs B    70,279
+  seed 139  seat0: A    60,198 vs B    59,065   seat1: A    60,292 vs B    59,071
+  seed 140  seat0: A    68,656 vs B    69,861   seat1: A    68,982 vs B    69,882
+  seed 141  seat0: A    81,735 vs B    83,939   seat1: A    81,735 vs B    83,939
+  seed 142  seat0: A    46,107 vs B    43,226   seat1: A    46,592 vs B    47,554
+  seed 143  seat0: A    97,511 vs B    97,511   seat1: A    97,511 vs B    97,511
+  seed 144  seat0: A    76,075 vs B    75,634   seat1: A    74,597 vs B    76,825
+  seed 145  seat0: A    53,262 vs B    54,814   seat1: A    53,262 vs B    54,814
+  seed 146  seat0: A   125,152 vs B   125,306   seat1: A   125,306 vs B   125,152
+  seed 147  seat0: A   100,096 vs B   102,994   seat1: A   103,004 vs B   101,640
+  seed 148  seat0: A    49,760 vs B    47,489   seat1: A    43,998 vs B    42,514
+  seed 149  seat0: A    73,163 vs B    74,211   seat1: A    80,688 vs B    79,782
+  seed 150  seat0: A    99,608 vs B    99,608   seat1: A    99,608 vs B    99,608
+  seed 151  seat0: A   105,274 vs B   105,274   seat1: A   105,274 vs B   105,274
+  seed 152  seat0: A    91,108 vs B    88,022   seat1: A    91,279 vs B    88,462
+  seed 153  seat0: A   109,715 vs B   112,095   seat1: A   109,759 vs B   112,064
+  seed 154  seat0: A    77,276 vs B    76,016   seat1: A    76,016 vs B    77,276
+  seed 155  seat0: A    67,078 vs B    70,625   seat1: A    68,745 vs B    73,408
+  seed 156  seat0: A    62,445 vs B    61,868   seat1: A    62,445 vs B    61,868
+  seed 157  seat0: A    41,848 vs B    41,846   seat1: A    42,716 vs B    41,038
+  seed 158  seat0: A   128,497 vs B   125,927   seat1: A   128,187 vs B   125,275
+  seed 159  seat0: A    59,472 vs B    58,449   seat1: A    59,472 vs B    58,449
+  seed 160  seat0: A    95,388 vs B    96,437   seat1: A    95,388 vs B    96,437
+  seed 161  seat0: A    61,383 vs B    62,717   seat1: A    62,766 vs B    62,273
+  seed 162  seat0: A    56,400 vs B    55,909   seat1: A    56,531 vs B    55,826
+  seed 163  seat0: A    93,305 vs B    93,290   seat1: A    93,290 vs B    93,305
+  seed 164  seat0: A   124,271 vs B   128,351   seat1: A   124,370 vs B   128,253
+  seed 165  seat0: A    59,841 vs B    59,713   seat1: A    59,834 vs B    59,728
+  seed 166  seat0: A    87,876 vs B    87,876   seat1: A    87,876 vs B    87,876
+  seed 167  seat0: A   130,680 vs B   130,188   seat1: A   130,188 vs B   130,680
+  seed 168  seat0: A   110,042 vs B   110,749   seat1: A   108,199 vs B   103,712
+  seed 169  seat0: A    71,968 vs B    69,568   seat1: A    71,968 vs B    69,518
+  seed 170  seat0: A   110,929 vs B   112,788   seat1: A   110,929 vs B   112,788
+  seed 171  seat0: A    82,182 vs B    80,584   seat1: A    82,182 vs B    80,584
+  seed 172  seat0: A   117,051 vs B   114,442   seat1: A   114,442 vs B   117,051
+  seed 173  seat0: A    75,426 vs B    77,169   seat1: A    63,267 vs B    65,376
+  seed 174  seat0: A    55,097 vs B    54,986   seat1: A    55,097 vs B    54,986
+  seed 175  seat0: A    58,496 vs B    60,043   seat1: A    69,189 vs B    69,812
+  seed 176  seat0: A   111,963 vs B   112,232   seat1: A   112,232 vs B   111,963
+
+==============================================================
+  WIN RATE (A)         47.4%     <-- the number that matters
+  record            73W - 59L - 22T   (n=154)
+  mean margin               +0   (informative, NOT the objective)
+  sd of margin           1,881
+  mu/sigma               0.000   (Pr[win] ~= Phi(mu/sigma))
+  wall clock             970.1s
+==============================================================
+
+  Reminder: if your change alters TILE OCCUPANCY (hands, land, plant count),
+  the town shop draw changes too and the seed is no longer a control (~77 seeds needed).

@@ -1,7 +1,17 @@
 """
 main.py — Kaggriculture agent.  ENTRY POINT (must be at archive root, must be named main.py).
 
-STATUS: v50a — CANDIDATE 2026-09-03 (ANTI-TAPE COUNTER-SCHEDULE, Exp 66).
+STATUS: v50b — CANDIDATE 2026-09-03 (= v50a + STR SUPPRESSION, Exp 66b).
+v50a decomposition: our bank +10,866 but tape +7,051 (avoidance let
+their 300 STR units realize ~$220 = 66k, 43% of their income).  The
+open-loop asymmetry runs the other way: THEY CANNOT STOP SELLING.
+v50b pins the STR market from d14 (threshold 3, dump batches) —
+sacrificing our ~15k berry engine to deny their ~50-60k.
+FALSIFICATION: tape margin must improve >= 10k over v50a's −36,631;
+check the replay STR price stays pinned < ~40 from d15; non-tape
+control must stay byte-identical.
+
+Was: v50a — CANDIDATE 2026-09-03 (ANTI-TAPE COUNTER-SCHEDULE, Exp 66).
 = v47b + fighting-phase module vs the tape class (top of board; we
 are 0-16 vs it, and every tape-class live opponent is an auto-loss).
 A tape is OPEN-LOOP: its complete sell schedule is embedded in its
@@ -996,9 +1006,10 @@ def _build_tasks(tiles, day, seeds, tape_mode=False, care_skip=(), crop_skip=(),
                     cap = WHEAT_FACTORY_CAP
                 if c == "STRAWBERRY":
                     cap = min(cap, _DYN_STR_CAP.get(_CUR_SEAT, 40))
-                    if tape_mode:
-                        # v50a: never plant into their 300-unit d16-29 flood
-                        cap = min(cap, TAPE_STR_CAP)
+                    # v50c: cap-24 avoidance REVERTED — suppression needs MORE
+                    # supply, not less (24 plants ~ town drain; the market
+                    # never accumulates glut and their waves sell into
+                    # recovered prices).  Full production, sold relentlessly.
                 if c == "TOMATO":
                     cap = tomato_cap
                 if c == "CARROT":
@@ -1380,6 +1391,17 @@ def _market_orders(day, hour, money, seeds, shed, inventories, prices, hires_tod
                 threshold = min(threshold, max(3, int(min_price * 0.4)))
                 n = batch + 8
                 dump_boost = True
+            if item == "STRAWBERRY" and day >= 12:
+                # v50b STR SUPPRESSION : 43% of the tape's income is
+                # strawberries at ~$220/unit — BECAUSE avoidance left them
+                # scarcity prices.  STR floors after ~62 glut units (engine:
+                # above-curve linear target 1.6 on base 120) and the tape
+                # cannot stop selling.  Pin the market from d14 (their first
+                # wave d16h16): our ~12 units/day is the pin rate.  We trade
+                # our ~15k berry engine for their ~50-60k.
+                threshold = 3
+                n = batch + 8
+                dump_boost = True
             if item == "WHEAT" and day >= TAPE_WHEAT_ENDGAME:
                 # v50a: beat their 196-unit d25-29 wheat dump out the door
                 # (feed reserve already excluded from `stock` above).
@@ -1515,8 +1537,6 @@ def _market_orders(day, hour, money, seeds, shed, inventories, prices, hires_tod
             want = WHEAT_FACTORY_SEED_WANT
         if crop == "STRAWBERRY" and _DYN_STR_CAP.get(_CUR_SEAT, 40) <= 20:
             continue
-        if crop == "STRAWBERRY" and tape_mode:
-            want = min(SEED_WANT[crop], 4)   # v50a: cap 24 needs few seeds
         if crop == "STRAWBERRY" and not herd_complete:
             # v18d: days 0-3 stay cow-only (v13c's day-0 burst failed at 37.5%);
             # from day 4 surplus cash flows to berries at want 6, with the next

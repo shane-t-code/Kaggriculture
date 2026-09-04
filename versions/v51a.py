@@ -1,7 +1,17 @@
 """
 main.py — Kaggriculture agent.  ENTRY POINT (must be at archive root, must be named main.py).
 
-STATUS: v50a — CANDIDATE 2026-09-03 (ANTI-TAPE COUNTER-SCHEDULE, Exp 66).
+STATUS: v51a — CANDIDATE 2026-09-03 (= v47b + BOTH validated modules).
+(1) v49a premium-weak latch broadening : 7W-1L +0.4-3.8k on
+fired towns (~20% of draws), byte-identical elsewhere.
+(2) v50a anti-tape counter-schedule : tape leg our bank
++10,866 / margin +3,815 vs v47b; non-tape control byte-identical.
+Suppression variants v50b/c tested and REJECTED (STR pin never
+holds at 24 plants; full-supply crash loses 11k to deny 6.9k).
+GAUNTLET (new protocol — report sd AND mu/sigma): 77 held-out
+vs v45a + vs v47b, proxies, tape.
+
+Was: v50a — CANDIDATE 2026-09-03 (ANTI-TAPE COUNTER-SCHEDULE, Exp 66).
 = v47b + fighting-phase module vs the tape class (top of board; we
 are 0-16 vs it, and every tape-class live opponent is an auto-loss).
 A tape is OPEN-LOOP: its complete sell schedule is embedded in its
@@ -1623,12 +1633,17 @@ def agent(obs):
     # (a started conversion gets finished even if a premium shop lands later).
     global _FACTORY_NOW, _DEAD_TOWN_NOW, _CUR_SEAT
     _CUR_SEAT = player   # v40a: key for _assign's cross-turn sticky memory
-    if (not _WHEAT_TOWN.get(player, False)
-            and day >= WHEAT_TOWN_CHECK_DAY
-            and _town_drain_per_day("STRAWBERRY", shops) <= 1
-            and _town_drain_per_day("MILK", shops) <= 1
-            and _town_drain_per_day("WHEAT", shops) >= 7):
-        _WHEAT_TOWN[player] = True
+    if not _WHEAT_TOWN.get(player, False) and day >= WHEAT_TOWN_CHECK_DAY:
+        _str_d = _town_drain_per_day("STRAWBERRY", shops)
+        _mlk_d = _town_drain_per_day("MILK", shops)
+        _whe_d = _town_drain_per_day("WHEAT", shops)
+        # v49a PREMIUM-WEAK BROADENING : also fire when wheat demand
+        # is real (2+ outlets) and neither premium engine has more than one
+        # outlet — the bakery/wheat class where 9 of v47's 11 live sub-90k
+        # losses happened.  Validated: 7W-1L, +0.4k..+3.8k on fired towns.
+        if ((_str_d <= 1 and _mlk_d <= 1 and _whe_d >= 7)
+                or (_whe_d >= 13 and _str_d <= 7 and _mlk_d <= 7)):
+            _WHEAT_TOWN[player] = True
     if hour == 0:
         _DYN_STR_CAP[player] = _dyn_str_cap(shops, day)
         _DYN_CARROT_CAP[player] = 12 if _town_drain_per_day("CARROT", shops) >= 8 else 0

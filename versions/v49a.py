@@ -1,20 +1,15 @@
 """
 main.py — Kaggriculture agent.  ENTRY POINT (must be at archive root, must be named main.py).
 
-STATUS: v50a — CANDIDATE 2026-09-03 (ANTI-TAPE COUNTER-SCHEDULE, Exp 66).
-= v47b + fighting-phase module vs the tape class (top of board; we
-are 0-16 vs it, and every tape-class live opponent is an auto-loss).
-A tape is OPEN-LOOP: its complete sell schedule is embedded in its
-own file and identical every game.  TAPE_SELLS = every 5+-unit sell
-it will ever make.  Counters (ALL gated on tape_mode → non-tape
-games byte-identical = free control): (1) generic FRONT-RUN — a
-scheduled wave >= 8 units within 10 turns triggers our dump first at
-0.4x threshold; (2) STR cap 24 + seed want 4 in tape games (their
-300-unit d16-29 flood makes marginal berries worthless); (3) wheat
-liquidation from d22 (their 196-unit d25-29 dump).  FALSIFICATION:
-tape-leg margin must improve >= 5k from v47b's −38,620 with our own
-bank UP (not just theirs down); 8-seed vs main must be BYTE-IDENTICAL
-(detector self-exclusion) or the gating leaks.
+STATUS: v49a — CANDIDATE 2026-09-03 (premium-weak latch broadening, Exp 65).
+= v47b + ONE change: the wheat-factory latch also fires on
+(wheat drain >= 13 AND str <= 7 AND milk <= 7) — the bakery/wheat
+town class where 9 of v47's 11 live sub-90k losses happened, all
+blocked by a single premium outlet under the old strict rule.
+GOAL IS SIGMA, NOT MU: cut the bad-town tail (live: mu/sigma 0.11 =
+~750; need ~0.3 = 800s).  TEST: paired A/B on latch-town seeds from
+town_map.json (must fire + gain) and non-latch seeds (must be
+byte-identical = control); then 77 held-out with SIGMA REPORTED.
 
 Was: v47b — CANDIDATE 2026-09-02 (= v47a + DYNAMIC CARROT CAP).
 v47a 16-seed screen 21W-11L (65.6%) +3,745; losses cluster in weak
@@ -615,33 +610,6 @@ TAPE_MELON_DUMP_DAY = 18     # ...and at any price from here (their wave lands d
 TAPE_MELON_DUMP = 10
 _TAPE_SEEN = {}              # player -> latched?  (reset at step 0 each episode)
 
-# v50a : the tape's COMPLETE sell schedule, extracted from its embedded
-# action list (open-loop => identical every game).  (step, units) for every
-# sell order of 5+ units.  Front-run rule: if a wave of >= TAPE_FR_MIN units
-# lands within TAPE_FR_HORIZON turns, dump our stock of that item NOW at a
-# deep-discount threshold — any price before their wave beats any price after.
-TAPE_SELLS = {
-    "FERTILIZER": ((48,5), (72,5), (96,5), (120,5), (144,5), (192,7), (216,10), (241,16), (276,12), (299,10), (316,16), (341,9), (411,7), (422,14), (527,14), (534,8), (558,5), (588,5), (598,10), (608,5), (617,6), (626,9), (648,5), (649,7), (662,6), (672,5), (687,5), (690,8), (696,5), (701,5), (718,5)),
-    "MELON": ((252,10), (255,6), (257,11), (260,6), (262,6), (486,6), (488,6), (490,12), (492,6), (493,10), (495,6), (496,6), (502,15), (503,6), (504,14)),
-    "MILK": ((302,6), (358,13), (362,6), (377,12), (406,24), (431,7), (451,8), (455,9), (480,6), (484,7), (502,9), (523,14), (551,13), (553,8), (555,9), (587,10), (599,12), (618,8), (638,10), (648,7), (665,12), (666,9), (690,8), (702,18), (703,18), (715,18)),
-    "STRAWBERRY": ((400,8), (405,14), (432,28), (472,12), (479,16), (480,20), (504,18), (522,10), (528,30), (552,24), (575,13), (594,20), (609,17), (615,13), (645,16), (651,11), (701,22)),
-    "WHEAT": ((1,9), (150,17), (211,6), (222,7), (278,11), (308,12), (312,24), (405,5), (467,19), (503,5), (522,7), (543,12), (596,20), (597,9), (609,31), (624,30), (632,7), (668,10), (672,46), (694,6), (696,53), (713,16), (715,26), (716,22), (717,36), (718,7)),
-    "WOOL": ((160,9), (168,17), (240,18), (361,8), (380,8), (419,12), (427,13), (453,12), (568,8), (583,8), (634,6), (661,10), (669,17), (682,8)),
-}
-TAPE_FR_HORIZON = 10    # turns of look-ahead
-TAPE_FR_MIN = 8         # units of incoming wave that trigger the front-run
-TAPE_STR_CAP = 24       # tape floods 300 STR units d16-29 (~21/day) — never
-                        # plant into it beyond this
-TAPE_WHEAT_ENDGAME = 22 # their 196-unit wheat dump lands d25-29; liquidate
-                        # surplus wheat from d22 at threshold 20
-
-def _tape_wave_within(item, step):
-    tot = 0
-    for s, n in TAPE_SELLS.get(item, ()):
-        if step < s <= step + TAPE_FR_HORIZON:
-            tot += n
-    return tot
-
 # ---------------------------------------------------------------------------
 # Rational sell thresholds (v7a).  The engine's glut-side price curve, verbatim
 # (ENGINE_NOTES B.1, engine L41-74): price = base - target*base*f(x)/f(T),
@@ -996,9 +964,6 @@ def _build_tasks(tiles, day, seeds, tape_mode=False, care_skip=(), crop_skip=(),
                     cap = WHEAT_FACTORY_CAP
                 if c == "STRAWBERRY":
                     cap = min(cap, _DYN_STR_CAP.get(_CUR_SEAT, 40))
-                    if tape_mode:
-                        # v50a: never plant into their 300-unit d16-29 flood
-                        cap = min(cap, TAPE_STR_CAP)
                 if c == "TOMATO":
                     cap = tomato_cap
                 if c == "CARROT":
@@ -1373,19 +1338,6 @@ def _market_orders(day, hour, money, seeds, shed, inventories, prices, hires_tod
                 n = batch + PRESSURE_BATCH_BONUS
         if tape_mode and day < liq_day:
             # We know the tape's decoded sell schedule; it cannot know ours.
-            # v50a FRONT-RUN : a scheduled wave lands within the
-            # horizon — any price now beats any price after 8-30 units hit
-            # this market.  Fires from the full schedule, not hand-picked days.
-            if _tape_wave_within(item, day * 24 + hour) >= TAPE_FR_MIN and stock > 0:
-                threshold = min(threshold, max(3, int(min_price * 0.4)))
-                n = batch + 8
-                dump_boost = True
-            if item == "WHEAT" and day >= TAPE_WHEAT_ENDGAME:
-                # v50a: beat their 196-unit d25-29 wheat dump out the door
-                # (feed reserve already excluded from `stock` above).
-                threshold = min(threshold, 20)
-                n = batch + 8
-                dump_boost = True
             if item == "WOOL" and day <= TAPE_WOOL_SALVAGE_UNTIL:
                 threshold = min(threshold, TAPE_WOOL_SALVAGE)
                 n = batch + 5
@@ -1515,8 +1467,6 @@ def _market_orders(day, hour, money, seeds, shed, inventories, prices, hires_tod
             want = WHEAT_FACTORY_SEED_WANT
         if crop == "STRAWBERRY" and _DYN_STR_CAP.get(_CUR_SEAT, 40) <= 20:
             continue
-        if crop == "STRAWBERRY" and tape_mode:
-            want = min(SEED_WANT[crop], 4)   # v50a: cap 24 needs few seeds
         if crop == "STRAWBERRY" and not herd_complete:
             # v18d: days 0-3 stay cow-only (v13c's day-0 burst failed at 37.5%);
             # from day 4 surplus cash flows to berries at want 6, with the next
@@ -1623,12 +1573,19 @@ def agent(obs):
     # (a started conversion gets finished even if a premium shop lands later).
     global _FACTORY_NOW, _DEAD_TOWN_NOW, _CUR_SEAT
     _CUR_SEAT = player   # v40a: key for _assign's cross-turn sticky memory
-    if (not _WHEAT_TOWN.get(player, False)
-            and day >= WHEAT_TOWN_CHECK_DAY
-            and _town_drain_per_day("STRAWBERRY", shops) <= 1
-            and _town_drain_per_day("MILK", shops) <= 1
-            and _town_drain_per_day("WHEAT", shops) >= 7):
-        _WHEAT_TOWN[player] = True
+    if not _WHEAT_TOWN.get(player, False) and day >= WHEAT_TOWN_CHECK_DAY:
+        _str_d = _town_drain_per_day("STRAWBERRY", shops)
+        _mlk_d = _town_drain_per_day("MILK", shops)
+        _whe_d = _town_drain_per_day("WHEAT", shops)
+        # v49a PREMIUM-WEAK BROADENING .  Live decode: 9 of v47's 11
+        # sub-90k losses were bakery/wheat towns where the old latch was
+        # blocked by a single PIZZA (milk 7) or FARMERS_MARKET (str 7) —
+        # the exact 26k-disaster pattern flagged in the old decode.  New:
+        # fire when wheat demand is REAL (2+ outlets) and neither premium
+        # engine has more than one outlet; old strict rule kept as-is.
+        if ((_str_d <= 1 and _mlk_d <= 1 and _whe_d >= 7)
+                or (_whe_d >= 13 and _str_d <= 7 and _mlk_d <= 7)):
+            _WHEAT_TOWN[player] = True
     if hour == 0:
         _DYN_STR_CAP[player] = _dyn_str_cap(shops, day)
         _DYN_CARROT_CAP[player] = 12 if _town_drain_per_day("CARROT", shops) >= 8 else 0

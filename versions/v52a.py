@@ -1,16 +1,15 @@
 """
 main.py — Kaggriculture agent.  ENTRY POINT (must be at archive root, must be named main.py).
 
-STATUS: v52b — CANDIDATE 2026-09-03 (COMPLETE LIQUIDATION, Exp 68b).
-= v50a + one line: from day 28, sell batch caps are OFF (n = stock).
-Live close-loss decode: 4 of 11 sub-8k losses stranded MORE shed
-value than the losing margin (d29 harvests arrive with 1-2 market
-turns left; milk batch 3/turn cannot clear 6-9 units).  Exp 68a
-(ℓ-aware lock-in) tested INERT — 8k+ leads at d24 are already-won
-games; close games never reach the trigger — dropped.
-FALSIFICATION: leftover shed value at step 719 must go to ~0 on
-replays; 16-seed A/B must not regress (margins should tick up in
-close games; big-seed games mostly unchanged).
+STATUS: v52a — CANDIDATE 2026-09-03 (ℓ-AWARE LOCK-IN, Exp 68).
+= v50a + the ahead-side of bank-differential play (the behind-side
+tomato gamble has existed since v24a).  From day 24 with a lead of
+8k+: liquidate at 1/3 thresholds with pressure batches — held goods
+are variance, cash is certain, and the flood suppresses the markets
+the trailing opponent needs.  Fires only when (day>=24 AND ahead
+8k+) so most games are untouched.  FALSIFICATION (σ protocol):
+77 held-out vs main — win rate up OR σ down required; close-game
+record specifically must improve; if flat/negative, discard.
 
 Was: v50a — CANDIDATE 2026-09-03 (ANTI-TAPE COUNTER-SCHEDULE, Exp 66).
 = v47b + fighting-phase module vs the tape class (top of board; we
@@ -639,6 +638,8 @@ TAPE_SELLS = {
     "WHEAT": ((1,9), (150,17), (211,6), (222,7), (278,11), (308,12), (312,24), (405,5), (467,19), (503,5), (522,7), (543,12), (596,20), (597,9), (609,31), (624,30), (632,7), (668,10), (672,46), (694,6), (696,53), (713,16), (715,26), (716,22), (717,36), (718,7)),
     "WOOL": ((160,9), (168,17), (240,18), (361,8), (380,8), (419,12), (427,13), (453,12), (568,8), (583,8), (634,6), (661,10), (669,17), (682,8)),
 }
+LOCKIN_DAY = 24         # v52a: from here, a lead converts to certain cash
+LOCKIN_LEAD = 8000      # bank lead that triggers lock-in liquidation
 TAPE_FR_HORIZON = 10    # turns of look-ahead
 TAPE_FR_MIN = 8         # units of incoming wave that trigger the front-run
 TAPE_STR_CAP = 24       # tape floods 300 STR units d16-29 (~21/day) — never
@@ -1248,17 +1249,6 @@ def _assign(units, tasks, inventories, tiles, day, hour):
     # to plain global greedy so no unit idles while work exists.
     greedy(range(len(tasks)))
 
-    # v52b : FINAL-EVENING BANK RUN — from d29 h14, any loaded unit
-    # overrides its task and runs its cargo in.  Goods deposited after ~h21
-    # miss the remaining market turns and are DESTROYED at step 720; live
-    # decode found 4 of 11 close losses stranded more value than the margin.
-    # Units shuttle naturally: deposit -> empty -> harvest -> override again.
-    if day >= LAST_DAY and hour >= 14:
-        for ui, (ux, uy) in enumerate(units):
-            if sum(inv_of(ui).values()) > 0:
-                assignment[ui] = {"prio": P_UNLOAD, "x": SHED_TILE[0],
-                                  "y": SHED_TILE[1], "op": ["DROP"]}
-
     # Idle-but-loaded units bank their cargo (sellable today instead of tomorrow),
     # but never while still carrying feed wheat for pending FEED tasks.
     feeds_pending = any(t.get("op", [None])[0] == "FEED" for ti, t in enumerate(tasks)
@@ -1288,7 +1278,7 @@ def _unit_action(unit_pos, task):
 
 def _market_orders(day, hour, money, seeds, shed, inventories, prices, hires_today,
                    n_hands, tiles, n_quadrants, opp_tiles, market_inv, shops, tape_mode,
-                   gamble=False):
+                   gamble=False, ell=0):
     opp_crops, opp_animals = _opp_capacity(opp_tiles)
     my_crops, my_animals = _opp_capacity(tiles)
     """Queue order: SELL (income), HIRE, wheat, animals, LAND, seeds. Engine cap: 10."""
@@ -1401,13 +1391,11 @@ def _market_orders(day, hour, money, seeds, shed, inventories, prices, hires_tod
             if _tape_wave_within(item, day * 24 + hour) >= TAPE_FR_MIN and stock > 0:
                 threshold = min(threshold, max(3, int(min_price * 0.4)))
                 n = batch + 8
-                dump_boost = True
             if item == "WHEAT" and day >= TAPE_WHEAT_ENDGAME:
                 # v50a: beat their 196-unit d25-29 wheat dump out the door
                 # (feed reserve already excluded from `stock` above).
                 threshold = min(threshold, 20)
                 n = batch + 8
-                dump_boost = True
             if item == "WOOL" and day <= TAPE_WOOL_SALVAGE_UNTIL:
                 threshold = min(threshold, TAPE_WOOL_SALVAGE)
                 n = batch + 5
@@ -1416,13 +1404,14 @@ def _market_orders(day, hour, money, seeds, shed, inventories, prices, hires_tod
                 n = batch + 5
             elif item == "MELON" and day >= TAPE_MELON_SOFT_DAY:
                 threshold = min(threshold, TAPE_MELON_SOFT)
-        if day >= 28:
-            # v52b : COMPLETE liquidation — live close-loss decode
-            # found 4 of 11 sub-8k losses had MORE value stranded in the shed
-            # than the losing margin (day-29 harvests land with 1-2 market
-            # turns left; batch 3/turn physically cannot clear them).  From
-            # d28, batch caps are off: sell the whole stock every turn.
-            n = stock
+        if day >= LOCKIN_DAY and ell >= LOCKIN_LEAD and day < liq_day:
+            # v52a ℓ-AWARE LOCK-IN : both banks are public; ahead
+            # late, held inventory is VARIANCE while banked cash is certain —
+            # and every early sale floods a market the trailing opponent
+            # still needs .
+            # Ratings pay wins, not margin: convert the lead to certainty.
+            threshold = min(threshold, max(3, min_price // 3))
+            n = max(n, batch + PRESSURE_BATCH_BONUS)
         if day >= liq_day or force or price >= threshold:
             orders.append(["SELL", item, min(n, stock)])
 
@@ -1696,7 +1685,7 @@ def agent(obs):
                             me.get("hires_today", 0), len(me.get("hands", [])), tiles,
                             len(me.get("unlocked_quadrants", ["NW"])),
                             opp.get("tiles", []), market_inv, shops, tape_mode,
-                            gamble)
+                            gamble, money - opp.get("money", 0))
 
     if DEBUG:
         print(f"d{day} h{hour} units={len(units)} tasks={len(tasks)} market={market}")

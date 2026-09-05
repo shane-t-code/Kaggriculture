@@ -505,7 +505,7 @@ NEVER_FORCE_SELL = {"WHEAT"}
 # Window (0,-1) = "watering never adds instant yield" (ongoing crops bonus only via fertilizer).
 CROP_INFO = {
     "MELON":      {"cost": 80,  "first": 10, "ready": 10, "last_plant": 6,  "window": (6, 12), "cap": 12},
-    "WHEAT":      {"cost": 10,  "first": 2,  "ready": 4,  "last_plant": 24, "window": (2, 4),  "cap": 26},
+    "WHEAT":      {"cost": 10,  "first": 2,  "ready": 4,  "last_plant": 24, "window": (2, 4),  "cap": 22},
     "STRAWBERRY": {"cost": 100, "first": 10, "ready": 10, "last_plant": 17, "window": (0, -1), "cap": 40},
     "CARROT":     {"cost": 20,  "first": 2,  "ready": 3,  "last_plant": 26, "window": (2, 3),  "cap": 0},
     "TOMATO":     {"cost": 50,  "first": 8,  "ready": 8,  "last_plant": 20, "window": (0, -1), "cap": 0},
@@ -574,12 +574,6 @@ WHEAT_FEED_RESERVE_DAYS = 1   # hold animals*this much wheat before selling any 
 # plants from this day so the tile earns wheat/carrot instead.
 ENDGAME_CONVERT_DAY = 19
 ENDGAME_CONVERT_CROPS = ("STRAWBERRY", "MELON")
-# v54i : the 2k class digs STR 30->15 across d22-26 and refills with
-# wheat (40 tiles by d24) for the late wheat ramp; we held 33-36 STR to d26.
-# From STR_CONVERT_DAY, idle (yield 0), old STR beyond the keep-count is dug
-# so the d22 wheat factory (cap 45) has tiles to fill.
-STR_CONVERT_DAY = 22
-STR_ENDGAME_KEEP = 18
 
 WHEAT_FACTORY_DAY = 22
 WHEAT_FACTORY_CAP = 45        # replaces CROP_INFO cap 20 from factory day
@@ -884,13 +878,6 @@ def _build_tasks(tiles, day, seeds, tape_mode=False, care_skip=(), crop_skip=(),
                  ramp_fast=False, tomato_cap=0):
     """Scan the farm -> the turn's task list. Returns (tasks, n_feed_needed)."""
     tasks = []
-    # v54i endgame conversion budget (see STR_CONVERT_DAY above)
-    _str_digs_left = 0
-    if day >= STR_CONVERT_DAY and day < LAST_DAY:
-        _str_now = sum(1 for _row in tiles for _t in _row
-                       if isinstance(_t, dict) and _t.get("kind") == "PLANT"
-                       and _t.get("crop") == "STRAWBERRY")
-        _str_digs_left = max(0, _str_now - STR_ENDGAME_KEEP)
     crop_counts = {}
     crop_pos = {}      # v45a: live plant positions per crop -> cluster centroids
     empty_tiles = []
@@ -984,14 +971,6 @@ def _build_tasks(tiles, day, seeds, tape_mode=False, care_skip=(), crop_skip=(),
                 if harvestable:
                     tasks.append({"prio": P_SAVE if dying else P_HARVEST, "x": x, "y": y,
                                   "op": ["HARVEST"]})
-                    continue
-
-                # v54i: endgame STR->WHEAT conversion — dig idle old strawberries
-                # beyond the keep-count so wheat can take the tile.
-                if (crop == "STRAWBERRY" and _str_digs_left > 0
-                        and t.get("yield_units", 0) == 0 and age >= 14):
-                    tasks.append({"prio": P_DIG, "x": x, "y": y, "op": ["DIG"]})
-                    _str_digs_left -= 1
                     continue
 
                 # Doomed-crop triage (v15e): its market is projected dead, so its
@@ -1342,10 +1321,7 @@ def _market_orders(day, hour, money, seeds, shed, inventories, prices, hires_tod
         # (37.5% forcing 8 on the empty farm) — run lean until the melon
         # detonation, then the machinery fills 12 for the big-farm phase.
         hands_target = min(hands_target, 6)
-    if hour <= 2 and day <= LAST_DAY:
-        # v54j: hire on d29 as well — the 2k class runs 11 hands through the
-        # final day's harvest+haul; we ran the complete liquidation with ZERO
-        # hands (hands expire nightly and the old gate skipped d29 rehiring).
+    if hour <= 2 and day < LAST_DAY:
         # v44a machinery (retest at blueprint scale — dead heat on the small
         # farm): WAVE hiring hours 0-2 (queue caps at 10 orders/turn; the fib
         # ladder keys on hires_today so waves cost the same), want counts only
@@ -1400,7 +1376,7 @@ def _market_orders(day, hour, money, seeds, shed, inventories, prices, hires_tod
             # ramp the reserve must sit ABOVE the feed top-up want (animals+2)
             # or the two rules oscillate - measured churn: SELL 2 @28 h7,
             # BUY 2 @30 h8, all day, spread paid to the market maker.
-            stock -= (placed_animals + 6) if day <= 12 else placed_animals + 4  # v54h: post-ramp reserve also sits above top-up want (animals+2) - reserve below it re-churned; surplus above it SELLS (2k class moves 85+177 wheat units d10-21 vs our 16+12)
+            stock -= (placed_animals + 6) if day <= 12 else placed_animals * WHEAT_FEED_RESERVE_DAYS
         if item == "FERTILIZER" and FERT_APPLY_FROM_DAY <= day < LAST_DAY:
             # Hold stock for crop fertilizing — but ONLY once the farm is liquid. In the
             # $0-bank opening, fertilizer sales are the survival cash that buys feed;
@@ -1574,9 +1550,9 @@ def _market_orders(day, hour, money, seeds, shed, inventories, prices, hires_tod
     # afternoon and stretching the ramp to d12 (2k class: C4 by d4, then the
     # STR flood; sequencing, not interleaving).
     cow_hold = 0
-    if owned["COW"] < 6 and day >= 1:
-        # v54d: release at 6 cows - full-herd gating starved the berry flood
-        # to d10+ (2k pattern: C4 by d4, STR flood from d5 alongside cow tail)
+    if owned["COW"] < 4 and day >= 1:
+        # v54g: release at C4 (2k sequence: C4 by d4, then the STR flood d5-7
+        # runs ALONGSIDE the cow tail — the growing fert stream funds both)
         cow_hold = 450
     spendable = money - feed_hold - payroll_hold - land_hold - cow_hold
     for crop in PLANT_ORDER:
@@ -1664,10 +1640,7 @@ def agent(obs):
         # day 3.  Both extra conditions + the day-2 cutoff keep us from false-
         # latching tape counters against our own versions in self-matches.
         if (_oa.get("SHEEP", 0) == 4 and _oa.get("COW", 0) >= 1
-                and _oc.get("MELON", 0) in (5, 8)):
-            # v54k: the current top tape (V16-RC5, salemali7 "2900+" lineage)
-            # opens 8 melons, not 5 — same sell schedule byte-for-byte
-            # (verified vs extracted _ACTIONS), so only the detector changes.
+                and _oc.get("MELON", 0) == 5):
             _TAPE_SEEN[player] = True
     tape_mode = _TAPE_SEEN.get(player, False)
 

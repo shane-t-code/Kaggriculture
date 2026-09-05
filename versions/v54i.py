@@ -1342,10 +1342,7 @@ def _market_orders(day, hour, money, seeds, shed, inventories, prices, hires_tod
         # (37.5% forcing 8 on the empty farm) — run lean until the melon
         # detonation, then the machinery fills 12 for the big-farm phase.
         hands_target = min(hands_target, 6)
-    if hour <= 2 and day <= LAST_DAY:
-        # v54j: hire on d29 as well — the 2k class runs 11 hands through the
-        # final day's harvest+haul; we ran the complete liquidation with ZERO
-        # hands (hands expire nightly and the old gate skipped d29 rehiring).
+    if hour <= 2 and day < LAST_DAY:
         # v44a machinery (retest at blueprint scale — dead heat on the small
         # farm): WAVE hiring hours 0-2 (queue caps at 10 orders/turn; the fib
         # ladder keys on hires_today so waves cost the same), want counts only
@@ -1664,10 +1661,7 @@ def agent(obs):
         # day 3.  Both extra conditions + the day-2 cutoff keep us from false-
         # latching tape counters against our own versions in self-matches.
         if (_oa.get("SHEEP", 0) == 4 and _oa.get("COW", 0) >= 1
-                and _oc.get("MELON", 0) in (5, 8)):
-            # v54k: the current top tape (V16-RC5, salemali7 "2900+" lineage)
-            # opens 8 melons, not 5 — same sell schedule byte-for-byte
-            # (verified vs extracted _ACTIONS), so only the detector changes.
+                and _oc.get("MELON", 0) == 5):
             _TAPE_SEEN[player] = True
     tape_mode = _TAPE_SEEN.get(player, False)
 

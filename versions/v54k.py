@@ -1,7 +1,7 @@
 """
 main.py — Kaggriculture agent.  ENTRY POINT (must be at archive root, must be named main.py).
 
-STATUS: v52b — CANDIDATE 2026-09-03 (COMPLETE LIQUIDATION, Exp 68b).
+STATUS: v54k — LIVE 2026-09-05 as submission 56022782 .
 = v50a + one line: from day 28, sell batch caps are OFF (n = stock).
 Live close-loss decode: 4 of 11 sub-8k losses stranded MORE shed
 value than the losing margin (d29 harvests arrive with 1-2 market

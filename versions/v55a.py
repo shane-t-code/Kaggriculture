@@ -1,7 +1,7 @@
 """
 main.py — Kaggriculture agent.  ENTRY POINT (must be at archive root, must be named main.py).
 
-STATUS: v56a — PROMOTED to main.py 2026-09-05 evening (alternate-day watering; held-out 77 140W-14L 90.9% +4,563 mu/sigma 1.190 = project-record confirm; Exp 77). NOT YET SUBMITTED.
+STATUS: v55a — CANDIDATE (v54k + persistent land hold; land buy was slipping d6→d9 in 31/42 live games).
 = v50a + one line: from day 28, sell batch caps are OFF (n = stock).
 Live close-loss decode: 4 of 11 sub-8k losses stranded MORE shed
 value than the losing margin (d29 harvests arrive with 1-2 market
@@ -450,7 +450,7 @@ ANIMAL_TARGETS = {"SHEEP": 4, "COW": 9}   # v47a blueprint: cow-heavy (dead-milk
 # Day-0 all-in basket (v37d refactor: named so the shape search can move them).
 D0_SHEEP = 2   # v47a blueprint basket: 2s+2c+12mel+7whe = $2,830 of $3,000
 D0_COW = 2
-D0_MELON = 8   # v55e: tiles leg — the 12-block squats the early quadrant (v55c/d fingerprints)
+D0_MELON = 12
 D0_WHEAT_SEED = 7
 D0_FEED = 4    # v47a: basket+hires must clear $3,000 (2,942+12 with feed 4)
 BUY_PRIORITY = ["GOOSE", "COW", "SHEEP"]   # v47a: cows first — milk from d8 IS the early engine
@@ -1011,29 +1011,8 @@ def _build_tasks(tiles, day, seeds, tape_mode=False, care_skip=(), crop_skip=(),
                         if info and info["window"][0] <= age <= info["window"][1]:
                             tasks.append({"prio": P_WATER, "x": x, "y": y, "op": ["WATER"]})
                     else:
-                        # v56a ALTERNATE-DAY WATERING (engine verified, Exp 77):
-                        # base production NEVER requires water — ongoing crops
-                        # tick on pure day arithmetic (L789-800, water only
-                        # gates the fert +2), one-shot crops grow ONLY on
-                        # watered window-days (L438-443), and a plant weeds
-                        # only at 2 consecutive dry days (L783).  Water only:
-                        #  (a) dying (unwatered==1) — P_SAVE, dies tonight;
-                        #  (b) one-shot inside its bonus window (water=yield);
-                        #  (c) ongoing with active fert on a tick night
-                        #      (tick at END of day D when (age+1-first) %
-                        #      interval == 0; keep the +2).
-                        _needed = dying
-                        if not _needed and info:
-                            _w0, _w1 = info["window"]
-                            if _w1 >= _w0:
-                                _needed = _w0 <= age <= _w1   # one-shot growth day
-                            elif t.get("fertilized_until_day", -1) >= day:
-                                _ivl = 2 if crop == "STRAWBERRY" else 1
-                                _needed = (age + 1 - first_age >= 0
-                                           and (age + 1 - first_age) % _ivl == 0)
-                        if _needed:
-                            tasks.append({"prio": P_SAVE if dying else P_WATER,
-                                          "x": x, "y": y, "op": ["WATER"]})
+                        tasks.append({"prio": P_SAVE if dying else P_WATER, "x": x, "y": y,
+                                      "op": ["WATER"]})
 
                 if crop in FERT_CROPS and FERT_APPLY_FROM_DAY <= day < 26:
                     lo, hi = FERT_CROPS[crop]
@@ -1531,26 +1510,17 @@ def _market_orders(day, hour, money, seeds, shed, inventories, prices, hires_tod
     # v47a: the unlock-day land buy is SACRED (blueprint: NE on d6 exactly —
     # our d9-10 slip was the root of the 2-3 day strawberry-ramp lag).  Save
     # toward the price from 2 days out; animals and seeds wait behind it.
-    # v55c BERRY-FIRST WINDOW : the band
-    # killers plant 20-26 strawberries d4-8 and buy the cow tail d7-10 with
-    # wool/milk money — the inverse of our order.  A d5 berry earns its whole
-    # d15-29 life (the measured d15-21 income hole); a d5-vs-d8 cow earns 3
-    # extra days.  While the window is open, cow buys wait and the cow fund
-    # flows to seeds.
-    _str_committed = (seeds.get("STRAWBERRY", 0)
-                      + sum(1 for _row in tiles for _t in _row
-                            if isinstance(_t, dict) and _t.get("kind") == "PLANT"
-                            and _t.get("crop") == "STRAWBERRY"))
-    _berry_first = (4 <= day <= 7 and owned.get("COW", 0) >= 3
-                    and _str_committed < 15)
     _next_land_day = LAND_DAYS[min(n_quadrants - 1, 2)]
     land_ready = day >= _next_land_day
     land_hold = 0
     if (n_quadrants < LAND_MAX_QUADRANTS and day <= 12
-            and _next_land_day - 1 <= day < _next_land_day):
+            and _next_land_day - 1 <= day):
         # v54b: hold from 1 day out (2-day hold froze $1,000 across d4-5 —
         # exactly the cow-per-day window; Prashant class buys land d6 AND a
         # cow daily, funded by the fert flywheel)
+        # v55a: hold persists until the quadrant is BOUGHT — the old window
+        # expired at day-6 dawn, so seeds/cows ate the land money and the
+        # buy slipped to d9 in 31/42 live games (land_probe 2026-09-05)
         land_hold = LAND_PRICES[n_quadrants - 1]
     if day <= 20 and not herd_complete:
         # v54b: morning-only window removed — the 2k class completes the herd
@@ -1575,8 +1545,6 @@ def _market_orders(day, hour, money, seeds, shed, inventories, prices, hires_tod
             cost = ANIMAL_INFO[sp]["cost"]
             if sp == "COW" and owned["COW"] >= cow_target:
                 continue
-            if sp == "COW" and _berry_first:
-                continue   # v55c: cow tail waits while the d4-7 berry wave commits
             sp_target = (_GOOSE_TARGET.get(_CUR_SEAT, 0) if sp == "GOOSE"
                          else sheep_target if sp == "SHEEP"
                          else cow_target)
@@ -1609,7 +1577,7 @@ def _market_orders(day, hour, money, seeds, shed, inventories, prices, hires_tod
     # afternoon and stretching the ramp to d12 (2k class: C4 by d4, then the
     # STR flood; sequencing, not interleaving).
     cow_hold = 0
-    if owned["COW"] < 6 and day >= 1 and not _berry_first:  # v55c: fund flows to seeds in-window
+    if owned["COW"] < 6 and day >= 1:
         # v54d: release at 6 cows - full-herd gating starved the berry flood
         # to d10+ (2k pattern: C4 by d4, STR flood from d5 alongside cow tail)
         cow_hold = 450

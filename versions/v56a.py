@@ -1,7 +1,7 @@
 """
 main.py — Kaggriculture agent.  ENTRY POINT (must be at archive root, must be named main.py).
 
-STATUS: v56a — PROMOTED to main.py 2026-09-05 evening (alternate-day watering; held-out 77 140W-14L 90.9% +4,563 mu/sigma 1.190 = project-record confirm; Exp 77). NOT YET SUBMITTED.
+STATUS: v56a — CANDIDATE (alternate-day watering: base yield never needs water, engine-verified; frees ~40% of water labor; Exp 77).
 = v50a + one line: from day 28, sell batch caps are OFF (n = stock).
 Live close-loss decode: 4 of 11 sub-8k losses stranded MORE shed
 value than the losing margin (d29 harvests arrive with 1-2 market

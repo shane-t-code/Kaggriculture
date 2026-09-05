@@ -1,7 +1,7 @@
 """
 main.py — Kaggriculture agent.  ENTRY POINT (must be at archive root, must be named main.py).
 
-STATUS: v56a — PROMOTED to main.py 2026-09-05 evening (alternate-day watering; held-out 77 140W-14L 90.9% +4,563 mu/sigma 1.190 = project-record confirm; Exp 77). NOT YET SUBMITTED.
+STATUS: v55e — CANDIDATE (berry-first bundle: D0_MELON 8 frees TILES + d4-7 window frees CASH; both legs required, Exp 76).
 = v50a + one line: from day 28, sell batch caps are OFF (n = stock).
 Live close-loss decode: 4 of 11 sub-8k losses stranded MORE shed
 value than the losing margin (d29 harvests arrive with 1-2 market
@@ -1011,29 +1011,8 @@ def _build_tasks(tiles, day, seeds, tape_mode=False, care_skip=(), crop_skip=(),
                         if info and info["window"][0] <= age <= info["window"][1]:
                             tasks.append({"prio": P_WATER, "x": x, "y": y, "op": ["WATER"]})
                     else:
-                        # v56a ALTERNATE-DAY WATERING (engine verified, Exp 77):
-                        # base production NEVER requires water — ongoing crops
-                        # tick on pure day arithmetic (L789-800, water only
-                        # gates the fert +2), one-shot crops grow ONLY on
-                        # watered window-days (L438-443), and a plant weeds
-                        # only at 2 consecutive dry days (L783).  Water only:
-                        #  (a) dying (unwatered==1) — P_SAVE, dies tonight;
-                        #  (b) one-shot inside its bonus window (water=yield);
-                        #  (c) ongoing with active fert on a tick night
-                        #      (tick at END of day D when (age+1-first) %
-                        #      interval == 0; keep the +2).
-                        _needed = dying
-                        if not _needed and info:
-                            _w0, _w1 = info["window"]
-                            if _w1 >= _w0:
-                                _needed = _w0 <= age <= _w1   # one-shot growth day
-                            elif t.get("fertilized_until_day", -1) >= day:
-                                _ivl = 2 if crop == "STRAWBERRY" else 1
-                                _needed = (age + 1 - first_age >= 0
-                                           and (age + 1 - first_age) % _ivl == 0)
-                        if _needed:
-                            tasks.append({"prio": P_SAVE if dying else P_WATER,
-                                          "x": x, "y": y, "op": ["WATER"]})
+                        tasks.append({"prio": P_SAVE if dying else P_WATER, "x": x, "y": y,
+                                      "op": ["WATER"]})
 
                 if crop in FERT_CROPS and FERT_APPLY_FROM_DAY <= day < 26:
                     lo, hi = FERT_CROPS[crop]

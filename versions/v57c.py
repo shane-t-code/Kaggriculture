@@ -1,7 +1,7 @@
 """
 main.py — Kaggriculture agent.  ENTRY POINT (must be at archive root, must be named main.py).
 
-STATUS: v57d — PROMOTED to main.py 2026-09-06 (fert pipeline + yarn sheep + melon sustain; held-out 77 103W-49L 66.9% +1,511 vs v57a; frontier margin best-ever −38.2k; Exp 78). NOT YET SUBMITTED.
+STATUS: v57c — CANDIDATE (melon sustain: small 2nd wave d10-14, cap 6; the band banks ~$2k/game on d15-21 melons where we sell zero; Exp 78).
 = v50a + one line: from day 28, sell batch caps are OFF (n = stock).
 Live close-loss decode: 4 of 11 sub-8k losses stranded MORE shed
 value than the losing margin (d29 harvests arrive with 1-2 market
@@ -766,8 +766,6 @@ _DYN_CARROT_CAP = {0: 0, 1: 0}  # per seat, refreshed at hour 0
 # v47b: YARN_STORE towns (12-24 wool/day) reward a bigger flock than the
 # blueprint's 4 — all three remaining screen losses were yarn towns.
 _DYN_SHEEP = {0: 4, 1: 4}       # per seat, refreshed at hour 0
-YARN_SHEEP = 6                  # v57b: sheep target in latched yarn towns
-_YARN_TOWN = {0: False, 1: False}
 _SLOT_NEED = {0: 13, 1: 13}     # live cow+sheep+goose target sum, set per call
 
 def _inflow_per_day(item, crops, animals):
@@ -1064,9 +1062,12 @@ def _build_tasks(tiles, day, seeds, tape_mode=False, care_skip=(), crop_skip=(),
                 if c == "WHEAT" and _FACTORY_NOW:
                     cap = WHEAT_FACTORY_CAP
                 if c == "MELON" and day > 6:
-                    # v57c MELON SUSTAIN: small 2nd wave d10-14 (after the
-                    # berry flood takes its tiles) into the recovered price;
-                    # the band banks ~$2k/game d15-21 melons where we sold 0.
+                    # v57c MELON SUSTAIN: the band families keep 8-14 melons
+                    # through d20 and bank ~$2k/game d15-21 where we sell 0
+                    # after the d10 detonation .  Small
+                    # second wave from d10 (after the berry flood has taken
+                    # its tiles), planted to d14, harvesting d20+ into the
+                    # recovered price.  Days 7-9: no melon planting at all.
                     cap = MELON_W2_CAP if day >= MELON_W2_FROM else 0
                 if c == "STRAWBERRY":
                     cap = min(cap, _DYN_STR_CAP.get(_CUR_SEAT, 40))
@@ -1537,8 +1538,6 @@ def _market_orders(day, hour, money, seeds, shed, inventories, prices, hires_tod
     # 6-cow opponent +21.8k (milk market recovered for THEM; Exp 63
     # principle).  Head-to-head, the 9-cow dump keeps mutual pressure.
     cow_target = 6 if milk_proj < 2.0 else ANIMAL_TARGETS["COW"]
-    if _YARN_TOWN.get(_CUR_SEAT, False):
-        cow_target = min(cow_target, 8)   # v57b: 6 sheep + 8 cows fit the 15-slot ring
     sheep_target = _DYN_SHEEP.get(_CUR_SEAT, ANIMAL_TARGETS["SHEEP"])
     herd_complete = (owned["SHEEP"] >= sheep_target
                      and owned["COW"] >= cow_target)
@@ -1709,7 +1708,6 @@ def agent(obs):
         _TAPE_SEEN[player] = False
         _GAMBLE_ON[player] = False
         _WHEAT_TOWN[player] = False
-        _YARN_TOWN[player] = False   # v57b
         _GOOSE_TARGET[player] = D0_GOOSE
         _STICKY[player] = {}
     if not _TAPE_SEEN.get(player, False) and 1 <= day <= 2:
@@ -1779,16 +1777,7 @@ def agent(obs):
         # v47b: a yarn-town sheep 4 -> 6 bump was tried and REVERTED — wool's
         # market is the game's smallest (T=105, sq glut curve): 2 extra sheep
         # crashed the price for both sides and cost us 8k on the yarn seed.
-        # v57b RETRY with the missing piece: a YARN_STORE drains 12 wool/day
-        # (single-product shop = double drain) — volume that a yarn town
-        # absorbs without crashing.  The band's sheep-10 family sizes its
-        # whole herd to this (its router keys on YARN_STORE, Exp 77) and
-        # takes ~$7k/game off us in yarn towns.  v47b's revert predates
-        # care-complete labor (v56a freed ~250 actions) and the fert/wool
-        # express (v57a).  Latch is sticky, d<=9; unfired towns identical.
-        if "YARN_STORE" in shops and day <= 9:
-            _YARN_TOWN[player] = True
-        _DYN_SHEEP[player] = YARN_SHEEP if _YARN_TOWN.get(player, False) else 4
+        _DYN_SHEEP[player] = 4
         if (_GOOSE_TARGET.get(player, 0) < 1 and day <= 10
                 and _town_drain_per_day("EGG", shops) >= 7):
             _GOOSE_TARGET[player] = 0

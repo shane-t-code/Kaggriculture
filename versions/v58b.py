@@ -1,7 +1,24 @@
 """
 main.py — Kaggriculture agent.  ENTRY POINT (must be at archive root, must be named main.py).
 
-STATUS: v57d — PROMOTED to main.py 2026-09-06 (fert pipeline + yarn sheep + melon sustain; held-out 77 103W-49L 66.9% +1,511 vs v57a; frontier margin best-ever −38.2k; Exp 78). NOT YET SUBMITTED.
+STATUS: v58b — REJECTED : 16-seed screen 15W-11L-6T (46.9%) +67
+mu/sigma 0.024 = WASH, same as v55b's original verdict, now WITH the freed
+v56a watering labor.  The pre-registered falsification triggered: labor was
+NOT the binding constraint on late wheat — LATE-FILL LINE CLOSED FOR GOOD
+(late-planted wheat sells into the same market the d22 STR conversion
+already floods).
+
+Was: v58b — CANDIDATE (Exp 79b: LATE WHEAT FILL RETEST = v55b's mechanism
+on the v57d chassis).  v55b washed PRE-v56a; alternate-day watering has since
+freed ~25% of labor (415 pass-with-work turns live, x-ray Sep 6) and we are
+feed-negative 50-120 wheat u/game.  From day 20 the wheat cap opens 26->45 so
+tiles freed by the d22 STR conversion + the ~22 live fallow tiles refill;
+wheat planted d20-24 harvests d24-29 into the 40-45 late peak, and surplus
+sells (band families move 85-177 u mid/late vs our 16-12).
+FALSIFICATION: if the 16-seed screen is a wash again even with freed labor,
+the late-fill line is closed for good (labor was not the binding constraint).
+
+Was: v57d — CANDIDATE BUNDLE (v57a fert pipeline + v57b yarn sheep [fired 19W-5L 79%] + v57c melon sustain [screen 81.2%]; Exp 78).
 = v50a + one line: from day 28, sell batch caps are OFF (n = stock).
 Live close-loss decode: 4 of 11 sub-8k losses stranded MORE shed
 value than the losing margin (d29 harvests arrive with 1-2 market
@@ -584,6 +601,8 @@ STR_ENDGAME_KEEP = 18
 WHEAT_FACTORY_DAY = 22
 WHEAT_FACTORY_CAP = 45        # replaces CROP_INFO cap 20 from factory day
 WHEAT_FACTORY_SEED_WANT = 10  # replaces SEED_WANT 4 from factory day
+LATE_FILL_DAY = 20            # v58b: from here, wheat cap opens so freed tiles refill
+LATE_WHEAT_CAP = 45
 
 # Fertilize-only addition (v4c): a $90 fertilizer applied to a STRAWBERRY doubles its
 # production ticks while watered (engine-verified) — ~$200+ of berries. Melon: reaches its
@@ -1063,6 +1082,13 @@ def _build_tasks(tiles, day, seeds, tape_mode=False, care_skip=(), crop_skip=(),
                 cap = info["cap"]
                 if c == "WHEAT" and _FACTORY_NOW:
                     cap = WHEAT_FACTORY_CAP
+                if c == "WHEAT" and day >= LATE_FILL_DAY:
+                    # v58b late fill: STR can't replant after d17 and the d22
+                    # conversion digs tiles free, but cap 26 left ~22 tiles
+                    # fallow d25-29 live.  Wheat planted d20-24 harvests
+                    # d24-29 into the ~40-45 peak; freed watering labor
+                    # (v56a) works it.
+                    cap = max(cap, LATE_WHEAT_CAP)
                 if c == "MELON" and day > 6:
                     # v57c MELON SUSTAIN: small 2nd wave d10-14 (after the
                     # berry flood takes its tiles) into the recovered price;
@@ -1653,6 +1679,8 @@ def _market_orders(day, hour, money, seeds, shed, inventories, prices, hires_tod
             want = 4
         if crop == "WHEAT" and _FACTORY_NOW:
             want = WHEAT_FACTORY_SEED_WANT
+        if crop == "WHEAT" and day >= LATE_FILL_DAY:
+            want = max(want, WHEAT_FACTORY_SEED_WANT)  # v58b: seeds for the late fill
         if crop == "STRAWBERRY" and _DYN_STR_CAP.get(_CUR_SEAT, 40) <= 20:
             continue
         if crop == "STRAWBERRY" and tape_mode:

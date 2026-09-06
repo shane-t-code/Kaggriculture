@@ -1,7 +1,17 @@
 """
 main.py — Kaggriculture agent.  ENTRY POINT (must be at archive root, must be named main.py).
 
-STATUS: v57d — PROMOTED to main.py 2026-09-06 (fert pipeline + yarn sheep + melon sustain; held-out 77 103W-49L 66.9% +1,511 vs v57a; frontier margin best-ever −38.2k; Exp 78). NOT YET SUBMITTED.
+STATUS: v58a — CANDIDATE (Exp 79: multi_route PER-ROUTE COUNTER, yarn routes
+first).  = v57d + one detector-gated mechanism: latch the multi_route family
+from its measured d1 opening (12 MELON + 7 WHEAT + 2 COW + 2 SHEEP), compute
+its route the way ITS OWN router does (town is shared; YARN_STORE position in
+shops[:3]), and front-run that route's EXECUTED sell waves (measured medians
+from 128 local games, tools/mr_decode.py — order tables were 3-14x spam-
+inflated).  Unfired games byte-identical to v57d (free control).
+FALSIFICATION: fired (yarn-route multi_route) games must improve margin with
+our bank UP; unfired games byte-identical; held-out 77 must not regress.
+
+Was: v57d — CANDIDATE BUNDLE (v57a fert pipeline + v57b yarn sheep [fired 19W-5L 79%] + v57c melon sustain [screen 81.2%]; Exp 78).
 = v50a + one line: from day 28, sell batch caps are OFF (n = stock).
 Live close-loss decode: 4 of 11 sub-8k losses stranded MORE shed
 value than the losing margin (d29 harvests arrive with 1-2 market
@@ -666,6 +676,77 @@ def _tape_wave_within(item, step):
     tot = 0
     for s, n in TAPE_SELLS.get(item, ()):
         if step < s <= step + TAPE_FR_HORIZON:
+            tot += n
+    return tot
+
+# ---------------------------------------------------------------------------
+# v58a : multi_route PER-ROUTE counter — yarn routes first.
+# The 1800-2600 family (and the sheep-heavy 756-900 band killers) is one public
+# agent playing 5 pre-computed tapes, chosen by where YARN_STORE lands in the
+# first 3 town shop draws (+ a milk-shop check).  The town is SHARED, so we can
+# compute their route with their own router logic and front-run the waves.
+# Wave tables = EXECUTED sell medians from 128 paired local games
+# (tools/mr_decode.py → mr_waves.py; the notebook's order tables are 3-14x
+# spam-inflated — engine clips silently).  All gated on _MR_SEEN: non-family
+# games are byte-identical to v57d.
+# ---------------------------------------------------------------------------
+_MR_SEEN = {}                 # player -> latched family detection (reset step 0)
+_MR_MILK_SUPPORT = {"PIZZA_SHOP", "ICE_CREAM_SHOP", "SMOOTHIE_SHOP"}
+MR_FR_HORIZON = 10            # turns of look-ahead (same as tape counter)
+MR_FR_MIN = 8                 # units of incoming wave that trigger the front-run
+
+# route -> item -> ((step, units), ...): EXECUTED sell medians per active-label
+# step (tools/mr_waves.py over 128 games; fire-fraction >= 0.5, median >= 3u).
+# YARN ROUTES ONLY in v58a (the sheep-heavy 756-900 band killers); non-yarn
+# routes are a separate version letter after the fired-lane verdict.
+_MR_SELLS = {
+    "6c12s_4q_first_yarn": {
+        "FERTILIZER": ((72,4), (96,4), (144,5), (216,6), (250,9), (288,6), (296,5), (312,5), (318,3), (322,7), (344,4), (357,3), (360,4), (365,12), (366,4), (384,13), (408,10), (432,9), (456,9), (480,17), (485,4), (504,6), (528,8), (552,8), (576,11), (581,4), (600,5), (624,25), (648,6), (672,12), (696,8)),
+        "MELON": ((256,12), (257,12), (258,12), (259,12), (262,12), (264,9)),
+        "MILK": ((197,12), (264,4), (288,3), (317,4), (337,9), (385,14), (429,6), (440,6), (464,5), (500,7), (550,4), (551,3), (587,5), (672,3), (717,3)),
+        "STRAWBERRY": ((384,4), (432,15), (455,8), (456,8), (480,15), (504,16), (524,4), (525,9), (528,14), (549,4), (559,3), (571,3), (575,4), (583,3), (591,3), (642,8), (665,4), (666,4)),
+        "WHEAT": ((216,6), (254,6), (255,5), (258,4), (378,5), (407,5), (408,5), (409,8), (450,8), (474,4), (475,3), (518,3), (520,6), (521,6), (523,9), (552,15), (557,9), (559,9), (561,9), (563,9), (565,9), (567,9), (569,9), (571,9), (573,9), (575,9), (580,4), (581,3), (583,9), (585,9), (587,9), (589,9), (591,9), (593,9), (595,9), (597,9), (599,9), (605,9), (607,9), (609,9), (611,9), (613,9), (614,5), (616,5), (618,9), (620,5), (622,9), (624,4), (626,3), (632,5), (634,9), (636,5), (637,4), (639,9), (643,9), (646,9), (654,4), (655,4), (657,9), (659,9), (666,9), (667,8), (696,53), (717,20)),
+        "WOOL": ((148,4), (151,6), (222,4), (223,4), (312,4), (367,6), (384,10), (414,12), (449,4), (456,14), (490,4), (504,4), (514,8), (528,8), (552,4), (563,6), (566,4), (576,4), (593,4), (597,4), (600,13), (611,4), (648,12), (662,4), (672,15), (696,4), (707,8), (717,8)),
+    },
+    "6c12s_4q_second_yarn": {
+        "FERTILIZER": ((144,5), (216,6), (250,10), (288,6), (295,5), (299,3), (312,11), (322,3), (336,4), (360,5), (365,11), (366,7), (384,14), (408,9), (437,9), (456,13), (471,6), (494,4), (496,3), (502,4), (509,7), (528,15), (561,7), (576,11), (580,7), (608,7), (624,10), (642,4), (644,5), (648,6), (672,12)),
+        "MELON": ((256,12), (257,24), (259,12), (262,12), (264,11), (396,6), (408,5), (420,6), (424,12)),
+        "MILK": ((193,6), (197,6), (264,4), (288,4), (312,4), (336,7), (360,4), (384,15), (430,9), (443,4), (447,3), (456,4), (549,6), (578,6), (610,4), (630,10), (648,3), (672,9), (696,3), (717,11)),
+        "STRAWBERRY": ((384,6), (432,5), (456,10), (480,13), (519,7), (523,7), (528,13), (545,6), (575,5), (585,29), (634,8), (663,8), (671,7)),
+        "WHEAT": ((253,5), (255,6), (256,3), (312,3), (377,4), (384,4), (408,4), (422,4), (429,7), (439,4), (443,9), (445,9), (447,9), (449,9), (451,9), (454,9), (455,3), (464,5), (466,9), (471,9), (473,9), (475,9), (477,9), (479,9), (490,8), (492,3), (494,8), (496,5), (497,3), (498,3), (499,3), (504,11), (509,9), (512,4), (515,9), (517,9), (519,9), (522,9), (523,5), (528,4), (537,9), (539,9), (541,9), (552,30), (557,5), (558,7), (560,5), (562,9), (564,4), (566,9), (567,9), (569,9), (570,8), (572,5), (573,9), (575,9), (576,3), (585,9), (587,8), (589,9), (591,9), (593,9), (595,9), (597,9), (598,9), (605,9), (608,4), (610,9), (612,4), (614,9), (615,4), (617,9), (619,9), (621,9), (623,9), (628,4), (630,9), (632,4), (634,9), (637,7), (648,12), (655,9), (657,9), (660,4), (661,5), (695,8), (696,71), (717,20)),
+        "WOOL": ((148,4), (151,6), (222,4), (223,4), (312,5), (336,3), (367,6), (384,9), (414,12), (456,17), (467,4), (504,7), (526,4), (528,12), (552,3), (562,8), (563,6), (566,4), (600,19), (611,4), (634,4), (648,7), (672,18), (696,3), (713,8), (717,8)),
+    },
+    "6c8s_3q": {
+        "FERTILIZER": ((217,3), (250,9), (288,6), (296,5), (312,4), (330,3), (336,5), (355,3), (360,3), (384,28), (414,4), (432,11), (456,9), (480,5), (557,9), (576,16), (600,8), (624,13), (648,10), (672,12), (696,7)),
+        "MELON": ((256,12), (257,12), (258,6), (259,12), (260,12), (262,12), (264,5)),
+        "MILK": ((264,4), (288,3), (312,3), (336,6), (360,3), (366,12), (384,3), (408,3), (432,9), (456,3), (480,9), (528,8), (576,8), (672,8), (717,6)),
+        "STRAWBERRY": ((384,4), (427,6), (455,10), (456,10), (480,8), (501,8), (504,13), (521,6), (525,8), (528,12), (551,8), (552,10), (570,4), (574,5), (600,11), (621,7), (642,8), (645,3), (665,6), (669,10), (672,8)),
+        "WHEAT": ((216,5), (253,5), (255,6), (256,3), (258,5), (360,4), (378,3), (379,3), (384,5), (422,7), (424,3), (425,3), (446,3), (447,3), (462,7), (464,3), (475,3), (498,5), (499,3), (504,3), (514,7), (518,7), (521,3), (545,7), (562,6), (566,7), (576,5), (595,5), (610,7), (614,7), (618,7), (622,7), (634,7), (637,7), (648,17), (654,7), (658,7), (661,5), (696,71), (717,8)),
+        "WOOL": ((222,4), (223,4), (312,4), (344,4), (372,4), (450,6), (464,20), (516,3), (518,3), (527,10), (551,15), (562,3), (565,4), (566,5), (614,3), (647,5), (654,5), (656,6), (658,7), (666,8), (672,5), (695,27)),
+    },
+}
+
+
+def _mr_route_label(shops):
+    # Byte-for-byte replication of their router (_kawa_route_label): they
+    # re-evaluate every step, so a 3rd-draw YARN flips them mid-game and this
+    # tracks that switch automatically.
+    shops = list(shops or [])
+    if shops[:1] == ["YARN_STORE"]:
+        return "6c12s_4q_first_yarn"
+    if "YARN_STORE" in shops[:2]:
+        return "6c12s_4q_second_yarn"
+    if "YARN_STORE" in shops[:3]:
+        return "6c8s_3q"
+    if _MR_MILK_SUPPORT.intersection(shops[:3]):
+        return "10c4s_3q"
+    return "8c6s_3q"
+
+
+def _mr_wave_within(route, item, step):
+    tot = 0
+    for s, n in _MR_SELLS.get(route, {}).get(item, ()):
+        if step < s <= step + MR_FR_HORIZON:
             tot += n
     return tot
 
@@ -1360,7 +1441,7 @@ def _unit_action(unit_pos, task):
 
 def _market_orders(day, hour, money, seeds, shed, inventories, prices, hires_today,
                    n_hands, tiles, n_quadrants, opp_tiles, market_inv, shops, tape_mode,
-                   gamble=False):
+                   mr_route=None, gamble=False):
     opp_crops, opp_animals = _opp_capacity(opp_tiles)
     my_crops, my_animals = _opp_capacity(tiles)
     """Queue order: SELL (income), HIRE, wheat, animals, LAND, seeds. Engine cap: 10."""
@@ -1494,6 +1575,17 @@ def _market_orders(day, hour, money, seeds, shed, inventories, prices, hires_tod
                 n = batch + 5
             elif item == "MELON" and day >= TAPE_MELON_SOFT_DAY:
                 threshold = min(threshold, TAPE_MELON_SOFT)
+        if mr_route is not None and day < liq_day:
+            # v58a FRONT-RUN : multi_route's route is computable from
+            # the shared town and its executed sell waves are measured — a
+            # wave >= MR_FR_MIN units inside the horizon means any price now
+            # beats any price after it lands (Exp 63 law: first seller wins;
+            # never throttle, never pace).
+            if (_mr_wave_within(mr_route, item, day * 24 + hour) >= MR_FR_MIN
+                    and stock > 0):
+                threshold = min(threshold, max(3, int(min_price * 0.4)))
+                n = batch + 8
+                dump_boost = True
         if day >= 28:
             # v52b : COMPLETE liquidation — live close-loss decode
             # found 4 of 11 sub-8k losses had MORE value stranded in the shed
@@ -1707,6 +1799,7 @@ def agent(obs):
         step = day * 24 + hour
     if step == 0:
         _TAPE_SEEN[player] = False
+        _MR_SEEN[player] = False     # v58a
         _GAMBLE_ON[player] = False
         _WHEAT_TOWN[player] = False
         _YARN_TOWN[player] = False   # v57b
@@ -1726,9 +1819,28 @@ def agent(obs):
             # (verified vs extracted _ACTIONS), so only the detector changes.
             _TAPE_SEEN[player] = True
     tape_mode = _TAPE_SEEN.get(player, False)
+    if not _MR_SEEN.get(player, False) and 1 <= day <= 2:
+        # v58a: multi_route family opening, measured in every one of 128 local
+        # games (mr_games.jsonl): day-1 noon farm = exactly 12 MELON + 7 WHEAT
+        # + 2 COW + 2 SHEEP, ~$22 cash.  Self-exclusion is structural: our
+        # lineage plants 8 melons and holds no cash that low with this layout;
+        # the V16 tape runs 4 sheep.  Live band killers (sheep-10 family)
+        # byte-match this opening .
+        _mc, _ma = _opp_capacity(opp.get("tiles", []))
+        if (_mc.get("MELON", 0) == 12 and _ma.get("COW", 0) == 2
+                and _ma.get("SHEEP", 0) == 2 and _mc.get("WHEAT", 0) >= 6):
+            _MR_SEEN[player] = True
 
     market_inv = (obs.get("market", {}) or {}).get("inventory", {}) or {}
     shops = (obs.get("town", {}) or {}).get("unlocked_shops", []) or []
+    # v58a: their route, computed the way THEIR router computes it (shared
+    # town).  None when the family isn't latched or the route has no table
+    # (yarn routes first) — _market_orders is then byte-identical to v57d.
+    mr_route = None
+    if _MR_SEEN.get(player, False):
+        _r = _mr_route_label(shops)
+        if _r in _MR_SELLS:
+            mr_route = _r
     care_skip = _care_skip_species(tiles, opp.get("tiles", []), market_inv, shops)
     crop_skip = _crop_skip(tiles, opp.get("tiles", []), market_inv, shops)
 
@@ -1820,7 +1932,7 @@ def agent(obs):
                             me.get("hires_today", 0), len(me.get("hands", [])), tiles,
                             len(me.get("unlocked_quadrants", ["NW"])),
                             opp.get("tiles", []), market_inv, shops, tape_mode,
-                            gamble)
+                            mr_route, gamble)
 
     if DEBUG:
         print(f"d{day} h{hour} units={len(units)} tasks={len(tasks)} market={market}")

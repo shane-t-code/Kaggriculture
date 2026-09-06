@@ -1,7 +1,24 @@
 """
 main.py — Kaggriculture agent.  ENTRY POINT (must be at archive root, must be named main.py).
 
-STATUS: v57d — PROMOTED to main.py 2026-09-06 (fert pipeline + yarn sheep + melon sustain; held-out 77 103W-49L 66.9% +1,511 vs v57a; frontier margin best-ever −38.2k; Exp 78). NOT YET SUBMITTED.
+STATUS: v58c — CANDIDATE (Exp 79c: MELON FERT ACCELERATION — win the day-10
+melon race).  Engine truth L438-443: one-shot yield grows ONLY on watered
+window days, +1 plain / +2 fertilized; melon window = ages 6-12, max_yield 6,
+harvest gate age 10.  Measured (melon_race probe, 8/8 seeds): the multi_route
+family fertilizes its melons → maxed 6/tile by d9, harvests at the d10 gate,
+dumps 256-264 at $272→220; OUR unfertilized melons reach 5/tile, unload at
+nightfall, and sell at 265-267 into the crater ($214→158) — the x-ray's six
+crater-sells.  Fix (universal, no opponent gating): (1) melon fert window
+(6,8) engine-aligned, (2) fert applies to MELONS allowed d6-9 (flywheel
+FERT_APPLY_FROM_DAY=10 made the old (5,7) entry DEAD CODE — Exp 71's
+"fert is cash" was right for STR, wrong for melons: $85 fert covers 3 window
+days = +3 melon units ~$600), (3) melon express-unload (≥4 carried) so the
+d10-morning harvest sells d10 morning, before everyone's wave.
+FALSIFICATION: fingerprint = fert applies d6-8 ≈ 9-11, melon sells ≤ step
+255 at ≥$240, ~6/tile; cow ramp must NOT slip (fert cash −~$800 d6-8);
+16-seed screen + field legs, then held-out 77.
+
+Was: v57d — CANDIDATE BUNDLE (v57a fert pipeline + v57b yarn sheep [fired 19W-5L 79%] + v57c melon sustain [screen 81.2%]; Exp 78).
 = v50a + one line: from day 28, sell batch caps are OFF (n = stock).
 Live close-loss decode: 4 of 11 sub-8k losses stranded MORE shed
 value than the losing margin (d29 harvests arrive with 1-2 market
@@ -588,7 +605,10 @@ WHEAT_FACTORY_SEED_WANT = 10  # replaces SEED_WANT 4 from factory day
 # Fertilize-only addition (v4c): a $90 fertilizer applied to a STRAWBERRY doubles its
 # production ticks while watered (engine-verified) — ~$200+ of berries. Melon: reaches its
 # 6-cap ~2 days earlier. Everything else is byte-identical to v3a.
-FERT_CROPS = {"STRAWBERRY": (7, 15), "MELON": (5, 7)}   # crop -> (min_age, max_age)
+FERT_CROPS = {"STRAWBERRY": (7, 15), "MELON": (6, 8)}   # crop -> (min_age, max_age)
+# v58c: melon window ENGINE-ALIGNED — window_start = (12+1)//2 = 6, so an
+# age-6 application covers ages 6-8 (fert lasts day..day+2) = 3 full +2 growth
+# days = maxed 6 units by end of age 8, harvestable at the age-10 gate.
 MELON_W2_FROM = 10       # v57c: second melon wave opens (berry flood already placed)
 MELON_W2_CAP = 6
 FERT_KEEP = 0            # v57a: was 6 — the shed keep was redundant (crop applies
@@ -988,7 +1008,14 @@ def _build_tasks(tiles, day, seeds, tape_mode=False, care_skip=(), crop_skip=(),
                     age >= ready_age or (day == LAST_DAY and age >= first_age)
                 )
                 if harvestable:
-                    tasks.append({"prio": P_SAVE if dying else P_HARVEST, "x": x, "y": y,
+                    _hprio = P_SAVE if dying else P_HARVEST
+                    if crop == "MELON" and day == 10:
+                        # v58c: win the day-10 melon race — at shared prio 1
+                        # the ring's feed/care tasks starved the harvests
+                        # until h14-18 (traced), landing the crop in the
+                        # h16 field-wide dump.
+                        _hprio = P_SAVE
+                    tasks.append({"prio": _hprio, "x": x, "y": y,
                                   "op": ["HARVEST"]})
                     continue
 
@@ -1041,7 +1068,13 @@ def _build_tasks(tiles, day, seeds, tape_mode=False, care_skip=(), crop_skip=(),
                             tasks.append({"prio": P_SAVE if dying else P_WATER,
                                           "x": x, "y": y, "op": ["WATER"]})
 
-                if crop in FERT_CROPS and FERT_APPLY_FROM_DAY <= day < 26:
+                if crop in FERT_CROPS and (
+                        FERT_APPLY_FROM_DAY <= day < 26
+                        # v58c: melons are the exception to the fert flywheel —
+                        # their whole growth window (ages 6-8 for the d0 wave)
+                        # closes before day 10, and one $85 fert there buys +3
+                        # units (~$600) plus a pre-wave d10 sell.
+                        or (crop == "MELON" and 6 <= day < FERT_APPLY_FROM_DAY)):
                     lo, hi = FERT_CROPS[crop]
                     if lo <= age <= hi and t.get("fertilized_until_day", -1) < day:
                         tasks.append({"prio": P_FERT, "x": x, "y": y,
@@ -1322,6 +1355,17 @@ def _assign(units, tasks, inventories, tiles, day, hour):
                 assignment[ui] = {"prio": P_UNLOAD, "x": SHED_TILE[0],
                                   "y": SHED_TILE[1], "op": ["DROP"]}
 
+    # v58c MELON BANK-RUN: the whole field's d0 melons detonate on day 10 and
+    # the big families dump from h16 (steps 256-264, measured 8/8 seeds,
+    # $272 -> $158).  A unit that harvests a maxed tile (6 units) drops what
+    # it holds NOW — the fingerprint showed pocketed melons reaching the shed
+    # at nightfall and selling into the crater.  Day 10 mornings only.
+    if day == 10 or (day == 11 and hour < 4):
+        for ui, (ux, uy) in enumerate(units):
+            if inv_of(ui).get("MELON", 0) >= 6:
+                assignment[ui] = {"prio": P_UNLOAD, "x": SHED_TILE[0],
+                                  "y": SHED_TILE[1], "op": ["DROP"]}
+
     # Idle-but-loaded units bank their cargo (sellable today instead of tomorrow),
     # but never while still carrying feed wheat for pending FEED tasks.
     feeds_pending = any(t.get("op", [None])[0] == "FEED" for ti, t in enumerate(tasks)
@@ -1331,7 +1375,12 @@ def _assign(units, tasks, inventories, tiles, day, hour):
             continue
         inv = inv_of(ui)
         if ((sum(inv.values()) >= UNLOAD_AT
-             or inv.get("FERTILIZER", 0) >= 1)
+             or inv.get("FERTILIZER", 0) >= 1
+             # v58c melon express: the whole field's d0 melons detonate d10
+             # and the big families dump at h16 (steps 256-264, measured);
+             # melons that ride in pockets until the nightly drop sell d11
+             # into the crater — measured $214->158 vs $272 pre-wave.
+             or inv.get("MELON", 0) >= 4)
                 and not (feeds_pending and inv.get("WHEAT", 0) > 0)):
             # v54d fert express: collected fert rode in pockets until the nightly
             # drop and sold NEXT morning - the ramp's cash lagged ~20h every day.

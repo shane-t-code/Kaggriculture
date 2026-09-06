@@ -1,7 +1,7 @@
 """
 main.py — Kaggriculture agent.  ENTRY POINT (must be at archive root, must be named main.py).
 
-STATUS: v57d — PROMOTED to main.py 2026-09-06 (fert pipeline + yarn sheep + melon sustain; held-out 77 103W-49L 66.9% +1,511 vs v57a; frontier margin best-ever −38.2k; Exp 78). NOT YET SUBMITTED.
+STATUS: v57d — CANDIDATE BUNDLE (v57a fert pipeline + v57b yarn sheep [fired 19W-5L 79%] + v57c melon sustain [screen 81.2%]; Exp 78).
 = v50a + one line: from day 28, sell batch caps are OFF (n = stock).
 Live close-loss decode: 4 of 11 sub-8k losses stranded MORE shed
 value than the losing margin (d29 harvests arrive with 1-2 market

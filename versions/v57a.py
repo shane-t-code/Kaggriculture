@@ -1,7 +1,7 @@
 """
 main.py — Kaggriculture agent.  ENTRY POINT (must be at archive root, must be named main.py).
 
-STATUS: v57d — PROMOTED to main.py 2026-09-06 (fert pipeline + yarn sheep + melon sustain; held-out 77 103W-49L 66.9% +1,511 vs v57a; frontier margin best-ever −38.2k; Exp 78). NOT YET SUBMITTED.
+STATUS: v57a — CANDIDATE (fert pipeline to market: express unload all game + FERT_KEEP 0; targets the measured ~$4-6k/game fert gap vs the band, Exp 78).
 = v50a + one line: from day 28, sell batch caps are OFF (n = stock).
 Live close-loss decode: 4 of 11 sub-8k losses stranded MORE shed
 value than the losing margin (d29 harvests arrive with 1-2 market
@@ -504,7 +504,7 @@ NEVER_FORCE_SELL = {"WHEAT"}
 # cap = max concurrent plants (market- or purpose-bound, not space-bound).
 # Window (0,-1) = "watering never adds instant yield" (ongoing crops bonus only via fertilizer).
 CROP_INFO = {
-    "MELON":      {"cost": 80,  "first": 10, "ready": 10, "last_plant": 14, "window": (6, 12), "cap": 12},  # v57c: was last_plant 6 (one-shot); wave 2 gated below
+    "MELON":      {"cost": 80,  "first": 10, "ready": 10, "last_plant": 6,  "window": (6, 12), "cap": 12},
     "WHEAT":      {"cost": 10,  "first": 2,  "ready": 4,  "last_plant": 24, "window": (2, 4),  "cap": 26},
     "STRAWBERRY": {"cost": 100, "first": 10, "ready": 10, "last_plant": 17, "window": (0, -1), "cap": 40},
     "CARROT":     {"cost": 20,  "first": 2,  "ready": 3,  "last_plant": 26, "window": (2, 3),  "cap": 0},
@@ -589,8 +589,6 @@ WHEAT_FACTORY_SEED_WANT = 10  # replaces SEED_WANT 4 from factory day
 # production ticks while watered (engine-verified) — ~$200+ of berries. Melon: reaches its
 # 6-cap ~2 days earlier. Everything else is byte-identical to v3a.
 FERT_CROPS = {"STRAWBERRY": (7, 15), "MELON": (5, 7)}   # crop -> (min_age, max_age)
-MELON_W2_FROM = 10       # v57c: second melon wave opens (berry flood already placed)
-MELON_W2_CAP = 6
 FERT_KEEP = 0            # v57a: was 6 — the shed keep was redundant (crop applies
 # are fed by the fert the circuit crews carry) and pinned 6 units out of the
 # market while the price decayed; sell everything that reaches the shed
@@ -766,8 +764,6 @@ _DYN_CARROT_CAP = {0: 0, 1: 0}  # per seat, refreshed at hour 0
 # v47b: YARN_STORE towns (12-24 wool/day) reward a bigger flock than the
 # blueprint's 4 — all three remaining screen losses were yarn towns.
 _DYN_SHEEP = {0: 4, 1: 4}       # per seat, refreshed at hour 0
-YARN_SHEEP = 6                  # v57b: sheep target in latched yarn towns
-_YARN_TOWN = {0: False, 1: False}
 _SLOT_NEED = {0: 13, 1: 13}     # live cow+sheep+goose target sum, set per call
 
 def _inflow_per_day(item, crops, animals):
@@ -1063,11 +1059,6 @@ def _build_tasks(tiles, day, seeds, tape_mode=False, care_skip=(), crop_skip=(),
                 cap = info["cap"]
                 if c == "WHEAT" and _FACTORY_NOW:
                     cap = WHEAT_FACTORY_CAP
-                if c == "MELON" and day > 6:
-                    # v57c MELON SUSTAIN: small 2nd wave d10-14 (after the
-                    # berry flood takes its tiles) into the recovered price;
-                    # the band banks ~$2k/game d15-21 melons where we sold 0.
-                    cap = MELON_W2_CAP if day >= MELON_W2_FROM else 0
                 if c == "STRAWBERRY":
                     cap = min(cap, _DYN_STR_CAP.get(_CUR_SEAT, 40))
                     if tape_mode:
@@ -1537,8 +1528,6 @@ def _market_orders(day, hour, money, seeds, shed, inventories, prices, hires_tod
     # 6-cow opponent +21.8k (milk market recovered for THEM; Exp 63
     # principle).  Head-to-head, the 9-cow dump keeps mutual pressure.
     cow_target = 6 if milk_proj < 2.0 else ANIMAL_TARGETS["COW"]
-    if _YARN_TOWN.get(_CUR_SEAT, False):
-        cow_target = min(cow_target, 8)   # v57b: 6 sheep + 8 cows fit the 15-slot ring
     sheep_target = _DYN_SHEEP.get(_CUR_SEAT, ANIMAL_TARGETS["SHEEP"])
     herd_complete = (owned["SHEEP"] >= sheep_target
                      and owned["COW"] >= cow_target)
@@ -1647,8 +1636,6 @@ def _market_orders(day, hour, money, seeds, shed, inventories, prices, hires_tod
         elif info["cap"] <= 0:
             continue
         want = SEED_WANT[crop]
-        if crop == "MELON" and 6 < day < MELON_W2_FROM:
-            continue   # v57c: no melon seeds in the dead window between waves
         if crop == "CARROT":
             want = 4
         if crop == "WHEAT" and _FACTORY_NOW:
@@ -1709,7 +1696,6 @@ def agent(obs):
         _TAPE_SEEN[player] = False
         _GAMBLE_ON[player] = False
         _WHEAT_TOWN[player] = False
-        _YARN_TOWN[player] = False   # v57b
         _GOOSE_TARGET[player] = D0_GOOSE
         _STICKY[player] = {}
     if not _TAPE_SEEN.get(player, False) and 1 <= day <= 2:
@@ -1779,16 +1765,7 @@ def agent(obs):
         # v47b: a yarn-town sheep 4 -> 6 bump was tried and REVERTED — wool's
         # market is the game's smallest (T=105, sq glut curve): 2 extra sheep
         # crashed the price for both sides and cost us 8k on the yarn seed.
-        # v57b RETRY with the missing piece: a YARN_STORE drains 12 wool/day
-        # (single-product shop = double drain) — volume that a yarn town
-        # absorbs without crashing.  The band's sheep-10 family sizes its
-        # whole herd to this (its router keys on YARN_STORE, Exp 77) and
-        # takes ~$7k/game off us in yarn towns.  v47b's revert predates
-        # care-complete labor (v56a freed ~250 actions) and the fert/wool
-        # express (v57a).  Latch is sticky, d<=9; unfired towns identical.
-        if "YARN_STORE" in shops and day <= 9:
-            _YARN_TOWN[player] = True
-        _DYN_SHEEP[player] = YARN_SHEEP if _YARN_TOWN.get(player, False) else 4
+        _DYN_SHEEP[player] = 4
         if (_GOOSE_TARGET.get(player, 0) < 1 and day <= 10
                 and _town_drain_per_day("EGG", shops) >= 7):
             _GOOSE_TARGET[player] = 0

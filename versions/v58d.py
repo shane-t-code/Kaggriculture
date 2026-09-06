@@ -1,7 +1,30 @@
 """
 main.py — Kaggriculture agent.  ENTRY POINT (must be at archive root, must be named main.py).
 
-STATUS: v58c — PROMOTED to main.py 2026-09-06 evening (Exp 79c: MELON FERT
+STATUS: v58d — BENCHED NEUTRAL : fingerprint PERFECT (fert applies
+81/85/72 → 61/65/61 per game, STR sold 94→129 / 159→177 / 155→156) but
+money a wash everywhere: mirror screen 15W-17L −488; wool 32-0 +21,575
+(v58c +21,413); multi_route −27,736 (v58c −27,893).  ⭐ LAW: our STR line
+is at its MARKET ceiling, not its production ceiling — extra units are
+eaten by our own price impact (STR T=100, the most glut-sensitive curve).
+Melons paid because the win was beating a price CRASH, not adding supply.
+Do NOT retry STR volume mechanisms; STR gains must come from price/timing.
+
+Was: v58d — CANDIDATE .
+Engine L789-801: an ongoing crop produces at most max_yield ticks
+(production_count caps at 4 for STR), at tick AGES first-1+2k = 9/11/13/15
+regardless of planting day; each tick pays +1, or +2 if watered AND
+fertilized that evening.  Fert lasts 3 days, ticks come every 2 — so an
+application ON a tick age covers TWO ticks (+2 units), one day off covers
+ONE.  Current code applies on any age in (7,15): ~half the coverage wasted.
+Fix: STRAWBERRY fert tasks fire only on tick ages ((age+1-first) % 2 == 0)
+— 2 applications (ages 9, 13) fully fertilize all 4 ticks = 8 units/plant
+ceiling vs 4 unfertilized, with FEWER ferts spent.  The v56a water rule
+already uses the same tick condition, so watering aligns for free.
+FALSIFICATION: fingerprint = fert applies per STR plant DOWN (~2 vs ~3),
+STR harvest units UP; 16-seed screen + legs; held-out 77 must not regress.
+
+Was: v58c — PROMOTED to main.py 2026-09-06 evening (Exp 79c: MELON FERT
 ACCELERATION).  HELD-OUT 77: 149W-5L (96.8%) +6,008 μ/σ 1.783 = strongest
 confirm in project history; all field legs project bests (wool 32-0 +21.4k,
 multi_route −27.9k, frontier −36.1k, tape −28.9k).  Engine truth L438-443: one-shot yield grows ONLY on watered
@@ -1079,8 +1102,19 @@ def _build_tasks(tiles, day, seeds, tape_mode=False, care_skip=(), crop_skip=(),
                         or (crop == "MELON" and 6 <= day < FERT_APPLY_FROM_DAY)):
                     lo, hi = FERT_CROPS[crop]
                     if lo <= age <= hi and t.get("fertilized_until_day", -1) < day:
-                        tasks.append({"prio": P_FERT, "x": x, "y": y,
-                                      "op": ["FERTILIZE"], "require": "FERTILIZER"})
+                        # v58d TICK ALIGNMENT: STR produces at most 4 ticks
+                        # (engine production_count cap), at tick AGES
+                        # first-1+2k = 9/11/13/15.  Fert lasts 3 days, ticks
+                        # every 2: applied ON a tick age it covers TWO ticks,
+                        # one day off it covers ONE.  Only apply on tick ages
+                        # — 2 ferts (ages 9, 13) then cover all 4 ticks.
+                        if (crop == "STRAWBERRY"
+                                and (age + 1 - info["first"]) % 2 != 0):
+                            pass
+                        else:
+                            tasks.append({"prio": P_FERT, "x": x, "y": y,
+                                          "op": ["FERTILIZE"],
+                                          "require": "FERTILIZER"})
                 continue
 
     # ---------------- planting: fill empty tiles by PLANT_ORDER, respecting caps --------

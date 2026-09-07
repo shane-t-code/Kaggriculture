@@ -1,12 +1,16 @@
 """
 main.py — Kaggriculture agent.  ENTRY POINT (must be at archive root, must be named main.py).
 
-STATUS: v61d — EXPERIMENTAL .
-v61c (tick-day feed P_SAVE + 2nd wheat carrier on deficit ≥ 6) + the
-v61a milk-boom (3-milk-shop towns, price ≥ $200 at d10-13 → cow target
-9→12, +3 slots, fallow pastures).  The boom's held-out wash traced to
-the single-feeder ceiling v61c removes — this is the boom retest on
-the fixed labor base.  Lineage …v60a→v61c→(v61d candidate).  NET-flow
+STATUS: v61d — PROMOTED to main.py 2026-09-07 night (Exp 81j: FEED
+COMPLETENESS + MILK-BOOM).  = v61c (tick-day feed P_SAVE + 2nd wheat
+carrier) + the milk-boom (3-milk-shop towns, milk ≥ $200 at d10-13 →
+cow target 9→12, +3 slots, fallow pastures; Wei Han decode = Shane's
+adaptivity thesis).  HELD-OUT 77 vs v61c: +361 μ/σ 0.179 overall,
+**FIRED LANE 20W-6L (77%) +2,141 σ4,010**.  Legs: MR/king/router
+byte-identical to v61c (latch never fires vs the front — clean
+gating); wool 29W-3L +17.7k; frontier −33,763; goose −34.4k (noise).
+NOT YET SUBMITTED — flag Shane: -m "v61d" (contains v61c feed fix +
+v60a wind-down).  Lineage …v58c→v60a→v61c→v61d.  NET-flow
 loss forensics (Sep 7, churn-corrected): in v58c's losses our OWN d15-21 net
 drops 25.4k -> 19.8k — the shared-market squeeze: their bigger flood kills
 our STR price and we keep producing into the corpse.  The d22 conversion's

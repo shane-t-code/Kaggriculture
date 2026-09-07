@@ -1,15 +1,12 @@
 """
 main.py — Kaggriculture agent.  ENTRY POINT (must be at archive root, must be named main.py).
 
-STATUS: v61c — PROMOTED to main.py 2026-09-07 evening (Exp 81g/h: FEED
-COMPLETENESS).  v60a + tick-day feeds at P_SAVE + a SECOND wheat
-carrier when the feed deficit >= 6 (the single-feeder ceiling starved
-the same animals nightly; unfed tick = no production L813 + care bonus
-burned L826).  HELD-OUT 77: 100W-54L (64.9%) +1,385 σ3,091 μ/σ 0.448 —
-strongest confirm since v58c.  Legs: wool 29W-3L +17.1k (softened,
-logged); MR −45.5k / king −45.5k / state_router −47.2k / goose −33.2k
-all BETTER; frontier holdout −34,054 NEW BEST EVER.  NOT YET SUBMITTED
-— flag Shane: -m "v61c".  Lineage …v57d→v58c→v60a→v61c.  NET-flow
+STATUS: v61b — EXPERIMENTAL (Exp 81c: HIRE-LAST ORDER PARTITION, from
+the King RC4 notebook's late-liquidity layer).  v60a + one change: the
+market-order queue is stably partitioned so HIREs go last (engine
+executes slots in list order, HIRE first within a slot — an early HIRE
+drains cash a later buy needed).  Order-only = town draw preserved =
+cheap paired test.  Lineage …v58c→v60a→(v61b candidate).  NET-flow
 loss forensics (Sep 7, churn-corrected): in v58c's losses our OWN d15-21 net
 drops 25.4k -> 19.8k — the shared-market squeeze: their bigger flood kills
 our STR price and we keep producing into the corpse.  The d22 conversion's
@@ -1012,15 +1009,7 @@ def _build_tasks(tiles, day, seeds, tape_mode=False, care_skip=(), crop_skip=(),
                     tick_ahead = _next_tick_day(placed, info["first"], info["interval"], day - 1)
                     if tick_ahead is not None or cu >= 1:
                         n_feed += 1
-                        # v61c : a TICK-DAY feed gates that tick's whole
-                        # payout (engine L813: unfed = no production; L826: unfed
-                        # also burns the stacked care bonus), yet it competed at
-                        # P_FEED=1 against the tick day's own harvest burst and
-                        # lost (measured seed 144: 16 feeds on off-days, 10-11 on
-                        # tick days, same 6 cows starved nightly).  Same fix
-                        # class as v58c's melon-day priority.
-                        _feed_prio = P_SAVE if (cu >= 1 or tick_ahead == day) else P_FEED
-                        tasks.append({"prio": _feed_prio, "x": x, "y": y,
+                        tasks.append({"prio": P_SAVE if cu >= 1 else P_FEED, "x": x, "y": y,
                                       "op": ["FEED"], "require": "WHEAT"})
 
                 if not t.get("cared_today", False) and t["animal"] not in care_skip:
@@ -1204,25 +1193,10 @@ def _supply_tasks(tasks, n_feed, units, inventories, shed, tiles, day):
         return
 
     carried_wheat = sum(inv.get("WHEAT", 0) for inv in inventories)
-    _feed_deficit = n_feed - carried_wheat
-    if _feed_deficit > 0 and shed.get("WHEAT", 0) > 0:
-        n = min(_feed_deficit + 2, shed["WHEAT"])
-        # v61c : SECOND wheat carrier when the deficit is large.
-        # One pickup task = one feeder walking the whole circuit; measured
-        # (seed 144, 16 animals): the same far cows starved EVERY night while
-        # wheat sat in the shed — the single carrier is a hard feed ceiling
-        # (~10-11 feeds/day).  Two tasks = two carriers on parallel
-        # sub-circuits; the focused-feeder rule already makes both
-        # feed-exclusive while feeds are open.
-        if _feed_deficit >= 6 and n >= 4:
-            _h1 = n // 2
-            tasks.append({"prio": P_CHAIN, "x": SHED_TILE[0], "y": SHED_TILE[1],
-                          "op": ["PICKUP", "WHEAT", _h1]})
-            tasks.append({"prio": P_CHAIN, "x": SHED_TILE[0], "y": SHED_TILE[1],
-                          "op": ["PICKUP", "WHEAT", n - _h1]})
-        else:
-            tasks.append({"prio": P_CHAIN, "x": SHED_TILE[0], "y": SHED_TILE[1],
-                          "op": ["PICKUP", "WHEAT", n]})
+    if n_feed > carried_wheat and shed.get("WHEAT", 0) > 0:
+        n = min(n_feed - carried_wheat + 2, shed["WHEAT"])
+        tasks.append({"prio": P_CHAIN, "x": SHED_TILE[0], "y": SHED_TILE[1],
+                      "op": ["PICKUP", "WHEAT", n]})
 
     # Fertilizer for FERTILIZE tasks: circuit units already carry some from
     # COLLECT_FERTILIZER; top up from the shed only when several plants are waiting.
@@ -1787,6 +1761,15 @@ def _market_orders(day, hour, money, seeds, shed, inventories, prices, hires_tod
                 orders.append(["BUY_SEED", crop, n])
                 spendable -= n * info["cost"]
 
+    # v61b : HIREs move to the
+    # BACK of the queue — engine executes slots in list order with HIRE
+    # committed first within its slot (engine L562-581), so an early HIRE
+    # drains the cash a later BUY_ANIMAL/BUY_LAND/BUY_SEED needed.  Stable
+    # partition: same orders, same counts, hires last.  Trade-off under
+    # test: on over-10-order turns the truncation now hits HIREs instead of
+    # late seed buys (old design argued a lost hand > a delayed sale).
+    orders = ([o for o in orders if not (o and o[0] == "HIRE")]
+              + [o for o in orders if o and o[0] == "HIRE"])
     return orders[:10]
 
 

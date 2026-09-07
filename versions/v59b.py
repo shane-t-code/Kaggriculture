@@ -1,28 +1,18 @@
 """
 main.py — Kaggriculture agent.  ENTRY POINT (must be at archive root, must be named main.py).
 
-STATUS: v61c — PROMOTED to main.py 2026-09-07 evening (Exp 81g/h: FEED
-COMPLETENESS).  v60a + tick-day feeds at P_SAVE + a SECOND wheat
-carrier when the feed deficit >= 6 (the single-feeder ceiling starved
-the same animals nightly; unfed tick = no production L813 + care bonus
-burned L826).  HELD-OUT 77: 100W-54L (64.9%) +1,385 σ3,091 μ/σ 0.448 —
-strongest confirm since v58c.  Legs: wool 29W-3L +17.1k (softened,
-logged); MR −45.5k / king −45.5k / state_router −47.2k / goose −33.2k
-all BETTER; frontier holdout −34,054 NEW BEST EVER.  NOT YET SUBMITTED
-— flag Shane: -m "v61c".  Lineage …v57d→v58c→v60a→v61c.  NET-flow
-loss forensics (Sep 7, churn-corrected): in v58c's losses our OWN d15-21 net
-drops 25.4k -> 19.8k — the shared-market squeeze: their bigger flood kills
-our STR price and we keep producing into the corpse.  The d22 conversion's
-STATIC keep-18 then makes the measured 84-120 floor-sell units at $1-2
-d22-28 (3-4 losses) plus shed-pressure force-dumps.  v60a: when the STR
-market projects DEEP-dead (5-day glut projection <= $5 — transient dips
-project far higher because STR has the game's biggest town drain, v15e
-protection) from day 18, the keep drops 18 -> 6 and digging may remove
-plants with pending (worthless) yield.  Healthy towns byte-identical.
-NOT v15e (mid-game abandonment, rejected) and NOT v53 care (closed): this
-fires only d18+, only at deep-floor projections, only beyond 6 keepers.
-FALSIFICATION: fired lane = dead-STR games only (fingerprint: floor sells
-100 -> ~30, digs up, elsewhere byte-identical); screen + legs + held-out.
+STATUS: v59b — CANDIDATE .  Live decode of
+v58c losses (Sep 7): the melon craters moved — the d10 race is now WON, but
+the SECOND wave (v57c, planted d10-14, sold ~steps 506-530 = d21-22) lands
+at $1-90 in games where the d10 double-dump left a glut the 1/day town drain
+cannot clear (measured tails −$1.6-3.3k; melon has no shop drain, center
+only).  Gate: at W2 planting time (d10-14), project the melon price 10 days
+out with _glut_price; if below MELON_W2_MIN_PROJ the wave's seeds + labor
+buy crater sells — skip planting, watering, and seed buys for W2 (existing
+_crop_skip only looks 3 days out at threshold $15, far too lenient here).
+FALSIFICATION: fired only in glutted-melon games (fingerprint: W2 plants 0
+there, unchanged elsewhere); screen + held-out must not regress — v57c's
+81.2% says W2 is net-positive, this only cuts the bad tail.
 
 Was: v58c — PROMOTED to main.py 2026-09-06 evening (Exp 79c: MELON FERT
 ACCELERATION).  HELD-OUT 77: 149W-5L (96.8%) +6,008 μ/σ 1.783 = strongest
@@ -622,9 +612,6 @@ ENDGAME_CONVERT_CROPS = ("STRAWBERRY", "MELON")
 # so the d22 wheat factory (cap 45) has tiles to fill.
 STR_CONVERT_DAY = 22
 STR_ENDGAME_KEEP = 18
-STR_DEAD_FROM_DAY = 18   # v60a: market-aware wind-down may start here...
-STR_DEAD_PRICE = 5       # ...when the 5-day glut projection is at/below this
-STR_DEAD_KEEP = 6        # keepers in a dead market (was a static 18)
 
 WHEAT_FACTORY_DAY = 22
 WHEAT_FACTORY_CAP = 45        # replaces CROP_INFO cap 20 from factory day
@@ -892,6 +879,21 @@ def _next_tick_day(placed_day, first, interval, after_day):
 CROP_SKIP_PRICE = 15     # crop's 3-day projected price at/below this = its labor
                          # (water/rescue/replant) is spent on worthless goods
 
+MELON_W2_MIN_PROJ = 80   # v59b: min projected melon price at W2 harvest (~10
+                         # days out) for the second wave to be worth planting
+
+
+def _melon_w2_dead(market_inv, shops, day):
+    """v59b: True when the melon market cannot recover by W2 sell time.
+    Melon's only drain is the town center (~1/day, no shop ever stocks it),
+    so a big d10 double-dump pins the price for the rest of the game —
+    measured crater tails of −$1.6-3.3k at steps 506-530 in live losses."""
+    x = market_inv.get("MELON", MARKET_I0) - MARKET_I0
+    if x <= 0:
+        return False
+    net = _town_drain_per_day("MELON", shops)
+    return _glut_price("MELON", max(0, x - net * 10)) < MELON_W2_MIN_PROJ
+
 def _crop_skip(tiles, opp_tiles, market_inv, shops):
     """Crops whose market is projected dead — stop watering/planting them."""
     skip = set()
@@ -935,21 +937,16 @@ def _care_skip_species(tiles, opp_tiles, market_inv, shops):
 
 
 def _build_tasks(tiles, day, seeds, tape_mode=False, care_skip=(), crop_skip=(),
-                 ramp_fast=False, tomato_cap=0, str_dead=False):
+                 ramp_fast=False, tomato_cap=0):
     """Scan the farm -> the turn's task list. Returns (tasks, n_feed_needed)."""
     tasks = []
     # v54i endgame conversion budget (see STR_CONVERT_DAY above)
-    # v60a: in a projected-dead STR market the wind-down starts earlier and
-    # keeps fewer producers (their units sell at the floor; the keep-18 made
-    # the measured 84-120 $1-2 floor sells d22-28).
     _str_digs_left = 0
-    _convert_from = STR_DEAD_FROM_DAY if str_dead else STR_CONVERT_DAY
-    _keep = STR_DEAD_KEEP if str_dead else STR_ENDGAME_KEEP
-    if day >= _convert_from and day < LAST_DAY:
+    if day >= STR_CONVERT_DAY and day < LAST_DAY:
         _str_now = sum(1 for _row in tiles for _t in _row
                        if isinstance(_t, dict) and _t.get("kind") == "PLANT"
                        and _t.get("crop") == "STRAWBERRY")
-        _str_digs_left = max(0, _str_now - _keep)
+        _str_digs_left = max(0, _str_now - STR_ENDGAME_KEEP)
     crop_counts = {}
     crop_pos = {}      # v45a: live plant positions per crop -> cluster centroids
     empty_tiles = []
@@ -1012,15 +1009,7 @@ def _build_tasks(tiles, day, seeds, tape_mode=False, care_skip=(), crop_skip=(),
                     tick_ahead = _next_tick_day(placed, info["first"], info["interval"], day - 1)
                     if tick_ahead is not None or cu >= 1:
                         n_feed += 1
-                        # v61c : a TICK-DAY feed gates that tick's whole
-                        # payout (engine L813: unfed = no production; L826: unfed
-                        # also burns the stacked care bonus), yet it competed at
-                        # P_FEED=1 against the tick day's own harvest burst and
-                        # lost (measured seed 144: 16 feeds on off-days, 10-11 on
-                        # tick days, same 6 cows starved nightly).  Same fix
-                        # class as v58c's melon-day priority.
-                        _feed_prio = P_SAVE if (cu >= 1 or tick_ahead == day) else P_FEED
-                        tasks.append({"prio": _feed_prio, "x": x, "y": y,
+                        tasks.append({"prio": P_SAVE if cu >= 1 else P_FEED, "x": x, "y": y,
                                       "op": ["FEED"], "require": "WHEAT"})
 
                 if not t.get("cared_today", False) and t["animal"] not in care_skip:
@@ -1063,8 +1052,7 @@ def _build_tasks(tiles, day, seeds, tape_mode=False, care_skip=(), crop_skip=(),
                 # v54i: endgame STR->WHEAT conversion — dig idle old strawberries
                 # beyond the keep-count so wheat can take the tile.
                 if (crop == "STRAWBERRY" and _str_digs_left > 0
-                        and (t.get("yield_units", 0) == 0 or str_dead)
-                        and age >= 14):
+                        and t.get("yield_units", 0) == 0 and age >= 14):
                     tasks.append({"prio": P_DIG, "x": x, "y": y, "op": ["DIG"]})
                     _str_digs_left -= 1
                     continue
@@ -1204,25 +1192,10 @@ def _supply_tasks(tasks, n_feed, units, inventories, shed, tiles, day):
         return
 
     carried_wheat = sum(inv.get("WHEAT", 0) for inv in inventories)
-    _feed_deficit = n_feed - carried_wheat
-    if _feed_deficit > 0 and shed.get("WHEAT", 0) > 0:
-        n = min(_feed_deficit + 2, shed["WHEAT"])
-        # v61c : SECOND wheat carrier when the deficit is large.
-        # One pickup task = one feeder walking the whole circuit; measured
-        # (seed 144, 16 animals): the same far cows starved EVERY night while
-        # wheat sat in the shed — the single carrier is a hard feed ceiling
-        # (~10-11 feeds/day).  Two tasks = two carriers on parallel
-        # sub-circuits; the focused-feeder rule already makes both
-        # feed-exclusive while feeds are open.
-        if _feed_deficit >= 6 and n >= 4:
-            _h1 = n // 2
-            tasks.append({"prio": P_CHAIN, "x": SHED_TILE[0], "y": SHED_TILE[1],
-                          "op": ["PICKUP", "WHEAT", _h1]})
-            tasks.append({"prio": P_CHAIN, "x": SHED_TILE[0], "y": SHED_TILE[1],
-                          "op": ["PICKUP", "WHEAT", n - _h1]})
-        else:
-            tasks.append({"prio": P_CHAIN, "x": SHED_TILE[0], "y": SHED_TILE[1],
-                          "op": ["PICKUP", "WHEAT", n]})
+    if n_feed > carried_wheat and shed.get("WHEAT", 0) > 0:
+        n = min(n_feed - carried_wheat + 2, shed["WHEAT"])
+        tasks.append({"prio": P_CHAIN, "x": SHED_TILE[0], "y": SHED_TILE[1],
+                      "op": ["PICKUP", "WHEAT", n]})
 
     # Fertilizer for FERTILIZE tasks: circuit units already carry some from
     # COLLECT_FERTILIZER; top up from the shed only when several plants are waiting.
@@ -1755,6 +1728,9 @@ def _market_orders(day, hour, money, seeds, shed, inventories, prices, hires_tod
         want = SEED_WANT[crop]
         if crop == "MELON" and 6 < day < MELON_W2_FROM:
             continue   # v57c: no melon seeds in the dead window between waves
+        if (crop == "MELON" and day >= MELON_W2_FROM
+                and _melon_w2_dead(market_inv, shops, day)):
+            continue   # v59b: W2 gate — don't buy seeds for a dead market
         if crop == "CARROT":
             want = 4
         if crop == "WHEAT" and _FACTORY_NOW:
@@ -1837,20 +1813,13 @@ def agent(obs):
     shops = (obs.get("town", {}) or {}).get("unlocked_shops", []) or []
     care_skip = _care_skip_species(tiles, opp.get("tiles", []), market_inv, shops)
     crop_skip = _crop_skip(tiles, opp.get("tiles", []), market_inv, shops)
-    # v60a: is the STR market deep-dead for the rest of the game?  5-day
-    # projection with both farms' inflow; STR's town drain is the game's
-    # biggest, so transient dips project far above the $5 bar (v15e guard).
-    str_dead = False
-    if day >= STR_DEAD_FROM_DAY:
-        _sx = market_inv.get("STRAWBERRY", MARKET_I0) - MARKET_I0
-        if _sx > 0:
-            _mc, _ma = _opp_capacity(tiles)
-            _oc2, _oa2 = _opp_capacity(opp.get("tiles", []))
-            _snet = (_town_drain_per_day("STRAWBERRY", shops)
-                     - _inflow_per_day("STRAWBERRY", _mc, _ma)
-                     - _inflow_per_day("STRAWBERRY", _oc2, _oa2))
-            if _glut_price("STRAWBERRY", max(0, _sx - _snet * 5)) <= STR_DEAD_PRICE:
-                str_dead = True
+    # v59b: W2 melon gate — during the second-wave window, a glut the town
+    # drain cannot clear by harvest means W2 seeds/water/labor buy crater
+    # sells.  Adding MELON to crop_skip blocks planting and watering (W1
+    # melons are already harvested by now, so nothing else is affected).
+    if MELON_W2_FROM <= day <= 14 and "MELON" not in crop_skip \
+            and _melon_w2_dead(market_inv, shops, day):
+        crop_skip = set(crop_skip) | {"MELON"}
 
     # ramp_fast (v18c): same herd-complete test the market code uses (total owned
     # animals vs sheep target + demand-conditioned cow target).
@@ -1921,7 +1890,7 @@ def agent(obs):
         tomato_cap = 0
 
     tasks, n_feed = _build_tasks(tiles, day, seeds, tape_mode, care_skip, crop_skip,
-                                 ramp_fast, tomato_cap, str_dead)
+                                 ramp_fast, tomato_cap)
     _supply_tasks(tasks, n_feed, units, inventories, shed, tiles, day)
     assignment = _assign(units, tasks, inventories, tiles, day, hour)
 

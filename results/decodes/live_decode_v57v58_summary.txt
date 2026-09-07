@@ -1,0 +1,93 @@
+live_v57d ep106371061 L    66,094 vs   107,444 (  -41,350) div_d  15 hands 12/12 opp[C8G2S3|M12S29W17] DI27 RF
+live_v57d ep106213082 L   104,669 vs   136,876 (  -32,207) div_d  16 hands 12/12 opp[C14S1|M10S17W3] Aleksander Sachuk
+live_v57d ep106208459 L    75,589 vs   101,184 (  -25,595) div_d  16 hands 12/13 opp[C7S7|M10S27W3] kawanot
+live_v57d ep106218576 L    89,221 vs   112,102 (  -22,881) div_d  15 hands 12/12 opp[C8S6|M6S27W5] hedy huangyuheng
+live_v57d ep106202966 L    69,810 vs    89,523 (  -19,713) div_d  23 hands 12/13 opp[C9S5|C3S25T3W8] Rakhansyah
+live_v57d ep106234686 L    97,849 vs   114,418 (  -16,569) div_d  16 hands 12/9 opp[C11S1|M11S40W12] Wei Han
+live_v57d ep106203871 L    92,578 vs   106,685 (  -14,107) div_d  29 hands 12/12 opp[C8S6|M6S27W5] seowoohyeon
+live_v57d ep106204770 L    63,742 vs    77,519 (  -13,777) div_d  18 hands 12/11 opp[C6S6|C2M8S29T4W10] ceir-ceir
+live_v57d ep106224072 L   109,754 vs   123,229 (  -13,475) div_d  16 hands 12/14 opp[C7S4|M14S31W12] Ahmet Abdullah Gültekin
+live_v57d ep106213977 L    70,211 vs    81,944 (  -11,733) div_d  18 hands 12/12 opp[C6S8|C1M7S12W16] Hoo Woo
+live_v57d ep106389810 L    92,061 vs   101,987 (   -9,926) div_d  16 hands 12/13 opp[C6S6|M5S25W17] Isaac Diaz Lopez
+live_v57d ep106286740 L    66,945 vs    76,599 (   -9,654) div_d  24 hands 12/10 opp[C7G5S3|M7S43T1W3] KAEOS
+live_v57d ep106224971 L    98,510 vs   107,515 (   -9,005) div_d  28 hands 12/12 opp[C7S5|M11S28] Gigrise
+live_v57d ep106286726 L    92,705 vs   100,761 (   -8,056) div_d  24 hands 12/12 opp[C9S4|M8S36W13] Muhammed Ali Kul
+live_v57d ep106222246 L   107,537 vs   114,047 (   -6,510) div_d  26 hands 12/8 opp[C14S3|M8S18] Gunjan Solanki
+live_v57d ep106216727 L    88,376 vs    93,741 (   -5,365) div_d  16 hands 12/12 opp[C12S1|M7S36] wuzixiao
+live_v57d ep106219485 L    84,919 vs    88,654 (   -3,735) div_d  30 hands 12/14 opp[C5S4|M13S35W13] Florian
+live_v57d ep106211220 L    68,463 vs    71,330 (   -2,867) div_d  30 hands 12/13 opp[C6S6|M13S11T2W8] jiajun chi
+live_v57d ep106225376 L    76,474 vs    79,003 (   -2,529) div_d  30 hands 12/12 opp[C5S11|S27W11] Anurag H H
+live_v57d ep106225938 L    86,237 vs    87,621 (   -1,384) div_d  30 hands 12/13 opp[C9S2|M3S36W6] Lucas Ferreira
+live_v57d ep106200135 W    64,949 vs    64,832 (     +117) div_d  30 hands 12/12 opp[C6S4|M6S31W18] Shane Thivaharraja
+live_v57d ep106217667 W   124,462 vs   123,205 (   +1,257) div_d  30 hands 12/11 opp[C8S6|M10S1W16] Tran Huy Hoang1312
+live_v57d ep106459850 W    89,599 vs    87,946 (   +1,653) div_d  30 hands 12/12 opp[C4S8|C2M9S32W6] yuki16
+live_v57d ep106212122 W    94,680 vs    90,813 (   +3,867) div_d  30 hands 12/14 opp[C10S4|M2S27W13] TrinhDung16
+live_v57d ep106322229 W    87,013 vs    82,836 (   +4,177) div_d  30 hands 12/9 opp[S11|M7S8] Siddharth Kumar Gopal
+live_v57d ep106207578 W    88,054 vs    83,564 (   +4,490) div_d  30 hands 12/12 opp[C10S2|C2M9S24W7] yuki16
+live_v57d ep106218429 W    35,413 vs    30,256 (   +5,157) div_d  29 hands 12/14 opp[C8S4|M10S23W16] Shinzo Takayama
+live_v57d ep106210287 W   105,083 vs    95,470 (   +9,613) div_d  11 hands 12/11 opp[C7S1|C1M9S34T1] GorillaGhost
+live_v57d ep106201177 W   105,518 vs    94,574 (  +10,944) div_d  14 hands 12/12 opp[C8|S18] rustlers42
+live_v57d ep106226848 W   109,480 vs    96,685 (  +12,795) div_d  28 hands 12/12 opp[C5S2|M13S36W7] bachi idriss
+live_v57d ep106215803 W   115,135 vs   102,329 (  +12,806) div_d  23 hands 12/10 opp[C3G4S8|S19W13] weimean
+live_v57d ep106209387 W    97,742 vs    84,323 (  +13,419) div_d  27 hands 12/12 opp[C7S6|C15M3S21W5] Adil Khabibullin
+live_v57d ep106381422 W    93,700 vs    80,059 (  +13,641) div_d  27 hands 12/10 opp[C5S1|M21S35] Palimpsesto
+live_v57d ep106220415 W   114,458 vs    99,798 (  +14,660) div_d  29 hands 12/12 opp[C7S4|S39W3] Viet Anh Ngo 
+live_v57d ep106259481 W   100,612 vs    82,430 (  +18,182) div_d  28 hands 12/14 opp[C5S4|M13S35W13] Florian
+live_v57d ep106205733 W   110,787 vs    90,437 (  +20,350) div_d  21 hands 12/11 opp[C7G4S2|S28W10] suzy su
+live_v57d ep106415279 W    72,388 vs    51,634 (  +20,754) div_d  24 hands 12/12 opp[C4S2|M7S28] Von Lan (VonLan233)
+live_v57d ep106214903 W    95,098 vs    71,614 (  +23,484) div_d  22 hands 12/9 opp[C4G4S4|M12S4W11] xiaoBOSS97
+live_v57d ep106223143 W    85,188 vs    61,099 (  +24,089) div_d  26 hands 12/12 opp[C4S4|M12S28W22] AlivRick
+live_v57d ep106358814 W    91,655 vs    63,103 (  +28,552) div_d  13 hands 12/10 opp[C4G2S12|M4S4W1] Nightshade Family
+live_v57d ep106202079 W   124,157 vs    94,523 (  +29,634) div_d  20 hands 12/12 opp[C8S5|M6S22W5] LJazya
+live_v57d ep106200292 W    83,966 vs    40,626 (  +43,340) div_d  24 hands 12/7 opp[C6S3|M13W7] Leonid Matetskiy
+live_v57d ep106390569 W   110,450 vs    62,563 (  +47,887) div_d  21 hands 12/13 opp[C6S3|S26W7] AgriMind
+live_v57d ep106221339 W    93,576 vs    27,430 (  +66,146) div_d  11 hands 12/11 opp[C5S4|] Sriram Reddy19
+live_v57d ep106206636 W    86,618 vs    11,498 (  +75,120) div_d  13 hands 12/12 opp[C7|M7S3W4] Symekah Shadrack Basweti
+live_v58c ep106398626 L    56,690 vs   111,196 (  -54,506) div_d  11 hands 12/12 opp[C8G3S6|S33W21] VanKoha
+live_v58c ep106468622 L   112,723 vs   163,526 (  -50,803) div_d  14 hands 12/12 opp[C13S3|M5S11W42] Zikai Chen
+live_v58c ep106213922 L    96,462 vs   131,837 (  -35,375) div_d  15 hands 12/12 opp[C5S9|M12S29W5] Marcin Skalski
+live_v58c ep106228585 L    66,109 vs    88,889 (  -22,780) div_d  18 hands 12/14 opp[C8S4|M14S32W12] Adhiraj Jagtap
+live_v58c ep106207489 L    89,338 vs   109,716 (  -20,378) div_d  15 hands 12/12 opp[C8S6|M6S27W5] Xiangchen Li
+live_v58c ep106273971 L   121,627 vs   141,399 (  -19,772) div_d  24 hands 12/12 opp[C14S3|M5S18W9] Adir
+live_v58c ep106222170 L    81,903 vs    98,136 (  -16,233) div_d  17 hands 12/14 opp[C11S4|C2M3S35W4] RamenBoy
+live_v58c ep106318891 L    92,503 vs   107,913 (  -15,410) div_d  29 hands 12/12 opp[C12G10S1|M10S16W30] XiweiZhou
+live_v58c ep106249291 L   103,490 vs   116,994 (  -13,504) div_d  29 hands 12/9 opp[C4G4S2|C1M11S40W10] Wei Han
+live_v58c ep106229509 L    90,173 vs   103,130 (  -12,957) div_d  16 hands 12/12 opp[C6S7|S35] Hazqeel Afyq
+live_v58c ep106223999 L    64,194 vs    77,136 (  -12,942) div_d  15 hands 12/10 opp[C8S6|M10S30W5] Justin Kimlim
+live_v58c ep106221270 L    52,287 vs    64,344 (  -12,057) div_d  18 hands 12/11 opp[C8S6|M10S30W5] seowoohyeon
+live_v58c ep106211158 L    91,622 vs   103,220 (  -11,598) div_d  29 hands 12/12 opp[C8S6|M6S27W5] lungjyuanz
+live_v58c ep106232325 L   116,456 vs   127,823 (  -11,367) div_d  18 hands 12/12 opp[C8S6|M6S27W5] IterumVici
+live_v58c ep106212963 L    57,512 vs    68,019 (  -10,507) div_d  29 hands 12/12 opp[C8S6|M11S25] B0RN2BL0W0UT
+live_v58c ep106205678 L    73,275 vs    80,345 (   -7,070) div_d  24 hands 12/12 opp[C8S6|M6S27W5] KhalidKhan
+live_v58c ep106219441 L   108,431 vs   114,547 (   -6,116) div_d  28 hands 12/14 opp[C7S3|S61] sbite0138
+live_v58c ep106214843 L    91,831 vs    97,013 (   -5,182) div_d  28 hands 12/13 opp[C5G1S7|S29W24] JairSanchez151270
+live_v58c ep106439590 L    66,056 vs    69,139 (   -3,083) div_d  30 hands 12/10 opp[C10S6|C2M1S4W29] Aussie lover
+live_v58c ep106223102 L    73,784 vs    76,494 (   -2,710) div_d  30 hands 12/10 opp[C8S6|M5S23W9] Avi Porath
+live_v58c ep106218498 L   109,107 vs   110,456 (   -1,349) div_d  30 hands 12/12 opp[C7S6|S19W2] Kangqiao LIU
+live_v58c ep106202860 L    56,306 vs    56,522 (     -216) div_d  30 hands 12/12 opp[C8S4|C4M6S29W14] Shane Thivaharraja
+live_v58c ep106227665 W   114,774 vs   114,702 (      +72) div_d  30 hands 12/10 opp[C6G2S2|M4S57] Jonas Jaku
+live_v58c ep106231353 W    43,541 vs    41,971 (   +1,570) div_d  30 hands 12/13 opp[C6S5|S30] cmxu
+live_v58c ep106360316 W    89,468 vs    82,526 (   +6,942) div_d  27 hands 12/11 opp[C7S6|M12S28W5] RMS Danaraj
+live_v58c ep106225845 W    91,669 vs    83,695 (   +7,974) div_d  29 hands 12/12 opp[C8S8|S28W18] GarciasN
+live_v58c ep106215758 W    91,320 vs    82,712 (   +8,608) div_d  21 hands 12/11 opp[C4S4|C13S25W18] bruhbruh
+live_v58c ep106230438 W    93,829 vs    84,769 (   +9,060) div_d  28 hands 12/12 opp[C5S7|M9S28W4] Jackson Sauls
+live_v58c ep106212085 W    68,133 vs    58,165 (   +9,968) div_d  24 hands 12/12 opp[C7S6|M6S27W5] yunus_bayram_kagle
+live_v58c ep106220349 W   115,718 vs   104,905 (  +10,813) div_d  28 hands 12/13 opp[C5S2|M7S50W1] sansh0u0
+live_v58c ep106206568 W   123,196 vs   111,477 (  +11,719) div_d  21 hands 12/12 opp[C12S6|S24W5] Raagav Anand
+live_v58c ep106208396 W   101,069 vs    89,179 (  +11,890) div_d  28 hands 12/12 opp[C12S3|M8S20W1] Harsha Vardhan Konisa
+live_v58c ep106347612 W   107,303 vs    94,366 (  +12,937) div_d  27 hands 12/12 opp[C7G2S4|M7S25W5] Alejandro Rendon B.
+live_v58c ep106352954 W   129,344 vs   114,095 (  +15,249) div_d  28 hands 12/13 opp[C6S4|S39W5] Haroon Rasheed
+live_v58c ep106247675 W    74,484 vs    59,224 (  +15,260) div_d  21 hands 12/8 opp[C4S3|C3S39W9] astro
+live_v58c ep106397312 W    89,919 vs    72,887 (  +17,032) div_d  10 hands 12/12 opp[C7S4|M18S43W2] Riki Garcia
+live_v58c ep106322900 W    72,520 vs    53,131 (  +19,389) div_d  10 hands 12/14 opp[C11S4|S18T2] Md.Mahfujul Karim
+live_v58c ep106224936 W    81,172 vs    61,657 (  +19,515) div_d  10 hands 12/12 opp[C6G2S5|M8S40] Life Is Roblox
+live_v58c ep106293073 W    80,460 vs    59,242 (  +21,218) div_d  26 hands 12/9 opp[C5G1S3|M12S15W11] AI老爸
+live_v58c ep106204793 W    80,555 vs    55,489 (  +25,066) div_d  19 hands 12/14 opp[C9S4|C2M3S8W14] LGarcia10
+live_v58c ep106226762 W   118,474 vs    90,889 (  +27,585) div_d  23 hands 12/11 opp[C2G2S2|C15M15S5W32] rooklift
+live_v58c ep106210232 W   113,656 vs    85,727 (  +27,929) div_d  22 hands 12/14 opp[C8S6|M10S38W6] Saurav Chaudhari
+live_v58c ep106203901 W   117,573 vs    88,325 (  +29,248) div_d  23 hands 12/10 opp[C13S4|C1M26] Arda Yasar
+live_v58c ep106216665 W    69,162 vs    37,667 (  +31,495) div_d  23 hands 12/11 opp[C7S7|M8S40W1] izack2666
+live_v58c ep106217583 W   137,974 vs    99,743 (  +38,231) div_d  21 hands 12/10 opp[C7S2|M10S17] Shigeru Kondou
+live_v58c ep106209325 W   113,891 vs    64,037 (  +49,854) div_d  19 hands 12/14 opp[C4S3|M6S19W5] zhaozy233
+
+TOTAL 91 episodes, 49W-42L

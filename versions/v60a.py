@@ -1,15 +1,9 @@
 """
 main.py — Kaggriculture agent.  ENTRY POINT (must be at archive root, must be named main.py).
 
-STATUS: v61c — PROMOTED to main.py 2026-09-07 evening (Exp 81g/h: FEED
-COMPLETENESS).  v60a + tick-day feeds at P_SAVE + a SECOND wheat
-carrier when the feed deficit >= 6 (the single-feeder ceiling starved
-the same animals nightly; unfed tick = no production L813 + care bonus
-burned L826).  HELD-OUT 77: 100W-54L (64.9%) +1,385 σ3,091 μ/σ 0.448 —
-strongest confirm since v58c.  Legs: wool 29W-3L +17.1k (softened,
-logged); MR −45.5k / king −45.5k / state_router −47.2k / goose −33.2k
-all BETTER; frontier holdout −34,054 NEW BEST EVER.  NOT YET SUBMITTED
-— flag Shane: -m "v61c".  Lineage …v57d→v58c→v60a→v61c.  NET-flow
+STATUS: v60a — PROMOTED to main.py 2026-09-07 .  Held-out 77:
+77W-47L-30T (ties = unfired byte-identical; fired lane 62.1% +193);
+wool 32-0 parity; frontier −35,928 best-ever; MR parity.  NET-flow
 loss forensics (Sep 7, churn-corrected): in v58c's losses our OWN d15-21 net
 drops 25.4k -> 19.8k — the shared-market squeeze: their bigger flood kills
 our STR price and we keep producing into the corpse.  The d22 conversion's
@@ -1012,15 +1006,7 @@ def _build_tasks(tiles, day, seeds, tape_mode=False, care_skip=(), crop_skip=(),
                     tick_ahead = _next_tick_day(placed, info["first"], info["interval"], day - 1)
                     if tick_ahead is not None or cu >= 1:
                         n_feed += 1
-                        # v61c : a TICK-DAY feed gates that tick's whole
-                        # payout (engine L813: unfed = no production; L826: unfed
-                        # also burns the stacked care bonus), yet it competed at
-                        # P_FEED=1 against the tick day's own harvest burst and
-                        # lost (measured seed 144: 16 feeds on off-days, 10-11 on
-                        # tick days, same 6 cows starved nightly).  Same fix
-                        # class as v58c's melon-day priority.
-                        _feed_prio = P_SAVE if (cu >= 1 or tick_ahead == day) else P_FEED
-                        tasks.append({"prio": _feed_prio, "x": x, "y": y,
+                        tasks.append({"prio": P_SAVE if cu >= 1 else P_FEED, "x": x, "y": y,
                                       "op": ["FEED"], "require": "WHEAT"})
 
                 if not t.get("cared_today", False) and t["animal"] not in care_skip:
@@ -1204,25 +1190,10 @@ def _supply_tasks(tasks, n_feed, units, inventories, shed, tiles, day):
         return
 
     carried_wheat = sum(inv.get("WHEAT", 0) for inv in inventories)
-    _feed_deficit = n_feed - carried_wheat
-    if _feed_deficit > 0 and shed.get("WHEAT", 0) > 0:
-        n = min(_feed_deficit + 2, shed["WHEAT"])
-        # v61c : SECOND wheat carrier when the deficit is large.
-        # One pickup task = one feeder walking the whole circuit; measured
-        # (seed 144, 16 animals): the same far cows starved EVERY night while
-        # wheat sat in the shed — the single carrier is a hard feed ceiling
-        # (~10-11 feeds/day).  Two tasks = two carriers on parallel
-        # sub-circuits; the focused-feeder rule already makes both
-        # feed-exclusive while feeds are open.
-        if _feed_deficit >= 6 and n >= 4:
-            _h1 = n // 2
-            tasks.append({"prio": P_CHAIN, "x": SHED_TILE[0], "y": SHED_TILE[1],
-                          "op": ["PICKUP", "WHEAT", _h1]})
-            tasks.append({"prio": P_CHAIN, "x": SHED_TILE[0], "y": SHED_TILE[1],
-                          "op": ["PICKUP", "WHEAT", n - _h1]})
-        else:
-            tasks.append({"prio": P_CHAIN, "x": SHED_TILE[0], "y": SHED_TILE[1],
-                          "op": ["PICKUP", "WHEAT", n]})
+    if n_feed > carried_wheat and shed.get("WHEAT", 0) > 0:
+        n = min(n_feed - carried_wheat + 2, shed["WHEAT"])
+        tasks.append({"prio": P_CHAIN, "x": SHED_TILE[0], "y": SHED_TILE[1],
+                      "op": ["PICKUP", "WHEAT", n]})
 
     # Fertilizer for FERTILIZE tasks: circuit units already carry some from
     # COLLECT_FERTILIZER; top up from the shed only when several plants are waiting.

@@ -1,0 +1,47 @@
+
+===== live_v57d: 45 eps, 25W-20L (56%) | my bank med 92,061 p10 66,945 p90 110,787 sd 17,680
+  vs     <600: 1W-0L  (1 games)
+  vs  600-756: 20W-3L  (23 games)
+  vs  756-900: 2W-15L  (17 games)
+  vs 900-1200: 2W-0L  (2 games)
+  vs    1200+: 0W-2L  (2 games)
+  -- LOSSES to lower/equal-rated opponents (the rating bleed):
+    ep106234686 opp Wei Han                (   744) margin   -16,569 my   97,849 div_d16 opp12[C11S1|M11S40W12]
+    ep106204770 opp ceir-ceir              (   789) margin   -13,777 my   63,742 div_d18 opp12[C6S6|C2M8S29T4W10]
+    ep106213977 opp Hoo Woo                (   776) margin   -11,733 my   70,211 div_d18 opp12[C6S8|C1M7S12W16]
+    ep106389810 opp Isaac Diaz Lopez       (   780) margin    -9,926 my   92,061 div_d16 opp12[C6S6|M5S25W17]
+    ep106224971 opp Gigrise                (   775) margin    -9,005 my   98,510 div_d28 opp12[C7S5|M11S28]
+    ep106286726 opp Muhammed Ali Kul       (   784) margin    -8,056 my   92,705 div_d24 opp12[C9S4|M8S36W13]
+    ep106222246 opp Gunjan Solanki         (   736) margin    -6,510 my  107,537 div_d26 opp12[C14S3|M8S18]
+    ep106216727 opp wuzixiao               (   783) margin    -5,365 my   88,376 div_d16 opp12[C12S1|M7S36]
+    ep106219485 opp Florian                (   757) margin    -3,735 my   84,919 div_d30 opp12[C5S4|M13S35W13]
+    ep106211220 opp jiajun chi             (   798) margin    -2,867 my   68,463 div_d30 opp12[C6S6|M13S11T2W8]
+    ep106225376 opp Anurag H H             (   790) margin    -2,529 my   76,474 div_d30 opp12[C5S11|S27W11]
+    ep106225938 opp Lucas Ferreira         (   734) margin    -1,384 my   86,237 div_d30 opp12[C9S2|M3S36W6]
+  -- wins vs higher-rated: 3
+    ep106207578 beat yuki16                 (  1186) margin    +4,490
+    ep106459850 beat yuki16                 (  1186) margin    +1,653
+    ep106223143 beat AlivRick               (   889) margin   +24,089
+
+===== live_v58c: 46 eps, 24W-22L (52%) | my bank med 91,471 p10 57,512 p90 118,474 sd 22,596
+  vs  600-756: 15W-4L  (19 games)
+  vs  756-900: 7W-15L  (22 games)
+  vs 900-1200: 1W-1L  (2 games)
+  vs    1200+: 0W-2L  (2 games)
+  (1 opponents not on leaderboard file)
+  -- LOSSES to lower/equal-rated opponents (the rating bleed):
+    ep106468622 opp Zikai Chen             (   741) margin   -50,803 my  112,723 div_d14 opp12[C13S3|M5S11W42]
+    ep106228585 opp Adhiraj Jagtap         (   779) margin   -22,780 my   66,109 div_d18 opp12[C8S4|M14S32W12]
+    ep106318891 opp XiweiZhou              (   801) margin   -15,410 my   92,503 div_d29 opp12[C12G10S1|M10S16W30]
+    ep106249291 opp Wei Han                (   744) margin   -13,504 my  103,490 div_d29 opp12[C4G4S2|C1M11S40W10]
+    ep106212963 opp B0RN2BL0W0UT           (   736) margin   -10,507 my   57,512 div_d29 opp12[C8S6|M11S25]
+    ep106219441 opp sbite0138              (   782) margin    -6,116 my  108,431 div_d28 opp12[C7S3|S61]
+    ep106214843 opp JairSanchez151270      (   779) margin    -5,182 my   91,831 div_d28 opp12[C5G1S7|S29W24]
+    ep106223102 opp Avi Porath             (   799) margin    -2,710 my   73,784 div_d30 opp12[C8S6|M5S23W9]
+    ep106218498 opp Kangqiao LIU           (   773) margin    -1,349 my  109,107 div_d30 opp12[C7S6|S19W2]
+    ep106202860 opp Shane Thivaharraja     (   726) margin      -216 my   56,306 div_d30 opp12[C8S4|C4M6S29W14]
+  -- wins vs higher-rated: 4
+    ep106210232 beat Saurav Chaudhari       (  1000) margin   +27,929
+    ep106360316 beat RMS Danaraj            (   850) margin    +6,942
+    ep106212085 beat yunus_bayram_kagle     (   839) margin    +9,968
+    ep106231353 beat cmxu                   (   814) margin    +1,570

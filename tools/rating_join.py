@@ -49,5 +49,5 @@ for sub in sorted({r["sub"] for r in recs}):
     # wins vs higher rated (what we do right)
     hi_w = [(lb.get(r["opp_name"]), r) for r in rs if r["win"] and lb.get(r["opp_name"], 0) > MY + 50]
     print(f"  -- wins vs higher-rated: {len(hi_w)}")
-    for sc, r in sorted(hi_w, reverse=True)[:8]:
+    for sc, r in sorted(hi_w, key=lambda x: x[0], reverse=True)[:8]:
         print(f"    ep{r['episode']} beat {r['opp_name'][:22]:22} ({sc:6.0f}) margin {r['margin']:+9,.0f}")

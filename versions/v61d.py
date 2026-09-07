@@ -1,15 +1,12 @@
 """
 main.py — Kaggriculture agent.  ENTRY POINT (must be at archive root, must be named main.py).
 
-STATUS: v61c — PROMOTED to main.py 2026-09-07 evening (Exp 81g/h: FEED
-COMPLETENESS).  v60a + tick-day feeds at P_SAVE + a SECOND wheat
-carrier when the feed deficit >= 6 (the single-feeder ceiling starved
-the same animals nightly; unfed tick = no production L813 + care bonus
-burned L826).  HELD-OUT 77: 100W-54L (64.9%) +1,385 σ3,091 μ/σ 0.448 —
-strongest confirm since v58c.  Legs: wool 29W-3L +17.1k (softened,
-logged); MR −45.5k / king −45.5k / state_router −47.2k / goose −33.2k
-all BETTER; frontier holdout −34,054 NEW BEST EVER.  NOT YET SUBMITTED
-— flag Shane: -m "v61c".  Lineage …v57d→v58c→v60a→v61c.  NET-flow
+STATUS: v61d — EXPERIMENTAL .
+v61c (tick-day feed P_SAVE + 2nd wheat carrier on deficit ≥ 6) + the
+v61a milk-boom (3-milk-shop towns, price ≥ $200 at d10-13 → cow target
+9→12, +3 slots, fallow pastures).  The boom's held-out wash traced to
+the single-feeder ceiling v61c removes — this is the boom retest on
+the fixed labor base.  Lineage …v60a→v61c→(v61d candidate).  NET-flow
 loss forensics (Sep 7, churn-corrected): in v58c's losses our OWN d15-21 net
 drops 25.4k -> 19.8k — the shared-market squeeze: their bigger flood kills
 our STR price and we keep producing into the corpse.  The d22 conversion's
@@ -489,6 +486,14 @@ UNLOAD_AT = 8            # a unit carrying this many items runs them to the shed
 # Livestock plan: sheep first (slowest payout -> place earliest, CARE stacks highest on it),
 # cows are the meta-proven workhorse. 6 animals ring the shed on one quadrant.
 ANIMAL_TARGETS = {"SHEEP": 4, "COW": 9}   # v47a blueprint: cow-heavy (dead-milk guard -> 6 kept)
+# v61a/v61d MILK-BOOM : in towns with THREE actual
+# milk shops whose milk price is still >= $200 at d10-13, extend the cow
+# target 9 -> 12.  Gate calibrated on 91 live replays (23% of towns; milk
+# held $150-278 through d24 in ALL of them).  UP-side only .
+COW_BOOM_FROM_DAY = 10
+COW_BOOM_UNTIL_DAY = 13
+COW_BOOM_PRICE = 200
+COW_BOOM_TARGET = 12
 # Day-0 all-in basket (v37d refactor: named so the shape search can move them).
 D0_SHEEP = 2   # v47a blueprint basket: 2s+2c+12mel+7whe = $2,830 of $3,000
 D0_COW = 2
@@ -816,6 +821,7 @@ _DYN_CARROT_CAP = {0: 0, 1: 0}  # per seat, refreshed at hour 0
 _DYN_SHEEP = {0: 4, 1: 4}       # per seat, refreshed at hour 0
 YARN_SHEEP = 6                  # v57b: sheep target in latched yarn towns
 _YARN_TOWN = {0: False, 1: False}
+_COW_BOOM = {0: False, 1: False}   # v61d: sticky milk-boom latch, reset at step 0
 _SLOT_NEED = {0: 13, 1: 13}     # live cow+sheep+goose target sum, set per call
 
 def _inflow_per_day(item, crops, animals):
@@ -1122,6 +1128,19 @@ def _build_tasks(tiles, day, seeds, tape_mode=False, care_skip=(), crop_skip=(),
                         tasks.append({"prio": P_FERT, "x": x, "y": y,
                                       "op": ["FERTILIZE"], "require": "FERTILIZER"})
                 continue
+
+    # v61d: boom pastures on fallow tiles (ring holds 15 slots and its tail
+    # slots carry strawberries until d22 — without this the boom cows
+    # shed-strand; latch-gated so unfired games stay byte-identical).
+    if _COW_BOOM.get(_CUR_SEAT, False) and day < LAST_DAY:
+        _deficit = _n_slots_total - _placed_now
+        if _deficit > 0 and empty_tiles:
+            _ax, _ay = ANIMAL_SLOTS[0]
+            empty_tiles.sort(key=lambda p: abs(p[0] - _ax) + abs(p[1] - _ay))
+            for _ in range(min(_deficit, len(empty_tiles))):
+                _bx, _by = empty_tiles.pop(0)
+                tasks.append({"prio": P_BUILD, "x": _bx, "y": _by,
+                              "op": ["BUILD_PASTURE"]})
 
     # ---------------- planting: fill empty tiles by PLANT_ORDER, respecting caps --------
     # Caps are market-bound (melon/carrot glut their price) or purpose-bound (wheat = feed),
@@ -1643,6 +1662,8 @@ def _market_orders(day, hour, money, seeds, shed, inventories, prices, hires_tod
     # 6-cow opponent +21.8k (milk market recovered for THEM; Exp 63
     # principle).  Head-to-head, the 9-cow dump keeps mutual pressure.
     cow_target = 6 if milk_proj < 2.0 else ANIMAL_TARGETS["COW"]
+    if _COW_BOOM.get(_CUR_SEAT, False):
+        cow_target = COW_BOOM_TARGET   # v61d: healthy-milk town, extend the tail
     if _YARN_TOWN.get(_CUR_SEAT, False):
         cow_target = min(cow_target, 8)   # v57b: 6 sheep + 8 cows fit the 15-slot ring
     sheep_target = _DYN_SHEEP.get(_CUR_SEAT, ANIMAL_TARGETS["SHEEP"])
@@ -1816,6 +1837,7 @@ def agent(obs):
         _GAMBLE_ON[player] = False
         _WHEAT_TOWN[player] = False
         _YARN_TOWN[player] = False   # v57b
+        _COW_BOOM[player] = False    # v61d
         _GOOSE_TARGET[player] = D0_GOOSE
         _STICKY[player] = {}
     if not _TAPE_SEEN.get(player, False) and 1 <= day <= 2:
@@ -1861,12 +1883,24 @@ def agent(obs):
     _milk_seen = sum(1 for s in shops if s in ("PIZZA_SHOP", "ICE_CREAM_SHOP",
                                                "SMOOTHIE_SHOP"))
     _milk_proj = _milk_seen + max(0, 8 - len(shops)) * 0.375
+    # v61d milk-boom latch (gate v2): sticky; requires THREE actual milk
+    # shops (drain that absorbs a 12-cow herd) + price still >= $200.
+    if (not _COW_BOOM.get(player, False)
+            and COW_BOOM_FROM_DAY <= day <= COW_BOOM_UNTIL_DAY
+            and _milk_seen >= 3
+            and not _YARN_TOWN.get(player, False)
+            and prices.get("MILK", 0) >= COW_BOOM_PRICE):
+        _COW_BOOM[player] = True
     _cow_t = 6 if _milk_proj < 2.0 else ANIMAL_TARGETS["COW"]
+    if _COW_BOOM.get(player, False):
+        _cow_t = COW_BOOM_TARGET
     _shp_t = _DYN_SHEEP.get(player, ANIMAL_TARGETS["SHEEP"])
     # v47b: _SLOT_NEED stays STATIC — feeding the live (guarded) targets in
     # shrank the ongoing-crop ban to 10 slots in weak towns and chaotically
     # reshaped whole games (seed-12 flip-flop).  Layout stability wins.
-    _SLOT_NEED[player] = sum(ANIMAL_TARGETS.values()) + _GOOSE_TARGET.get(player, 0)
+    _SLOT_NEED[player] = (sum(ANIMAL_TARGETS.values()) + _GOOSE_TARGET.get(player, 0)
+                          + (COW_BOOM_TARGET - ANIMAL_TARGETS["COW"]
+                             if _COW_BOOM.get(player, False) else 0))
     ramp_fast = (_owned_n >= _shp_t + _cow_t
                  or money >= 3000)  # v37d: detonation counts as ramped
 

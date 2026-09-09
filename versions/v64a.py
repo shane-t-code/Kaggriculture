@@ -1,15 +1,26 @@
 """
 main.py — Kaggriculture agent.  ENTRY POINT (must be at archive root, must be named main.py).
 
-STATUS: v62a — PROMOTED to main.py 2026-09-08 (Exp 83: TILE-BATCH
-STICKINESS, the labor campaign's first confirmed win).  v61e + two
-assignment edits (feeder may batch same-tile jobs; greedy leaves an
-occupied tile's jobs to its occupant).  HELD-OUT 77 vs v61e:
-**97W-57L (63.0%) +1,493 σ3,511 μ/σ 0.425**.  Legs: wool 32-0
-+23.8k PERFECT, frontier holdout −29,408 NEW BEST EVER, king dip
-recovered (−46.4k), rest parity.  NOT YET SUBMITTED — flag Shane:
--m "v62a" (displaces v58c 771 → actives v61e 772 + v62a).
-Lineage …v60a→v61c→v61d→v61e→v62a.  Contains:
+STATUS: v64a — REJECTED AS STANDALONE (Exp 84a: DAWN ROUTE
+PLANNER, 7 builds 2026-09-08 night).  MECHANISM ACHIEVED: animal
+ops-per-stop 1.40 → 2.57 (King 2.48), canonical CARE+COLL+FEED
+stop ×127, animal stops 622→336, feeds/cares to parity (build 4).
+MONEY REJECTED every config: screens 31.2% (b2) / 37.5% (b4),
+b5-b7 negative on 6 debug seeds.  ⭐ WHY (the session's real
+finding, each step measured): (1) WORKING CAPITAL — pocket wheat
+masked feed shortages (fix kept); (2) ⭐ LABOR SLACK IS LOAD-
+BEARING — v62a's express-unload fires only when idle; circuits
+shrink the general pool → nobody idles → 3 shed deliveries vs 9
+→ ALL goods sell a day late (sawtooth per-day deltas); delivery-
+as-override at old thresholds ping-pongs (b6), gated version
+still net-negative (b7); (3) melon-fert window d6-9 starved by
+carrier fert pockets (11→3 applications, d10 yield −8).  The
+King's choreography works because his ECONOMY is shaped for it
+(41% work, 5.7% carry, ~2× banks): batching without the workload
++ hauling shape does not pay.  KEEP for the 84b coupled retest
+(v55e precedent: coupled constraints pay only together).
+File = build 7.  Baseline unbeaten = v62a.
+Lineage …v60a→v61c→v61d→v61e→v62a→(v64a rejected).  Contains:
 milk-boom (fired lane 20W-6L 77% +2,141) + feed completeness (held-out
 64.9% +1,385) + v60a STR wind-down + hire-last (v61b2 held-out 89W-65L
 57.8% n=154, measured WITH a handicap — no boom — and still won).
@@ -603,6 +614,24 @@ _FACTORY_NOW = False         # set per agent() call: wheat factory active this t
 _DEAD_TOWN_NOW = False       # set per agent() call: dead-town latch this turn
 _STICKY = {}                 # v40a: per-seat {unit_index: (x, y, op0)}, reset at step 0
 _CUR_SEAT = 0                # v40a: set per agent() call so _assign can key _STICKY
+# v64a DAWN ROUTE PLANNER state .  Rebuilt every dawn — hands respawn
+# at the shed each morning, so carrier unit-indexes are only meaningful within
+# one day (the v63b lesson).  Reset at step 0.
+_ROUTE = {0: {}, 1: {}}          # per seat: {carrier_ui: [ordered (x,y) animal tiles]}
+_ROUTE_TILES = {0: set(), 1: set()}  # per seat: union of that seat's route tiles
+_ROUTE_DAY = {0: -1, 1: -1}      # day the current plan was built
+PLANNER_MIN_ANIMALS = 4      # below this the greedy handles animals fine (early game)
+ROUTE_RELEASE_HOUR = 18      # from this hour, unvisited route jobs reopen for mop-up
+ROUTE_UNLOAD_AT = 6          # carrier mid-lap shed detour threshold.  Detours are
+                             # CHEAP (the shed sits inside the animal ring, <=2 steps
+                             # from every ring tile) and they use PLACE, not DROP, so
+                             # the feed wheat stays in hand (engine L393-410) — the
+                             # first build's DROP detours cost a re-pickup each (5
+                             # feeds lost seed 3 d28), and a high threshold instead
+                             # made goods reach the shed a day late (screen 31.2%:
+                             # sawtooth per-day deltas = classic sell-a-day-late).
+ROUTE_FERT_EXPRESS = 3       # fert in a carrier pocket detours early (v57a law: fert
+                             # decays all season and never recovers — sell same day)
 # Planting priority when a tile opens up: melon (highest $/tile-day, tiny cap), wheat (feeds
 # the herd — replaces market buys at scarcity prices), strawberry (biggest town demand:
 # ~426/season median), carrot (fast filler, capped so we stop glutting our own market).
@@ -1240,7 +1269,18 @@ def _supply_tasks(tasks, n_feed, units, inventories, shed, tiles, day):
     if day >= LAST_DAY:
         return
 
-    carried_wheat = sum(inv.get("WHEAT", 0) for inv in inventories)
+    # v64a: when the route planner is on, its circuit carriers own the route
+    # tiles' feeds and their own wheat logistics (pickup override in _assign).
+    # This block then supplies only OFF-route feeds (an animal placed mid-day
+    # sits on a tile the dawn plan never saw) — same coverage as before, no
+    # duplicate wheat carriers.  Carrier-held wheat/fert is spoken for, so it
+    # is excluded from the deficit math.
+    _rt = _ROUTE_TILES.get(_CUR_SEAT) or set()
+    _cset = set(_ROUTE.get(_CUR_SEAT) or {})
+    n_feed -= sum(1 for t in tasks
+                  if t["op"][0] == "FEED" and (t["x"], t["y"]) in _rt)
+    carried_wheat = sum(inv.get("WHEAT", 0) for ui, inv in enumerate(inventories)
+                        if ui not in _cset)
     _feed_deficit = n_feed - carried_wheat
     if _feed_deficit > 0 and shed.get("WHEAT", 0) > 0:
         n = min(_feed_deficit + 2, shed["WHEAT"])
@@ -1267,7 +1307,8 @@ def _supply_tasks(tasks, n_feed, units, inventories, shed, tiles, day):
     # yo-yoed units to the shed while crops died — measured: WATER 800->609, wheat
     # weeded out, 26 melon replants. Fertilizing is a luxury; restock at P_FERT(3).
     n_fert = sum(1 for t in tasks if t["op"][0] == "FERTILIZE")
-    carried_fert = sum(inv.get("FERTILIZER", 0) for inv in inventories)
+    carried_fert = sum(inv.get("FERTILIZER", 0) for ui, inv in enumerate(inventories)
+                       if ui not in _cset)
     if n_fert - carried_fert >= 3 and shed.get("FERTILIZER", 0) > 0:
         n = min(n_fert - carried_fert, shed["FERTILIZER"])
         tasks.append({"prio": P_FERT, "x": SHED_TILE[0], "y": SHED_TILE[1],
@@ -1287,8 +1328,70 @@ def _supply_tasks(tasks, n_feed, units, inventories, shed, tiles, day):
                     break
 
 
-def _assign(units, tasks, inventories, tiles, day, hour):
-    """{unit_index: task}. Carrier overrides, then stickiness, then greedy (prio, dist)."""
+def _plan_routes(player, units, tasks, tiles, day):
+    """v64a : the dawn choreography.  Order today's animal tiles into
+    a shed-anchored nearest-neighbor loop, split it across 1-3 circuit
+    carriers sized to the day's job count, and reserve the loop's jobs for
+    them.  One carrier stop then batches EVERY job on the tile (COLLECT +
+    FEED + CARE + HARVEST) — the King's 2.48 ops-per-animal-stop vs our
+    greedy's 1.41 , which three eligibility variants could not
+    close (the v62c/v63a/v63b law: restrictions starve coverage; a plan
+    assigns positively instead)."""
+    _ROUTE[player] = {}
+    _ROUTE_TILES[player] = set()
+    if day >= LAST_DAY:
+        return
+    if day == 10:
+        # Melon detonation day (v58c, measured 8/8 seeds): every hand belongs
+        # to the harvest race — the screen showed −2.2k..−4.8k on d10 alone
+        # when 2-3 hands sat on animal circuits.  Old machinery feeds today.
+        return
+    atiles = [(x, y) for y, row in enumerate(tiles) for x, t in enumerate(row)
+              if isinstance(t, dict) and t.get("animal")]
+    n_hands = len(units) - 1
+    if len(atiles) < PLANNER_MIN_ANIMALS or n_hands < 2:
+        return
+    aset = set(atiles)
+    job_ct = {}
+    for t in tasks:
+        p = (t["x"], t["y"])
+        if p in aset:
+            job_ct[p] = job_ct.get(p, 0) + 1
+    total_jobs = sum(job_ct.values())
+    if total_jobs == 0:
+        return
+    # Carriers sized to the day's workload: jobs + one walk per tile, at ~16
+    # effective turns per carrier (measured seed 3: ~23 turn budget minus
+    # pickups, detours and long hops — a divisor of 22 left d22's 13 animals
+    # on 2 carriers and 4 went unfed; a cap of 3 left carriers at 23/23
+    # turns with feeds undone while the general pool idled 18%).  Never the
+    # farmer, always leave at least one hand in the general pool.
+    K = max(1, min(4, -(-(total_jobs + len(atiles)) // 16), n_hands - 1))
+    order = []
+    cur = SHED_TILE
+    rem = sorted(atiles, key=lambda p: (p[1], p[0]))
+    while rem:
+        rem.sort(key=lambda p: (abs(p[0] - cur[0]) + abs(p[1] - cur[1]),
+                                p[1] * 16 + p[0]))
+        cur = rem.pop(0)
+        order.append(cur)
+    # Contiguous segments of the loop, balanced by job count.
+    routes = [[] for _ in range(K)]
+    acc, k = 0, 0
+    for p in order:
+        routes[k].append(p)
+        acc += job_ct.get(p, 0)
+        if k < K - 1 and acc * K >= total_jobs * (k + 1):
+            k += 1
+    # Carriers = the last K hands (highest indexes; all at the shed at dawn).
+    carriers = list(range(len(units) - K, len(units)))
+    _ROUTE[player] = {carriers[i]: routes[i] for i in range(K) if routes[i]}
+    _ROUTE_TILES[player] = set(order)
+
+
+def _assign(units, tasks, inventories, tiles, day, hour, shed=None):
+    """{unit_index: task}. Carrier overrides, then the route planner's circuit
+    carriers, then stickiness, then greedy (prio, dist)."""
     assignment = {}
     taken = [False] * len(tasks)
 
@@ -1326,6 +1429,76 @@ def _assign(units, tasks, inventories, tiles, day, hour):
             if hour >= 21 - dist:  # 1-turn safety margin before the hour-22 cutoff
                 assignment[ui] = {"prio": P_SAVE, "x": SHED_TILE[0], "y": SHED_TILE[1],
                                   "op": ["DROP"]}
+
+    # ---- v64a ROUTE PLANNER pre-pass: circuit carriers walk the dawn plan.
+    # Runs BEFORE stickiness/greedy so feeds_open()/eligible() below already
+    # see route jobs as taken — a wheat-crop harvester carrying incidental
+    # wheat is then NOT feed-locked (the v63a crash class).
+    _plan = _ROUTE.get(_CUR_SEAT) or {}
+    if _plan and day < LAST_DAY:
+        _open_route = {}
+        for ti, t in enumerate(tasks):
+            if not taken[ti]:
+                _p = (t["x"], t["y"])
+                if _p in _ROUTE_TILES.get(_CUR_SEAT, ()):
+                    _open_route.setdefault(_p, []).append(ti)
+        for ui, _route in _plan.items():
+            if ui >= len(units) or ui in assignment:
+                continue
+            _inv = inv_of(ui)
+            _my_open = [p for p in _route if p in _open_route]
+            if not _my_open:
+                continue      # lap done -> the unit rejoins the general pool
+            # Cargo runs to the shed mid-lap (sellable TODAY — the screen's
+            # sawtooth per-day deltas showed lap-end drops selling a day
+            # late).  PLACE deposits one item type and KEEPS the feed wheat
+            # (engine L393-410); DROP only when no wheat is held (dumps all).
+            _non_wheat = sum(n for it, n in _inv.items() if it != "WHEAT")
+            if (_non_wheat >= ROUTE_UNLOAD_AT
+                    or _inv.get("FERTILIZER", 0) >= ROUTE_FERT_EXPRESS):
+                if _inv.get("WHEAT", 0) > 0:
+                    _it = max(((it, n) for it, n in _inv.items()
+                               if it != "WHEAT" and n > 0),
+                              key=lambda kv: kv[1])[0]
+                    assignment[ui] = {"prio": P_UNLOAD, "x": SHED_TILE[0],
+                                      "y": SHED_TILE[1],
+                                      "op": ["PLACE", _it, _inv[_it]]}
+                else:
+                    assignment[ui] = {"prio": P_UNLOAD, "x": SHED_TILE[0],
+                                      "y": SHED_TILE[1], "op": ["DROP"]}
+                continue
+            _feeds_left = sum(1 for p in _my_open for ti in _open_route[p]
+                              if tasks[ti]["op"][0] == "FEED")
+            if (_feeds_left > 0 and _inv.get("WHEAT", 0) <= 0
+                    and (shed or {}).get("WHEAT", 0) > 0):
+                _n = min(_feeds_left + 1, shed["WHEAT"])
+                assignment[ui] = {"prio": P_CHAIN, "x": SHED_TILE[0],
+                                  "y": SHED_TILE[1], "op": ["PICKUP", "WHEAT", _n]}
+                continue
+            # Walk the loop in order; first tile with a servable job.  A FEED
+            # with no wheat in hand is a silent engine no-op — skip past it
+            # (the tile stays reserved; wheat arrives via the rule above).
+            _best = None
+            for p in _my_open:
+                for ti in sorted(_open_route[p], key=lambda i: tasks[i]["prio"]):
+                    if (tasks[ti]["op"][0] == "FEED"
+                            and _inv.get("WHEAT", 0) <= 0):
+                        continue
+                    _best = ti
+                    break
+                if _best is not None:
+                    break
+            if _best is not None:
+                assignment[ui] = tasks[_best]
+                taken[_best] = True
+        # Reserve every remaining route job for its circuit.  From
+        # ROUTE_RELEASE_HOUR the reservation lifts and the general pool mops
+        # up whatever the loop has not reached (the anti-v63a coverage guard;
+        # CARE/COLLECT/HARVEST need no wheat, so any unit can finish them).
+        if hour < ROUTE_RELEASE_HOUR:
+            for _p, _tis in _open_route.items():
+                for ti in _tis:
+                    taken[ti] = True
 
     def feeds_open():
         return any(t["op"][0] == "FEED" and not taken[ti]
@@ -1475,25 +1648,42 @@ def _assign(units, tasks, inventories, tiles, day, hour):
     # at nightfall and selling into the crater.  Day 10 mornings only.
     if day == 10 or (day == 11 and hour < 4):
         for ui, (ux, uy) in enumerate(units):
-            if inv_of(ui).get("MELON", 0) >= 6:
+            # v64a: >=4, was >=6 — a melon tile yields 5-6, so 5-melon pockets
+            # stalled all day (seed 14 d10: 58 yield, 18 sold, −7.9k).
+            if inv_of(ui).get("MELON", 0) >= 4:
                 assignment[ui] = {"prio": P_UNLOAD, "x": SHED_TILE[0],
                                   "y": SHED_TILE[1], "op": ["DROP"]}
 
-    # Idle-but-loaded units bank their cargo (sellable today instead of tomorrow),
+    # Loaded units bank their cargo (sellable today instead of tomorrow),
     # but never while still carrying feed wheat for pending FEED tasks.
+    # v64a: delivery OVERRIDES routine work (prio >= P_WATER) instead of
+    # waiting for an idle moment — with 3-4 hands on circuits the general
+    # pool is always-assigned, so the old idle-only express never fired and
+    # every pocket rode full all day (seed 14 d10: 3 shed deliveries vs
+    # v62a's 9 — v62a's labor SLACK was a load-bearing delivery conveyor).
+    # Urgent tasks (saves/feeds/harvests/chains) are never abandoned;
+    # circuit carriers keep their own PLACE-detour cadence.
     feeds_pending = any(t.get("op", [None])[0] == "FEED" for ti, t in enumerate(tasks)
                         if not taken[ti])
     for ui, (ux, uy) in enumerate(units):
-        if ui in assignment:
+        if ui in _plan:
+            continue
+        if ui in assignment and assignment[ui]["prio"] < P_WATER:
             continue
         inv = inv_of(ui)
-        if ((sum(inv.values()) >= UNLOAD_AT
-             or inv.get("FERTILIZER", 0) >= 1
-             # v58c melon express: the whole field's d0 melons detonate d10
-             # and the big families dump at h16 (steps 256-264, measured);
-             # melons that ride in pockets until the nightly drop sell d11
-             # into the crater — measured $214->158 vs $272 pre-wave.
-             or inv.get("MELON", 0) >= 4)
+        _busy = ui in assignment   # overriding routine work takes a FULL load;
+                                   # an idle unit banks at the old thresholds
+                                   # (fert>=1 as an override caused perpetual
+                                   # shed ping-pong — 6-seed regression)
+        if (((sum(inv.values()) >= UNLOAD_AT
+              or inv.get("MELON", 0) >= 4) if _busy else
+             (sum(inv.values()) >= UNLOAD_AT
+              or inv.get("FERTILIZER", 0) >= 1
+              # v58c melon express: the whole field's d0 melons detonate d10
+              # and the big families dump at h16 (steps 256-264, measured);
+              # melons that ride in pockets until the nightly drop sell d11
+              # into the crater — measured $214->158 vs $272 pre-wave.
+              or inv.get("MELON", 0) >= 4))
                 and not (feeds_pending and inv.get("WHEAT", 0) > 0)):
             # v54d fert express: collected fert rode in pockets until the nightly
             # drop and sold NEXT morning - the ramp's cash lagged ~20h every day.
@@ -1670,7 +1860,19 @@ def _market_orders(day, hour, money, seeds, shed, inventories, prices, hires_tod
     # lands in the shed after this turn's unit actions, so buy ahead of need.
     wheat_price = max(1, prices.get("WHEAT", 25))
     if day <= LAST_TICK_DAY and placed_animals > 0:
-        wheat_stock = shed.get("WHEAT", 0) + sum(inv.get("WHEAT", 0) for inv in inventories)
+        # v64a WORKING CAPITAL (the King's notebook concept): when the route
+        # planner is on, only shed wheat + circuit-carrier wheat is FEEDABLE —
+        # wheat riding in crop-harvester pockets masked the shortage (measured
+        # seed 3 d28: "stock" 58 while 7 animals starved with shed at 10; the
+        # reserved route feeds mean pocket wheat never reaches an animal).
+        _wcar = set(_ROUTE.get(_CUR_SEAT) or {})
+        if _wcar:
+            wheat_stock = shed.get("WHEAT", 0) + sum(
+                inv.get("WHEAT", 0) for ui, inv in enumerate(inventories)
+                if ui in _wcar)
+        else:
+            wheat_stock = shed.get("WHEAT", 0) + sum(inv.get("WHEAT", 0)
+                                                     for inv in inventories)
         want = placed_animals + 2
         if wheat_stock < want and money > 0:
             # FEED IS SACRED: feed buys bypass every reserve (the reserve exists FOR feed).
@@ -1887,6 +2089,9 @@ def agent(obs):
         _COW_BOOM[player] = False    # v61d
         _GOOSE_TARGET[player] = D0_GOOSE
         _STICKY[player] = {}
+        _ROUTE[player] = {}          # v64a
+        _ROUTE_TILES[player] = set()
+        _ROUTE_DAY[player] = -1
     if not _TAPE_SEEN.get(player, False) and 1 <= day <= 2:
         _oc, _oa = _opp_capacity(opp.get("tiles", []))
         # Self-exclusion (v15 copies the tape's 4-sheep opening): the tape shows
@@ -2003,8 +2208,23 @@ def agent(obs):
 
     tasks, n_feed = _build_tasks(tiles, day, seeds, tape_mode, care_skip, crop_skip,
                                  ramp_fast, tomato_cap, str_dead)
+    # v64a: the dawn choreography — plan once per day.  Hands are REHIRED
+    # every morning and only exist after the hour-0 HIRE order executes, so
+    # hour 0 sees the farmer alone (measured seed 0: units=1 at every dawn);
+    # plan at the first hour with hands on the board — the task list is still
+    # the full day's (fed/cared reset overnight; fertilizer_available is set
+    # at the PRIOR day-end, engine L831).  Yesterday's plan clears at day
+    # change: its carrier indexes died with yesterday's hands.
+    if day != _ROUTE_DAY.get(player, -1):
+        _ROUTE[player] = {}
+        _ROUTE_TILES[player] = set()
+        if len(units) >= 3 and hour <= 8:
+            _ROUTE_DAY[player] = day
+            _plan_routes(player, units, tasks, tiles, day)
+        elif hour > 8:
+            _ROUTE_DAY[player] = day   # hands never came; skip today
     _supply_tasks(tasks, n_feed, units, inventories, shed, tiles, day)
-    assignment = _assign(units, tasks, inventories, tiles, day, hour)
+    assignment = _assign(units, tasks, inventories, tiles, day, hour, shed)
 
     actions = [_unit_action(units[ui], assignment.get(ui)) for ui in range(len(units))]
 

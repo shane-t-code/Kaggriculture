@@ -1,7 +1,7 @@
 """
 main.py — Kaggriculture agent.  ENTRY POINT (must be at archive root, must be named main.py).
 
-STATUS: v62a — PROMOTED to main.py 2026-09-08 (Exp 83: TILE-BATCH
+STATUS: v63a — EXPERIMENTAL .  Base = v62a (Exp 83: TILE-BATCH
 STICKINESS, the labor campaign's first confirmed win).  v61e + two
 assignment edits (feeder may batch same-tile jobs; greedy leaves an
 occupied tile's jobs to its occupant).  HELD-OUT 77 vs v61e:
@@ -1251,7 +1251,18 @@ def _supply_tasks(tasks, n_feed, units, inventories, shed, tiles, day):
         # (~10-11 feeds/day).  Two tasks = two carriers on parallel
         # sub-circuits; the focused-feeder rule already makes both
         # feed-exclusive while feeds are open.
-        if _feed_deficit >= 6 and n >= 4:
+        if _feed_deficit >= 12 and n >= 6:
+            # v63a: THREE carriers for boom-size herds — the circuit math
+            # : ~14-16 animal tiles x 3-4 ops + walking ≈ 57-70
+            # unit-turns/day, beyond two carriers' 48.  Third sweep closes it.
+            _h1 = n // 3
+            tasks.append({"prio": P_CHAIN, "x": SHED_TILE[0], "y": SHED_TILE[1],
+                          "op": ["PICKUP", "WHEAT", _h1]})
+            tasks.append({"prio": P_CHAIN, "x": SHED_TILE[0], "y": SHED_TILE[1],
+                          "op": ["PICKUP", "WHEAT", _h1]})
+            tasks.append({"prio": P_CHAIN, "x": SHED_TILE[0], "y": SHED_TILE[1],
+                          "op": ["PICKUP", "WHEAT", n - 2 * _h1]})
+        elif _feed_deficit >= 6 and n >= 4:
             _h1 = n // 2
             tasks.append({"prio": P_CHAIN, "x": SHED_TILE[0], "y": SHED_TILE[1],
                           "op": ["PICKUP", "WHEAT", _h1]})
@@ -1331,24 +1342,32 @@ def _assign(units, tasks, inventories, tiles, day, hour):
         return any(t["op"][0] == "FEED" and not taken[ti]
                    for ti, t in enumerate(tasks))
 
+    def _on_animal(task):
+        row = tiles[task["y"]] if 0 <= task["y"] < len(tiles) else None
+        t = row[task["x"]] if row and 0 <= task["x"] < len(row) else None
+        return isinstance(t, dict) and bool(t.get("animal"))
+
     def eligible(ui, task):
         req = task.get("require")
         if req is not None and inv_of(ui).get(req, 0) <= 0:
             return False
-        # FOCUSED FEEDER (v11e): while FEED tasks are pending, wheat carriers do
-        # feeds ONLY.  Measured failure: the sole wheat carrier was assigned P_SAVE
-        # crop rescues across the map and fed 2-6 of 12 animals/day from day 12 on —
-        # an animal unfed on its production day wipes its whole banked care bonus.
-        # Hands can rescue plants; only wheat carriers can feed.
-        # v62a TILE-BATCH exception: jobs on the unit's CURRENT tile are always
-        # allowed — the feeder cares/harvests/collects the animal it just fed
-        # before moving on.  (Exp 83b measured our work-per-stop at 1.29 vs the
-        # King's 1.93; the feed-only rule forced every animal tile to be walked
-        # twice.  Feed exclusivity still holds across tiles.)
-        if (task["op"][0] != "FEED" and inv_of(ui).get("WHEAT", 0) > 0
-                and feeds_open()
-                and not (task["x"] == units[ui][0] and task["y"] == units[ui][1])):
-            return False
+        # v63a ANIMAL-CIRCUIT OWNERSHIP (rework of the v11e focused feeder +
+        # v62a batching).  The wheat carriers ARE the animal circuit: while
+        # they hold wheat and feeds are open, they take animal-tile ops of
+        # ANY kind (feed, care, collect, milk/wool harvest) and nothing else;
+        # other units stay off the pending animal jobs so ONE sweep does 3-4
+        # ops per stop (Exp 83e: our stops were FEED-alone 175x / COLL-alone
+        # 135x / CARE-alone 93x vs the King's single FEED+CARE+COLLECT stop
+        # 289x — his animal streak 2.48, ours 1.41).  Same-tile jobs stay
+        # open to everyone (finish where you stand), and from hour 16 the
+        # circuit opens up so nothing starves if the carriers fall behind.
+        _same_tile = (task["x"] == units[ui][0] and task["y"] == units[ui][1])
+        _carrier = inv_of(ui).get("WHEAT", 0) > 0
+        if _carrier and feeds_open() and not _same_tile and not _on_animal(task):
+            return False   # carriers stay on the circuit
+        if (not _carrier and hour < 16 and feeds_open() and not _same_tile
+                and task["op"][0] in ("FEED", "CARE", "COLLECT_FERTILIZER")):
+            return False   # non-carriers leave animal jobs to the sweep
         return True
 
     # Stickiness: finish the tile you stand on.

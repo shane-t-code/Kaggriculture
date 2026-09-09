@@ -1,15 +1,13 @@
 """
 main.py — Kaggriculture agent.  ENTRY POINT (must be at archive root, must be named main.py).
 
-STATUS: v62a — PROMOTED to main.py 2026-09-08 (Exp 83: TILE-BATCH
-STICKINESS, the labor campaign's first confirmed win).  v61e + two
-assignment edits (feeder may batch same-tile jobs; greedy leaves an
-occupied tile's jobs to its occupant).  HELD-OUT 77 vs v61e:
-**97W-57L (63.0%) +1,493 σ3,511 μ/σ 0.425**.  Legs: wool 32-0
-+23.8k PERFECT, frontier holdout −29,408 NEW BEST EVER, king dip
-recovered (−46.4k), rest parity.  NOT YET SUBMITTED — flag Shane:
--m "v62a" (displaces v58c 771 → actives v61e 772 + v62a).
-Lineage …v60a→v61c→v61d→v61e→v62a.  Contains:
+STATUS: v62c — EXPERIMENTAL .  v61e +
+two assignment edits from the walk-trace diagnosis (our work-per-stop
+1.29 vs King 1.93 with the SAME walk count — payload per stop, not
+walking, is the labor gap): (1) focused feeder may do same-tile
+non-feed jobs before moving on; (2) greedy leaves an occupied tile's
+remaining jobs to its occupant (P_SAVE overrides).  Base below = v61e
+as promoted .  Contains:
 milk-boom (fired lane 20W-6L 77% +2,141) + feed completeness (held-out
 64.9% +1,385) + v60a STR wind-down + hire-last (v61b2 held-out 89W-65L
 57.8% n=154, measured WITH a handicap — no boom — and still won).
@@ -1349,6 +1347,18 @@ def _assign(units, tasks, inventories, tiles, day, hour):
                 and feeds_open()
                 and not (task["x"] == units[ui][0] and task["y"] == units[ui][1])):
             return False
+        # v62c ANIMAL-CIRCUIT CONSOLIDATION: while feeds are open (before
+        # hour 16), CARE and COLLECT go only to wheat carriers — the units
+        # that will stand on those tiles anyway — so the animal ring is
+        # swept ONCE with 3-4 ops per stop instead of by three specialist
+        # walks (Exp 83d audit: COLL-alone x93 and CARE-alone x76 stops with
+        # feed still open on the same square).  Same-tile jobs and the h16+
+        # cleanup window stay open to everyone.
+        if (task["op"][0] in ("CARE", "COLLECT_FERTILIZER")
+                and hour < 16 and feeds_open()
+                and inv_of(ui).get("WHEAT", 0) <= 0
+                and not (task["x"] == units[ui][0] and task["y"] == units[ui][1])):
+            return False
         return True
 
     # Stickiness: finish the tile you stand on.
@@ -1378,6 +1388,14 @@ def _assign(units, tasks, inventories, tiles, day, hour):
         if _t.get("x") == _up[0] and _t.get("y") == _up[1]:
             _occupied.add((_up[0], _up[1]))
 
+    # v62b TILE-CLAIM: once any task on a tile is assigned this turn, the
+    # tile's remaining tasks are left for that walker's arrival stickiness
+    # instead of dispatching a second/third walker to the same square
+    # (Exp 83c: our top animal stops were FEED-alone 184x / COLLECT-alone
+    # 136x / CARE-alone 93x — three walks for the King's one
+    # FEED+CARE+COLLECT stop, 289x).  P_SAVE still overrides.
+    _claimed = set(_occupied)
+
     def greedy(candidate_tis):
         """Most urgent first, nearest eligible unit wins, stable tie-break.
         Incumbent bias (v40a, from v33a): the unit already walking to a task
@@ -1387,8 +1405,8 @@ def _assign(units, tasks, inventories, tiles, day, hour):
             if taken[ti]:
                 continue
             task = tasks[ti]
-            if (task["x"], task["y"]) in _occupied and task["prio"] > P_SAVE:
-                continue   # v62a: the unit already there batches it next turn
+            if (task["x"], task["y"]) in _claimed and task["prio"] > P_SAVE:
+                continue   # v62a/b: the tile's walker batches it on arrival
             for ui, (ux, uy) in enumerate(units):
                 if ui in assignment or not eligible(ui, task):
                     continue
@@ -1400,8 +1418,11 @@ def _assign(units, tasks, inventories, tiles, day, hour):
         for prio, d, _, ui, ti in pairs:
             if ui in assignment or taken[ti]:
                 continue
+            if (tasks[ti]["x"], tasks[ti]["y"]) in _claimed and tasks[ti]["prio"] > P_SAVE:
+                continue   # claimed earlier in this same wave
             assignment[ui] = tasks[ti]
             taken[ti] = True
+            _claimed.add((tasks[ti]["x"], tasks[ti]["y"]))
 
     # Urgent work (saves, feeds, harvests, supply chains) is assigned globally — a dying
     # plant doesn't care about zones.

@@ -1,15 +1,24 @@
 """
 main.py — Kaggriculture agent.  ENTRY POINT (must be at archive root, must be named main.py).
 
-STATUS: v62a — PROMOTED to main.py 2026-09-08 (Exp 83: TILE-BATCH
-STICKINESS, the labor campaign's first confirmed win).  v61e + two
-assignment edits (feeder may batch same-tile jobs; greedy leaves an
-occupied tile's jobs to its occupant).  HELD-OUT 77 vs v61e:
-**97W-57L (63.0%) +1,493 σ3,511 μ/σ 0.425**.  Legs: wool 32-0
-+23.8k PERFECT, frontier holdout −29,408 NEW BEST EVER, king dip
-recovered (−46.4k), rest parity.  NOT YET SUBMITTED — flag Shane:
--m "v62a" (displaces v58c 771 → actives v61e 772 + v62a).
-Lineage …v60a→v61c→v61d→v61e→v62a.  Contains:
+STATUS: v64b — BENCHED, WASH OUT-OF-SAMPLE (Exp 84b-1: FERT
+APPLICATION COMPLETENESS).  Screen 65.6% (21W-11L +1,643) was
+SEED FLATTERY (the v53a class, reconfirmed): held-out 100-176
+split 65.4%/43.4%, fresh-seed extension 177-215 47.4% —
+combined **121W-111L (52.2%, n=232) +381, p≈0.26 = WASH**.
+Mechanism was real (fert reaches crops: applies up where short,
+no regressions) but the money it moves does not clear noise.
+Direct-application idea stays available for a coupled retest.  v62a + two edits: (1) demand-conditioned fert
+sell reserve (hold exactly today's open FERTILIZE demand, cap 8,
+window d10+ only — NOT v57a's static keep: zero demand reserves
+zero); (2) fert restock chain at deficit >= 1 (was >= 3) with a
+second parallel carrier at deficit >= 6 (v61c two-feeder
+pattern).  BASIS (measured, seed 3 v62a): FERTILIZE tasks sat
+open 579 task-turns/game while 341 unit-turns PASSed — the
+require-gate (no fert in hand) locked idle labor out, and
+FERT_KEEP 0 sold the shed out from under the appliers; we
+execute 40-60 applies/game vs opponents' ~103 .
+UNTESTED.  Lineage …v61e→v62a→v64b.  v62a base was:
 milk-boom (fired lane 20W-6L 77% +2,141) + feed completeness (held-out
 64.9% +1,385) + v60a STR wind-down + hire-last (v61b2 held-out 89W-65L
 57.8% n=154, measured WITH a handicap — no boom — and still won).
@@ -1268,10 +1277,24 @@ def _supply_tasks(tasks, n_feed, units, inventories, shed, tiles, day):
     # weeded out, 26 melon replants. Fertilizing is a luxury; restock at P_FERT(3).
     n_fert = sum(1 for t in tasks if t["op"][0] == "FERTILIZE")
     carried_fert = sum(inv.get("FERTILIZER", 0) for inv in inventories)
-    if n_fert - carried_fert >= 3 and shed.get("FERTILIZER", 0) > 0:
-        n = min(n_fert - carried_fert, shed["FERTILIZER"])
-        tasks.append({"prio": P_FERT, "x": SHED_TILE[0], "y": SHED_TILE[1],
-                      "op": ["PICKUP", "FERTILIZER", n]})
+    _fdef = n_fert - carried_fert
+    if _fdef >= 1 and shed.get("FERTILIZER", 0) > 0:
+        # v64b : threshold was >= 3 — FERTILIZE tasks sat open 579
+        # task-turns/game while units PASSed (require-gated: no fert in hand,
+        # no restock emitted).  >= 1 restocks as soon as demand exists; at a
+        # big deficit a SECOND parallel carrier splits the errand (the v61c
+        # two-feeder pattern).  Priority stays P_FERT — at P_CHAIN this
+        # errand yo-yoed units through the shed while crops died (measured).
+        n = min(_fdef, shed["FERTILIZER"])
+        if _fdef >= 6 and n >= 4:
+            _f1 = n // 2
+            tasks.append({"prio": P_FERT, "x": SHED_TILE[0], "y": SHED_TILE[1],
+                          "op": ["PICKUP", "FERTILIZER", _f1]})
+            tasks.append({"prio": P_FERT, "x": SHED_TILE[0], "y": SHED_TILE[1],
+                          "op": ["PICKUP", "FERTILIZER", n - _f1]})
+        else:
+            tasks.append({"prio": P_FERT, "x": SHED_TILE[0], "y": SHED_TILE[1],
+                          "op": ["PICKUP", "FERTILIZER", n]})
 
     # One animal-pickup per turn: an animal sits in the shed and an empty structure waits.
     _empties = set(t.get("kind") for row in tiles for t in row
@@ -1424,6 +1447,36 @@ def _assign(units, tasks, inventories, tiles, day, hour):
                 taken[ti] = True
                 break
 
+    # v64b DIRECT APPLICATION : a unit already HOLDING fert applies
+    # it to the nearest waiting crop before the sweep re-routes it.  Measured
+    # (seed 3, d10-26): with FERTILIZE demand open on 408 turns, fert averaged
+    # 10.2 in collector POCKETS vs 1.1 in the shed — collectors are never
+    # idle (express never fires) and always nearer their next COLLECT than
+    # the crops, so the fert circles the ring while empty units PASS at the
+    # require-gate.  Pocket -> crop beats pocket -> shed -> pickup -> crop.
+    # eligible() keeps the focused-feeder lock (a wheat carrier with feeds
+    # open is never dragged off).  Urgent work above already had its claim.
+    _fert_tis = [ti for ti, t in enumerate(tasks)
+                 if not taken[ti] and t["op"][0] == "FERTILIZE"]
+    if _fert_tis:
+        for ui, (ux, uy) in enumerate(units):
+            if not _fert_tis:
+                break
+            if ui in assignment or inv_of(ui).get("FERTILIZER", 0) < 2:
+                continue
+            _best, _bd = None, None
+            for ti in _fert_tis:
+                t = tasks[ti]
+                if not eligible(ui, t):
+                    break          # eligibility is per-unit, not per-task here
+                d = abs(t["x"] - ux) + abs(t["y"] - uy)
+                if _bd is None or d < _bd:
+                    _best, _bd = ti, d
+            if _best is not None:
+                assignment[ui] = tasks[_best]
+                taken[_best] = True
+                _fert_tis.remove(_best)
+
     # ZONED SWEEP for routine work (water/care/collect/plant/dig): order the remaining
     # tasks along a serpentine (row-by-row, alternating direction) and carve them into one
     # contiguous chunk per free unit, matched to units by the same ordering. Each worker
@@ -1522,7 +1575,7 @@ def _unit_action(unit_pos, task):
 
 def _market_orders(day, hour, money, seeds, shed, inventories, prices, hires_today,
                    n_hands, tiles, n_quadrants, opp_tiles, market_inv, shops, tape_mode,
-                   gamble=False):
+                   gamble=False, fert_demand=0):
     opp_crops, opp_animals = _opp_capacity(opp_tiles)
     my_crops, my_animals = _opp_capacity(tiles)
     """Queue order: SELL (income), HIRE, wheat, animals, LAND, seeds. Engine cap: 10."""
@@ -1604,7 +1657,13 @@ def _market_orders(day, hour, money, seeds, shed, inventories, prices, hires_tod
             # Hold stock for crop fertilizing — but ONLY once the farm is liquid. In the
             # $0-bank opening, fertilizer sales are the survival cash that buys feed;
             # hoarding them starved the sheep that produce them (measured: 0-32 vs v3a).
-            stock -= FERT_KEEP
+            # v64b : the static FERT_KEEP 0 (v57a) sold the shed
+            # out from under the appliers — FERTILIZE tasks sat open 579
+            # task-turns/game while we execute 40-60 applies vs opponents'
+            # ~103 .  Reserve exactly TODAY'S open apply demand
+            # (capped 8 — fert decays, never hoard), sell the rest.  This is
+            # NOT v57a's static keep: with zero demand it reserves zero.
+            stock -= max(FERT_KEEP, min(fert_demand, 8))
         if stock <= 0:
             continue
         price = prices.get(item, 0)
@@ -2021,7 +2080,9 @@ def agent(obs):
                             me.get("hires_today", 0), len(me.get("hands", [])), tiles,
                             len(me.get("unlocked_quadrants", ["NW"])),
                             opp.get("tiles", []), market_inv, shops, tape_mode,
-                            gamble)
+                            gamble,
+                            fert_demand=sum(1 for t in tasks
+                                            if t["op"][0] == "FERTILIZE"))
 
     if DEBUG:
         print(f"d{day} h{hour} units={len(units)} tasks={len(tasks)} market={market}")

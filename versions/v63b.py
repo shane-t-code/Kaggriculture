@@ -1,7 +1,7 @@
 """
 main.py — Kaggriculture agent.  ENTRY POINT (must be at archive root, must be named main.py).
 
-STATUS: v62a — PROMOTED to main.py 2026-09-08 (Exp 83: TILE-BATCH
+STATUS: v63b — EXPERIMENTAL .  Base = v62a (Exp 83: TILE-BATCH
 STICKINESS, the labor campaign's first confirmed win).  v61e + two
 assignment edits (feeder may batch same-tile jobs; greedy leaves an
 occupied tile's jobs to its occupant).  HELD-OUT 77 vs v61e:
@@ -602,6 +602,11 @@ _WHEAT_TOWN = {}             # per-seat sticky latch, reset at step 0
 _FACTORY_NOW = False         # set per agent() call: wheat factory active this turn
 _DEAD_TOWN_NOW = False       # set per agent() call: dead-town latch this turn
 _STICKY = {}                 # v40a: per-seat {unit_index: (x, y, op0)}, reset at step 0
+_FEEDER_TAGS = {0: set(), 1: set()}   # v63b: unit indices assigned a shed
+# wheat PICKUP today — the TRUE circuit carriers.  Cleared each dawn (hands
+# respawn).  Fixes the loose "carrier = holds wheat" test that made every
+# wheat-crop harvester an accidental carrier (v63a's crash: banks halved
+# when incidental carriers were locked onto the animal circuit).
 _CUR_SEAT = 0                # v40a: set per agent() call so _assign can key _STICKY
 # Planting priority when a tile opens up: melon (highest $/tile-day, tiny cap), wheat (feeds
 # the herd — replaces market buys at scarcity prices), strawberry (biggest town demand:
@@ -1295,6 +1300,15 @@ def _assign(units, tasks, inventories, tiles, day, hour):
     def inv_of(ui):
         return inventories[ui] if ui < len(inventories) else {}
 
+    # v63b: dawn reset of the feeder tags (hands respawn each morning, so
+    # yesterday's unit indices mean nothing today).
+    if hour == 0:
+        _FEEDER_TAGS[_CUR_SEAT] = set()
+    _tags = _FEEDER_TAGS[_CUR_SEAT]
+
+    def is_feeder(ui):
+        return ui in _tags and inv_of(ui).get("WHEAT", 0) > 0
+
     # Override 1: a unit carrying an animal delivers it to the nearest empty pasture.
     for ui, (ux, uy) in enumerate(units):
         inv = inv_of(ui)
@@ -1331,23 +1345,34 @@ def _assign(units, tasks, inventories, tiles, day, hour):
         return any(t["op"][0] == "FEED" and not taken[ti]
                    for ti, t in enumerate(tasks))
 
+    def _on_animal(task):
+        row = tiles[task["y"]] if 0 <= task["y"] < len(tiles) else None
+        t = row[task["x"]] if row and 0 <= task["x"] < len(row) else None
+        return isinstance(t, dict) and bool(t.get("animal"))
+
     def eligible(ui, task):
         req = task.get("require")
         if req is not None and inv_of(ui).get(req, 0) <= 0:
             return False
-        # FOCUSED FEEDER (v11e): while FEED tasks are pending, wheat carriers do
-        # feeds ONLY.  Measured failure: the sole wheat carrier was assigned P_SAVE
-        # crop rescues across the map and fed 2-6 of 12 animals/day from day 12 on —
-        # an animal unfed on its production day wipes its whole banked care bonus.
-        # Hands can rescue plants; only wheat carriers can feed.
-        # v62a TILE-BATCH exception: jobs on the unit's CURRENT tile are always
-        # allowed — the feeder cares/harvests/collects the animal it just fed
-        # before moving on.  (Exp 83b measured our work-per-stop at 1.29 vs the
-        # King's 1.93; the feed-only rule forced every animal tile to be walked
-        # twice.  Feed exclusivity still holds across tiles.)
-        if (task["op"][0] != "FEED" and inv_of(ui).get("WHEAT", 0) > 0
-                and feeds_open()
-                and not (task["x"] == units[ui][0] and task["y"] == units[ui][1])):
+        # v63b ANIMAL-CIRCUIT OWNERSHIP with REAL carrier identity (fixes
+        # v63a's crash: "carrier = holds wheat" made every wheat-crop
+        # harvester an accidental carrier and starved the crops).  Only
+        # units TAGGED by a shed wheat-pickup are circuit feeders:
+        #  - a tagged feeder with wheat, while feeds are open, works animal
+        #    tiles only (any op there: feed, care, collect, milk/wool
+        #    harvest) — one sweep, 3-4 ops per stop (Exp 83e: King 2.48
+        #    ops/animal-stop vs our 1.41);
+        #  - untagged units leave cross-tile FEED/CARE/COLLECT to the sweep
+        #    before hour 16 while a tagged feeder is fielded;
+        #  - same-tile jobs are always allowed (finish where you stand),
+        #    and from hour 16 everything opens up (starvation guard).
+        _same_tile = (task["x"] == units[ui][0] and task["y"] == units[ui][1])
+        if _same_tile:
+            return True
+        if is_feeder(ui) and feeds_open() and not _on_animal(task):
+            return False
+        if (not is_feeder(ui) and hour < 16 and _tags and feeds_open()
+                and task["op"][0] in ("FEED", "CARE", "COLLECT_FERTILIZER")):
             return False
         return True
 
@@ -1507,6 +1532,11 @@ def _assign(units, tasks, inventories, tiles, day, hour):
 
     _STICKY[_CUR_SEAT] = {ui: (t["x"], t["y"], t["op"][0])
                           for ui, t in assignment.items()}
+    # v63b: tag the units assigned a shed wheat-pickup — they are today's
+    # circuit feeders (tags persist across turns, cleared at dawn).
+    for ui, t in assignment.items():
+        if t["op"][0] == "PICKUP" and len(t["op"]) > 1 and t["op"][1] == "WHEAT":
+            _tags.add(ui)
     return assignment
 
 

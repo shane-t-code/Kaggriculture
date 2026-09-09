@@ -1,0 +1,264 @@
+----- cell 5 -----
+submission 56061209: 63 episodes on the ladder, reading the newest 40
+W19-L21-T0, margin median -1,408, worst -69,980, best +33,183
+
+----- cell 5 -----
+<Figure size 900x340 with 1 Axes>
+----- cell 6 -----
+  10/40 replays fetched
+  20/40 replays fetched
+  30/40 replays fetched
+  40/40 replays fetched
+40 replays loaded, 32 distinct shop pairs
+
+----- cell 8 -----
+texture: green 28.4%, amber 1.3%, navy 70.3%
+
+----- cell 9 -----
+<Figure size 1100x604.444 with 1 Axes>
+----- cell 9 -----
+<Figure size 1100x604.444 with 1 Axes>
+----- cell 12 -----
+GLOBAL: ADAPTIVE  (varying 82.3%, first divergence t=15, channels {'farmer': 487, 'hands': 562, 'market': 489})
+within-world verdict: {'ADAPTIVE': 8}
+
+----- cell 12 -----
+<Figure size 900x272 with 1 Axes>
+----- cell 12 -----
+                             world  n            cls   vary first
+0                   BAKERY__BAKERY  1  (one episode)             
+1           BAKERY__ICE_CREAM_SHOP  2       ADAPTIVE  75.8%    29
+2                 BAKERY__PET_CAFE  1  (one episode)             
+3              BRUNCH_SPOT__BAKERY  1  (one episode)             
+4      BRUNCH_SPOT__FARMERS_MARKET  2       ADAPTIVE  78.0%    15
+5          BRUNCH_SPOT__PIZZA_SHOP  2       ADAPTIVE  76.1%    96
+6          BRUNCH_SPOT__YARN_STORE  1  (one episode)             
+7      FARMERS_MARKET__BRUNCH_SPOT  1  (one episode)             
+8   FARMERS_MARKET__FARMERS_MARKET  1  (one episode)             
+9   FARMERS_MARKET__ICE_CREAM_SHOP  1  (one episode)             
+10      FARMERS_MARKET__PIZZA_SHOP  1  (one episode)             
+11      FARMERS_MARKET__YARN_STORE  1  (one episode)             
+12          ICE_CREAM_SHOP__BAKERY  1  (one episode)             
+13     ICE_CREAM_SHOP__BRUNCH_SPOT  1  (one episode)             
+14  ICE_CREAM_SHOP__ICE_CREAM_SHOP  2       ADAPTIVE  76.2%    29
+15        ICE_CREAM_SHOP__PET_CAFE  1  (one episode)             
+16                PET_CAFE__BAKERY  1  (one episode)             
+17           PET_CAFE__BRUNCH_SPOT  1  (one episode)             
+18        PET_CAFE__ICE_CREAM_SHOP  1  (one episode)             
+19            PET_CAFE__PIZZA_SHOP  1  (one episode)             
+20              PIZZA_SHOP__BAKERY  2       ADAPTIVE  78.6%    15
+21      PIZZA_SHOP__FARMERS_MARKET  1  (one episode)             
+22            PIZZA_SHOP__PET_CAFE  1  (one episode)             
+23          PIZZA_SHOP__YARN_STORE  1  (one episode)             
+24           SMOOTHIE_SHOP__BAKERY  1  (one episode)             
+25   SMOOTHIE_SHOP__ICE_CREAM_SHOP  2       ADAPTIVE  77.6%    96
+26         SMOOTHIE_SHOP__PET_CAFE  1  (one episode)             
+27       SMOOTHIE_SHOP__PIZZA_SHOP  1  (one episode)             
+28      YARN_STORE__FARMERS_MARKET  2       ADAPTIVE  79.8%    93
+29      YARN_STORE__ICE_CREAM_SHOP  1  (one episode)             
+30       YARN_STORE__SMOOTHIE_SHOP  1  (one episode)             
+31          YARN_STORE__YARN_STORE  2       ADAPTIVE  79.8%    93
+----- cell 15 -----
+0 mirror games (plan >= 0.95), 0 sibling games (0.50-0.95), 40 unrelated
+
+----- cell 15 -----
+<Figure size 900x300 with 1 Axes>
+----- cell 15 -----
+<pandas.io.formats.style.Styler at 0x7b390b5ecd10>
+----- cell 17 -----
+39 genetic groups among 40 opponents (1 with 2+ games, 38 singletons)
+
+----- cell 17 -----
+<Figure size 900x220 with 1 Axes>
+----- cell 17 -----
+   group yours  games  submissions                  lead    record  \
+0     G1            2            2             Yuxuan Ba  W0-L2-T0   
+1     G2            1            1             Esperanza  W1-L0-T0   
+2     G3            1            1        Adhiraj Jagtap  W0-L1-T0   
+3     G4            1            1       Shinzo Takayama  W1-L0-T0   
+4     G5            1            1             wonder777  W0-L1-T0   
+5     G6            1            1     Md.Mahfujul Karim  W1-L0-T0   
+6     G7            1            1        Life Is Roblox  W1-L0-T0   
+7     G8            1            1    Constantin Craciun  W1-L0-T0   
+8     G9            1            1               VanKoha  W0-L1-T0   
+9    G10            1            1                 astro  W1-L0-T0   
+10   G11            1            1               Wei Han  W0-L1-T0   
+11   G12            1            1             XiweiZhou  W0-L1-T0   
+12   G13            1            1                  AI老爸  W1-L0-T0   
+13   G14            1            1        Marcin Skalski  W0-L1-T0   
+14   G15            1            1              Jia Chen  W0-L1-T0   
+15   G16            1            1     Andrew Chistyakov  W1-L0-T0   
+16   G17            1            1            Jonas Jaku  W1-L0-T0   
+17   G18            1            1                  Adir  W0-L1-T0   
+18   G19            1            1         Justin Kimlim  W0-L1-T0   
+19   G20            1            1       Pietro Valocchi  W0-L1-T0   
+20   G21            1            1                  cmxu  W1-L0-T0   
+21   G22            1            1         Jackson Sauls  W1-L0-T0   
+22   G23            1            1              GarciasN  W1-L0-T0   
+23   G24            1            1           RMS Danaraj  W1-L0-T0   
+24   G25            1            1        李秉叡（ntumlnoob）  W0-L1-T0   
+25   G26            1            1    Shivam Shrivastava  W0-L1-T0   
+26   G27            1            1          Aussie lover  W0-L1-T0   
+27   G28            1            1              rooklift  W1-L0-T0   
+28   G29            1            1                ijiiok  W1-L0-T0   
+29   G30            1            1            IterumVici  W0-L1-T0   
+30   G31            1            1        Haroon Rasheed  W1-L0-T0   
+31   G32            1            1             qiu ji123  W0-L1-T0   
+32   G33            1            1            Zikai Chen  W0-L1-T0   
+33   G34            1            1          Hazqeel Afyq  W0-L1-T0   
+34   G35            1            1                sue124  W0-L1-T0   
+35   G36            1            1   Alejandro Rendon B.  W1-L0-T0   
+36   G37            1            1           Riki Garcia  W1-L0-T0   
+37   G38            1            1               Alex #4  W1-L0-T0   
+38   G39            1            1  Abhishek Kumar Gupta  W0-L1-T0   
+
+    margin_med  worst   best  plan_to_you  
+0       -52690 -69980 -52690        0.001  
+1         2958   2958   2958        0.000  
+2       -22780 -22780 -22780        0.000  
+3          108    108    108        0.006  
+4       -20762 -20762 -20762        0.000  
+5        19389  19389  19389        0.000  
+6        19515  19515  19515        0.000  
+7         9780   9780   9780        0.000  
+8       -54506 -54506 -54506        0.000  
+9        15260  15260  15260        0.000  
+10      -13504 -13504 -13504        0.001  
+11      -15410 -15410 -15410        0.003  
+12       21218  21218  21218        0.000  
+13      -19763 -19763 -19763        0.001  
+14      -27224 -27224 -27224        0.003  
+15        9254   9254   9254        0.008  
+16          72     72     72        0.001  
+17      -19772 -19772 -19772        0.024  
+18      -12942 -12942 -12942        0.000  
+19      -14087 -14087 -14087        0.003  
+20        1570   1570   1570        0.028  
+21        9060   9060   9060        0.015  
+22        7974   7974   7974        0.000  
+23        6942   6942   6942        0.001  
+24      -18372 -18372 -18372        0.000  
+25       -1408  -1408  -1408        0.001  
+26       -3083  -3083  -3083        0.000  
+27       27585  27585  27585        0.001  
+28        1471   1471   1471        0.000  
+29      -11367 -11367 -11367        0.000  
+30       15249  15249  15249        0.001  
+31      -18565 -18565 -18565        0.004  
+32      -50803 -50803 -50803        0.000  
+33      -12957 -12957 -12957        0.011  
+34       -3762  -3762  -3762        0.008  
+35       12937  12937  12937        0.000  
+36       17032  17032  17032        0.000  
+37       33183  33183  33183        0.001  
+38       -3137  -3137  -3137        0.036  
+----- cell 19 -----
+macro profile, median [p10, p90]; ref = the measured #1 shape
+  2nd quadrant, day                      9 [9, 9]    ref 5
+  care actions                         188 [118, 268]    ref 280
+  herd bought (median)           COW 8  SHEEP 3  GOOSE 0    ref 7 COW
+  endgame fallow tiles d25-29           21 [17, 27]    ref 13
+  stranded $ at the bell                 0 [0, 0]    ref 442
+  pass-with-work unit-turns            413 [392, 426]    ref low
+  shed-at-cap turns                      0 [0, 2]    ref 0
+  floor sells (price <= 2)              10 [0, 23]    ref 0
+
+----- cell 19 -----
+<Figure size 900x450 with 1 Axes>
+----- cell 21 -----
+<Figure size 920x520 with 1 Axes>
+----- cell 23 -----
+<Figure size 1300x800 with 2 Axes>
+----- cell 23 -----
+craters dug by us that the rival sold into: MELON -$3,252, MELON -$1,356, STRAWBERRY -$952, MELON -$912, STRAWBERRY -$886, MELON -$732
+craters we sold into: MELON -$3,348, MELON -$2,580, MELON -$2,580, MELON -$2,388, MELON -$2,100, STRAWBERRY -$1,666
+
+----- cell 25 -----
+<Figure size 1300x340 with 4 Axes>
+----- cell 25 -----
+occupancy: chi2/dof 1,394.8 over 75 unlocked cells; the ten busiest hold 19.2% of the mass against 13.3% if the board were used evenly
+occupancy: half-split correlation r = +0.999   (below about +0.9, read the map as one season's noise)
+
+----- cell 25 -----
+<Figure size 360x360 with 1 Axes>
+----- cell 25 -----
+unit presence: chi2/dof 3,248.0 over 75 unlocked cells; the ten busiest hold 36.6% of the mass against 13.3% if the board were used evenly
+unit presence: half-split correlation r = +1.000   (below about +0.9, read the map as one season's noise)
+
+----- cell 27 -----
+king resolved by climbing the live ladder: 2,283 -> 2,282 -> 2,399 -> 2,730 -> 2,763 -> 2,342 -> 1,747 -> 1,803 -> 1,869 -> 2,238
+
+----- cell 27 -----
+<Figure size 1100x640 with 2 Axes>
+----- cell 27 -----
+season-wide split of every unit-turn: work 27.0%  carry 1.8%  move 53.9%  idle 17.3%
+
+----- cell 29 -----
+<Figure size 1100x420 with 1 Axes>
+----- cell 29 -----
+field-wide reference (490 seasons): 4 hands to day 4, 8 by day 6, 11 by day 10, 12 from day 13 to the bell; IQR 0-2 hands all season
+
+----- cell 31 -----
+SETTLING  (drift -1.68 pts/episode over the last 20, 5 sign flips, threshold 1.0, n=63 episodes, rating now 771.0)
+
+----- cell 31 -----
+<Figure size 950x400 with 2 Axes>
+----- cell 31 -----
+<Figure size 900x320 with 1 Axes>
+----- cell 31 -----
+pairing rate: 1.4 episodes/hour lifetime, 0.7/hour in the last 24h
+at the current rate the 20-episode drift window refreshes in about 30 hours: that is when to read again
+
+----- cell 33 -----
+submission 56061209: 40 episodes, 32 distinct worlds
+  ledger  W19-L21-T0, margin median -1,408, worst -69,980, best +33,183
+  texture green 28.4%  amber 1.3%  navy 70.3%
+
+  GLOBAL class: ADAPTIVE  (varying 82.3%, first divergence t=15, channels {'farmer': 487, 'hands': 562, 'market': 489})
+
+  world                                n class               vary first_div
+  BAKERY__BAKERY                       1 (one episode)    
+  BAKERY__ICE_CREAM_SHOP               2 ADAPTIVE           75.8%        29
+  BAKERY__PET_CAFE                     1 (one episode)    
+  BRUNCH_SPOT__BAKERY                  1 (one episode)    
+  BRUNCH_SPOT__FARMERS_MARKET          2 ADAPTIVE           78.0%        15
+  BRUNCH_SPOT__PIZZA_SHOP              2 ADAPTIVE           76.1%        96
+  BRUNCH_SPOT__YARN_STORE              1 (one episode)    
+  FARMERS_MARKET__BRUNCH_SPOT          1 (one episode)    
+  FARMERS_MARKET__FARMERS_MARKET       1 (one episode)    
+  FARMERS_MARKET__ICE_CREAM_SHOP       1 (one episode)    
+  FARMERS_MARKET__PIZZA_SHOP           1 (one episode)    
+  FARMERS_MARKET__YARN_STORE           1 (one episode)    
+  ICE_CREAM_SHOP__BAKERY               1 (one episode)    
+  ICE_CREAM_SHOP__BRUNCH_SPOT          1 (one episode)    
+  ICE_CREAM_SHOP__ICE_CREAM_SHOP       2 ADAPTIVE           76.2%        29
+  ICE_CREAM_SHOP__PET_CAFE             1 (one episode)    
+  PET_CAFE__BAKERY                     1 (one episode)    
+  PET_CAFE__BRUNCH_SPOT                1 (one episode)    
+  PET_CAFE__ICE_CREAM_SHOP             1 (one episode)    
+  PET_CAFE__PIZZA_SHOP                 1 (one episode)    
+  PIZZA_SHOP__BAKERY                   2 ADAPTIVE           78.6%        15
+  PIZZA_SHOP__FARMERS_MARKET           1 (one episode)    
+  PIZZA_SHOP__PET_CAFE                 1 (one episode)    
+  PIZZA_SHOP__YARN_STORE               1 (one episode)    
+  SMOOTHIE_SHOP__BAKERY                1 (one episode)    
+  SMOOTHIE_SHOP__ICE_CREAM_SHOP        2 ADAPTIVE           77.6%        96
+  SMOOTHIE_SHOP__PET_CAFE              1 (one episode)    
+  SMOOTHIE_SHOP__PIZZA_SHOP            1 (one episode)    
+  YARN_STORE__FARMERS_MARKET           2 ADAPTIVE           79.8%        93
+  YARN_STORE__ICE_CREAM_SHOP           1 (one episode)    
+  YARN_STORE__SMOOTHIE_SHOP            1 (one episode)    
+  YARN_STORE__YARN_STORE               2 ADAPTIVE           79.8%        93
+
+  within-world verdict: {'ADAPTIVE': 8}
+  kinship: 0 mirrors, 0 siblings, 40 opponents read
+
+  macro profile, median [p10, p90]; ref = the measured #1 shape
+  2nd quadrant, day                      9 [9, 9]    ref 5
+  care actions                         188 [118, 268]    ref 280
+  herd bought (median)           COW 8  SHEEP 3  GOOSE 0    ref 7 COW
+  endgame fallow tiles d25-29           21 [17, 27]    ref 13
+  stranded $ at the bell                 0 [0, 0]    ref 442
+
+  convergence: SETTLING  (drift -1.68 pts/episode, 5 flips, threshold 1.0, n=63, rating 771.0)
+

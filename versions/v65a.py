@@ -1,33 +1,20 @@
 """
 main.py — Kaggriculture agent.  ENTRY POINT (must be at archive root, must be named main.py).
 
-STATUS: v66c — PROMOTED to main.py 2026-09-10 (Exp 86c: EARLY
-LAND + EXTENDED BERRY WINDOW — the mid-game cadence fix).
-= v61e + land_hold persists post-clock (Q2 d9→d6, 4/4) + berry
-window d4-9 / cap 24 / sheep tail pauses (the tail's dollars =
-the cohort's seed money; each alone failed — v55a seed-cash law
-+ 86b solo — the PAIR pays, v55e precedent).  GAUNTLET:
-**HELD-OUT 154: 115W-39L (74.7%) +2,321 μ/σ 0.69** (halves
-70.5/78.9 — 2nd-strongest full confirm ever, behind v58c);
-screen 68.8%; boom-scale unfed gate PASSED (9.5% vs 11.9% at
-16-herd); legs: wool 32-0 +26.8k RECORD, frontier HOLDOUT
-−27,431 NEW BEST EVER, router −45.1k (+2k), MR −44.3k (+1k),
-goose −35.8k (noise), king −49.1k (worst leg, logged).
-Mechanism = the live loss anatomy: STR cohort planted ~d7-9 on
-d6 Q2 tiles pays INSIDE d15-21 (the band battle week where
-losses ran us +20k vs their +38k).  NOT SUBMITTED — flag Shane:
--m "v66c" (displaces broken v62a 734 → actives v61e 766 + v66c;
-supersedes the v61e-r re-file flag).
-Lineage …v61c→v61d→v61e→v66c.  v61e base:  v61e + ONE edit: land_hold persists
-while a clocked quadrant is pending (was: 1 pre-clock day only),
-so sheep 5-7 stop eating the $1,000 for 3 days — live Q2 was d9
-[9,9] tight vs all 3 band killers' d8 and the ref #1's d5; the
-d15-21 income week is planted on those fresh tiles.  Ledger
-proof: $1,083 on d6 morning, clock fired, spent on sheep+wheat.
-PRE-REGISTERED RISKS: herd tail +1 day; d6-7 seed dip (berry
-window overlaps).  FINGERPRINT GATES: Q2 day 9→6-7; STR@d10 up;
-unfed not worse; herd complete ≤ +1 day.  Baseline v61e.
-Lineage …v61d→v61e→v66b.  v61e base:
+STATUS: v65a — CANDIDATE .  v62a's
+tile-batch went live and BROKE FEEDING at herd scale (Sep 9
+decode: unfed >=10% in 28/47 live games, boom games 14-22% vs
+v61e's 5-8%; boom lane fell 71%->50%, band 36%->26%, rating 734
+vs 766).  Single-edit bisect: the feeder same-tile exception =
+~3pts of the unfed, the occupied-tile skip = ~1pt.  v65a keeps
+both batching edits but GUARDS them: (1) the feeder may batch
+its tile only in the FEED TAIL (<= 2 feeds still open) — while
+the round is hot it is feed-exclusive again (v61c completeness);
+(2) the occupied-tile skip exempts urgent work (prio <= 1:
+feeds/harvests/chains) — only routine work waits for the
+occupant.  NEW PROMOTION GATE: unfed fingerprint at BOOM SCALE.
+Baseline to beat = v61e (the stronger live anchor, 766).
+Lineage …v60a→v61c→v61d→v61e→v62a→v65a.  v62a base contained:
 milk-boom (fired lane 20W-6L 77% +2,141) + feed completeness (held-out
 64.9% +1,385) + v60a STR wind-down + hire-last (v61b2 held-out 89W-65L
 57.8% n=154, measured WITH a handicap — no boom — and still won).
@@ -1310,6 +1297,13 @@ def _assign(units, tasks, inventories, tiles, day, hour):
     assignment = {}
     taken = [False] * len(tasks)
 
+    # v65a: herd size gates the feeder's same-tile batch — at boom scale the
+    # feed round is the whole economics (fed lane 82% live) and the batch
+    # measurably starves it (paired 16-herd games: +1.3-3.0pts unfed even
+    # with the feed-tail guard; 13-herd games: parity).
+    _n_anim = sum(1 for _row in tiles for _t in _row
+                  if isinstance(_t, dict) and _t.get("animal"))
+
     def inv_of(ui):
         return inventories[ui] if ui < len(inventories) else {}
 
@@ -1349,6 +1343,10 @@ def _assign(units, tasks, inventories, tiles, day, hour):
         return any(t["op"][0] == "FEED" and not taken[ti]
                    for ti, t in enumerate(tasks))
 
+    def open_feed_count():
+        return sum(1 for ti, t in enumerate(tasks)
+                   if t["op"][0] == "FEED" and not taken[ti])
+
     def eligible(ui, task):
         req = task.get("require")
         if req is not None and inv_of(ui).get(req, 0) <= 0:
@@ -1358,8 +1356,25 @@ def _assign(units, tasks, inventories, tiles, day, hour):
         # crop rescues across the map and fed 2-6 of 12 animals/day from day 12 on —
         # an animal unfed on its production day wipes its whole banked care bonus.
         # Hands can rescue plants; only wheat carriers can feed.
+        # v62a TILE-BATCH exception: jobs on the unit's CURRENT tile are always
+        # allowed — the feeder cares/harvests/collects the animal it just fed
+        # before moving on.  (Exp 83b measured our work-per-stop at 1.29 vs the
+        # King's 1.93; the feed-only rule forced every animal tile to be walked
+        # twice.  Feed exclusivity still holds across tiles.)
+        # v65a FEED-AT-SCALE GUARD : the unconditional same-tile
+        # exception let the feeder LINGER batching while the rest of the herd
+        # waited — live unfed hit 14-22% in boom games (v61e: 5-8%; single-
+        # edit bisect: removing the exception alone restored 7.9%).  The
+        # batch is now allowed only in the FEED TAIL (<= 2 feeds still open):
+        # while the round is hot the feeder is feed-exclusive again (v61c
+        # completeness), and the work-per-stop win survives on the last
+        # tiles + every post-feed round.
         if (task["op"][0] != "FEED" and inv_of(ui).get("WHEAT", 0) > 0
-                and feeds_open()):
+                and feeds_open()
+                and not (_n_anim <= 14
+                         and open_feed_count() <= 2
+                         and task["x"] == units[ui][0]
+                         and task["y"] == units[ui][1])):
             return False
         return True
 
@@ -1379,6 +1394,17 @@ def _assign(units, tasks, inventories, tiles, day, hour):
 
     remembered = _STICKY.get(_CUR_SEAT, {})
 
+    # v62a TILE-BATCH: tiles where a unit is standing AND working this turn.
+    # Greedy leaves that tile's remaining jobs for the occupant's next-turn
+    # stickiness instead of walking a second unit there (Exp 83b: two units
+    # converging on one tile was the other half of the 1.29 work-per-stop).
+    # P_SAVE tasks still override — a dying plant doesn't wait for batching.
+    _occupied = set()
+    for _ui, _t in assignment.items():
+        _up = units[_ui]
+        if _t.get("x") == _up[0] and _t.get("y") == _up[1]:
+            _occupied.add((_up[0], _up[1]))
+
     def greedy(candidate_tis):
         """Most urgent first, nearest eligible unit wins, stable tie-break.
         Incumbent bias (v40a, from v33a): the unit already walking to a task
@@ -1388,6 +1414,13 @@ def _assign(units, tasks, inventories, tiles, day, hour):
             if taken[ti]:
                 continue
             task = tasks[ti]
+            if (task["x"], task["y"]) in _occupied and task["prio"] > P_CHAIN:
+                # v62a: the unit already there batches it next turn.
+                # v65a: urgent work (feeds/harvests/chains, prio <= 1) is
+                # EXEMPT — deferring FEED behind an occupied tile was ~1pt
+                # of the live unfed regression (bisect, Exp 85); only
+                # routine work (water/care/collect/plant/dig) waits.
+                continue
             for ui, (ux, uy) in enumerate(units):
                 if ui in assignment or not eligible(ui, task):
                     continue
@@ -1722,34 +1755,16 @@ def _market_orders(day, hour, money, seeds, shed, inventories, prices, hires_tod
                       + sum(1 for _row in tiles for _t in _row
                             if isinstance(_t, dict) and _t.get("kind") == "PLANT"
                             and _t.get("crop") == "STRAWBERRY"))
-    # v66c : the berry window now covers the post-land days too —
-    # v66b bought Q2 at d6 (9→6, all fingerprint seeds) but STR@d10 FELL:
-    # the $1,000 leaving 3 days earlier starved the d6-8 seed budget and
-    # the fresh tiles sat empty (the v55a law: the cohort is SEED-CASH
-    # bound).  The killers fund d7-8 cohort seeds from mid-week income we
-    # don't have; ours comes from the animal TAIL instead — the window
-    # extends d7→d9 and widens 15→24 committed, and the SHEEP tail joins
-    # the cow tail in the pause (below).  Cows 6-8 at d11-14 still repay
-    # (v18e measurement); the melon detonation refills everything at d10.
-    _berry_first = (4 <= day <= 9 and owned.get("COW", 0) >= 3
-                    and _str_committed < 24)
+    _berry_first = (4 <= day <= 7 and owned.get("COW", 0) >= 3
+                    and _str_committed < 15)
     _next_land_day = LAND_DAYS[min(n_quadrants - 1, 2)]
     land_ready = day >= _next_land_day
     land_hold = 0
     if (n_quadrants < LAND_MAX_QUADRANTS and day <= 12
-            and _next_land_day - 1 <= day):
+            and _next_land_day - 1 <= day < _next_land_day):
         # v54b: hold from 1 day out (2-day hold froze $1,000 across d4-5 —
         # exactly the cow-per-day window; Prashant class buys land d6 AND a
         # cow daily, funded by the fert flywheel)
-        # v66b : the hold now PERSISTS while the CLOCKED land is
-        # still pending — live ledger (vs Amr, ep106615748): we sat at
-        # $1,083 on d6 morning with the d6 land clock fired and spent it on
-        # sheep+wheat because ANIMALS OUTRANK LAND in this queue; Q2 then
-        # slipped to d9 [9,9] every game (x-ray) while all 3 decoded band
-        # killers unlock d8 and plant their STR cohort on the fresh tiles —
-        # the d15-21 income week.  Post-clock ordering is NOT v54b's
-        # pre-clock freeze nor v55a's seed-starving hold: seeds are gated
-        # by feed_hold, not land_hold, and the hold dies at d12.
         land_hold = LAND_PRICES[n_quadrants - 1]
     if day <= 20 and not herd_complete:
         # v54b: morning-only window removed — the 2k class completes the herd
@@ -1775,10 +1790,7 @@ def _market_orders(day, hour, money, seeds, shed, inventories, prices, hires_tod
             if sp == "COW" and owned["COW"] >= cow_target:
                 continue
             if sp == "COW" and _berry_first:
-                continue   # v55c: cow tail waits while the berry wave commits
-            if sp == "SHEEP" and _berry_first and owned.get("SHEEP", 0) >= 4:
-                continue   # v66c: the sheep TAIL (5+, yarn towns) waits too —
-                           # its $500 at d6-7 is the cohort's seed money
+                continue   # v55c: cow tail waits while the d4-7 berry wave commits
             sp_target = (_GOOSE_TARGET.get(_CUR_SEAT, 0) if sp == "GOOSE"
                          else sheep_target if sp == "SHEEP"
                          else cow_target)

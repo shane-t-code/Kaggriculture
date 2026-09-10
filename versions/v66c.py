@@ -1,24 +1,15 @@
 """
 main.py — Kaggriculture agent.  ENTRY POINT (must be at archive root, must be named main.py).
 
-STATUS: v66c — PROMOTED to main.py 2026-09-10 (Exp 86c: EARLY
-LAND + EXTENDED BERRY WINDOW — the mid-game cadence fix).
-= v61e + land_hold persists post-clock (Q2 d9→d6, 4/4) + berry
-window d4-9 / cap 24 / sheep tail pauses (the tail's dollars =
-the cohort's seed money; each alone failed — v55a seed-cash law
-+ 86b solo — the PAIR pays, v55e precedent).  GAUNTLET:
-**HELD-OUT 154: 115W-39L (74.7%) +2,321 μ/σ 0.69** (halves
-70.5/78.9 — 2nd-strongest full confirm ever, behind v58c);
-screen 68.8%; boom-scale unfed gate PASSED (9.5% vs 11.9% at
-16-herd); legs: wool 32-0 +26.8k RECORD, frontier HOLDOUT
-−27,431 NEW BEST EVER, router −45.1k (+2k), MR −44.3k (+1k),
-goose −35.8k (noise), king −49.1k (worst leg, logged).
-Mechanism = the live loss anatomy: STR cohort planted ~d7-9 on
-d6 Q2 tiles pays INSIDE d15-21 (the band battle week where
-losses ran us +20k vs their +38k).  NOT SUBMITTED — flag Shane:
--m "v66c" (displaces broken v62a 734 → actives v61e 766 + v66c;
-supersedes the v61e-r re-file flag).
-Lineage …v61c→v61d→v61e→v66c.  v61e base:  v61e + ONE edit: land_hold persists
+STATUS: v66c — CANDIDATE (Exp 86c: EARLY LAND + EXTENDED BERRY
+WINDOW, the coupled pair).  = v66b (land outranks the herd tail
+post-clock; Q2 9→6 confirmed 4/4) + berry window d4-7→d4-9,
+committed cap 15→24, sheep tail (5+) joins the cow tail in the
+pause — the freed animal-tail dollars buy the cohort seeds the
+fresh Q2 tiles were starving for (86b alone: STR@d10 FELL, the
+v55a seed-cash law).  v55e precedent: coupled constraints pay
+only together.  GATES: Q2 ≤7, STR@d10 UP vs v61e, unfed flat,
+herd12 ≤ +1 day.  (86b solo notes below.)  v61e + ONE edit: land_hold persists
 while a clocked quadrant is pending (was: 1 pre-clock day only),
 so sheep 5-7 stop eating the $1,000 for 3 days — live Q2 was d9
 [9,9] tight vs all 3 band killers' d8 and the ref #1's d5; the

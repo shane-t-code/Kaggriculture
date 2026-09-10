@@ -1,24 +1,8 @@
 """
 main.py — Kaggriculture agent.  ENTRY POINT (must be at archive root, must be named main.py).
 
-STATUS: v66c — PROMOTED to main.py 2026-09-10 (Exp 86c: EARLY
-LAND + EXTENDED BERRY WINDOW — the mid-game cadence fix).
-= v61e + land_hold persists post-clock (Q2 d9→d6, 4/4) + berry
-window d4-9 / cap 24 / sheep tail pauses (the tail's dollars =
-the cohort's seed money; each alone failed — v55a seed-cash law
-+ 86b solo — the PAIR pays, v55e precedent).  GAUNTLET:
-**HELD-OUT 154: 115W-39L (74.7%) +2,321 μ/σ 0.69** (halves
-70.5/78.9 — 2nd-strongest full confirm ever, behind v58c);
-screen 68.8%; boom-scale unfed gate PASSED (9.5% vs 11.9% at
-16-herd); legs: wool 32-0 +26.8k RECORD, frontier HOLDOUT
-−27,431 NEW BEST EVER, router −45.1k (+2k), MR −44.3k (+1k),
-goose −35.8k (noise), king −49.1k (worst leg, logged).
-Mechanism = the live loss anatomy: STR cohort planted ~d7-9 on
-d6 Q2 tiles pays INSIDE d15-21 (the band battle week where
-losses ran us +20k vs their +38k).  NOT SUBMITTED — flag Shane:
--m "v66c" (displaces broken v62a 734 → actives v61e 766 + v66c;
-supersedes the v61e-r re-file flag).
-Lineage …v61c→v61d→v61e→v66c.  v61e base:  v61e + ONE edit: land_hold persists
+STATUS: v66b — CANDIDATE (Exp 86b: LAND OUTRANKS THE HERD TAIL
+once the land clock fires).  v61e + ONE edit: land_hold persists
 while a clocked quadrant is pending (was: 1 pre-clock day only),
 so sheep 5-7 stop eating the $1,000 for 3 days — live Q2 was d9
 [9,9] tight vs all 3 band killers' d8 and the ref #1's d5; the
@@ -1722,17 +1706,8 @@ def _market_orders(day, hour, money, seeds, shed, inventories, prices, hires_tod
                       + sum(1 for _row in tiles for _t in _row
                             if isinstance(_t, dict) and _t.get("kind") == "PLANT"
                             and _t.get("crop") == "STRAWBERRY"))
-    # v66c : the berry window now covers the post-land days too —
-    # v66b bought Q2 at d6 (9→6, all fingerprint seeds) but STR@d10 FELL:
-    # the $1,000 leaving 3 days earlier starved the d6-8 seed budget and
-    # the fresh tiles sat empty (the v55a law: the cohort is SEED-CASH
-    # bound).  The killers fund d7-8 cohort seeds from mid-week income we
-    # don't have; ours comes from the animal TAIL instead — the window
-    # extends d7→d9 and widens 15→24 committed, and the SHEEP tail joins
-    # the cow tail in the pause (below).  Cows 6-8 at d11-14 still repay
-    # (v18e measurement); the melon detonation refills everything at d10.
-    _berry_first = (4 <= day <= 9 and owned.get("COW", 0) >= 3
-                    and _str_committed < 24)
+    _berry_first = (4 <= day <= 7 and owned.get("COW", 0) >= 3
+                    and _str_committed < 15)
     _next_land_day = LAND_DAYS[min(n_quadrants - 1, 2)]
     land_ready = day >= _next_land_day
     land_hold = 0
@@ -1775,10 +1750,7 @@ def _market_orders(day, hour, money, seeds, shed, inventories, prices, hires_tod
             if sp == "COW" and owned["COW"] >= cow_target:
                 continue
             if sp == "COW" and _berry_first:
-                continue   # v55c: cow tail waits while the berry wave commits
-            if sp == "SHEEP" and _berry_first and owned.get("SHEEP", 0) >= 4:
-                continue   # v66c: the sheep TAIL (5+, yarn towns) waits too —
-                           # its $500 at d6-7 is the cohort's seed money
+                continue   # v55c: cow tail waits while the d4-7 berry wave commits
             sp_target = (_GOOSE_TARGET.get(_CUR_SEAT, 0) if sp == "GOOSE"
                          else sheep_target if sp == "SHEEP"
                          else cow_target)

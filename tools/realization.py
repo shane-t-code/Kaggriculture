@@ -127,10 +127,14 @@ def town_consume(inv, town, step, shop_interval, center_interval):
 
 def decode_episode(path, me_name):
     rep = json.load(open(path, encoding="utf-8"))
-    teams = rep["info"].get("TeamNames")
+    teams = (rep.get("info") or {}).get("TeamNames")
     if isinstance(teams, str):
         teams = ast.literal_eval(teams)
-    my = teams.index(me_name) if me_name in teams else 0
+    if teams and me_name in teams:
+        my = teams.index(me_name)
+    else:
+        my = 0  # local replay: seat 0 = agent A ("ME"), seat 1 = opponent
+        teams = ["seat0(A)", "seat1(B)"]
     conf = rep.get("configuration", {})
     params = _resolve_market_params(conf.get("marketParams"))
     max_orders = int(conf.get("maxMarketOrdersPerTurn", 10))

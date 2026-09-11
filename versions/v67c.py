@@ -1,11 +1,7 @@
 """
 main.py — Kaggriculture agent.  ENTRY POINT (must be at archive root, must be named main.py).
 
-STATUS: v67c — PROMOTED to main.py Sep 11 night (Exp 90 BERRY-FORWARD
-+ CAPITAL REALLOCATION + MILK-RICH RELEASE).  Gates: cells swept vs
-v61e AND v66c (thin cells first-ever lineage win); boom unfed gate =
-v66c exactly; FROZEN holdout 79/80 (98.8%) vs v61e, 52/80 vs v66c
-(yarn/mixed soft spots — Exp 91); king deltas +9.7k MILK0 margin.
+STATUS: v67a — Exp 89 PHASE 1 CANDIDATE (BERRY-FORWARD, Sep 11).
 = v66c + berry window opens DAY 2 (was 4): seed gate d4→d2,
 _berry_first 4-9→2-9 (COW>=3 kept), window-days STR plants at
 P_WATER pre-herd.  WHY (measured, 110 live games): d15-21 loss
@@ -602,7 +598,7 @@ NEVER_FORCE_SELL = {"WHEAT"}
 # Window (0,-1) = "watering never adds instant yield" (ongoing crops bonus only via fertilizer).
 CROP_INFO = {
     "MELON":      {"cost": 80,  "first": 10, "ready": 10, "last_plant": 14, "window": (6, 12), "cap": 12},  # v57c: was last_plant 6 (one-shot); wave 2 gated below
-    "WHEAT":      {"cost": 10,  "first": 2,  "ready": 4,  "last_plant": 27, "window": (2, 4),  "cap": 26},  # v68a: 24->27 — king replants wheat to d26-27 (his d26 board: 40 wheat vs our 20; our 24 fallow tiles d25-29 vs his 13); a d27 wheat still pays 1-2u x ~$40 for a $10 seed
+    "WHEAT":      {"cost": 10,  "first": 2,  "ready": 4,  "last_plant": 24, "window": (2, 4),  "cap": 26},
     "STRAWBERRY": {"cost": 100, "first": 10, "ready": 10, "last_plant": 17, "window": (0, -1), "cap": 40},
     "CARROT":     {"cost": 20,  "first": 2,  "ready": 3,  "last_plant": 26, "window": (2, 3),  "cap": 0},
     "TOMATO":     {"cost": 50,  "first": 8,  "ready": 8,  "last_plant": 20, "window": (0, -1), "cap": 0},
@@ -681,13 +677,7 @@ STR_DEAD_FROM_DAY = 18   # v60a: market-aware wind-down may start here...
 STR_DEAD_PRICE = 5       # ...when the 5-day glut projection is at/below this
 STR_DEAD_KEEP = 6        # keepers in a dead market (was a static 18)
 
-WHEAT_FACTORY_DAY = 13   # v68a : was 22.  King decode
-# (4 pinned worlds): he sustains 22-40 wheat tiles d11-26 vs our 15-22 and
-# NETS +$9.6k/game on wheat (404u sold at ~$40/u realized — 5/8 shops drain
-# wheat into scarcity pricing; band tapes churned wheat at a loss, the king
-# FARMS it).  d13 start: the STR cohort is fully planted by d12-13 and the
-# melon detonation frees its tiles d10-12, so the factory takes leftovers,
-# not cohort ground.
+WHEAT_FACTORY_DAY = 22
 WHEAT_FACTORY_CAP = 45        # replaces CROP_INFO cap 20 from factory day
 WHEAT_FACTORY_SEED_WANT = 10  # replaces SEED_WANT 4 from factory day
 

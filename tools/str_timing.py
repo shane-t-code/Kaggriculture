@@ -15,10 +15,14 @@ for ep in eps:
     if not cands:
         print(ep, "not found"); continue
     rep = json.load(open(os.path.join(d, cands[0]), encoding="utf-8"))
-    teams = rep["info"].get("TeamNames")
+    teams = (rep.get("info") or {}).get("TeamNames")
     if isinstance(teams, str):
         teams = ast.literal_eval(teams)
-    my = teams.index(ME)
+    if teams and ME in teams:
+        my = teams.index(ME)
+    else:
+        my = 0  # local replay: seat 0 = agent A
+        teams = ["seat0(A)", "seat1(B)"]
     steps = rep["steps"]
     print(f"\n== ep {ep} vs {teams[1-my]} ==")
     print("day | stock@end | sold | tiles(STR planted)")

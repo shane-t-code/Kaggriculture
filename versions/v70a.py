@@ -1,16 +1,11 @@
 """
 main.py — Kaggriculture agent.  ENTRY POINT (must be at archive root, must be named main.py).
 
-STATUS: v70c — PROMOTED to main.py Sep 12 early .
-= v67c (berry-forward + capital reallocation + milk-rich release)
-  + v68a WHEAT SUSTAIN (last_plant 24→27, factory day 22→13; field
-    +1.2-1.6k own bank vs king AND band tape, all fresh cells)
-  + v70c YARN RELEASE (sheep pause 2→4 when a YARN_STORE revealed;
-    YARN2 vs v66c 6-0 +1,664 — the holdout 2-14 regression closed;
-    exact no-op in yarn-less worlds; king YARN2 delta +4,467 bank).
-Gates all passed: fresh-seed field cells, boom unfed 8.2-8.6% =
-baseline, mirror-artifact rule applied (field legs decide).
---- v67c layer below (Sep 11): ---
+STATUS: v67c — PROMOTED to main.py Sep 11 night (Exp 90 BERRY-FORWARD
++ CAPITAL REALLOCATION + MILK-RICH RELEASE).  Gates: cells swept vs
+v61e AND v66c (thin cells first-ever lineage win); boom unfed gate =
+v66c exactly; FROZEN holdout 79/80 (98.8%) vs v61e, 52/80 vs v66c
+(yarn/mixed soft spots — Exp 91); king deltas +9.7k MILK0 margin.
 = v66c + berry window opens DAY 2 (was 4): seed gate d4→d2,
 _berry_first 4-9→2-9 (COW>=3 kept), window-days STR plants at
 P_WATER pre-herd.  WHY (measured, 110 live games): d15-21 loss
@@ -699,7 +694,14 @@ WHEAT_FACTORY_SEED_WANT = 10  # replaces SEED_WANT 4 from factory day
 # Fertilize-only addition (v4c): a $90 fertilizer applied to a STRAWBERRY doubles its
 # production ticks while watered (engine-verified) — ~$200+ of berries. Melon: reaches its
 # 6-cap ~2 days earlier. Everything else is byte-identical to v3a.
-FERT_CROPS = {"STRAWBERRY": (7, 15), "MELON": (6, 8)}   # crop -> (min_age, max_age)
+FERT_CROPS = {"STRAWBERRY": (7, 15)}   # crop -> (min_age, max_age)
+# v70a : MELON dropped
+# from fert (the d6-8 applies were all melon; king applies ZERO ever and
+# sells 46u d5-9 at ~$89 vs our 8u).  v69c freed this cash into EXTRA SEEDS
+# and lost vs band tapes (their STR flood caps cohort value — benched law);
+# v70a routes the same cash into the DRIP COW TAIL instead (below): milk is
+# opponent-independent, and a cow bought d4-8 yields d12-16, inside the
+# deciding week (cow first_yield_day=8; the old d10 tail-burst yielded d18+).
 # v58c: melon window ENGINE-ALIGNED — window_start = (12+1)//2 = 6, so an
 # age-6 application covers ages 6-8 (fert lasts day..day+2) = 3 full +2 growth
 # days = maxed 6 units by end of age 8, harvestable at the age-10 gate.
@@ -1820,18 +1822,18 @@ def _market_orders(day, hour, money, seeds, shed, inventories, prices, hires_tod
             cost = ANIMAL_INFO[sp]["cost"]
             if sp == "COW" and owned["COW"] >= cow_target:
                 continue
-            if sp == "COW" and _berry_first:
-                continue   # v55c: cow tail waits while the berry wave commits
-            if (sp == "SHEEP" and _berry_first
-                    and owned.get("SHEEP", 0) >= (4 if "YARN_STORE" in shops else 2)):
+            if sp == "COW" and _berry_first and owned["COW"] >= 2 + (day + 1) // 2:
+                continue   # v70a DRIP TAIL (was: full pause while the window
+                           # is open).  King timeline (herd_timeline.py, 2
+                           # worlds identical): C3@d2, C4@d4, C6@d7, C7@d9 —
+                           # ~1 cow / 2 days WHILE planting 20 STR by d8,
+                           # funded by same-day fert sales.  Cap 2+(day+1)//2
+                           # mirrors it exactly; the money gate below still
+                           # applies, so the drip only fires when the
+                           # flywheel actually paid.
+            if sp == "SHEEP" and _berry_first and owned.get("SHEEP", 0) >= 2:
                 continue   # v67b: sheep tail pauses at 2 (was 4) — sheep 3+4's
-                           # $1,000 at d1-3 IS the missing cohort seed money.
-                           # v70c YARN RELEASE: a revealed YARN_STORE (d3/d6,
-                           # 13 wool/day drain at $150-200/u) outbids the
-                           # cohort for sheep 3-4 — the holdout's YARN2 2-14
-                           # and MIXED 2-14 losses to v66c were exactly the
-                           # paused sheep; gates run on FRESH seeds (516+),
-                           # never re-judged on the spent 500-507 block.
+                           # $1,000 at d1-3 IS the missing cohort seed money
             sp_target = (_GOOSE_TARGET.get(_CUR_SEAT, 0) if sp == "GOOSE"
                          else sheep_target if sp == "SHEEP"
                          else cow_target)

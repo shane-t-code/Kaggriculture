@@ -1,16 +1,11 @@
 """
 main.py — Kaggriculture agent.  ENTRY POINT (must be at archive root, must be named main.py).
 
-STATUS: v70c — PROMOTED to main.py Sep 12 early .
-= v67c (berry-forward + capital reallocation + milk-rich release)
-  + v68a WHEAT SUSTAIN (last_plant 24→27, factory day 22→13; field
-    +1.2-1.6k own bank vs king AND band tape, all fresh cells)
-  + v70c YARN RELEASE (sheep pause 2→4 when a YARN_STORE revealed;
-    YARN2 vs v66c 6-0 +1,664 — the holdout 2-14 regression closed;
-    exact no-op in yarn-less worlds; king YARN2 delta +4,467 bank).
-Gates all passed: fresh-seed field cells, boom unfed 8.2-8.6% =
-baseline, mirror-artifact rule applied (field legs decide).
---- v67c layer below (Sep 11): ---
+STATUS: v67c — PROMOTED to main.py Sep 11 night (Exp 90 BERRY-FORWARD
++ CAPITAL REALLOCATION + MILK-RICH RELEASE).  Gates: cells swept vs
+v61e AND v66c (thin cells first-ever lineage win); boom unfed gate =
+v66c exactly; FROZEN holdout 79/80 (98.8%) vs v61e, 52/80 vs v66c
+(yarn/mixed soft spots — Exp 91); king deltas +9.7k MILK0 margin.
 = v66c + berry window opens DAY 2 (was 4): seed gate d4→d2,
 _berry_first 4-9→2-9 (COW>=3 kept), window-days STR plants at
 P_WATER pre-herd.  WHY (measured, 110 live games): d15-21 loss

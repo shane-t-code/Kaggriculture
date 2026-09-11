@@ -1,16 +1,11 @@
 """
 main.py — Kaggriculture agent.  ENTRY POINT (must be at archive root, must be named main.py).
 
-STATUS: v70c — PROMOTED to main.py Sep 12 early .
-= v67c (berry-forward + capital reallocation + milk-rich release)
-  + v68a WHEAT SUSTAIN (last_plant 24→27, factory day 22→13; field
-    +1.2-1.6k own bank vs king AND band tape, all fresh cells)
-  + v70c YARN RELEASE (sheep pause 2→4 when a YARN_STORE revealed;
-    YARN2 vs v66c 6-0 +1,664 — the holdout 2-14 regression closed;
-    exact no-op in yarn-less worlds; king YARN2 delta +4,467 bank).
-Gates all passed: fresh-seed field cells, boom unfed 8.2-8.6% =
-baseline, mirror-artifact rule applied (field legs decide).
---- v67c layer below (Sep 11): ---
+STATUS: v67c — PROMOTED to main.py Sep 11 night (Exp 90 BERRY-FORWARD
++ CAPITAL REALLOCATION + MILK-RICH RELEASE).  Gates: cells swept vs
+v61e AND v66c (thin cells first-ever lineage win); boom unfed gate =
+v66c exactly; FROZEN holdout 79/80 (98.8%) vs v61e, 52/80 vs v66c
+(yarn/mixed soft spots — Exp 91); king deltas +9.7k MILK0 margin.
 = v66c + berry window opens DAY 2 (was 4): seed gate d4→d2,
 _berry_first 4-9→2-9 (COW>=3 kept), window-days STR plants at
 P_WATER pre-herd.  WHY (measured, 110 live games): d15-21 loss
@@ -982,9 +977,25 @@ def _crop_skip(tiles, opp_tiles, market_inv, shops):
     return skip
 
 
-def _care_skip_species(tiles, opp_tiles, market_inv, shops):
+def _care_skip_species(tiles, opp_tiles, market_inv, shops, day=0):
     """Species whose product market is projected dead when a care bonus would land."""
     skip = set()
+    # v70b : the old check below is a
+    # $15-deathbed price projection — it fires AFTER the crash.  This one
+    # fires on DEMAND, days ahead: from d6 (2 shops known), a species whose
+    # product the town barely drains gets no care.  Engine math: care
+    # triples output (pending_care_bonus, cow 3/tick vs 1); milk floors at
+    # I0+122 (linear 1.60); a 0-milk-shop town drains 1/day.  Caring there
+    # converts ~8 labor-actions/day into $1 goods AND deepens our own glut
+    # (v47b: KEEP the animals — the dumping still pressures their price;
+    # cut only the self-harm).  v70a's failed cow-drip proved the same law
+    # from the other side (drip cows in MILK0 = −3k).  Wool analog: no yarn
+    # store by d6 → drain 1/day vs 4 cared sheep ≈ 5.3/day.
+    if day >= 6:
+        if _town_drain_per_day("MILK", shops) <= 1:
+            skip.add("COW")
+        if _town_drain_per_day("WOOL", shops) <= 1:
+            skip.add("SHEEP")
     my_crops, my_animals = _opp_capacity(tiles)
     opp_crops, opp_animals = _opp_capacity(opp_tiles)
     for sp, info in ANIMAL_INFO.items():
@@ -1822,16 +1833,9 @@ def _market_orders(day, hour, money, seeds, shed, inventories, prices, hires_tod
                 continue
             if sp == "COW" and _berry_first:
                 continue   # v55c: cow tail waits while the berry wave commits
-            if (sp == "SHEEP" and _berry_first
-                    and owned.get("SHEEP", 0) >= (4 if "YARN_STORE" in shops else 2)):
+            if sp == "SHEEP" and _berry_first and owned.get("SHEEP", 0) >= 2:
                 continue   # v67b: sheep tail pauses at 2 (was 4) — sheep 3+4's
-                           # $1,000 at d1-3 IS the missing cohort seed money.
-                           # v70c YARN RELEASE: a revealed YARN_STORE (d3/d6,
-                           # 13 wool/day drain at $150-200/u) outbids the
-                           # cohort for sheep 3-4 — the holdout's YARN2 2-14
-                           # and MIXED 2-14 losses to v66c were exactly the
-                           # paused sheep; gates run on FRESH seeds (516+),
-                           # never re-judged on the spent 500-507 block.
+                           # $1,000 at d1-3 IS the missing cohort seed money
             sp_target = (_GOOSE_TARGET.get(_CUR_SEAT, 0) if sp == "GOOSE"
                          else sheep_target if sp == "SHEEP"
                          else cow_target)
@@ -1978,7 +1982,7 @@ def agent(obs):
 
     market_inv = (obs.get("market", {}) or {}).get("inventory", {}) or {}
     shops = (obs.get("town", {}) or {}).get("unlocked_shops", []) or []
-    care_skip = _care_skip_species(tiles, opp.get("tiles", []), market_inv, shops)
+    care_skip = _care_skip_species(tiles, opp.get("tiles", []), market_inv, shops, day)
     crop_skip = _crop_skip(tiles, opp.get("tiles", []), market_inv, shops)
     # v60a: is the STR market deep-dead for the rest of the game?  5-day
     # projection with both farms' inflow; STR's town drain is the game's

@@ -119,9 +119,18 @@ def main() -> None:
     ap.add_argument("--steps", type=int, default=720)
     ap.add_argument("--replay", action="store_true", help="dump replay JSON per seed")
     ap.add_argument("--debug", action="store_true", help="engine debug output (shows invalid actions!)")
+    ap.add_argument("--shops", default=None,
+                    help="PIN the town shop sequence (kills the re-roll bias; Exp 89). "
+                         "A preset (MILK0/MILK1/MILK3/YARN2/MIXED) or comma list of shop names.")
     args = ap.parse_args()
 
     check_version()
+    if args.shops:
+        sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "tools"))
+        import shop_pin
+        seq = args.shops if args.shops.upper() in shop_pin.PRESETS else args.shops.split(",")
+        shop_pin.install(seq)
+        print(f"SHOP WORLD PINNED: {args.shops} -> {shop_pin._SEQ}")
     print(f"\nA = {args.a}\nB = {args.b}")
     print(f"{args.seeds} seeds x 2 seats = {args.seeds * 2} games\n")
 

@@ -1,0 +1,424 @@
+
+===== CELL 0 (markdown) =====
+The leaderboard gives your agent one number. Its replays give away everything else: whether it is a script anyone can copy verbatim, which opponents already play your exact plan, where its economy trails the leader, and whether the number under your name has even settled. This notebook reads all of it, for any submission. By default it hunts down **whoever is number one right now**, resolved at run time by climbing the live ladder, and x-rays them; **fork it and put your own id in the next cell to x-ray yourself.** Scheduled daily, this page is always the reigning king's x-ray, never a stale one.
+
+One run answers, in order:
+
+* **How is it doing?** The win-loss-tie ledger and the margin of every episode, in play order.
+* **What does it actually play?** The stripe panels: one plan or several, and where it deviates from its own mode.
+* **What kind of agent is it?** Pure replay, script with repairs, shop router, or live policy, classified globally and within each world so routing is not mistaken for reactivity.
+* **Who have you been playing?** The kinship spectrum: which opponents run your exact lineage, which are siblings, and whether mirrors are finding you.
+* **What did your economy do?** Land timing, herd, care, endgame hygiene and money by day, each against the measured shape of the leader.
+* **Can the rating be quoted yet?** Drift per episode, sign flips, and a verdict with its threshold stated.
+
+No API token and no attached data: the episode list comes from the competition's public episode service and the replays from the public CDN (the fork needs the notebook's Internet toggle, which ships on here and which Kaggle gates behind phone verification), the same route [georgymamarin's kaggriculture-episodes dataset](https://www.kaggle.com/datasets/georgymamarin/kaggriculture-episodes) crawls nightly, credit to his scraper for the endpoint. Fetching is the slow part, about 25 MB per replay, so the default caps at 40 episodes and a run takes a few minutes.
+
+The view behind it is the stripe texture I have used to read other people's agents for weeks ([a DNA test for agents](https://www.kaggle.com/code/destbreso/a-dna-test-for-agents), [a week-four X-ray of the top twelve](https://www.kaggle.com/code/destbreso/a-week-four-x-ray-of-the-top-twelve)): one row per real episode, one column per turn, three colors:
+
+* **green** where the episode plays its submission's own modal action at that turn,
+* **amber** where only the market channel differs,
+* **navy** where the plan itself (farmer or hands) differs.
+
+The first run against my own live agent found **four opponents running my exact lineage**, three of them action-identical on all 719 turns, an endgame stranding **sixty times less money at the bell than the leader tolerates**, and a rating still moving at 1.3 points a game, which by my own threshold is not yet a number worth quoting. One run.
+
+===== CELL 1 (markdown) =====
+## 1. The submission and its ledger
+
+Put a submission id below, or leave "KING" to read today's number one. The listing alone already answers the first questions: how many games, the win-loss-tie ledger, and the margin of every episode in play order.
+
+===== CELL 2 (code) =====
+
+===== CELL 3 (code) =====
+
+===== CELL 4 (code) =====
+
+===== CELL 5 (code) =====
+submission 56110156: 72 episodes on the ladder, reading the newest 40
+W17-L23-T0, margin median -2,438, worst -55,201, best +58,595
+
+<Figure size 900x340 with 1 Axes>
+
+===== CELL 6 (code) =====
+  10/40 replays fetched
+  20/40 replays fetched
+  30/40 replays fetched
+  40/40 replays fetched
+40 replays loaded, 30 distinct shop pairs
+
+
+===== CELL 7 (markdown) =====
+## 2. The stripes
+
+The stripe matrix compares every episode against the submission's own mode, turn by turn. Order inside the market list is meaningful in this game (orders settle index by index), so it is compared as a sequence, never sorted away.
+
+===== CELL 8 (code) =====
+texture: green 28.7%, amber 2.5%, navy 68.8%
+
+
+===== CELL 9 (code) =====
+<Figure size 1100x604.444 with 1 Axes>
+<Figure size 1100x604.444 with 1 Axes>
+
+===== CELL 10 (markdown) =====
+## 3. How to read the panels
+
+The chart comes twice, because two orderings answer two different questions.
+
+A **WORLD** here is the ordered pair of the FIRST TWO town shops the episode revealed, at turns 72 and 144. The town keeps unlocking a shop every three days, up to nine in a season, so two is not a magic number and deserves its justification:
+
+* **Timing against sunk cost.** Land, herd and construction commit in the first week, so a shop revealed on day 3 or 6 can still steer them; one revealed on day 9 or later meets a farm that is mostly committed.
+* **The marginal is measured, not assumed.** The strongest public router conditions on exactly these two, and its author priced the second branch at **+0.136 points of rating per game** over his own 24,000-game census.
+* **Each further branch multiplies the space by eight.** Two shops make 64 worlds, three make 512, and the episodes available to validate a plan per world collapse accordingly.
+
+Whether a third branch pays is **an open question, not a settled no**.
+
+* The **first panel** groups rows by world, white lines between worlds, so route structure reads as blocks instead of noise.
+* The **second panel** puts the same rows in play order, oldest at the top: the view where TIME shows, a submission that changed behaviour mid-life, a mirror population arriving, or matchmaking walking you into a different neighbourhood of opponents.
+
+How to read what you got.
+
+A solid green panel is a pure replay: the submission plays the same recorded game every time, and everything it will ever do is already public in its first episode.
+
+A green panel with amber columns is a script with repairs: one plan, and a market channel that answers the day. Most of the field looks like this.
+
+A green opening that forks into navy blocks at turns 72 or 144 is a shop router: the plan itself is chosen by which shops the town revealed, and each block is one world's route. The white lines separate shop pairs precisely so this reads as structure instead of noise.
+
+A panel that goes navy as the season ages, inside the same shop pair, is a live policy: the plan itself responds to the opponent, and no single recording of it tells you what it will do next time.
+
+===== CELL 11 (markdown) =====
+## 4. Classification
+
+The texture has a name, and one number lies about a router, so I classify twice.
+
+**GLOBAL** compares all episodes together. **WITHIN-WORLD** groups episodes by the shop pair the town actually revealed and compares only inside each group. A shop router forks its plan at turns 72 and 144 with the draw, so it reads as wildly adaptive globally while each world's games are near-identical. A genuinely live policy diverges inside a world too. **The gap between the two readings is the diagnosis.**
+
+===== CELL 12 (code) =====
+GLOBAL: ADAPTIVE  (varying 82.6%, first divergence t=25, channels {'farmer': 532, 'hands': 569, 'market': 510})
+within-world verdict: {'ADAPTIVE': 9}
+
+<Figure size 900x306 with 1 Axes>
+                             world  n            cls   vary first
+0                   BAKERY__BAKERY  3       ADAPTIVE  80.1%    25
+1           BAKERY__FARMERS_MARKET  1  (one episode)             
+2            BAKERY__SMOOTHIE_SHOP  1  (one episode)             
+3              BRUNCH_SPOT__BAKERY  1  (one episode)             
+4      BRUNCH_SPOT__ICE_CREAM_SHOP  1  (one episode)             
+5            BRUNCH_SPOT__PET_CAFE  2       ADAPTIVE  74.1%    25
+6          BRUNCH_SPOT__PIZZA_SHOP  1  (one episode)             
+7          BRUNCH_SPOT__YARN_STORE  1  (one episode)             
+8           FARMERS_MARKET__BAKERY  2       ADAPTIVE  70.9%    35
+9   FARMERS_MARKET__ICE_CREAM_SHOP  2       ADAPTIVE  72.5%    35
+10        FARMERS_MARKET__PET_CAFE  2       ADAPTIVE  68.2%   117
+11          ICE_CREAM_SHOP__BAKERY  1  (one episode)             
+12  ICE_CREAM_SHOP__ICE_CREAM_SHOP  1  (one episode)             
+13        ICE_CREAM_SHOP__PET_CAFE  1  (one episode)             
+14      ICE_CREAM_SHOP__YARN_STORE  2       ADAPTIVE  70.1%    35
+15                PET_CAFE__BAKERY  1  (one episode)             
+16         PET_CAFE__SMOOTHIE_SHOP  1  (one episode)             
+17            PET_CAFE__YARN_STORE  1  (one episode)             
+18              PIZZA_SHOP__BAKERY  1  (one episode)             
+19          PIZZA_SHOP__PIZZA_SHOP  2       ADAPTIVE  68.7%   117
+20          PIZZA_SHOP__YARN_STORE  1  (one episode)             
+21           SMOOTHIE_SHOP__BAKERY  1  (one episode)             
+22      SMOOTHIE_SHOP__BRUNCH_SPOT  1  (one episode)             
+23   SMOOTHIE_SHOP__FARMERS_MARKET  1  (one episode)             
+24   SMOOTHIE_SHOP__ICE_CREAM_SHOP  1  (one episode)             
+25              YARN_STORE__BAKERY  1  (one episode)             
+26         YARN_STORE__BRUNCH_SPOT  1  (one episode)             
+27      YARN_STORE__ICE_CREAM_SHOP  2       ADAPTIVE  76.2%    35
+28          YARN_STORE__PIZZA_SHOP  1  (one episode)             
+29          YARN_STORE__YARN_STORE  2       ADAPTIVE  70.1%   117
+
+===== CELL 13 (markdown) =====
+What each class means for the agent you are looking at.
+
+* **PURE_REPLAY**: byte-identical streams. Everything this submission will ever do is already public in its first episode, and anyone can replay it verbatim.
+* **REPAIRING_SCRIPT**: one plan, small localised differences, usually market-only. Most of the field looks like this, and the plan half is still harvestable.
+* **ADAPTIVE**: the plan itself moves between episodes of the SAME world. A recording of it answered one opponent and one seed, and replaying it plays a game it never played.
+
+One honest limit: two episodes differ both because the agent reacted and because the seed differs, and streams alone cannot fully separate the two. That is exactly why the within-world grouping exists, it removes the largest seed effect there is, the shop draw, before reading anything as reactivity.
+
+===== CELL 14 (markdown) =====
+## 5. Kinship with the opponents
+
+A duel leaves both streams in the replay, so the same download that x-rayed you also holds every opponent you faced, and kinship between agents is measurable from actions alone.
+
+Three numbers per opponent:
+
+* **PLAN agreement**, the fraction of turns where farmer and hands are identical, finds the family: shared chassis, shared notebook, shared route.
+* **WHOLE agreement** adds the market channel, and 1.000 there means you two played the same recorded game.
+* **The BARCODE** is thirty per-day signatures of the plan channel over hours 1 to 4 of each day, the resynchronisation anchor this engine gives every morning, and the first differing band localises WHERE two related routes fork, to the day.
+
+An opponent at plan 1.000 is **your mirror**: it runs your exact lineage, and everything you will do is as public to it as its play is to you. High plan with a low whole is a sibling that changed only its selling. Agreement confined to the first two or three days is not kinship at all, nothing observable differs before turn 48 in this game, so every agent agrees at dawn.
+
+===== CELL 15 (code) =====
+0 mirror games (plan >= 0.95), 0 sibling games (0.50-0.95), 40 unrelated
+
+<Figure size 900x300 with 1 Axes>
+<pandas.io.formats.style.Styler at 0x7e7843e2bbc0>
+
+===== CELL 16 (markdown) =====
+And the opponents themselves fall into **genetic groups**. Two rivals from different worlds can still share a lineage, they just fork at the shop branches, so I group them by plan agreement over the OPENING window, the turns before the second branch at t=144, at a 0.98 threshold: connected components of "plays the same opening". Per group, the statistics that matter in a duel: how often you met it, the record against it, and the margins.
+
+The group your own lineage belongs to is marked. A large group with a negative median margin is a population problem, not a bad day; a group you only tie is your own chassis looking back at you.
+
+===== CELL 17 (code) =====
+34 genetic groups among 40 opponents (3 with 2+ games, 31 singletons)
+
+<Figure size 900x220 with 1 Axes>
+   group yours  games  submissions                    lead    record  \
+0     G1            5            5             Yunho Hwang  W0-L5-T0   
+1     G2            2            2                  ckyasb  W0-L2-T0   
+2     G3            2            2              llllllc666  W0-L2-T0   
+3     G4            1            1           Ahmad Elawady  W0-L1-T0   
+4     G5            1            1                 Florian  W0-L1-T0   
+5     G6            1            1             Lê Ngọc Lâm  W0-L1-T0   
+6     G7            1            1             Jiawei Zhao  W1-L0-T0   
+7     G8            1            1               Oshbocker  W1-L0-T0   
+8     G9            1            1              Cihan Atak  W1-L0-T0   
+9    G10            1            1  Ludwig Agurto Contador  W1-L0-T0   
+10   G11            1            1                MugaBros  W1-L0-T0   
+11   G12            1            1           Ryan Triplett  W0-L1-T0   
+12   G13            1            1          Azamat Sadikov  W1-L0-T0   
+13   G14            1            1               gachichan  W1-L0-T0   
+14   G15            1            1       nattapon nakakong  W0-L1-T0   
+15   G16            1            1               Vikas1306  W1-L0-T0   
+16   G17            1            1               Klgv Klgv  W0-L1-T0   
+17   G18            1            1              Sze Yu Sim  W1-L0-T0   
+18   G19            1            1         Krzysztof Gonia  W0-L1-T0   
+19   G20            1            1               gachichan  W1-L0-T0   
+20   G21            1            1           Abnormal Guys  W0-L1-T0   
+21   G22            1            1              jaepyeocho  W1-L0-T0   
+22   G23            1            1                Sarah Ng  W0-L1-T0   
+23   G24            1            1            HKUST Random  W1-L0-T0   
+24   G25            1            1                   c_fxy  W0-L1-T0   
+25   G26            1            1               curiosity  W0-L1-T0   
+26   G27            1            1                Haruki.O  W1-L0-T0   
+27   G28            1            1               maniginam  W1-L0-T0   
+28   G29            1            1            Aashir Noman  W1-L0-T0   
+29   G30            1            1         Spencer Farrand  W1-L0-T0   
+30   G31            1            1             sukesuke012  W0-L1-T0   
+31   G32            1            1             hansama.qht  W1-L0-T0   
+32   G33            1            1             Jiawei Zhao  W0-L1-T0   
+33   G34            1            1          Netanel Keidar  W0-L1-T0   
+
+    margin_med  worst   best  plan_to_you  
+0       -50002 -55201 -44328        0.001  
+1        -6205  -8634  -6205        0.003  
+2       -30108 -53395 -30108        0.003  
+3        -2066  -2066  -2066        0.006  
+4       -13806 -13806 -13806        0.001  
+5        -3358  -3358  -3358        0.001  
+6         7122   7122   7122        0.007  
+7        15140  15140  15140        0.008  
+8          590    590    590        0.003  
+9        33097  33097  33097        0.006  
+10       22128  22128  22128        0.011  
+11       -6969  -6969  -6969        0.011  
+12       55072  55072  55072        0.003  
+13       27115  27115  27115        0.001  
+14      -19096 -19096 -19096        0.003  
+15       18212  18212  18212        0.018  
+16      -11666 -11666 -11666        0.001  
+17       30623  30623  30623        0.001  
+18       -7972  -7972  -7972        0.001  
+19        4338   4338   4338        0.011  
+20      -24584 -24584 -24584        0.000  
+21       29536  29536  29536        0.018  
+22      -38544 -38544 -38544        0.003  
+23       49169  49169  49169        0.006  
+24      -36711 -36711 -36711        0.022  
+25      -54068 -54068 -54068        0.006  
+26       10772  10772  10772        0.008  
+27       27412  27412  27412        0.001  
+28        4755   4755   4755        0.000  
+29       58595  58595  58595        0.001  
+30       -2438  -2438  -2438        0.001  
+31       24234  24234  24234        0.000  
+32        -506   -506   -506        0.007  
+33      -33186 -33186 -33186        0.025  
+
+===== CELL 18 (markdown) =====
+## 6. The macroeconomic x-ray
+
+The stripes show WHAT you play; the macroeconomic x-ray shows what your economy DID. When the second quadrant arrived, how much CARE the herd got, whether the endgame left tiles fallow and stock stranded at the bell, and how money accumulated day by day, one line per episode.
+
+The reference column is the shape of the number one **as of my 2026-08-30 capture**, measured in [my macroeconomic x-ray of the meta](https://www.kaggle.com/code/destbreso/a-macroeconomic-x-ray-of-the-kaggriculture-meta), and a rank is a timestamp, not a property, so re-read it there if you are far from that date: second quadrant on **day 5**, **seven cows**, about **280 CARE actions**, and it leaves **13 tiles fallow** late and **442 dollars stranded**, so those two are not targets, they are what the strongest agent happens to tolerate.
+
+===== CELL 19 (code) =====
+macro profile, median [p10, p90]; ref = the measured #1 shape
+  2nd quadrant, day                      7 [7, 9]    ref 5
+  care actions                         236 [122, 272]    ref 280
+  herd bought (median)           COW 8  SHEEP 3  GOOSE 0    ref 7 COW
+  endgame fallow tiles d25-29           24 [19, 32]    ref 13
+  stranded $ at the bell                 0 [0, 0]    ref 442
+  pass-with-work unit-turns            388 [374, 405]    ref low
+  shed-at-cap turns                      0 [0, 0]    ref 0
+  floor sells (price <= 2)               5 [1, 22]    ref 0
+
+<Figure size 900x450 with 1 Axes>
+
+===== CELL 20 (markdown) =====
+And the same farm indicators as DISTRIBUTIONS rather than points, one dot per episode, jittered, alpha so concentration reads as density. The blue cloud is the leader of my 2026-08-30 macroeconomic x-ray capture, one dot per each of its 245 real episodes, embedded here so the chart works without extra downloads; the orange cloud is the submission you are reading. Everything is a multiple of the leader median for that row, the vertical line at 1, and the thick tick above each cloud is that side's median. A row where your cloud is missing means your agent never did the thing, which for the third quadrant is itself a reading.
+
+===== CELL 21 (code) =====
+<Figure size 920x520 with 1 Axes>
+
+===== CELL 22 (markdown) =====
+### Actions on money, and the craters under the rival
+
+The bank curve above says *when* the money arrived. This chart says **what was done to make it move**, on the single most decisive episode of the sample (the largest margin either way): both money curves, every market order as a marker **sized by its dollar weight** (circle sell, square structural purchase, triangle other), so the buys that financed the season and the sells that paid for them sit on the curve they moved.
+
+And the market is shared, so a sell is also a **weapon**. When one side dumps a product the book reprices it for both. A shaded span marks a **crater**: one side's large sell drops a product's price and the other side sells the same product into the depressed window within a day. **Red: the rival sold into our crater. Blue: we sold into theirs.** The damage figure is first-order, victim quantity times the price drop they ate, so read it as the size of the hole rather than as a causal transfer. The lower panel shows the price paths of exactly the products the craters touched.
+
+
+===== CELL 23 (code) =====
+<Figure size 1300x800 with 2 Axes>
+craters dug by us that the rival sold into: STRAWBERRY -$2,592, MELON -$2,400, MELON -$2,040, STRAWBERRY -$1,496, MELON -$1,080, MELON -$1,080
+craters we sold into: STRAWBERRY -$1,910, STRAWBERRY -$1,596, MELON -$1,394, MILK -$954, STRAWBERRY -$634, STRAWBERRY -$328
+
+
+===== CELL 24 (markdown) =====
+## 7. How the board is used
+
+Everything above reads a farm as a **bag**: how many tiles of wheat, how many animals, how much banked. The farm is a **10x10 grid** and the engine charges for distance, so *where* a thing sits is a decision that a bag cannot see.
+
+Two maps, and two controls that decide whether either is worth reading.
+
+**Occupancy** is what stands on a cell, per turn. **Presence** is where the farmer and the hands actually are. The season is split into three ten-day panels beside the whole-season map, because an opening board and an endgame board are different animals.
+
+**A heat map always looks structured to the eye**, so neither is reported without:
+
+- a **chi-square against uniform** over the cells that were ever unlocked, and the share of the mass in the ten busiest cells against the share a flat board would give;
+- a **half-split correlation**: the episodes are dealt alternately into two piles and the two maps compared. A map whose halves disagree is one season's noise wearing a label.
+
+
+===== CELL 25 (code) =====
+<Figure size 1300x340 with 4 Axes>
+occupancy: chi2/dof 1,323.8 over 75 unlocked cells; the ten busiest hold 19.3% of the mass against 13.3% if the board were used evenly
+occupancy: half-split correlation r = +0.998   (below about +0.9, read the map as one season's noise)
+
+<Figure size 360x360 with 1 Axes>
+unit presence: chi2/dof 3,461.3 over 75 unlocked cells; the ten busiest hold 36.6% of the mass against 13.3% if the board were used evenly
+unit presence: half-split correlation r = +0.999   (below about +0.9, read the map as one season's noise)
+
+
+===== CELL 26 (markdown) =====
+## 8. Productivity in time, against the leader's own band
+
+Every unit-turn goes into exactly one of four buckets: **work** (plant, water, harvest, feed, care, fertilize, dig, build), **carry** (pickup, place, drop), **move** (the four compass steps) and **idle** (PASS). The buckets are exhaustive on purpose, and anything the engine emits that is not in them is printed rather than dropped, so a new verb announces itself instead of disappearing into a rounding error.
+
+The comparison is against **today's number one, as a band rather than a line**. One agent's season is one sample, and a baseline drawn as a single line invites reading normal variation as a difference. The band is the 10th to 90th percentile of the leader's own episodes, per day. Every day your curve leaves it is circled.
+
+**Read `move` before calling anything wasted.** Measured on 40 episodes of a leader against 40 of a mid-table agent, the leader spent **53.8 % of all its unit-turns walking and 3.8 % standing still**, against 42.9 % and 11.8 % for the other. The ten points of movement the weaker agent did not spend came back as idling in place. Movement is the cost of reaching a wide board; PASS is the thing with nothing on the other side of it.
+
+
+===== CELL 27 (code) =====
+king resolved by climbing the live ladder: 2,283 -> 2,282 -> 2,399 -> 2,730 -> 2,763 -> 2,342 -> 1,747 -> 1,803 -> 1,621 -> 2,274 -> 2,682 -> 2,785 -> 2,853 -> 2,890 -> 3,012
+
+<Figure size 1100x640 with 2 Axes>
+season-wide split of every unit-turn: work 27.4%  carry 2.1%  move 51.9%  idle 18.6%
+
+
+===== CELL 28 (markdown) =====
+### Staffing in time, against the rivals you actually met
+
+The field agrees on hiring more than on anything else it does. Measured over **490 seat-seasons** (both seats of 245 full replays, many distinct teams), the interquartile spread of hands-on-the-board is **0-2 hands on every day of the season**: four hands to day 4, a ramp through 8 to eleven by day 10, and **twelve from day 13 to the bell**. A consensus that tight is a heuristic bound: a staffing curve outside it is a claim that needs evidence, not a style.
+
+The band here is built from the **rivals these very episodes were played against**, so it is the consensus of the field you actually met. Days where your median leaves the band are circled.
+
+
+===== CELL 29 (code) =====
+<Figure size 1100x420 with 1 Axes>
+field-wide reference (490 seasons): 4 hands to day 4, 8 by day 6, 11 by day 10, 12 from day 13 to the bell; IQR 0-2 hands all season
+
+
+===== CELL 30 (markdown) =====
+## 9. Convergence
+
+Before quoting the rating this submission holds, ask whether the number has stopped moving, and measure that in the only unit that works here: **the EPISODE, never the minute**. The leaderboard updates in batches, so dividing by wall-clock time counts minutes in which nothing happened; I have watched a per-hour average say a rating was crawling while per-episode sampling showed it climbing six points a game.
+
+Three numbers together, never one:
+
+* **DRIFT**, the mean rating change per new episode over the recent window.
+* **SIGN FLIPS**, how often consecutive per-episode deltas change direction.
+* **n**, the episodes played. Warming up is drift above the threshold with no flips, the number still travelling one way and misstating the agent. Settled is drift at or below the threshold with at least one flip. The threshold is a decision, not a constant: one point per episode here, stated with the verdict, and **a verdict quoted without its threshold is not a verdict**.
+
+The pairing rate is its own diagnostic, and it is **not part of the verdict on purpose**. The matchmaker sets how often you play by its own placement uncertainty, so a fresh or badly placed submission gets paired hard and a settled one cools down: the rate chart usually starts hot and decays, and a falling rate is itself evidence the system thinks it knows where you belong. The drift is measured per EPISODE precisely so the verdict does not depend on that schedule; weighting convergence by frequency would re-import the wall-clock error this section exists to avoid. What frequency is for is the calendar: episodes-to-settle divided by the current rate is how long to wait before reading the number again, and I print that conversion below.
+
+The rating curve is colored by its own speed, the rolling per-episode |drift|: **warm stretches are above the threshold and still travelling, cool stretches are below it and settling**, so each moment of the curve declares its regime at a glance.
+
+===== CELL 31 (code) =====
+SETTLED  (drift -0.23 pts/episode over the last 20, 8 sign flips, threshold 1.0, n=72 episodes, rating now 737.7)
+
+<Figure size 950x400 with 2 Axes>
+<Figure size 900x320 with 1 Axes>
+pairing rate: 1.2 episodes/hour lifetime, 0.6/hour in the last 24h
+at the current rate the 20-episode drift window refreshes in about 34 hours: that is when to read again
+
+
+===== CELL 32 (markdown) =====
+## 10. The report
+
+Everything above in one block, the exact format my local instrument writes to **report.txt**: ledger, texture, classification, worlds, kinship, macro profile and convergence, ready to paste or diff.
+
+===== CELL 33 (code) =====
+submission 56110156: 40 episodes, 30 distinct worlds
+  ledger  W17-L23-T0, margin median -2,438, worst -55,201, best +58,595
+  texture green 28.7%  amber 2.5%  navy 68.8%
+
+  GLOBAL class: ADAPTIVE  (varying 82.6%, first divergence t=25, channels {'farmer': 532, 'hands': 569, 'market': 510})
+
+  world                                n class               vary first_div
+  BAKERY__BAKERY                       3 ADAPTIVE           80.1%        25
+  BAKERY__FARMERS_MARKET               1 (one episode)    
+  BAKERY__SMOOTHIE_SHOP                1 (one episode)    
+  BRUNCH_SPOT__BAKERY                  1 (one episode)    
+  BRUNCH_SPOT__ICE_CREAM_SHOP          1 (one episode)    
+  BRUNCH_SPOT__PET_CAFE                2 ADAPTIVE           74.1%        25
+  BRUNCH_SPOT__PIZZA_SHOP              1 (one episode)    
+  BRUNCH_SPOT__YARN_STORE              1 (one episode)    
+  FARMERS_MARKET__BAKERY               2 ADAPTIVE           70.9%        35
+  FARMERS_MARKET__ICE_CREAM_SHOP       2 ADAPTIVE           72.5%        35
+  FARMERS_MARKET__PET_CAFE             2 ADAPTIVE           68.2%       117
+  ICE_CREAM_SHOP__BAKERY               1 (one episode)    
+  ICE_CREAM_SHOP__ICE_CREAM_SHOP       1 (one episode)    
+  ICE_CREAM_SHOP__PET_CAFE             1 (one episode)    
+  ICE_CREAM_SHOP__YARN_STORE           2 ADAPTIVE           70.1%        35
+  PET_CAFE__BAKERY                     1 (one episode)    
+  PET_CAFE__SMOOTHIE_SHOP              1 (one episode)    
+  PET_CAFE__YARN_STORE                 1 (one episode)    
+  PIZZA_SHOP__BAKERY                   1 (one episode)    
+  PIZZA_SHOP__PIZZA_SHOP               2 ADAPTIVE           68.7%       117
+  PIZZA_SHOP__YARN_STORE               1 (one episode)    
+  SMOOTHIE_SHOP__BAKERY                1 (one episode)    
+  SMOOTHIE_SHOP__BRUNCH_SPOT           1 (one episode)    
+  SMOOTHIE_SHOP__FARMERS_MARKET        1 (one episode)    
+  SMOOTHIE_SHOP__ICE_CREAM_SHOP        1 (one episode)    
+  YARN_STORE__BAKERY                   1 (one episode)    
+  YARN_STORE__BRUNCH_SPOT              1 (one episode)    
+  YARN_STORE__ICE_CREAM_SHOP           2 ADAPTIVE           76.2%        35
+  YARN_STORE__PIZZA_SHOP               1 (one episode)    
+  YARN_STORE__YARN_STORE               2 ADAPTIVE           70.1%       117
+
+  within-world verdict: {'ADAPTIVE': 9}
+  kinship: 0 mirrors, 0 siblings, 40 opponents read
+
+  macro profile, median [p10, p90]; ref = the measured #1 shape
+  2nd quadrant, day                      7 [7, 9]    ref 5
+  care actions                         236 [122, 272]    ref 280
+  herd bought (median)           COW 8  SHEEP 3  GOOSE 0    ref 7 COW
+  endgame fallow tiles d25-29           24 [19, 32]    ref 13
+  stranded $ at the bell                 0 [0, 0]    ref 442
+
+  convergence: SETTLED  (drift -0.23 pts/episode, 8 flips, threshold 1.0, n=72, rating 737.7)
+
+
+===== CELL 34 (markdown) =====
+## 11. Caveats and credits
+
+* **The mode is computed from the episodes shown**, so with very few episodes the mode itself is weak.
+* **Nothing observable differs before turn 48** in this game, so early agreement between ANY two agents is the engine's determinism, not evidence of anything.
+* **The turn convention**: the action decided at turn t is stored at steps[t + 1] of the replay, and the day is turn // 24. Use the raw index and the whole picture shifts by one turn.
+
+If this found something odd in your agent, the follow-ups are in [a DNA test for agents](https://www.kaggle.com/code/destbreso/a-dna-test-for-agents). And the replay route I fetch from is the one [georgymamarin's dataset](https://www.kaggle.com/datasets/georgymamarin/kaggriculture-episodes) crawls nightly: vote for it, his scraper is where I learned the endpoint.

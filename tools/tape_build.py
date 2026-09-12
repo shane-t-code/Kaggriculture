@@ -43,7 +43,7 @@ import json, zlib, base64
 _TABLE = json.loads(zlib.decompress(base64.b85decode(
     "{blob}")))
 
-def agent(obs, config):
+def agent(obs, config=None):
     t = obs["step"]
     if 0 <= t < len(_TABLE):
         return _TABLE[t]

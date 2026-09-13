@@ -1,20 +1,48 @@
 """
 main.py — Kaggriculture agent.  ENTRY POINT (must be at archive root, must be named main.py).
 
-STATUS: v71c — PROMOTED to main.py Sep 13 .
-= v70c + ONE change: care_skip gates on OBSERVED price (<= CARE_FLOOR_NOW=$8)
-  instead of the falsified glut projection (comment at the care_skip line).
-EVIDENCE (the strongest gate this project has run — paired natural-world
-py_ab on real live-opponent tapes): vs Amitesh(801) 77 seeds margin-diff
-+1,155±596, wins 27%→32%; vs Infill(804) FRESH seeds 596-634 +1,281±889,
-wins 33%→36%; pooled +1,195±495 t≈2.4; vs killer tape(2400-class) +180±510
-no-harm; boom unfed 4.1% @16 animals; care 74% of animal-days (live was
-~55-60%; the old projection had care silently ~OFF in thin worlds).
-Falsified siblings for the record: v71a (P_CARE 1.5 starved waters −1.5/
-−1.8k; demand gate = no-op, town center drains 1/day of everything);
-v71b (blanket-on: floored milk eats labor + sell slots, YARN2 −3,537);
-v74d (hinge stack: pinned cells +1.6k but 77-seed OOS wash — pinned
-money-cells are screens, never gates).
+STATUS: v74c — THE CANDIDATE .  NOT promoted/submitted.
+= v74a (hinge + care stack) + boom-latch stand-down ONLY (v74b's refine b).
+Refine (a) (cow care waits for a milk shop) DROPPED: +535 YARN2 but −1,103
+money cell (our missing milk RAISED the milk px and fed the tape) and
+−0.65k MILK0.  YARN2 stays −769 — accepted (stack is net-positive).
+Cells to hold: money 39,214 (byte-eq to v74a expected: no boom in MILK1),
+MILK3 ≥ 77,468 (v74b's (b)-only level), MILK0/YARN2 = v74a levels.
+--- v74a header below: ---
+(was) STATUS: v74a — STACK CANDIDATE .  NOT promoted/submitted.
+= v73c hinge pivot (money cell +1,098 own, margin +1,452; 78 carrots + 31
+  tomatoes into rising uncontested px) + v71c care layer (observed-price
+  care gate, money cell +888).  If ~additive → ~+2k own in flooder worlds.
+Gates: money cell > 38,560 (v73c alone); then MILK0/MILK3/YARN2 no-harm
+vs the per-layer results; unfed ≤8% boom; then wide paired A/B (killer
+tape + king + multi_route × cells) and frozen holdout 519+.
+--- v73c header below: ---
+(was) STATUS: v73c — CANDIDATE .  NOT promoted, NOT submitted.
+= v73b + carrots actually get tiles in flooder worlds: flooder plant order
+  [MEL,STR,TOM,CARROT,WHEAT] (wheat is family-flooded too, 331u churn; its
+  late refills unaffected — the d22+ STR exit opens the board), flooder
+  carrot cap 16 (nets to 8 beside 8 tomatoes), carrot seed want 8.
+  v73b finding: carrot seeds sat unplanted d10-28 — board tile-bound and
+  CARROT last in PLANT_ORDER; bank byte-identical to v73a (+304).
+--- v73b header below: ---
+(was) STATUS: v73b — CANDIDATE .  NOT promoted, NOT submitted.
+= v73a (+304 money cell; 8 tomatoes d11, 27u @ ~$70, single wave) + FLOODER
+  CARROTS: _DYN_CARROT_CAP >= 12 when flooder latched, d>=10, carrot px >= 30
+  (repeat-yielder every 2-3d, gentlest glut curve T=450; px 40->52 rising in
+  flooder worlds).  NOTE the shared-space rule nets carrots to cap−tomato_cap
+  (= 4 alongside 8 tomatoes) — fingerprint decides if that needs room.
+--- v73a header below: ---
+(was) STATUS: v73a — CANDIDATE .  NOT promoted, NOT submitted.
+= v70c + FLOODER-GATED SCARCITY-HINGE PIVOT: opp melon tiles >=10 read
+  d4-8 (public farm; 91% dump predictor) latches _FLOODER; from d10
+  (their detonation frees tiles + our capital) tomato_cap 8 at px >= 55,
+  seed-gate bar 55 on this path only (the 85 confirm bar = v24a inertness).
+  Basis: hinge px RISE all game in their loss worlds (TOM 61/64/74) with
+  ~zero family supply; premium supply-adds all falsified (v72a/b, v47b).
+Gates: MILK1 s2 vs killer tape own bank > 37,462 (money cell); flooder
+must latch there (tape has 12 melons); tomato tiles ~8 by d12-14 and
+sells d18+ at >=$55 in the replay; unfired (non-flooder) worlds byte-
+identical to v70c; then no-harm cells + A/B + holdout 519+.
 --- v70c layer below: ---
 (was) STATUS: v70c — PROMOTED to main.py Sep 12 early .
 = v67c (berry-forward + capital reallocation + milk-rich release)
@@ -637,6 +665,17 @@ BEHIND_GAMBLE_DEFICIT = 5000
 BEHIND_TOMATO_DAY = 15
 BEHIND_TOMATO_PRICE = 70
 _GAMBLE_ON = {}              # per-seat sticky latch, reset at step 0
+# v73a  SCARCITY-HINGE PIVOT: a premium-flooding opponent (the killer
+# family and its detonator cousins) saturates STR/WOOL/MILK — added premium
+# supply from us backfires (v72a/v72b + v47b all measured it).  What they DON'T
+# touch: hinge goods (1.32.7 scarcity curves).  Live medians in 18 family
+# losses RISE all game: TOMATO 61/64/74, CARROT 35/40/52.  Detection: opp
+# melon tiles >= 10 by d5 predicts a >=25u dump at 91% (64/91 live opponents).
+# Their d10-11 detonation frees our capital timing too: tomatoes plant d10+
+# (post berry-window crunch), yield d18+ into the rising hinge.
+FLOODER_MEL_TILES = 10       # opp melon acreage that latches the flooder read
+FLOODER_TOMATO_CAP = 8       # tiles of tomato we add from day 10 when latched
+_FLOODER = {}                # per-seat sticky latch, reset at step 0
 
 # Conditional early wheat factory (v31a).  The shop draw is public and one shop
 # unlocks every 3 days (engine L867-891).  When the visible draw has NO
@@ -754,11 +793,9 @@ PRESSURE_BATCH_BONUS = 3
 # resumes the moment the market recovers.
 CARE_SKIP_PRICE = 15     # projected price at/below this = care not worth the turn
 CARE_SKIP_HORIZON = 3    # days until a banked care bonus typically pays out
-CARE_FLOOR_NOW = 8       # v71c: observed-price care gate — skip a species only
-                         # while its product's CURRENT price is at/near the $1
-                         # floor (units then realize ~nothing and cost labor +
-                         # sell slots).  No projection (that model is falsified
-                         # 4x); town drain lifts price -> care resumes same turn.
+CARE_FLOOR_NOW = 8       # v71c layer (see care_skip site): observed-price care
+                         # gate — skip a species only while its product's
+                         # CURRENT price is at/near the $1 floor.  No projection.
 
 # Tape-family counter (v7c).  Fingerprint: the meta tape places exactly 4 SHEEP and
 # its first COW on day 0 (visible from day 1); we field 3 sheep and no cow then, so
@@ -1231,9 +1268,15 @@ def _build_tasks(tiles, day, seeds, tape_mode=False, care_skip=(), crop_skip=(),
         budget = dict(seeds)
         planned = dict(crop_counts)
         want = []              # this turn's plant multiset — the conditions
+        # v73c: in flooder worlds carrots outrank wheat for vacancies — wheat
+        # is ALSO family-flooded (331u/game churn) while the carrot hinge is
+        # uncontested and rising; wheat keeps the late refills regardless
+        # (STR's d22+ exit opens the board).  Non-flooder: original order.
+        _p_order = (["MELON", "STRAWBERRY", "TOMATO", "CARROT", "WHEAT"]
+                    if _FLOODER.get(_CUR_SEAT, False) else PLANT_ORDER)
         for _ in empty_tiles:  # below never read tile coords, so the multiset
             crop = None        # is identical to the old raster-order loop's
-            for c in PLANT_ORDER:
+            for c in _p_order:
                 info = CROP_INFO[c]
                 cap = info["cap"]
                 if c == "WHEAT" and _FACTORY_NOW:
@@ -1895,7 +1938,11 @@ def _market_orders(day, hour, money, seeds, shed, inventories, prices, hires_tod
             continue
         if crop == "TOMATO":
             _tpx = prices.get("TOMATO", 0)
-            _bar = BEHIND_TOMATO_PRICE if gamble else TOMATO_HINGE_CONFIRM
+            # v73a: the flooder path buys at the signal floor (55) — the 85
+            # confirm bar was the v24a inertness (live median px 61-74 never
+            # clears it; it cleared 2/27 in the loss decode).
+            _bar = (TOMATO_MIN_SIGNAL_PRICE if _FLOODER.get(_CUR_SEAT, False)
+                    else (BEHIND_TOMATO_PRICE if gamble else TOMATO_HINGE_CONFIRM))
             if not (herd_complete or money >= 3000) or _tpx < _bar:
                 continue  # v37d: detonation cash also opens the tomato gate
         elif crop == "CARROT":
@@ -1907,7 +1954,7 @@ def _market_orders(day, hour, money, seeds, shed, inventories, prices, hires_tod
         if crop == "MELON" and 6 < day < MELON_W2_FROM:
             continue   # v57c: no melon seeds in the dead window between waves
         if crop == "CARROT":
-            want = 4
+            want = 8 if _FLOODER.get(_CUR_SEAT, False) else 4  # v73c: 8 hinge tiles
         if crop == "WHEAT" and _FACTORY_NOW:
             want = WHEAT_FACTORY_SEED_WANT
         if crop == "STRAWBERRY" and _DYN_STR_CAP.get(_CUR_SEAT, 40) <= 20:
@@ -1976,6 +2023,7 @@ def agent(obs):
     if step == 0:
         _TAPE_SEEN[player] = False
         _GAMBLE_ON[player] = False
+        _FLOODER[player] = False     # v73a
         _WHEAT_TOWN[player] = False
         _YARN_TOWN[player] = False   # v57b
         _COW_BOOM[player] = False    # v61d
@@ -1998,19 +2046,11 @@ def agent(obs):
 
     market_inv = (obs.get("market", {}) or {}).get("inventory", {}) or {}
     shops = (obs.get("town", {}) or {}).get("unlocked_shops", []) or []
-    # v71c : care_skip = OBSERVED-PRICE gate, replacing the glut
-    # PROJECTION (falsified: live care completeness fell to 71% mid / 34%
-    # late — off in worlds where the killers care 94-99% and realize
-    # ~$106/u milk).  Blanket-on (v71b) was falsified the other way:
-    # YARN2 −3,537 / MILK3 −847 vs v70c — in no-milk-shop worlds milk
-    # really floors, and cared milk then eats harvest/haul labor and
-    # 10-cap sell slots that wool needed.  The projection was right THERE
-    # and wrong everywhere else, so gate on the observed price NOW, no
-    # forecast: skip a species only while its product actually sits at
-    # the floor; the town's 1/day drain lifts it and care resumes the
-    # same turn (banked bonuses still pay at the next tick).  Engine
-    # L829-830: +1 product unit per cared+fed day.  P_CARE stays 2
-    # (1.5 measured −1.5/−1.8k: starved waters).
+    # v74a = v71c care layer stacked onto v73c: care_skip gates on OBSERVED
+    # price (<= CARE_FLOOR_NOW) instead of the falsified glut projection.
+    # v71c cell results: MILK0 +669/+387 (best of all variants), MILK1 vs
+    # killer tape +888 own bank, MILK3 −365, YARN2 −1,295 (hybrid fix TBD:
+    # cow care may also want >=1 revealed milk shop after d7).
     care_skip = {sp for sp, info in ANIMAL_INFO.items()
                  if prices.get(info["product"], 999) <= CARE_FLOOR_NOW}
     crop_skip = _crop_skip(tiles, opp.get("tiles", []), market_inv, shops)
@@ -2083,8 +2123,25 @@ def agent(obs):
             and _town_drain_per_day("WHEAT", shops) >= 7):
         _WHEAT_TOWN[player] = True
     if hour == 0:
+        # v73a flooder latch: read the opponent's public melon acreage d4-8.
+        if not _FLOODER.get(player, False) and 4 <= day <= 8:
+            _opp_mel = sum(1 for _r in opp.get("tiles", []) for _t in _r
+                           if isinstance(_t, dict) and _t.get("kind") == "PLANT"
+                           and _t.get("crop") == "MELON")
+            if _opp_mel >= FLOODER_MEL_TILES:
+                _FLOODER[player] = True
         _DYN_STR_CAP[player] = _dyn_str_cap(shops, day)
         _DYN_CARROT_CAP[player] = 12 if _town_drain_per_day("CARROT", shops) >= 8 else 0
+        # v73b: flooder-gated hinge carrots regardless of PET_CAFE — carrot
+        # repeat-yields every 2-3d from d13 on a d10 plant, px 40->52 rising in
+        # flooder worlds (18-loss median), and its glut curve is the game's
+        # gentlest (T=450 sqrt): the market absorbs our volume without a crash.
+        if (_FLOODER.get(player, False) and day >= 10
+                and not _COW_BOOM.get(player, False)   # v74c
+                and prices.get("CARROT", 0) >= 30):
+            # v73c: 16 (was 12) — the shared-space rule nets carrots to
+            # cap − tomato_cap, so 16 yields 8 tiles beside the 8 tomatoes.
+            _DYN_CARROT_CAP[player] = max(_DYN_CARROT_CAP[player], 16)
         # v47b: a yarn-town sheep 4 -> 6 bump was tried and REVERTED — wool's
         # market is the game's smallest (T=105, sq glut curve): 2 extra sheep
         # crashed the price for both sides and cost us 8k on the yarn seed.
@@ -2106,6 +2163,12 @@ def agent(obs):
     if ramp_fast and (_tom_px >= TOMATO_HINGE_CONFIRM
                       or (gamble and _tom_px >= BEHIND_TOMATO_PRICE)):
         tomato_cap = min(12, TOMATO_CAP_PER_SHOP * max(1, _tom_shops))
+    elif (_FLOODER.get(player, False) and day >= 10
+          and not _COW_BOOM.get(player, False)   # v74c: boom labor wins (77% fired lane)
+          and _tom_px >= TOMATO_MIN_SIGNAL_PRICE):
+        # v73a hinge pivot: from d10 (their detonation just freed tiles and
+        # our capital), plant into the uncontested rising hinge market.
+        tomato_cap = FLOODER_TOMATO_CAP
     else:
         tomato_cap = 0
 

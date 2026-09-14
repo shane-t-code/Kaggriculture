@@ -1,33 +1,15 @@
 """
 main.py — Kaggriculture agent.  ENTRY POINT (must be at archive root, must be named main.py).
 
-STATUS: v80b — PROMOTED CANDIDATE, SUBMIT-FLAGGED :
-D10 MELON CARAVAN, DETONATOR-GATED.  = v80a + _MEL_RACE latch (opp melons
-with planted_day<=1 >= 10, latched d4-8 — DAY-0 COHORT, because Amitesh
-replants to 10-11 TILES but its d0 cohort is 7 and the ungated caravan
-measured −1,079±879 there; the family plants 10-12 all on d0).  Latch
-fires in 69/94 live detonator games incl 15/16 of the FAST class that
-beats us 88%.  FINAL GATE (paired margin-diff, all fresh seeds, natural
-worlds): Utkarsh 712-750 +733±1,207 | killer 712-750 +1,453±1,056 |
-killer 790-828 +481±1,047 (replication) | Utkarsh 829-867 +1,235±1,005
-(replication) | POOLED n=156: +976±536 t=1.82 | Amitesh = EXACTLY 0
-(byte-identical v71c, 4 banks verified to the dollar).  All four
-detonator legs positive, both tapes replicated, worst leg zero.
---- v80a layer: ---
-(was) STATUS: v80a — CANDIDATE : D10 MELON CARAVAN, the
-first family-CHOREOGRAPHY port under the existence-proof rule.  = v71c +
-ONE mechanism (their d10 pipeline, decoded from 94 live detonator games,
-results/decodes/choreo_melon.jsonl + tools/choreo_melon.py):
- (1) dawn caravan — d10 h0-9 ripe-melon HARVESTs assigned FIRST, nearest
-     unit per tile (wheat carriers last), before feeds/stickiness/zones;
- (2) bank-run >=6 -> >=1 melon (one tile per trip, straight home);
- (3) same-turn sell — melon SELL order includes pocket cargo d10-11
-     (deposits resolve before market orders inside a step; oversell no-ops).
-WHY: fast copies beat us 88% (slow only 49%); same layout/distance/hands —
-they sell 45.8u by h13 @ wavg $231, we sold 9.0u, and 17u died in hands'
-pockets at midnight.  GATE: 4-pillar (fingerprint d10 timeline, then py_ab
-killer + Utkarsh fresh seeds 712+, margin-diff + win flips).
---- v71c layer below: ---
+STATUS: v79a — BENCHED INERT : the priority bump adds only +2 STR fert ops locally (57→59, seed 8) — priority is not the constraint.  LIVE GAP CONFIRMED REAL on v71c replays: us 49.8 vs their 60.8 ops/game vs detonators (~+2.2k/game lane).  Next: fert-window audit on live replays (which tile-days unfertilized and WHY — supply routing? window timing?) before any further build.  Was CANDIDATE; NOT
+promoted, NOT submitted until py_ab gates pass.  = v71c + ONE mechanism:
+STRAWBERRY fert tasks run at the WATERING tier (P2, was background P3)
+while observed STR price >= 120 (re-read every dawn; no projection).
+Basis: ops ledger of the 18 family losses — equal STR acreage, them +14
+FERTILIZE ops; each apply doubles 1-2 ticks (+1-2u at the 144-202 STR
+holds in family worlds) vs ~70 selling the fert unit.  STR px < 120 or
+str_dead worlds: byte-identical to v71c.
+--- v71c layer below (PROMOTED Sep 13, live 755.3): ---
 (was) STATUS: v71c — PROMOTED to main.py Sep 13 .
 = v70c + ONE change: care_skip gates on OBSERVED price (<= CARE_FLOOR_NOW=$8)
   instead of the falsified glut projection (comment at the care_skip line).
@@ -680,11 +662,6 @@ WHEAT_TOWN_STR_CAP = 15      # latched: stop NEW strawberry planting above this
 _WHEAT_TOWN = {}             # per-seat sticky latch, reset at step 0
 _FACTORY_NOW = False         # set per agent() call: wheat factory active this turn
 _DEAD_TOWN_NOW = False       # set per agent() call: dead-town latch this turn
-_MEL_RACE = {}               # v80b: per-seat latch — opp melon tiles >=10 seen d4-8
-                             # (91% d10-dump predictor, 64/91 live opponents).  The
-                             # caravan pays vs detonators (+733/+1,453 killer/fast,
-                             # seeds 712-750) and cost −1,079 vs Amitesh(mel7) —
-                             # dawn labor buys nothing when the price holds all day.
 _STICKY = {}                 # v40a: per-seat {unit_index: (x, y, op0)}, reset at step 0
 _CUR_SEAT = 0                # v40a: set per agent() call so _assign can key _STICKY
 # Planting priority when a tile opens up: melon (highest $/tile-day, tiny cap), wheat (feeds
@@ -761,6 +738,8 @@ FERT_KEEP = 0            # v57a: was 6 — the shed keep was redundant (crop app
 # compounds it ($98/day more fert).  We were feeding melons instead (11 applies
 # d5-9).  Fert is CASH during the ramp, an input after.
 FERT_APPLY_FROM_DAY = 10
+_STR_FERT_HOT = {}       # v79a: per-seat, set each h0 = observed STR px >= 120
+STR_FERT_HOT_PRICE = 120
 
 # Opponent-pressure-aware selling (Phase 5, v6a). The opponent's farm is PUBLIC every
 # turn. When their visible capacity in a premium product is large, their dump is coming:
@@ -1238,7 +1217,17 @@ def _build_tasks(tiles, day, seeds, tape_mode=False, care_skip=(), crop_skip=(),
                         or (crop == "MELON" and 6 <= day < FERT_APPLY_FROM_DAY)):
                     lo, hi = FERT_CROPS[crop]
                     if lo <= age <= hi and t.get("fertilized_until_day", -1) < day:
-                        tasks.append({"prio": P_FERT, "x": x, "y": y,
+                        # v79a  STR FERT COMPLETENESS: the ops ledger
+                        # of the 18 family losses has them +14 FERTILIZE ops
+                        # on equal STR acreage — each application doubles 1-2
+                        # ticks (+1-2u at the $150-200 STR holds in family
+                        # worlds) vs ~$70 selling the fert.  At P_FERT=3 the
+                        # apply loses to the d10-16 crunch; while the OBSERVED
+                        # STR price is hot it runs with the watering tier.
+                        _fprio = (P_WATER if (crop == "STRAWBERRY"
+                                              and _STR_FERT_HOT.get(_CUR_SEAT, False))
+                                  else P_FERT)
+                        tasks.append({"prio": _fprio, "x": x, "y": y,
                                       "op": ["FERTILIZE"], "require": "FERTILIZER"})
                 continue
 
@@ -1410,43 +1399,6 @@ def _assign(units, tasks, inventories, tiles, day, hour):
             assignment[ui] = {"prio": P_CHAIN, "x": best[0], "y": best[1],
                               "op": ["PLACE", species]}
 
-    # v80a D10 MELON CARAVAN (Exp 102 — family choreography port, decoded from
-    # 94 live detonator games in results/decodes/choreo_melon.jsonl): the fast
-    # copies (they beat us 88%; slow copies only 49%) put ONE unit on each ripe
-    # melon tile by h5, clear all ~12 tiles by h9, and run every load straight
-    # home — 45.8u sold by h13 at wavg $231 vs our 9.0u (same 12 tiles, same
-    # 3-7 tile distance, same 0 hands at h0).  Our greedy gave the near animal
-    # tasks to everyone first and the focused-feeder rule locked wheat carriers
-    # out of harvests, so tiles cleared ONE PER HOUR h0-h22 and hands died at
-    # midnight carrying 17u (auto-deposit sold d11 h0 at $156 vs $265 peak).
-    # Husbandry legally shifts to the afternoon: fed/cared/watered are day-level
-    # flags, and the family runs care/water heavy h16-23 on d10 (same decode).
-    if day == 10 and hour <= 9 and _MEL_RACE.get(_CUR_SEAT, False):
-        remembered0 = _STICKY.get(_CUR_SEAT, {})
-        pairs = []
-        for ti, t in enumerate(tasks):
-            if taken[ti] or t["op"][0] != "HARVEST":
-                continue
-            tl = tiles[t["y"]][t["x"]] if 0 <= t["y"] < len(tiles) else None
-            if not (isinstance(tl, dict) and tl.get("crop") == "MELON"):
-                continue
-            for ui, (ux, uy) in enumerate(units):
-                # loaded units are the return leg (bank-run override below);
-                # wheat carriers go last so dawn feeds keep one feeder.
-                if ui in assignment or inv_of(ui).get("MELON", 0) > 0:
-                    continue
-                d = abs(t["x"] - ux) + abs(t["y"] - uy)
-                if remembered0.get(ui) == (t["x"], t["y"], "HARVEST"):
-                    d -= 2   # incumbent bias: keep walkers walking
-                pairs.append((1 if inv_of(ui).get("WHEAT", 0) > 0 else 0,
-                              d, t["y"] * 16 + t["x"], ui, ti))
-        pairs.sort()
-        for _w, _d, _, ui, ti in pairs:
-            if ui in assignment or taken[ti]:
-                continue
-            assignment[ui] = tasks[ti]
-            taken[ti] = True
-
     # Override 2 (day 29 only): loaded units must reach the shed and DROP by hour 22 or
     # their cargo is worth $0 (no end-of-day drop ever runs again). Leave just in time.
     if day == LAST_DAY:
@@ -1584,15 +1536,14 @@ def _assign(units, tasks, inventories, tiles, day, hour):
                 assignment[ui] = {"prio": P_UNLOAD, "x": SHED_TILE[0],
                                   "y": SHED_TILE[1], "op": ["DROP"]}
 
-    # v58c MELON BANK-RUN, v80a tightened >=6 -> >=1: ANY melon in a pocket on
-    # d10 runs home now (family cadence: one tile per trip, PLACE+SELL on
-    # arrival).  The >=6 bar let a 5-load hand plant/water for hours and die
-    # at midnight still carrying it (live trace ep108610904: 17u auto-
-    # deposited at h24, sold d11 h0 at $156 vs the $265 peak).
+    # v58c MELON BANK-RUN: the whole field's d0 melons detonate on day 10 and
+    # the big families dump from h16 (steps 256-264, measured 8/8 seeds,
+    # $272 -> $158).  A unit that harvests a maxed tile (6 units) drops what
+    # it holds NOW — the fingerprint showed pocketed melons reaching the shed
+    # at nightfall and selling into the crater.  Day 10 mornings only.
     if day == 10 or (day == 11 and hour < 4):
-        _melmin = 1 if _MEL_RACE.get(_CUR_SEAT, False) else 6  # v80b gate
         for ui, (ux, uy) in enumerate(units):
-            if inv_of(ui).get("MELON", 0) >= _melmin:
+            if inv_of(ui).get("MELON", 0) >= 6:
                 assignment[ui] = {"prio": P_UNLOAD, "x": SHED_TILE[0],
                                   "y": SHED_TILE[1], "op": ["DROP"]}
 
@@ -1722,15 +1673,6 @@ def _market_orders(day, hour, money, seeds, shed, inventories, prices, hires_tod
             # $0-bank opening, fertilizer sales are the survival cash that buys feed;
             # hoarding them starved the sheep that produce them (measured: 0-32 vs v3a).
             stock -= FERT_KEEP
-        if item == "MELON" and 10 <= day <= 11 and _MEL_RACE.get(_CUR_SEAT, False):
-            # v80a SAME-TURN SELL: unit deposits resolve BEFORE market orders
-            # inside one engine step (kaggriculture.py interpreter: unit
-            # actions L935-939, then _process_market L941), and per-unit SELL
-            # commits stop harmlessly at an empty shed (L653-655).  So order
-            # the caravan's incoming pockets too — a load sells the hour it
-            # lands instead of the hour after (family cadence, ep108610904:
-            # dep 24 / sell 24 in the same step).  Unarrived pockets no-op.
-            stock += sum(inv.get("MELON", 0) for inv in inventories)
         if stock <= 0:
             continue
         price = prices.get(item, 0)
@@ -1782,10 +1724,6 @@ def _market_orders(day, hour, money, seeds, shed, inventories, prices, hires_tod
                 n = batch + 5
             elif item == "MELON" and day >= TAPE_MELON_SOFT_DAY:
                 threshold = min(threshold, TAPE_MELON_SOFT)
-        if item == "MELON" and 10 <= day <= 11 and _MEL_RACE.get(_CUR_SEAT, False):
-            # v80a: no batch cap on the detonation — the first seller gets
-            # $265, the second gets the crater (fast copies sell 24/turn).
-            n = stock
         if day >= 28:
             # v52b : COMPLETE liquidation — live close-loss decode
             # found 4 of 11 sub-8k losses had MORE value stranded in the shed
@@ -2063,7 +2001,6 @@ def agent(obs):
         _YARN_TOWN[player] = False   # v57b
         _COW_BOOM[player] = False    # v61d
         _GOOSE_TARGET[player] = D0_GOOSE
-        _MEL_RACE[player] = False    # v80b
         _STICKY[player] = {}
     if not _TAPE_SEEN.get(player, False) and 1 <= day <= 2:
         _oc, _oa = _opp_capacity(opp.get("tiles", []))
@@ -2079,18 +2016,6 @@ def agent(obs):
             # (verified vs extracted _ACTIONS), so only the detector changes.
             _TAPE_SEEN[player] = True
     tape_mode = _TAPE_SEEN.get(player, False)
-    if not _MEL_RACE.get(player, False) and 4 <= day <= 8:
-        # v80b caravan gate — DAY-0 COHORT, not tile count: Amitesh(801)
-        # replants to 10-11 melon tiles but its d0 cohort is 7 (staggered
-        # maturities, no d10 detonation, caravan measured −1,079 there);
-        # the family plants 10-12 ALL on d0 (decode: fast 11.4, slow 10.2
-        # tiles at planted_day 0) → simultaneous d10 detonation, caravan
-        # +733/+1,453.  planted_day is public in the opponent farm.
-        _oppmel0 = sum(1 for row in (opp.get("tiles") or []) for t in (row or [])
-                       if isinstance(t, dict) and t.get("crop") == "MELON"
-                       and t.get("planted_day", 99) <= 1)
-        if _oppmel0 >= 10:
-            _MEL_RACE[player] = True
 
     market_inv = (obs.get("market", {}) or {}).get("inventory", {}) or {}
     shops = (obs.get("town", {}) or {}).get("unlocked_shops", []) or []
@@ -2180,6 +2105,9 @@ def agent(obs):
         _WHEAT_TOWN[player] = True
     if hour == 0:
         _DYN_STR_CAP[player] = _dyn_str_cap(shops, day)
+        # v79a: STR fert runs at the watering tier only while the OBSERVED
+        # market pays for the extra units (no projection; re-read every dawn).
+        _STR_FERT_HOT[player] = prices.get("STRAWBERRY", 0) >= STR_FERT_HOT_PRICE
         _DYN_CARROT_CAP[player] = 12 if _town_drain_per_day("CARROT", shops) >= 8 else 0
         # v47b: a yarn-town sheep 4 -> 6 bump was tried and REVERTED — wool's
         # market is the game's smallest (T=105, sq glut curve): 2 extra sheep

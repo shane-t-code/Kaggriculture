@@ -1,20 +1,7 @@
 """
 main.py — Kaggriculture agent.  ENTRY POINT (must be at archive root, must be named main.py).
 
-STATUS: v80b — PROMOTED CANDIDATE, SUBMIT-FLAGGED :
-D10 MELON CARAVAN, DETONATOR-GATED.  = v80a + _MEL_RACE latch (opp melons
-with planted_day<=1 >= 10, latched d4-8 — DAY-0 COHORT, because Amitesh
-replants to 10-11 TILES but its d0 cohort is 7 and the ungated caravan
-measured −1,079±879 there; the family plants 10-12 all on d0).  Latch
-fires in 69/94 live detonator games incl 15/16 of the FAST class that
-beats us 88%.  FINAL GATE (paired margin-diff, all fresh seeds, natural
-worlds): Utkarsh 712-750 +733±1,207 | killer 712-750 +1,453±1,056 |
-killer 790-828 +481±1,047 (replication) | Utkarsh 829-867 +1,235±1,005
-(replication) | POOLED n=156: +976±536 t=1.82 | Amitesh = EXACTLY 0
-(byte-identical v71c, 4 banks verified to the dollar).  All four
-detonator legs positive, both tapes replicated, worst leg zero.
---- v80a layer: ---
-(was) STATUS: v80a — CANDIDATE : D10 MELON CARAVAN, the
+STATUS: v80a — CANDIDATE : D10 MELON CARAVAN, the
 first family-CHOREOGRAPHY port under the existence-proof rule.  = v71c +
 ONE mechanism (their d10 pipeline, decoded from 94 live detonator games,
 results/decodes/choreo_melon.jsonl + tools/choreo_melon.py):
@@ -680,11 +667,6 @@ WHEAT_TOWN_STR_CAP = 15      # latched: stop NEW strawberry planting above this
 _WHEAT_TOWN = {}             # per-seat sticky latch, reset at step 0
 _FACTORY_NOW = False         # set per agent() call: wheat factory active this turn
 _DEAD_TOWN_NOW = False       # set per agent() call: dead-town latch this turn
-_MEL_RACE = {}               # v80b: per-seat latch — opp melon tiles >=10 seen d4-8
-                             # (91% d10-dump predictor, 64/91 live opponents).  The
-                             # caravan pays vs detonators (+733/+1,453 killer/fast,
-                             # seeds 712-750) and cost −1,079 vs Amitesh(mel7) —
-                             # dawn labor buys nothing when the price holds all day.
 _STICKY = {}                 # v40a: per-seat {unit_index: (x, y, op0)}, reset at step 0
 _CUR_SEAT = 0                # v40a: set per agent() call so _assign can key _STICKY
 # Planting priority when a tile opens up: melon (highest $/tile-day, tiny cap), wheat (feeds
@@ -1421,7 +1403,7 @@ def _assign(units, tasks, inventories, tiles, day, hour):
     # midnight carrying 17u (auto-deposit sold d11 h0 at $156 vs $265 peak).
     # Husbandry legally shifts to the afternoon: fed/cared/watered are day-level
     # flags, and the family runs care/water heavy h16-23 on d10 (same decode).
-    if day == 10 and hour <= 9 and _MEL_RACE.get(_CUR_SEAT, False):
+    if day == 10 and hour <= 9:
         remembered0 = _STICKY.get(_CUR_SEAT, {})
         pairs = []
         for ti, t in enumerate(tasks):
@@ -1590,9 +1572,8 @@ def _assign(units, tasks, inventories, tiles, day, hour):
     # at midnight still carrying it (live trace ep108610904: 17u auto-
     # deposited at h24, sold d11 h0 at $156 vs the $265 peak).
     if day == 10 or (day == 11 and hour < 4):
-        _melmin = 1 if _MEL_RACE.get(_CUR_SEAT, False) else 6  # v80b gate
         for ui, (ux, uy) in enumerate(units):
-            if inv_of(ui).get("MELON", 0) >= _melmin:
+            if inv_of(ui).get("MELON", 0) >= 1:
                 assignment[ui] = {"prio": P_UNLOAD, "x": SHED_TILE[0],
                                   "y": SHED_TILE[1], "op": ["DROP"]}
 
@@ -1722,7 +1703,7 @@ def _market_orders(day, hour, money, seeds, shed, inventories, prices, hires_tod
             # $0-bank opening, fertilizer sales are the survival cash that buys feed;
             # hoarding them starved the sheep that produce them (measured: 0-32 vs v3a).
             stock -= FERT_KEEP
-        if item == "MELON" and 10 <= day <= 11 and _MEL_RACE.get(_CUR_SEAT, False):
+        if item == "MELON" and 10 <= day <= 11:
             # v80a SAME-TURN SELL: unit deposits resolve BEFORE market orders
             # inside one engine step (kaggriculture.py interpreter: unit
             # actions L935-939, then _process_market L941), and per-unit SELL
@@ -1782,7 +1763,7 @@ def _market_orders(day, hour, money, seeds, shed, inventories, prices, hires_tod
                 n = batch + 5
             elif item == "MELON" and day >= TAPE_MELON_SOFT_DAY:
                 threshold = min(threshold, TAPE_MELON_SOFT)
-        if item == "MELON" and 10 <= day <= 11 and _MEL_RACE.get(_CUR_SEAT, False):
+        if item == "MELON" and 10 <= day <= 11:
             # v80a: no batch cap on the detonation — the first seller gets
             # $265, the second gets the crater (fast copies sell 24/turn).
             n = stock
@@ -2063,7 +2044,6 @@ def agent(obs):
         _YARN_TOWN[player] = False   # v57b
         _COW_BOOM[player] = False    # v61d
         _GOOSE_TARGET[player] = D0_GOOSE
-        _MEL_RACE[player] = False    # v80b
         _STICKY[player] = {}
     if not _TAPE_SEEN.get(player, False) and 1 <= day <= 2:
         _oc, _oa = _opp_capacity(opp.get("tiles", []))
@@ -2079,18 +2059,6 @@ def agent(obs):
             # (verified vs extracted _ACTIONS), so only the detector changes.
             _TAPE_SEEN[player] = True
     tape_mode = _TAPE_SEEN.get(player, False)
-    if not _MEL_RACE.get(player, False) and 4 <= day <= 8:
-        # v80b caravan gate — DAY-0 COHORT, not tile count: Amitesh(801)
-        # replants to 10-11 melon tiles but its d0 cohort is 7 (staggered
-        # maturities, no d10 detonation, caravan measured −1,079 there);
-        # the family plants 10-12 ALL on d0 (decode: fast 11.4, slow 10.2
-        # tiles at planted_day 0) → simultaneous d10 detonation, caravan
-        # +733/+1,453.  planted_day is public in the opponent farm.
-        _oppmel0 = sum(1 for row in (opp.get("tiles") or []) for t in (row or [])
-                       if isinstance(t, dict) and t.get("crop") == "MELON"
-                       and t.get("planted_day", 99) <= 1)
-        if _oppmel0 >= 10:
-            _MEL_RACE[player] = True
 
     market_inv = (obs.get("market", {}) or {}).get("inventory", {}) or {}
     shops = (obs.get("town", {}) or {}).get("unlocked_shops", []) or []

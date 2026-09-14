@@ -1,7 +1,26 @@
 """
 main.py — Kaggriculture agent.  ENTRY POINT (must be at archive root, must be named main.py).
 
-STATUS: v71c — PROMOTED to main.py Sep 13 .
+STATUS: v75a -- FALSIFIED : -2,757 +- 1,341 paired 39 seeds vs killer tape - parked HANDS overnight but hands EXPIRE AT MIDNIGHT (engine): burned their last evening turns + disrupted evening water/care.
+submitted until py_ab gates pass (fingerprint → killer tape 77 fresh seeds
+635+ → replication on a 2nd tape → no-harm vs non-detonator).
+= v71c + ONE mechanism: the d10-12 melon dump moves from h14-20 to h0-6.
+  (1) overnight parking: h22-23 of d9-11, free units walk onto melon tiles
+      that mature at midnight (_assign, "v75a DAWN RAID"); HARVEST no-ops
+      until age 10 (engine L453 gate — age is CALENDAR, fert cannot beat
+      it) then fires at h0 with the unit already standing there;
+  (2) P_SAVE melon harvest extended d10→d10-12 (late first-wave tiles);
+  (3) melon sell batch caps off d10-12 (_market_orders) — melon has zero
+      shop demand, a crashed melon market NEVER recovers, first seller
+      takes the $250 peak.
+WHY (live trace ep108610904, −60.9k vs 2901 family copy): 11 tiles mature
+d10 h0; first harvest h8-9; our 65u sold h12-d11h1 into $236→99 while
+their 42u took $244-266 at h9-11.  Race position correlates with match
+outcome across all 60 detonator games .
+Feed/water/care are DAY-level engine deadlines — the shifted morning
+routine costs nothing.
+--- v71c layer below (Sep 13, PROMOTED, submitted, 755.3 settled): ---
+(was) STATUS: v71c — PROMOTED to main.py Sep 13 .
 = v70c + ONE change: care_skip gates on OBSERVED price (<= CARE_FLOOR_NOW=$8)
   instead of the falsified glut projection (comment at the care_skip line).
 EVIDENCE (the strongest gate this project has run — paired natural-world
@@ -1137,11 +1156,13 @@ def _build_tasks(tiles, day, seeds, tape_mode=False, care_skip=(), crop_skip=(),
                 )
                 if harvestable:
                     _hprio = P_SAVE if dying else P_HARVEST
-                    if crop == "MELON" and day == 10:
+                    if crop == "MELON" and 10 <= day <= 12:
                         # v58c: win the day-10 melon race — at shared prio 1
                         # the ring's feed/care tasks starved the harvests
                         # until h14-18 (traced), landing the crop in the
                         # h16 field-wide dump.
+                        # v75a: d11-12 too — late-planted first-wave melons
+                        # mature d11-12 and met the crater (live trace).
                         _hprio = P_SAVE
                     tasks.append({"prio": _hprio, "x": x, "y": y,
                                   "op": ["HARVEST"]})
@@ -1515,12 +1536,82 @@ def _assign(units, tasks, inventories, tiles, day, hour):
                 assignment[ui] = {"prio": P_UNLOAD, "x": SHED_TILE[0],
                                   "y": SHED_TILE[1], "op": ["DROP"]}
 
+    # v75a DAWN RAID : the melon race is decided by the HOUR.  Live
+    # trace (ep108610904, −60.9k): 11 tiles mature at d10 h0, first harvest
+    # h8-9, our dump lands h14-20 — the family's h9-13 tranche took the $250+
+    # peak and we sold the crash.  Feed/water/care are DAY-level deadlines
+    # (engine checks fed_today/cared_today at day end), so the morning
+    # routine shifts a few hours at zero cost while the dump moves to h0-6.
+    # Park units on tonight's ripening melons at h22-23 (HARVEST no-ops
+    # until age 10, then fires at h0; sticky keeps them on the tile).
+    if 9 <= day <= 11 and hour >= 20:
+        # (parking, from h20: units average 4-8 tiles from the ring — the
+        # h22 variant left them mid-walk and the morning machinery
+        # recaptured them, traced on seed 2)
+        _ripe = [(x2, y2) for y2, _row in enumerate(tiles)
+                 for x2, _t in enumerate(_row)
+                 if (isinstance(_t, dict) and _t.get("crop") == "MELON"
+                     and day - _t.get("planted_day", day) == 9
+                     and _t.get("yield_units", 0) > 0)]
+        if len(_ripe) >= 4:
+            _used = set()
+            for (_tx, _ty) in _ripe:
+                _best, _bd = None, 999
+                for ui, (ux, uy) in enumerate(units):
+                    if ui in _used:
+                        continue
+                    _cur = assignment.get(ui)
+                    if _cur is not None and _cur["prio"] <= P_FEED:
+                        continue                      # never rob rescue/feed work
+                    if sum(inv_of(ui).values()) >= 4:
+                        continue                      # loaded carriers keep hauling
+                    _d = abs(ux - _tx) + abs(uy - _ty)
+                    if _d < _bd:
+                        _best, _bd = ui, _d
+                if _best is not None:
+                    _used.add(_best)
+                    assignment[_best] = {"prio": P_HARVEST, "x": _tx, "y": _ty,
+                                         "op": ["HARVEST"]}
+
+    # v75a DAWN RAID part 2: the morning blitz itself.  Carrier overrides and
+    # stickiness run BEFORE the priority greedy, so at h0 the crew was being
+    # recaptured by the morning feed/water routine while 10 mature melon
+    # tiles waited until h11 (traced, seed 2).  Feeds/waters/cares are
+    # DAY-level deadlines (engine checks *_today at day end) — shifting them
+    # a few hours costs nothing, losing the melon race costs the game.
+    # Only true rescue work (P_SAVE) is exempt from the grab.
+    if 10 <= day <= 12 and hour < 7:
+        _mature = [(x2, y2) for y2, _row in enumerate(tiles)
+                   for x2, _t in enumerate(_row)
+                   if (isinstance(_t, dict) and _t.get("crop") == "MELON"
+                       and day - _t.get("planted_day", day) >= 10
+                       and _t.get("yield_units", 0) > 0)]
+        _used = set()
+        for (_tx, _ty) in _mature:
+            _best, _bd = None, 999
+            for ui, (ux, uy) in enumerate(units):
+                if ui in _used:
+                    continue
+                _cur = assignment.get(ui)
+                if _cur is not None and _cur["prio"] <= P_SAVE:
+                    continue                          # dying-crop rescues keep their unit
+                if inv_of(ui).get("MELON", 0) >= 6:
+                    continue                          # full pockets bank-run below
+                _d = abs(ux - _tx) + abs(uy - _ty)
+                if _d < _bd:
+                    _best, _bd = ui, _d
+            if _best is not None:
+                _used.add(_best)
+                assignment[_best] = {"prio": P_SAVE, "x": _tx, "y": _ty,
+                                     "op": ["HARVEST"]}
+
     # v58c MELON BANK-RUN: the whole field's d0 melons detonate on day 10 and
     # the big families dump from h16 (steps 256-264, measured 8/8 seeds,
     # $272 -> $158).  A unit that harvests a maxed tile (6 units) drops what
     # it holds NOW — the fingerprint showed pocketed melons reaching the shed
     # at nightfall and selling into the crater.  Day 10 mornings only.
-    if day == 10 or (day == 11 and hour < 4):
+    # v75a: d11-12 waves too (late-planted first-wave melons).
+    if 10 <= day <= 12 or (day == 13 and hour < 4):
         for ui, (ux, uy) in enumerate(units):
             if inv_of(ui).get("MELON", 0) >= 6:
                 assignment[ui] = {"prio": P_UNLOAD, "x": SHED_TILE[0],
@@ -1709,6 +1800,13 @@ def _market_orders(day, hour, money, seeds, shed, inventories, prices, hires_tod
             # than the losing margin (day-29 harvests land with 1-2 market
             # turns left; batch 3/turn physically cannot clear them).  From
             # d28, batch caps are off: sell the whole stock every turn.
+            n = stock
+        if item == "MELON" and 10 <= day <= 12:
+            # v75a DAWN RAID: batch caps off in the race window — melon has
+            # ZERO shop demand (engine SHOPS L103-112) so a crashed melon
+            # market never recovers; every unit still in the shed when the
+            # field's h9-16 dumps land sells into the crater.  First seller
+            # takes the $250 peak (live trace ep108610904).
             n = stock
         if day >= liq_day or force or price >= threshold:
             orders.append(["SELL", item, min(n, stock)])

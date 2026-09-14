@@ -1,7 +1,16 @@
 """
 main.py — Kaggriculture agent.  ENTRY POINT (must be at archive root, must be named main.py).
 
-STATUS: v71c — PROMOTED to main.py Sep 13 .
+STATUS: v76a — FALSIFIED : 77-seed paired vs killer −4,633±798 (t=−5.80).  GATE BUG: milk shops <=1 of the first TWO reveals fires in ~86% of worlds incl. milk-rich (seed 667: 2nd reveal ICE_CREAM, milk \-197, eggs \/u, −22.6k).  Geese were fine; the gate was wrong → v76b (3 reveals, ==0 milky).  Was:
+NOT submitted until py_ab gates pass.  = v71c + ONE mechanism: thin-milk
+goose latch (milk shops <=1 by d6-10, no boom, no yarn town -> 4 geese
+bought once SW land exists, coops on new tail slots 16-17).  The 3x old
+goose falsifications are VOID — they ran with care silently OFF (the
+projection bug v71c fixed); a cared goose = 2 eggs/day, EGG = hinge good
+(50->60 in family worlds), gentlest glut curve in the game, zero family
+supply.  Unfired towns byte-identical to v71c.
+--- v71c layer below (PROMOTED Sep 13, live 755.3 settled): ---
+(was) STATUS: v71c — PROMOTED to main.py Sep 13 .
 = v70c + ONE change: care_skip gates on OBSERVED price (<= CARE_FLOOR_NOW=$8)
   instead of the falsified glut projection (comment at the care_skip line).
 EVIDENCE (the strongest gate this project has run — paired natural-world
@@ -580,7 +589,13 @@ ANIMAL_INFO = {
 # the animal tile and the wheat lives at the shed, so clustering minimizes walking.
 ANIMAL_SLOTS = [(3, 4), (4, 3), (3, 3), (2, 4), (4, 2), (2, 3), (3, 2), (2, 2),
                 (4, 5), (3, 5), (2, 5), (4, 6),
-                (3, 6), (2, 6), (4, 7)]   # +7 SW slots (v37a: 15-animal herd)
+                (3, 6), (2, 6), (4, 7),
+                (3, 7), (2, 7)]   # +7 SW slots (v37a: 15-animal herd)
+                                  # v76a: +2 SW tail (16-17) — goose coops when
+                                  # the thin-milk latch fires (13 pastures + 4
+                                  # coops > the old 15); tail slots are reserved
+                                  # only when _SLOT_NEED reaches them, so
+                                  # latch-off games are untouched.
 # v42b geese: slots are species-aware; adaptive target set per game in agent()
 # once an egg shop is seen.  D0_GOOSE > 0 = blind day-0 goose bet (search gene;
 # first egg day 4) — day-0 geese take the FRONT slots (nothing built yet),
@@ -1852,6 +1867,11 @@ def _market_orders(day, hour, money, seeds, shed, inventories, prices, hires_tod
                            # and MIXED 2-14 losses to v66c were exactly the
                            # paused sheep; gates run on FRESH seeds (516+),
                            # never re-judged on the spent 500-507 block.
+            if sp == "GOOSE" and n_quadrants < 3:
+                # v76a: late-latched geese take SW tail slots — buying before
+                # the SW quadrant exists strands them in the shed (the v54f
+                # dead-capital disease, 8 in-shed animal-days measured).
+                continue
             sp_target = (_GOOSE_TARGET.get(_CUR_SEAT, 0) if sp == "GOOSE"
                          else sheep_target if sp == "SHEEP"
                          else cow_target)
@@ -2098,9 +2118,25 @@ def agent(obs):
         if "YARN_STORE" in shops and day <= 9:
             _YARN_TOWN[player] = True
         _DYN_SHEEP[player] = YARN_SHEEP if _YARN_TOWN.get(player, False) else 4
-        if (_GOOSE_TARGET.get(player, 0) < 1 and day <= 10
-                and _town_drain_per_day("EGG", shops) >= 7):
-            _GOOSE_TARGET[player] = 0
+        # v76a THIN-MILK GOOSE LATCH (Exp 98; replaces the neutered egg-town
+        # latch that set target 0).  Reviewer consensus + measured basis:
+        # the 3x goose falsifications all ran with care silently OFF (the
+        # pre-v71c projection bug) — a goose's case IS the care multiplier
+        # (cared = 2 eggs/day vs 1; engine interval 1).  EGG is a 1.32.7
+        # hinge good (base 50, rises to ~60 in family worlds, above_func
+        # LOG = gentlest glut curve in the game) and the flood family
+        # supplies ~none (+140 goose-days is THEIR quiet lane).  Gate =
+        # thin-premium towns (milk shops <= 1 of the first 2-3 reveals) —
+        # the mirror image of the milk-boom gate; 11 of our 15 worst live
+        # loss profiles are 0-1-milk-shop towns.  Boom and yarn towns
+        # excluded (labor + slots already committed).  Sticky; unfired
+        # towns byte-identical.
+        if (_GOOSE_TARGET.get(player, 0) < 1 and 6 <= day <= 10
+                and sum(1 for s in shops if s in ("PIZZA_SHOP",
+                        "ICE_CREAM_SHOP", "SMOOTHIE_SHOP")) <= 1
+                and not _COW_BOOM.get(player, False)
+                and not _YARN_TOWN.get(player, False)):
+            _GOOSE_TARGET[player] = 4
     _DEAD_TOWN_NOW = _WHEAT_TOWN.get(player, False)
     _FACTORY_NOW = day >= WHEAT_FACTORY_DAY or _DEAD_TOWN_NOW
     if ramp_fast and (_tom_px >= TOMATO_HINGE_CONFIRM

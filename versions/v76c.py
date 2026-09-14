@@ -1,7 +1,16 @@
 """
 main.py — Kaggriculture agent.  ENTRY POINT (must be at archive root, must be named main.py).
 
-STATUS: v71c — PROMOTED to main.py Sep 13 .
+STATUS: v76c — FALSIFIED, GOOSE LANE CLOSED : 77 seeds ALL −426±271, latched −1,427±885 (7/23 positive) — the CLEAN implementation (surplus capital only, zero-milk towns, fallow-tile coops, 4 geese by d14, 81%% cared,  egg gross confirmed) still nets negative vs the killer tape in its own target worlds. Revenue math was right; labor+feed+capital opportunity cost eats it. Also unearthed: goose buy loop was DEAD CODE since v42b (herd_complete gate). Was:  NOT promoted,
+NOT submitted until py_ab gates pass.  = v71c + ONE mechanism: thin-milk
+goose latch (milk shops <=1 by d6-10, no boom, no yarn town -> 4 geese
+bought once SW land exists, coops on new tail slots 16-17).  The 3x old
+goose falsifications are VOID — they ran with care silently OFF (the
+projection bug v71c fixed); a cared goose = 2 eggs/day, EGG = hinge good
+(50->60 in family worlds), gentlest glut curve in the game, zero family
+supply.  Unfired towns byte-identical to v71c.
+--- v71c layer below (PROMOTED Sep 13, live 755.3 settled): ---
+(was) STATUS: v71c — PROMOTED to main.py Sep 13 .
 = v70c + ONE change: care_skip gates on OBSERVED price (<= CARE_FLOOR_NOW=$8)
   instead of the falsified glut projection (comment at the care_skip line).
 EVIDENCE (the strongest gate this project has run — paired natural-world
@@ -570,7 +579,11 @@ D0_COW = 2
 D0_MELON = 8   # v55e: tiles leg — the 12-block squats the early quadrant (v55c/d fingerprints)
 D0_WHEAT_SEED = 7
 D0_FEED = 4    # v47a: basket+hires must clear $3,000 (2,942+12 with feed 4)
-BUY_PRIORITY = ["GOOSE", "COW", "SHEEP"]   # v47a: cows first — milk from d8 IS the early engine
+BUY_PRIORITY = ["COW", "SHEEP", "GOOSE"]   # v47a: cows first — milk from d8 IS the early engine
+# v76c: GOOSE moved LAST — seed-644 diagnosis: latched geese pre-empted the
+# $400 cow buys at the d10-12 capital chokepoint (cows 3 at d12 vs 9), and a
+# delayed cow-day in a $130-180 milk world costs more than a goose earns.
+# With goose target 0 (latch unfired) the order change is a no-op.
 ANIMAL_INFO = {
     "GOOSE": {"cost": 300, "build": "BUILD_COOP", "first": 4, "interval": 1, "product": "EGG"},
     "COW":   {"cost": 400, "build": "BUILD_PASTURE", "first": 8, "interval": 2, "product": "MILK"},
@@ -580,7 +593,13 @@ ANIMAL_INFO = {
 # the animal tile and the wheat lives at the shed, so clustering minimizes walking.
 ANIMAL_SLOTS = [(3, 4), (4, 3), (3, 3), (2, 4), (4, 2), (2, 3), (3, 2), (2, 2),
                 (4, 5), (3, 5), (2, 5), (4, 6),
-                (3, 6), (2, 6), (4, 7)]   # +7 SW slots (v37a: 15-animal herd)
+                (3, 6), (2, 6), (4, 7),
+                (3, 7), (2, 7)]   # +7 SW slots (v37a: 15-animal herd)
+                                  # v76a: +2 SW tail (16-17) — goose coops when
+                                  # the thin-milk latch fires (13 pastures + 4
+                                  # coops > the old 15); tail slots are reserved
+                                  # only when _SLOT_NEED reaches them, so
+                                  # latch-off games are untouched.
 # v42b geese: slots are species-aware; adaptive target set per game in agent()
 # once an egg shop is seen.  D0_GOOSE > 0 = blind day-0 goose bet (search gene;
 # first egg day 4) — day-0 geese take the FRONT slots (nothing built yet),
@@ -1055,7 +1074,15 @@ def _build_tasks(tiles, day, seeds, tape_mode=False, care_skip=(), crop_skip=(),
     # d3-8, but melons anchored on the ring stranded them in the shed until the
     # d10 detonation (measured: 8 in-shed animal-days by d9 = dead capital).
     # 8 clear slots hold the whole early wave; melons shift to non-ring tiles.
-    reserved = set(ANIMAL_SLOTS[:min(_n_slots_total, max(8, _placed_now + 2))])
+    _reserve_n = max(8, _placed_now + 2)
+    if _GOOSE_TARGET.get(_CUR_SEAT, 0) > 0:
+        # v76c: latched geese need their tail-slot coops NOW — the +2
+        # headroom crept one slot per placement (goose ramp 1/3/4 over
+        # d12-28, traced), each site deferring behind a wheat replant.
+        # The latch fires post-herd (d12+), so reserving the full slot
+        # need costs wheat only 4 SW tiles late-game.
+        _reserve_n = _n_slots_total
+    reserved = set(ANIMAL_SLOTS[:min(_n_slots_total, _reserve_n)])
 
     for y, row in enumerate(tiles):
         for x, t in enumerate(row):
@@ -1222,6 +1249,20 @@ def _build_tasks(tiles, day, seeds, tape_mode=False, care_skip=(), crop_skip=(),
                 _bx, _by = empty_tiles.pop(0)
                 tasks.append({"prio": P_BUILD, "x": _bx, "y": _by,
                               "op": ["BUILD_PASTURE"]})
+
+    # v76c: goose coops on fallow tiles (mirror of the v61d boom block) —
+    # the tail slots carry live crops when the latch fires (d12+), so slot
+    # coops defer 10+ days (goose ramp 1/3/4 over d12-28, traced).  Latch-
+    # gated: unfired games byte-identical.
+    if _GOOSE_TARGET.get(_CUR_SEAT, 0) > 0 and day < LAST_DAY:
+        _gdeficit = _n_slots_total - _placed_now
+        if _gdeficit > 0 and empty_tiles:
+            _ax, _ay = SHED_TILE
+            empty_tiles.sort(key=lambda p: abs(p[0] - _ax) + abs(p[1] - _ay))
+            for _ in range(min(_gdeficit, len(empty_tiles))):
+                _bx, _by = empty_tiles.pop(0)
+                tasks.append({"prio": P_BUILD, "x": _bx, "y": _by,
+                              "op": ["BUILD_COOP"]})
 
     # ---------------- planting: fill empty tiles by PLANT_ORDER, respecting caps --------
     # Caps are market-bound (melon/carrot glut their price) or purpose-bound (wheat = feed),
@@ -1817,7 +1858,12 @@ def _market_orders(day, hour, money, seeds, shed, inventories, prices, hires_tod
         # pre-clock freeze nor v55a's seed-starving hold: seeds are gated
         # by feed_hold, not land_hold, and the hold dies at d12.
         land_hold = LAND_PRICES[n_quadrants - 1]
-    if day <= 20 and not herd_complete:
+    if day <= 20 and (not herd_complete
+                      or owned.get("GOOSE", 0) < _GOOSE_TARGET.get(_CUR_SEAT, 0)):
+        # v76c: geese latch AFTER the herd completes (surplus-capital rule),
+        # but this loop was gated on `not herd_complete` — the goose leg of
+        # the buy machinery was unreachable dead code since v42b.  The
+        # per-species skips above keep cows/sheep from re-buying.
         # v54b: morning-only window removed — the 2k class completes the herd
         # by d8 buying whenever cash allows; afternoon cash was buying seeds
         # while cows waited overnight
@@ -1852,6 +1898,11 @@ def _market_orders(day, hour, money, seeds, shed, inventories, prices, hires_tod
                            # and MIXED 2-14 losses to v66c were exactly the
                            # paused sheep; gates run on FRESH seeds (516+),
                            # never re-judged on the spent 500-507 block.
+            if sp == "GOOSE" and n_quadrants < 3:
+                # v76a: late-latched geese take SW tail slots — buying before
+                # the SW quadrant exists strands them in the shed (the v54f
+                # dead-capital disease, 8 in-shed animal-days measured).
+                continue
             sp_target = (_GOOSE_TARGET.get(_CUR_SEAT, 0) if sp == "GOOSE"
                          else sheep_target if sp == "SHEEP"
                          else cow_target)
@@ -2098,9 +2149,43 @@ def agent(obs):
         if "YARN_STORE" in shops and day <= 9:
             _YARN_TOWN[player] = True
         _DYN_SHEEP[player] = YARN_SHEEP if _YARN_TOWN.get(player, False) else 4
-        if (_GOOSE_TARGET.get(player, 0) < 1 and day <= 10
-                and _town_drain_per_day("EGG", shops) >= 7):
-            _GOOSE_TARGET[player] = 0
+        # v76a THIN-MILK GOOSE LATCH (Exp 98; replaces the neutered egg-town
+        # latch that set target 0).  Reviewer consensus + measured basis:
+        # the 3x goose falsifications all ran with care silently OFF (the
+        # pre-v71c projection bug) — a goose's case IS the care multiplier
+        # (cared = 2 eggs/day vs 1; engine interval 1).  EGG is a 1.32.7
+        # hinge good (base 50, rises to ~60 in family worlds, above_func
+        # LOG = gentlest glut curve in the game) and the flood family
+        # supplies ~none (+140 goose-days is THEIR quiet lane).  Gate =
+        # thin-premium towns (milk shops <= 1 of the first 2-3 reveals) —
+        # the mirror image of the milk-boom gate; 11 of our 15 worst live
+        # loss profiles are 0-1-milk-shop towns.  Boom and yarn towns
+        # excluded (labor + slots already committed).  Sticky; unfired
+        # towns byte-identical.
+        # v76b GATE FIX: v76a fired on "milk shops <=1 of the first TWO
+        # reveals" — that is ~86% of all worlds (shops draw with
+        # replacement, 3 of 8 types are milky) and it triggered in
+        # milk-RICH worlds (seed 667: ICE_CREAM at reveal 2, milk $180-197
+        # all game, geese stole the milk engine's labor: 77-seed verdict
+        # −4,633±798 t=−5.80).  v76b waits for THREE reveals (d9) and
+        # requires ZERO milk shops — a genuinely milk-dead town (~24% of
+        # draws; the profile of 11 of our 15 worst live losses).  Buys
+        # were SW-land-gated (~d10-11) anyway, so placement timing is
+        # unchanged.
+        # v76c: + HERD-COMPLETE precondition — geese are SURPLUS capital
+        # only, never a substitute for the herd (seed 644: goose $ displaced
+        # cows 3-9 in a world that turned milky at reveal 4; −12.3k).
+        # Window runs to d15: the berry-forward chassis holds the herd at
+        # 2C+2S until the d10 melon money, so "herd complete" lands d12-14
+        # in thin worlds — geese are the NEXT purchase after the tail, out
+        # of surplus, never instead of it.
+        if (_GOOSE_TARGET.get(player, 0) < 1 and 9 <= day <= 15
+                and sum(1 for s in shops if s in ("PIZZA_SHOP",
+                        "ICE_CREAM_SHOP", "SMOOTHIE_SHOP")) == 0
+                and _owned_n >= _shp_t + min(_cow_t, 6)
+                and not _COW_BOOM.get(player, False)
+                and not _YARN_TOWN.get(player, False)):
+            _GOOSE_TARGET[player] = 4
     _DEAD_TOWN_NOW = _WHEAT_TOWN.get(player, False)
     _FACTORY_NOW = day >= WHEAT_FACTORY_DAY or _DEAD_TOWN_NOW
     if ramp_fast and (_tom_px >= TOMATO_HINGE_CONFIRM

@@ -1,15 +1,7 @@
 """
 main.py — Kaggriculture agent.  ENTRY POINT (must be at archive root, must be named main.py).
 
-STATUS: v84c — CANDIDATE : YARN-TOWN SLOT BUMP
-ONLY.  = v83a + _SLOT_NEED includes max(0, _shp_t − 4) — a pure BUGFIX:
-yarn towns have wanted YARN_SHEEP=6 against a 13-slot budget since
-v57b, stranding sheep 5-6 in the shed (v54f dead-capital disease;
-fingerprint seeds 12-13 showed "+2 shed" for 12+ days).  Non-yarn
-worlds: bump = 0, byte-identical v83a.  Base sheep stays 4 — v84b
-RE-FALSIFIED sheep-6 honestly (Amitesh wins 16→10, flips +2/−8, fresh
-seeds, stranding fixed; 4th and final sheep falsification).
-Bar: waste-removal layer → yarn-town fingerprint + no-harm leg.
+STATUS: v84a — CANDIDATE, GATING : SHEEP 4->6
 BASE RE-GATE.  = v83a + _DYN_SHEEP else-branch 4->6 (non-yarn worlds;
 yarn towns keep YARN_SHEEP=6).  v72b's close = same pinned-screen
 pattern as v72a; live WOOL −$3,254/game = last big real ledger line.
@@ -2242,15 +2234,7 @@ def agent(obs):
     # reshaped whole games (seed-12 flip-flop).  Layout stability wins.
     _SLOT_NEED[player] = (sum(ANIMAL_TARGETS.values()) + _GOOSE_TARGET.get(player, 0)
                           + (COW_BOOM_TARGET - ANIMAL_TARGETS["COW"]
-                             if _COW_BOOM.get(player, False) else 0)
-                          # v84b: + the sheep bump, same pattern as the boom
-                          # bump (constant per game — no v47b flip-flop; the
-                          # chaos then came from _cow_t moving mid-game).
-                          # Without it sheep 5-6 sat IN THE SHED 12+ days
-                          # (fingerprint seeds 12-13: "+2 shed" at d24 —
-                          # the v54f dead-capital disease); slots were still
-                          # planned for ANIMAL_TARGETS' sheep 4.
-                          + max(0, _shp_t - ANIMAL_TARGETS["SHEEP"]))
+                             if _COW_BOOM.get(player, False) else 0))
     ramp_fast = (_owned_n >= _shp_t + _cow_t
                  or money >= 3000)  # v37d: detonation counts as ramped
 
@@ -2292,12 +2276,13 @@ def agent(obs):
         # express (v57a).  Latch is sticky, d<=9; unfired towns identical.
         if "YARN_STORE" in shops and day <= 9:
             _YARN_TOWN[player] = True
-        # v84b RE-FALSIFIED base sheep 6 : modern
-        # pipeline, fresh seeds 1102-1140, stranding fixed — Amitesh margin
-        # wash but WINS 16→10 (flips +2/−8, primary estimator).  4th sheep
-        # falsification (v19a, v47b, v72b, v84b); the band's sheep-10
-        # families are a different CHASSIS, not ours +2 sheep.  Base stays 4.
-        _DYN_SHEEP[player] = YARN_SHEEP if _YARN_TOWN.get(player, False) else 4
+        # v84a : base sheep 4→6 — re-gate of v72b (closed on the
+        # same single pinned killer money-cell as v72a, −1,752 = a screen).
+        # Live ledger: WOOL −$3,254/game is the last big real line; the
+        # band's sheep-9-13 families farm it against us all game.  Yarn
+        # towns keep YARN_SHEEP; v47b's "wool glut" revert predates
+        # care-complete labor AND the v83a STR hold (richer late market).
+        _DYN_SHEEP[player] = YARN_SHEEP if _YARN_TOWN.get(player, False) else 6
         if (_GOOSE_TARGET.get(player, 0) < 1 and day <= 10
                 and _town_drain_per_day("EGG", shops) >= 7):
             _GOOSE_TARGET[player] = 0

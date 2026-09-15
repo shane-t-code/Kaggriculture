@@ -1,34 +1,7 @@
 """
 main.py — Kaggriculture agent.  ENTRY POINT (must be at archive root, must be named main.py).
 
-STATUS: v83a — PROMOTED, SUBMIT-FLAGGED : STR WIND-DOWN
-RE-GATE — THE STRONGEST FULL GATE IN PROJECT HISTORY.  = v82c +
-STR_CONVERT_DAY 22->24 + STR_ENDGAME_KEEP 18->34 (v72a's dials; its
-close was one pinned killer money-cell −1,138 = a screen by our own
-later law; live ledger STR −$3,276/game was the real line).  GATE
-(fresh paired seeds, natural worlds): Amitesh 1024-1062 +2,525±428
-t=5.90 flips +3/−0 | killer 1024-1062 +1,554±373 t=4.16 +1/−0 |
-Infill 1063-1101 +2,298±379 t=6.07 +5/−0.  POOLED 117 seeds ≈ +2,100,
-flips +9/−0.  The early STR exit was subsidizing the field's late
-monopoly EVERYWHERE, including vs the killer.  str_dead crash branch
-unchanged (d18/keep 6).  Supersedes the separate v82c flag — v82c's
-chain is inside this version.
---- v82c layer: ---
-(was) STATUS: v82c — PROMOTED, SUBMIT-FLAGGED : ZERO-WALK
-CHAIN, slack-guarded + detonator-gated.  FINAL GATE: killer 946-984
-+254±1,790 flips +4/−2, killer 985-1023 REPLICATION +1,044±1,065 flips
-+2/−1 — POOLED 78 seeds flips +6/−3, margin ≈ +650; Amitesh byte-v80b
-exact 0 (banks verified to the dollar); Utkarsh −1,011 wash confined to
-0-flip 40k blowouts (wins-only scoring); unfed 4.4-5.5% = baseline.
-(prior header below)
-(was) STATUS: v82c — CANDIDATE : ZERO-WALK CHAIN, SLACK-
-GUARDED + DETONATOR-GATED.  = v82b + chain fires only when _MEL_RACE
-latched (family games).  Killer leg carries over from v82b (+4/−2 flips,
-wins 2->4, margin +254±1,790); Amitesh = byte-v80b exact 0 (chain
-measured −8/+2 flips there ungated); Utkarsh leg = v82b_u (pending at
-build time).  Unfed 4.4-5.5% = baseline (slack guard).
---- v82b layer: ---
-(was) STATUS: v82b — CANDIDATE, GATING : ZERO-WALK CHAIN +
+STATUS: v82b — CANDIDATE, GATING : ZERO-WALK CHAIN +
 FEED-SLACK GUARD.  = v82a + chain allowed only while the feed round
 still fits the day (2*pending_feeds + 2 <= hours left) — v82a's
 unguarded chain DOUBLED unfed (9.4% vs 4.4% same seeds) yet STILL
@@ -773,13 +746,8 @@ ENDGAME_CONVERT_CROPS = ("STRAWBERRY", "MELON")
 # wheat (40 tiles by d24) for the late wheat ramp; we held 33-36 STR to d26.
 # From STR_CONVERT_DAY, idle (yield 0), old STR beyond the keep-count is dug
 # so the d22 wheat factory (cap 45) has tiles to fill.
-STR_CONVERT_DAY = 24   # v83a : was 22 — re-gate of v72a's wind-down
-STR_ENDGAME_KEEP = 34  # v83a: was 18.  v72a was closed on ONE pinned killer
-# money-cell (−1,138) before the modern pipeline existed — a screen, not a
-# gate, by our own later law.  Live ledger (43 v80b games): STR −$3,276/game
-# is the biggest REAL remaining line (no consumption path — genuine sells),
-# and the band keeps selling STR after our d22 exit.  str_dead branch
-# (floored market: d18 / keep 6) UNCHANGED — the crash case stays covered.
+STR_CONVERT_DAY = 22
+STR_ENDGAME_KEEP = 18
 STR_DEAD_FROM_DAY = 18   # v60a: market-aware wind-down may start here...
 STR_DEAD_PRICE = 5       # ...when the 5-day glut projection is at/below this
 STR_DEAD_KEEP = 6        # keepers in a dead market (was a static 18)
@@ -1540,18 +1508,12 @@ def _assign(units, tasks, inventories, tiles, day, hour):
         # past midnight (v61c law: an unfed tick-day burns the whole banked
         # bonus).  Chain only while the round still fits in the day:
         # ~2 turns per remaining feed (op + walk) + 2 margin.
-        # v82c DETONATOR GATE on the chain: measured split — chain flips
-        # +4/−2 wins vs the killer family but −8/+2 vs Amitesh(band)
-        # (39 paired seeds each, 946-984).  Same asymmetry as the caravan,
-        # same fix: family games only (_MEL_RACE, opp d0-cohort >=10);
-        # band games revert to byte-v80b, where we already win 14/39.
         if (task["op"][0] != "FEED" and inv_of(ui).get("WHEAT", 0) > 0
                 and feeds_open()):
             same_tile = (task["x"] == units[ui][0] and task["y"] == units[ui][1])
             pend = sum(1 for _ti, _t in enumerate(tasks)
                        if _t["op"][0] == "FEED" and not taken[_ti])
-            if not (same_tile and _MEL_RACE.get(_CUR_SEAT, False)
-                    and 2 * pend + 2 <= 24 - hour):
+            if not (same_tile and 2 * pend + 2 <= 24 - hour):
                 return False
         return True
 

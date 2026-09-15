@@ -1,20 +1,7 @@
 """
 main.py — Kaggriculture agent.  ENTRY POINT (must be at archive root, must be named main.py).
 
-STATUS: v83a — PROMOTED, SUBMIT-FLAGGED : STR WIND-DOWN
-RE-GATE — THE STRONGEST FULL GATE IN PROJECT HISTORY.  = v82c +
-STR_CONVERT_DAY 22->24 + STR_ENDGAME_KEEP 18->34 (v72a's dials; its
-close was one pinned killer money-cell −1,138 = a screen by our own
-later law; live ledger STR −$3,276/game was the real line).  GATE
-(fresh paired seeds, natural worlds): Amitesh 1024-1062 +2,525±428
-t=5.90 flips +3/−0 | killer 1024-1062 +1,554±373 t=4.16 +1/−0 |
-Infill 1063-1101 +2,298±379 t=6.07 +5/−0.  POOLED 117 seeds ≈ +2,100,
-flips +9/−0.  The early STR exit was subsidizing the field's late
-monopoly EVERYWHERE, including vs the killer.  str_dead crash branch
-unchanged (d18/keep 6).  Supersedes the separate v82c flag — v82c's
-chain is inside this version.
---- v82c layer: ---
-(was) STATUS: v82c — PROMOTED, SUBMIT-FLAGGED : ZERO-WALK
+STATUS: v82c — PROMOTED, SUBMIT-FLAGGED : ZERO-WALK
 CHAIN, slack-guarded + detonator-gated.  FINAL GATE: killer 946-984
 +254±1,790 flips +4/−2, killer 985-1023 REPLICATION +1,044±1,065 flips
 +2/−1 — POOLED 78 seeds flips +6/−3, margin ≈ +650; Amitesh byte-v80b
@@ -773,13 +760,8 @@ ENDGAME_CONVERT_CROPS = ("STRAWBERRY", "MELON")
 # wheat (40 tiles by d24) for the late wheat ramp; we held 33-36 STR to d26.
 # From STR_CONVERT_DAY, idle (yield 0), old STR beyond the keep-count is dug
 # so the d22 wheat factory (cap 45) has tiles to fill.
-STR_CONVERT_DAY = 24   # v83a : was 22 — re-gate of v72a's wind-down
-STR_ENDGAME_KEEP = 34  # v83a: was 18.  v72a was closed on ONE pinned killer
-# money-cell (−1,138) before the modern pipeline existed — a screen, not a
-# gate, by our own later law.  Live ledger (43 v80b games): STR −$3,276/game
-# is the biggest REAL remaining line (no consumption path — genuine sells),
-# and the band keeps selling STR after our d22 exit.  str_dead branch
-# (floored market: d18 / keep 6) UNCHANGED — the crash case stays covered.
+STR_CONVERT_DAY = 22
+STR_ENDGAME_KEEP = 18
 STR_DEAD_FROM_DAY = 18   # v60a: market-aware wind-down may start here...
 STR_DEAD_PRICE = 5       # ...when the 5-day glut projection is at/below this
 STR_DEAD_KEEP = 6        # keepers in a dead market (was a static 18)

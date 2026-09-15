@@ -21,6 +21,9 @@ DIRS = [
     r"C:\Kaggriculture\replays\live_v70c_sep13",
     r"C:\Kaggriculture\replays\live_v67c",
 ]
+import sys as _sys
+if "--dirs" in _sys.argv:
+    DIRS = _sys.argv[_sys.argv.index("--dirs") + 1].split(";")
 SHED = [(4, 4), (5, 4), (4, 5), (5, 5)]
 
 

@@ -1,30 +1,7 @@
 """
 main.py — Kaggriculture agent.  ENTRY POINT (must be at archive root, must be named main.py).
 
-STATUS: v88a — PROMOTED, SUBMIT-FLAGGED : CHAIN
-EVERYWHERE.  GATE at protocol-n for an occupancy-changing candidate
-(78 seeds per live leg, 195 total): Amitesh 78 = **+2,433±976 t=2.49
-flips +19/−10 (23→32 wins)** | infill 78 = +572±864 t=0.66 flips
-+11/−15 (lottery-flat; first block's −926 erased by the second — 26
-flips/78 = re-roll churn, decoded seeds incl. boom→yarn re-rolls) |
-killer 39 = exact null BY CONSTRUCTION (chain already ran in
-detonator games).  Pooled live legs ≈ +1,503/game.  The v82c
-detonator-gate is overturned: its −8-flip evidence was decoded as
-shop-draw lottery (3/3 biggest flips; own revenue UP in 2).
-Fingerprint: STR@d9 17→23, caravan sold11 up to 58-64, unfed tail
-mild (3/16 seeds 6.7-8.0%, mean +0.5pp — priced into the gate).
-(prior CANDIDATE header:)
-EVERYWHERE.  = v87b + the zero-walk feed-chain's _MEL_RACE gate
-removed (slack guard kept).  The v82c detonator-gating is overturned
-by archaeology: all 3 decoded Amitesh "damage" flips were shop-draw
-re-rolls (own revenue UP in 2/3; ops/unfed identical), judged on a
-n.s. margin.  The band chains CARE+COLL+FEED stops in EVERY class
-(1.53 v 1.34 ops/stop = +311 ops/game, re-based on v83a live).
-GATE: fingerprint (chain stops up in NON-detonator games, unfed <=
-baseline — v82a's 9.4% was the failure mode, slack guard must hold)
-→ 3 legs fresh 1570+.  ⚠ SUBMITTED VERSION = v87b (sub 56267346).
---- v87b layer: ---
-(was) STATUS: v87b — PROMOTED, SUBMIT-FLAGGED : BUSY-UNIT
+STATUS: v87b — PROMOTED, SUBMIT-FLAGGED : BUSY-UNIT
 PREMIUM BANK-RUN.  = v87a + PREM_BANK_BUSY=6 override (non-FEED only;
 feeds sacred; feed-wheat carriers exempt).  GATE (fresh 1453-1569,
 117 seeds) — ALL THREE LEGS POSITIVE, 2nd-strongest gate ever:
@@ -1624,16 +1601,8 @@ def _assign(units, tasks, inventories, tiles, day, hour):
             same_tile = (task["x"] == units[ui][0] and task["y"] == units[ui][1])
             pend = sum(1 for _ti, _t in enumerate(tasks)
                        if _t["op"][0] == "FEED" and not taken[_ti])
-            # v88a : _MEL_RACE gate REMOVED — the chain runs in ALL
-            # games.  The v82b close (+2/−8 flips vs Amitesh, 946-984) was
-            # re-decoded seed-by-seed: the 3 biggest flips (971/948/983,
-            # swings −11k to −22k) were ALL shop-draw re-rolls (tomato-
-            # jackpot town lost, yarn town gained; own revenue UP in 2 of 3;
-            # ops/unfed near-identical) — world lottery, not chain damage,
-            # judged on a n.s. margin (−1,585±1,335).  The band runs chained
-            # CARE+COLL+FEED stops everywhere (1.53 ops/stop vs our 1.34 =
-            # +311 ops/game, re-based on v83a live).  Slack guard stays.
-            if not (same_tile and 2 * pend + 2 <= 24 - hour):
+            if not (same_tile and _MEL_RACE.get(_CUR_SEAT, False)
+                    and 2 * pend + 2 <= 24 - hour):
                 return False
         return True
 

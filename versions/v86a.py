@@ -1,27 +1,33 @@
 """
 main.py — Kaggriculture agent.  ENTRY POINT (must be at archive root, must be named main.py).
 
-STATUS: v87a — PROMOTED, SUBMIT-FLAGGED :
-PREMIUM-GOODS EXPRESS.  GATE (fresh 1336-1452, 117 seeds, 3 legs, no
-failing leg): Amitesh +116±1,428 flips **+8/−4 (16→20 wins)** |
-killer +1,306±1,336 t=0.98 flips +2/−3 | infill −170±1,366 flips
-+7/−6.  Pooled ≈ +417/game, flips +17/−13 net +4.  Trace-verified
-(exec_ledger seed 0): the d6 wool sale now funds STR seeds AND the
-land buy the same day — the whole d7 pipeline runs a day earlier.
-Contains v84c (yarn slot fix) — submitting this covers both.
-= v84c + ONE LINE: the idle-unit cargo express (v54d fert / v58c
-melon pattern) gains a WOOL+MILK+EGG >= 4 trigger.  DECODED FROM THE
-BAND-LOSS LEDGER: SELL draws from the shed only (L653); our sheared
-wool rode the carer's pocket 19h (ep109133507 d6 h5, 5u @ $221) and
-sold a day late — EVERY animal product, ALL game.  The band sells
-shear-day; that d6 wool sale funds their d7-8 STR seed cohort (they
-hold $1,638 at d7, we held $831).  UNLOAD_AT=8 and the fert/melon
-triggers never covered a 5-7u premium load.  Idle-units-only (no
-feed-routing risk).  GATE: fingerprint (wool sale d7->d6, cash@d7 up,
-unfed flat, chain/caravan intact) -> Amitesh+killer+infill fresh
-seeds 1336+, flips primary.  Lineage: v85a/b + v86a falsified same
-day (honest headers in versions/) — allocation surgery died, the
-cash was in the pockets all along.
+STATUS: v86a — FALSIFIED, BENCHED : melon-topup
+deferral FAILED infill no-harm: −2,036±1,408 t=−1.45, flips +2/−7
+(wins 13→8); Amitesh leg was wash-positive +344±1,281 flips +7/−6.
+CAUSE: the freed $480 was partly REPLANT INSURANCE — zero spare melon
+seeds d1-9 means a weeded melon tile detonates short (fingerprint
+seed 0: sold-by-d11h13 65→48).  STR@d9 gain (+2, +6 in starved
+worlds) did not cover it.  LESSON: timing micro-fixes can't fund the
+d7 cohort; the band funds it STRUCTURALLY (wheat tiles + feed buffer
++ smaller melon block).  → v87 = full mel7-class opening port.
+(orig header below)
+--- 
+(the funding-engine port, animals UNTOUCHED — v85's falsification
+demanded exactly this).  = v84c + 2 timing edits, ONE mechanism (free
+the d2-7 cash the existing want-12 STR seed-buyer already spends in
+one turn when it can): melon seed topups blocked d1-9 (were d1-6
+allowed: ~6 seeds/$480 idle through the starved window; wave-2 d10+
+buys and the d0 block untouched).  The band holds $1,638 at d7 and
+buys its 13-seed cohort in ONE day; we held $831 and trickled 2.8.
+(A 2nd edit — wheat sells 'from d5' — was REVERTED before testing:
+SELL_RULES tuple is (batch, min_price, liq_day), no day gate exists;
+our d5-7 wheat volume is stock-limited by the feed reserve, not
+timing-limited.  Their extra volume = more grown/bought stock.)
+SOURCE: choreo_funding.py decode of all 19 band games (both classes
+buy the cohort d7-8 in one purchase; mel12 class = our chassis shape,
+existence proof with the 12-melon caravan intact).
+GATE: fingerprint (cash@d7 up, STR@d9 up, wave-2 melons intact,
+detonation byte-similar) → no-harm + Amitesh/infill flips, fresh 1258+.
 --- v84c layer: ---
 (was) STATUS: v84c — CANDIDATE : YARN-TOWN SLOT BUMP
 ONLY.  = v83a + _SLOT_NEED includes max(0, _shp_t − 4) — a pure BUGFIX:
@@ -1723,18 +1729,7 @@ def _assign(units, tasks, inventories, tiles, day, hour):
              # and the big families dump at h16 (steps 256-264, measured);
              # melons that ride in pockets until the nightly drop sell d11
              # into the crater — measured $214->158 vs $272 pre-wave.
-             or inv.get("MELON", 0) >= 4
-             # v87a premium-goods express : SELL
-             # draws from the SHED only (engine L653), and wool/milk/eggs
-             # sheared into pockets sat there until the midnight auto-drop —
-             # measured hour-by-hour (ep109133507): 5 wool sheared d6 h5 at
-             # $221 rode the pocket 19h and sold d7 — EVERY animal product
-             # reached the market a day late, all game (~$1.1-2.2k of
-             # working capital, and the band's d6 wool sale funds its d7-8
-             # STR cohort while ours waits).  Same pattern as the fert
-             # (v54d) and melon (v58c) expresses: bank at >=4 premium units.
-             or (inv.get("WOOL", 0) + inv.get("MILK", 0)
-                 + inv.get("EGG", 0)) >= 4)
+             or inv.get("MELON", 0) >= 4)
                 and not (feeds_pending and inv.get("WHEAT", 0) > 0)):
             # v54d fert express: collected fert rode in pockets until the nightly
             # drop and sold NEXT morning - the ramp's cash lagged ~20h every day.
@@ -2111,8 +2106,15 @@ def _market_orders(day, hour, money, seeds, shed, inventories, prices, hires_tod
         elif info["cap"] <= 0:
             continue
         want = SEED_WANT[crop]
-        if crop == "MELON" and 6 < day < MELON_W2_FROM:
-            continue   # v57c: no melon seeds in the dead window between waves
+        if crop == "MELON" and 0 < day < MELON_W2_FROM:
+            continue   # v57c: no melon seeds in the dead window between waves.
+            # v86a : the block now starts at d1, not d7 — the d1-6
+            # topups (~6 seeds, $480) sat idle through exactly the d2-7
+            # window that starves the STR cohort buy (band-loss ledger: the
+            # mel12-class band holds $1,638 at d7 and buys its 13-seed STR
+            # cohort in ONE day; we held $831 and trickled 2.8).  Wave-2
+            # buys (d10+) and the d0 block buy are untouched; a d1-9 melon
+            # replant loses only its seed's timing, measured ~1 tile/game.
         if crop == "CARROT":
             want = 4
         if crop == "WHEAT" and _FACTORY_NOW:

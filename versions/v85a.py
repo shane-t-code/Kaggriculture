@@ -1,27 +1,29 @@
 """
 main.py — Kaggriculture agent.  ENTRY POINT (must be at archive root, must be named main.py).
 
-STATUS: v87a — PROMOTED, SUBMIT-FLAGGED :
-PREMIUM-GOODS EXPRESS.  GATE (fresh 1336-1452, 117 seeds, 3 legs, no
-failing leg): Amitesh +116±1,428 flips **+8/−4 (16→20 wins)** |
-killer +1,306±1,336 t=0.98 flips +2/−3 | infill −170±1,366 flips
-+7/−6.  Pooled ≈ +417/game, flips +17/−13 net +4.  Trace-verified
-(exec_ledger seed 0): the d6 wool sale now funds STR seeds AND the
-land buy the same day — the whole d7 pipeline runs a day earlier.
-Contains v84c (yarn slot fix) — submitting this covers both.
-= v84c + ONE LINE: the idle-unit cargo express (v54d fert / v58c
-melon pattern) gains a WOOL+MILK+EGG >= 4 trigger.  DECODED FROM THE
-BAND-LOSS LEDGER: SELL draws from the shed only (L653); our sheared
-wool rode the carer's pocket 19h (ep109133507 d6 h5, 5u @ $221) and
-sold a day late — EVERY animal product, ALL game.  The band sells
-shear-day; that d6 wool sale funds their d7-8 STR seed cohort (they
-hold $1,638 at d7, we held $831).  UNLOAD_AT=8 and the fert/melon
-triggers never covered a 5-7u premium load.  Idle-units-only (no
-feed-routing risk).  GATE: fingerprint (wool sale d7->d6, cash@d7 up,
-unfed flat, chain/caravan intact) -> Amitesh+killer+infill fresh
-seeds 1336+, flips primary.  Lineage: v85a/b + v86a falsified same
-day (honest headers in versions/) — allocation surgery died, the
-cash was in the pockets all along.
+STATUS: v85a — FALSIFIED, BENCHED .  Berry-first
+hardening UNGATED: killer leg latched −2,684±1,447 (t=−1.85, 0 flips)
+— extra d15-21 STR lands inside the family's 300u flood while the
+diverted animals were real money.  Superseded by v85b (detonator-
+gated), which then ALSO fell on the infill replication.  Amitesh leg
+was +3/−1 flips (+337±722) — the one leg that liked it.  The LANE
+(early STR cohort, band plants 15-19 by d9) stays OPEN by existence
+proof; THIS FUNDING (pause the animal tail) is what died.
+HARDENING from the band-loss ledger (all 14 v83a 756-900 losses
+decoded).  = v84c + two edits, ONE allocation rule: the d2-9 STR
+cohort outbids the animal tail unless a real cow-boom is latched.
+(1) _berry_first no longer killed by milk_seen>=2 (v67c's kill was a
+2-milk close justified by a 3-milk wash, pre-pipeline; live: 2-milk
+towns = cows 3-5 by d9, STR@d9 4-5 vs band's 15-19, d15-21 window
+−5.5k/game at EQUAL $204 price; full-game milk a WASH) — now yields
+only to _COW_BOOM (3 shops + $200, v66c's win, preserved).
+(2) yarn-town sheep release (pause 4) deferred to d10 — in all 5
+yarn-town band losses sheep 3-4's $600 at d5-9 was the missing seed
+money; band out-earns us on wool anyway.  MECHANISM TARGET: STR@d9
+7→15; the 8/13 losses within −4.6k are the flip class.
+GATE PLAN: fingerprint 2-milk + yarn screens (STR@d9, unfed, boom
+intact) → py_ab Amitesh (the mel7 class = 8/13 of these losses) +
+killer + Infill, fresh seeds 1141+, ab_sum flips primary.
 --- v84c layer: ---
 (was) STATUS: v84c — CANDIDATE : YARN-TOWN SLOT BUMP
 ONLY.  = v83a + _SLOT_NEED includes max(0, _shp_t − 4) — a pure BUGFIX:
@@ -1723,18 +1725,7 @@ def _assign(units, tasks, inventories, tiles, day, hour):
              # and the big families dump at h16 (steps 256-264, measured);
              # melons that ride in pockets until the nightly drop sell d11
              # into the crater — measured $214->158 vs $272 pre-wave.
-             or inv.get("MELON", 0) >= 4
-             # v87a premium-goods express : SELL
-             # draws from the SHED only (engine L653), and wool/milk/eggs
-             # sheared into pockets sat there until the midnight auto-drop —
-             # measured hour-by-hour (ep109133507): 5 wool sheared d6 h5 at
-             # $221 rode the pocket 19h and sold d7 — EVERY animal product
-             # reached the market a day late, all game (~$1.1-2.2k of
-             # working capital, and the band's d6 wool sale funds its d7-8
-             # STR cohort while ours waits).  Same pattern as the fert
-             # (v54d) and melon (v58c) expresses: bank at >=4 premium units.
-             or (inv.get("WOOL", 0) + inv.get("MILK", 0)
-                 + inv.get("EGG", 0)) >= 4)
+             or inv.get("MELON", 0) >= 4)
                 and not (feeds_pending and inv.get("WHEAT", 0) > 0)):
             # v54d fert express: collected fert rode in pockets until the nightly
             # drop and sold NEXT morning - the ramp's cash lagged ~20h every day.
@@ -2004,8 +1995,19 @@ def _market_orders(day, hour, money, seeds, shed, inventories, prices, hires_tod
     # closes and the cow tail buys immediately (v66c boom behavior).  v67b's
     # A/B: thin cells crushed (8-0 +3.4k / 7-1 +2.7k vs v66c; 8-0 vs v61e
     # MILK0) but MILK3 washed (4-4, -957) — the paused tail costs boom lead.
+    # v85a : the milk_seen<2 kill REMOVED — it was
+    # v67c's, a 2-milk close justified by a 3-milk wash, pre-pipeline.  Live
+    # decode of all 14 v83a band losses: in every 2-milk town we bought cows
+    # 3-5 by d9 instead of ~$1,000 of STR seeds (STR@d9 4-5 vs the band's
+    # open-loop 15-19) and lost the d15-21 window −5.5k/game AT EQUAL $204.
+    # Full-game milk was a WASH (us 24.6k vs them 23.9k).  The pause is now
+    # UNCONDITIONAL in-window: _COW_BOOM latches d10-13 (post-window) from
+    # detonation cash, so the boom tail itself is mechanically untouched;
+    # what moves in 3-milk towns is cows 3-6 (d5-9 → d10+), v67b's measured
+    # MILK3 wash (−957 pinned) — accepted pending the natural-world gate
+    # (both 3-milk live losses won milk +7.8k/+11k and still lost on STR).
     _berry_first = (2 <= day <= 9 and owned.get("COW", 0) >= 2
-                    and _str_committed < 24 and milk_seen < 2)
+                    and _str_committed < 24)
     _next_land_day = LAND_DAYS[min(n_quadrants - 1, 2)]
     land_ready = day >= _next_land_day
     land_hold = 0
@@ -2050,7 +2052,13 @@ def _market_orders(day, hour, money, seeds, shed, inventories, prices, hires_tod
             if sp == "COW" and _berry_first:
                 continue   # v55c: cow tail waits while the berry wave commits
             if (sp == "SHEEP" and _berry_first
-                    and owned.get("SHEEP", 0) >= (4 if "YARN_STORE" in shops else 2)):
+                    and owned.get("SHEEP", 0) >= 2):
+                # v85a: the v70c YARN release (pause at 4 when YARN_STORE
+                # drawn) is deferred to d10 — in all 5 yarn-town band losses
+                # sheep 3-4's $600 at d5-9 WAS the missing STR cohort money
+                # (us SHEEP4/COW2/STR 5-10 @d9 vs their 15-19 STR); the band
+                # out-earned us on wool anyway (+5.6k/game).  Sheep 3-6 rebuy
+                # from d10 detonation cash; v84c's slot bump places them.
                 continue   # v67b: sheep tail pauses at 2 (was 4) — sheep 3+4's
                            # $1,000 at d1-3 IS the missing cohort seed money.
                            # v70c YARN RELEASE: a revealed YARN_STORE (d3/d6,

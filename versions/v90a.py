@@ -1,21 +1,16 @@
 """
 main.py — Kaggriculture agent.  ENTRY POINT (must be at archive root, must be named main.py).
 
-STATUS: v89c — PROMOTED, SUBMIT-FLAGGED : v89b +
-SHED_FORCE_SELL 80->92.  Gate: Amitesh no-harm +106±194 (latched
-+243±452), 0 flips — waste-removal bar passed (live evidence: ~5
-floor-units/game dumped at $1-3 with shed 80-94).  CONTAINS v89b's
-dig guard + v87/v88 (express + chain).  = tonight's submission.
-(orig:) v89b + SHED_FORCE_SELL
-80->92 (the express-induced panic-dump fix; ~5 floor-units/game at
-shed 80-94 measured live).  WOOL CHASSIS (v90a/b) FALSIFIED 5th and
-FINAL time same day — fully functional (12 placed, fed, 3rd carrier
-built) and still loses to BOTH the wool-mirror tape and Amitesh
-(6/8 seeds each; the sheep bill guts the STR cohort).  The lane
-needs Bharath's WHOLE economy (bought feed, no hands, matchup luck)
-= a rewrite, not a dial.  (v90 experimental code NOT carried — v89c
-is exactly v89b + this one constant; the 3rd-carrier split lives in
-versions/v90b.py if the herd ever scales.)
+STATUS: v90a — CANDIDATE, UNGATED : THE WOOL CHASSIS.
+= v89b + ANIMAL_TARGETS {SHEEP 12, COW 8} (was 4/9) + 9 NE-overflow
+slots (Bharath's dense-block layout; slots order NW ring -> NE -> SW).
+SOURCE: top-class anatomy (Bharath 2004 $175k: wool 53.6k/fert 17.6k
+on 6-8C+11-18S, ZERO hands, care-on-interval; sheep-27 shark $116k;
+v88a band winners sheep-12).  Our 4 sheep closes all tested cow-9
+chassis +2 — never this ratio.  RISKS: unfed at 20 animals, wool
+self-glut both-seat, band regression.  GATE: fingerprint (sheep-12
+placed, unfed, wool rev, STR/melon intact) -> 4 top tapes + amitesh
++ killer, fresh 1960+.  ⚠ SUBMIT FLAG remains on v89b (gated).
 --- v89b layer: ---
 (was) STATUS: v89b — PROMOTED, SUBMIT-FLAGGED : STR
 CRASH-BRANCH CONFIRM GUARD.  GATE: killer NULL (−10±143 — true
@@ -738,18 +733,22 @@ LAND_DAYS = [6, 10, 99]   # v5b: retry the 3rd quadrant now that fert + cash bug
 LAND_PRICES = [1000, 2000, 4000]   # engine LAND_PRICES (ENGINE_NOTES B.1); order NE->SW->SE
 # (crop mix now lives in CROP_INFO caps + PLANT_ORDER + SEED_WANT below)
 LIQUIDATE_FROM_DAY = 28  # unsold inventory is worth $0 at the end — sell everything late
-SHED_FORCE_SELL = 92     # v89c: was 80.  The express (v87) fills the shed
-                         # same-day, so the any-price panic-dump fired
-                         # chronically 20 slots early — live: ~5 floor-units/
-                         # game sold at $1-3 with shed at 80-94 (cap is 100
-                         # and overflow only destroys at end-of-day).
+SHED_FORCE_SELL = 80     # shed cap is 100 and overflow is DESTROYED at end-of-day drop
 UNLOAD_AT = 8            # a unit carrying this many items runs them to the shed (sellable today)
 PREM_BANK_BUSY = 6       # v87b: premium load (wool+milk+egg) that overrides a
                          # busy unit's non-FEED task for a shed run (idle bar is 4)
 
 # Livestock plan: sheep first (slowest payout -> place earliest, CARE stacks highest on it),
 # cows are the meta-proven workhorse. 6 animals ring the shed on one quadrant.
-ANIMAL_TARGETS = {"SHEEP": 4, "COW": 9}   # v47a blueprint: cow-heavy (dead-milk guard -> 6 kept)
+ANIMAL_TARGETS = {"SHEEP": 12, "COW": 8}  # v90a : THE WOOL CHASSIS.
+# Every decode converged here: the winning class is wool-heavy — Bharath
+# (2004, $175k bank): 6-8 cows + 11-18 sheep, wool $53.6k vs our $30k,
+# fert $17.6k vs $10.8k; the sheep-27 shark $116k; the v88a band winners
+# sheep-12.  Our 4 prior sheep falsifications all tested OUR cow-9 chassis
+# +2 sheep — never this ratio.  Bharath runs the herd in ONE dense block
+# (x1-7,y1-4, spilling into NE the day it unlocks) with ZERO hands all
+# game (feed daily, care on the yield interval ≈ 25-30 ops/day).
+# (was {"SHEEP": 4, "COW": 9} — v47a blueprint, cow-heavy)
 # v61a/v61d MILK-BOOM : in towns with THREE actual
 # milk shops whose milk price is still >= $200 at d10-13, extend the cow
 # target 9 -> 12.  Gate calibrated on 91 live replays (23% of towns; milk
@@ -773,6 +772,10 @@ ANIMAL_INFO = {
 # Ring around the shed-access tile (4,4): FEED/CARE/HARVEST/COLLECT all happen standing ON
 # the animal tile and the wheat lives at the shed, so clustering minimizes walking.
 ANIMAL_SLOTS = [(3, 4), (4, 3), (3, 3), (2, 4), (4, 2), (2, 3), (3, 2), (2, 2),
+                # v90a: +9 NE-overflow slots (Bharath's exact layout — dense
+                # block continues east the day NE unlocks; SW never needed
+                # for the herd):
+                (5, 4), (5, 3), (5, 2), (6, 4), (6, 3), (6, 2), (7, 4), (7, 3), (7, 2),
                 (4, 5), (3, 5), (2, 5), (4, 6),
                 (3, 6), (2, 6), (4, 7)]   # +7 SW slots (v37a: 15-animal herd)
 # v42b geese: slots are species-aware; adaptive target set per game in agent()
@@ -2452,7 +2455,12 @@ def agent(obs):
         # wash but WINS 16→10 (flips +2/−8, primary estimator).  4th sheep
         # falsification (v19a, v47b, v72b, v84b); the band's sheep-10
         # families are a different CHASSIS, not ours +2 sheep.  Base stays 4.
-        _DYN_SHEEP[player] = YARN_SHEEP if _YARN_TOWN.get(player, False) else 4
+        # v90a: the else-branch had a HARDCODED 4 from the v84b era that
+        # silently overrode ANIMAL_TARGETS — the wool chassis needs the
+        # target to flow through (yarn towns take the max of both).
+        _DYN_SHEEP[player] = (max(YARN_SHEEP, ANIMAL_TARGETS["SHEEP"])
+                              if _YARN_TOWN.get(player, False)
+                              else ANIMAL_TARGETS["SHEEP"])
         if (_GOOSE_TARGET.get(player, 0) < 1 and day <= 10
                 and _town_drain_per_day("EGG", shops) >= 7):
             _GOOSE_TARGET[player] = 0

@@ -1,0 +1,165 @@
+
+## 1. The submission and its ledger
+
+--- cell 5 [eps = requests.post(LIST_URL, json={"submissionId": SUBMISSION_ID},] ---
+submission 56267346: 40 episodes on the ladder, reading the newest 40
+W19-L21-T0, margin median -99, worst -74,453, best +73,962
+
+<Figure size 900x340 with 1 Axes>
+
+--- cell 6 [PASS = {"farmer": ["PASS"], "hands": [], "market": []}] ---
+10/40 replays fetched
+  20/40 replays fetched
+  30/40 replays fetched
+  40/40 replays fetched
+40 replays loaded, 32 distinct shop pairs
+
+## 2. The stripes
+
+--- cell 8 [def canon(a):] ---
+texture: green 23.8%, amber 2.1%, navy 74.2%
+
+--- cell 9 [def stripe_panel(rr, mm, subtitle, world_lines):] ---
+<Figure size 1100x604.444 with 1 Axes>
+<Figure size 1100x604.444 with 1 Axes>
+
+## 3. How to read the panels
+
+## 4. Classification
+
+--- cell 12 [CHANNELS = ("farmer", "hands", "market")] ---
+GLOBAL: ADAPTIVE  (varying 86.6%, first divergence t=25, channels {'farmer': 578, 'hands': 588, 'market': 557})
+within-world verdict: {'ADAPTIVE': 6}
+
+<Figure size 900x220 with 1 Axes>
+                             world  n            cls   vary first
+0                   BAKERY__BAKERY  2       ADAPTIVE  76.4%   162
+1           BAKERY__ICE_CREAM_SHOP  1  (one episode)             
+2                 BAKERY__PET_CAFE  2       ADAPTIVE  75.7%   166
+3               BAKERY__YARN_STORE  2       ADAPTIVE  82.9%    68
+4         BRUNCH_SPOT__BRUNCH_SPOT  1  (one episode)             
+5      BRUNCH_SPOT__ICE_CREAM_SHOP  1  (one episode)             
+6          BRUNCH_SPOT__YARN_STORE  1  (one episode)             
+7           FARMERS_MARKET__BAKERY  1  (one episode)             
+8      FARMERS_MARKET__BRUNCH_SPOT  3       ADAPTIVE  86.4%    25
+9   FARMERS_MARKET__FARMERS_MARKET  1  (one episode)             
+10  FARMERS_MARKET__ICE_CREAM_SHOP  1  (one episode)             
+11      FARMERS_MARKET__YARN_STORE  1  (one episode)             
+12  ICE_CREAM_SHOP__FARMERS_MARKET  1  (one episode)             
+13        ICE_CREAM_SHOP__PET_CAFE  1  (one episode)             
+14        PET_CAFE__FARME
+
+## 5. Kinship with the opponents
+
+--- cell 15 [import hashlib] ---
+0 mirror games (plan >= 0.95), 0 sibling games (0.50-0.95), 40 unrelated
+
+<Figure size 900x300 with 1 Axes>
+<pandas.io.formats.style.Styler at 0x79e1c08a6c00>
+
+--- cell 17 [PRE = 144] ---
+33 genetic groups among 40 opponents (5 with 2+ games, 28 singletons)
+
+<Figure size 900x250 with 1 Axes>
+   group yours  games  submissions                     lead    record  \
+0     G1            3            3                  Athnnna  W1-L2-T0   
+1     G2            3            3             chengsongtao  W0-L3-T0   
+2     G3            2            1            Natnael Yerga  W1-L1-T0   
+3     G4            2            1  Dr. Mikholae Hutchinson  W0-L2-T0   
+4     G5            2            2                 UYHHHHYu  W0-L2-T0   
+5     G6            1            1                 Lugas024  W1-L0-T0   
+6     G7            1            1                      kai  W1-L0-T0   
+7     G8            1            1       Shane Thivaharraja  W0-L1-T0   
+8     G9            1            1          Sergey Bryansky  W1-L0-T0   
+9    G10            1            1            Tong Jing Yen  W0-L1-T0   
+10   G11            1            1            Teddy McBride  W1-L0-T0   
+11   G12            1            1                CaminoLSY  W1-L0-T0   
+12   G13            1            1       Constantin Craciun  W0-L1-T0   
+13   G14            1            1             I_luv_magick  W0-L1-T0   
+
+
+## 6. The macroeconomic x-ray
+
+--- cell 19 [def q(vals, p):] ---
+macro profile, median [p10, p90]; ref = the measured #1 shape
+  2nd quadrant, day                      6 [6, 6]    ref 5
+  care actions                         244 [193, 272]    ref 280
+  herd bought (median)           COW 7  SHEEP 5  GOOSE 0    ref 7 COW
+  endgame fallow tiles d25-29            5 [4, 10]    ref 13
+  stranded $ at the bell               324 [2, 1,298]    ref 442
+  pass-with-work unit-turns            388 [381, 404]    ref low
+  shed-at-cap turns                      0 [0, 0]    ref 0
+  floor sells (price <= 2)               9 [1, 18]    ref 0
+
+<Figure size 900x450 with 1 Axes>
+
+--- cell 21 [import random] ---
+<Figure size 920x520 with 1 Axes>
+
+### Actions on money, and the craters under the rival
+
+--- cell 23 [def _mf_events(stream, prices_t):] ---
+<Figure size 1300x800 with 2 Axes>
+craters dug by us that the rival sold into: WHEAT -$27,030, MILK -$22,077, MELON -$4,344, MELON -$3,912, MELON -$3,912, MELON -$3,912
+craters we sold into: WHEAT -$224, WHEAT -$196, WHEAT -$142, WHEAT -$107, WHEAT -$98, WHEAT -$57
+
+## 7. How the board is used
+
+--- cell 25 [def _bh_corr(a, b):] ---
+<Figure size 1300x340 with 4 Axes>
+occupancy: chi2/dof 1,147.4 over 75 unlocked cells; the ten busiest hold 17.9% of the mass against 13.3% if the board were used evenly
+occupancy: half-split correlation r = +1.000   (below about +0.9, read the map as one season's noise)
+
+<Figure size 360x360 with 1 Axes>
+unit presence: chi2/dof 2,834.8 over 75 unlocked cells; the ten busiest hold 35.9% of the mass against 13.3% if the board were used evenly
+unit presence: half-split correlation r = +0.999   (below about +0.9, read the map as one season's noise)
+
+## 8. Productivity in time, against the leader's own band
+
+--- cell 27 [_PR_WORK  = {"PLANT","HARVEST","FEED","CARE","COLLECT_FERTILIZER","FERTILIZE",] ---
+king resolved by climbing the live ladder: 2,283 -> 2,282 -> 2,399 -> 2,730 -> 2,763 -> 2,342 -> 1,747 -> 1,803 -> 1,426 -> 1,767 -> 1,807 -> 1,936 -> 1,995 -> 2,764 -> 2,809
+
+<Figure size 1100x640 with 2 Axes>
+season-wide split of every unit-turn: work 28.6%  carry 2.2%  move 56.1%  idle 13.1%
+
+### Staffing in time, against the rivals you actually met
+
+--- cell 29 [_hr_days = list(range(30))] ---
+<Figure size 1100x420 with 1 Axes>
+field-wide reference (490 seasons): 4 hands to day 4, 8 by day 6, 11 by day 10, 12 from day 13 to the bell; IQR 0-2 hands all season
+
+## 9. Convergence
+
+--- cell 31 [THRESH = 1.0   # points per episode; state it with the verdict] ---
+SETTLING  (drift -1.40 pts/episode over the last 20, 9 sign flips, threshold 1.0, n=40 episodes, rating now 735.0)
+
+<Figure size 950x400 with 2 Axes>
+<Figure size 900x320 with 1 Axes>
+pairing rate: 1.9 episodes/hour lifetime, 1.9/hour in the last 24h
+at the current rate the 20-episode drift window refreshes in about 10 hours: that is when to read again
+
+## 10. The report
+
+--- cell 33 [lab = f"submission {SUBMISSION_ID}"] ---
+submission 56267346: 40 episodes, 32 distinct worlds
+  ledger  W19-L21-T0, margin median -99, worst -74,453, best +73,962
+  texture green 23.8%  amber 2.1%  navy 74.2%
+
+  GLOBAL class: ADAPTIVE  (varying 86.6%, first divergence t=25, channels {'farmer': 578, 'hands': 588, 'market': 557})
+
+  world                                n class               vary first_div
+  BAKERY__BAKERY                       2 ADAPTIVE           76.4%       162
+  BAKERY__ICE_CREAM_SHOP               1 (one episode)    
+  BAKERY__PET_CAFE                     2 ADAPTIVE           75.7%       166
+  BAKERY__YARN_STORE                   2 ADAPTIVE           82.9%        68
+  BRUNCH_SPOT__BRUNCH_SPOT             1 (one episode)    
+  BRUNCH_SPOT__ICE_CREAM_SHOP          1 (one episode)    
+  BRUNCH_SPOT__YARN_STORE              1 (one episode)    
+  FARMERS_MARKET__BAKERY               1 (one episode)    
+  FARMERS_MARKET__BRUNCH_SPOT          3 ADAPTIVE           86.4%        25
+  FARMERS_MARKET__FARMERS_MARKET       1 (one episode)    
+  FARMERS_MARKET__ICE_CREAM_SHOP       1 (one episode)    
+  FARMERS_MARKET__YARN_STORE           1 (one episode)    
+  ICE_CREAM_SHOP__FARMERS_MARKET       1 (one episode)    
+
+## 11. Caveats and credits

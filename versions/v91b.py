@@ -1,7 +1,35 @@
 """
 main.py — Kaggriculture agent.  ENTRY POINT (must be at archive root, must be named main.py).
 
-STATUS: v89c — PROMOTED, SUBMIT-FLAGGED : v89b +
+STATUS: v91b — HOLD, FULLY GATED, NOT PROMOTED (Exp 114 final,
+Sep 17 night; 3 legs x 78 fresh seeds 2272-2505): vs ALLAI tape
++696±483 t=1.44 OWN BANK +2,104 (real vs the class that showed the
+live starvation) | vs Amitesh −359±550 n.s., flips +5/−8 ALL 13
+decoded as world re-rolls (own bank UP in every negative flip) |
+vs holdpx −1,040±650 t=−1.60, own −1,151, flips +2/−0.  Pooled
+band margin ≈ −230/game = wash; converts zero net wins today.
+VERDICT: an ENABLER, not a win-mover — retest bundled with the
+fert-coverage/labor work when the wheat economy scales.  main.py
+stays v89c.  (earlier interim header:)
+GATE (78/leg): vs ALLAI tape +696±483 t=1.44, OWN BANK +2,104 (the
+mechanism works vs the class that showed the live bug; 0 wins either
+way there).  vs Amitesh (fresh 2350-2427) −359±550 n.s., own-bank
+−30, flips +5/−8 (net −3, within re-roll lottery but undecoded).
+Promotion bar = positive + 2nd-tape replication: NOT met.  NEXT:
+holdpx leg + decode the 8 Amitesh flip seeds; promote only if the
+flips decode as world re-rolls.  main.py reverted to v89c.
+(orig:) v89c +
+SAME-TILE PLANT exempt from the focused-feeder lock (one edit in
+eligible()).  THE BUG: a unit that harvests wheat holds wheat ->
+feed-locked -> forbidden to replant the tile it stands on (slack
+guard passes only before ~h4).  Live: wheat tiles 10->3 at d18
+with 10 seeds + $22k idle.  STR allocation UNTOUCHED (v91a's STR
+40->33 port FALSIFIED same night: ami -3,688 t=-5.3 flips +3/-21,
+holdpx -4,824 t=-4.0 flips +0/-8 — own bank flat both legs, the
+opponent gains 4-5k: our 40-STR flood price-suppresses EVERY
+STR-selling opponent; ALLAI affords 33 only because its wheat+
+hands+fert machine nets more than the denial.  versions/v91a.py).
+(was) STATUS: v89c — PROMOTED, SUBMIT-FLAGGED : v89b +
 SHED_FORCE_SELL 80->92.  Gate: Amitesh no-harm +106±194 (latched
 +243±452), 0 flips — waste-removal bar passed (live evidence: ~5
 floor-units/game dumped at $1-3 with shed 80-94).  CONTAINS v89b's
@@ -1676,6 +1704,20 @@ def _assign(units, tasks, inventories, tiles, day, hour):
         if (task["op"][0] != "FEED" and inv_of(ui).get("WHEAT", 0) > 0
                 and feeds_open()):
             same_tile = (task["x"] == units[ui][0] and task["y"] == units[ui][1])
+            # v91b : HARVEST->REPLANT chain exempt from the feed
+            # lock.  A unit that harvests wheat is instantly "holding wheat"
+            # and the focused-feeder rule froze it — it stood ON the empty
+            # tile, seeds in stock, forbidden to replant (live d18: wheat
+            # tiles 10->3 with 10 seeds + $22k idle; 0-4 PLANT ops/day).
+            # NARROW: only the unit whose last sticky op was HARVEST on this
+            # exact tile — a blanket same-tile exemption pinballed feed
+            # carriers through the wheat block's plant tasks (unfed 8.6-9.1%
+            # vs 4.4-5.5% norm, caught by fingerprint).  One turn, same tile,
+            # then it goes back to feeding with the wheat it just picked.
+            if (task["op"][0] == "PLANT" and same_tile
+                    and _STICKY.get(_CUR_SEAT, {}).get(ui)
+                        == (task["x"], task["y"], "HARVEST")):
+                return True
             pend = sum(1 for _ti, _t in enumerate(tasks)
                        if _t["op"][0] == "FEED" and not taken[_ti])
             # v88a : _MEL_RACE gate REMOVED — the chain runs in ALL

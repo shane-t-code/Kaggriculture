@@ -1,23 +1,7 @@
 """
 main.py — Kaggriculture agent.  ENTRY POINT (must be at archive root, must be named main.py).
 
-STATUS: v89c — PROMOTED, SUBMIT-FLAGGED : v89b +
-SHED_FORCE_SELL 80->92.  Gate: Amitesh no-harm +106±194 (latched
-+243±452), 0 flips — waste-removal bar passed (live evidence: ~5
-floor-units/game dumped at $1-3 with shed 80-94).  CONTAINS v89b's
-dig guard + v87/v88 (express + chain).  = tonight's submission.
-(orig:) v89b + SHED_FORCE_SELL
-80->92 (the express-induced panic-dump fix; ~5 floor-units/game at
-shed 80-94 measured live).  WOOL CHASSIS (v90a/b) FALSIFIED 5th and
-FINAL time same day — fully functional (12 placed, fed, 3rd carrier
-built) and still loses to BOTH the wool-mirror tape and Amitesh
-(6/8 seeds each; the sheep bill guts the STR cohort).  The lane
-needs Bharath's WHOLE economy (bought feed, no hands, matchup luck)
-= a rewrite, not a dial.  (v90 experimental code NOT carried — v89c
-is exactly v89b + this one constant; the 3rd-carrier split lives in
-versions/v90b.py if the herd ever scales.)
---- v89b layer: ---
-(was) STATUS: v89b — PROMOTED, SUBMIT-FLAGGED : STR
+STATUS: v89b — PROMOTED, SUBMIT-FLAGGED : STR
 CRASH-BRANCH CONFIRM GUARD.  GATE: killer NULL (−10±143 — true
 crashes still dig); holdpx tape (built from the live Samuel game
 where we dug 27 tiles at ~$200) +169±115 / latched +387±260;
@@ -738,11 +722,7 @@ LAND_DAYS = [6, 10, 99]   # v5b: retry the 3rd quadrant now that fert + cash bug
 LAND_PRICES = [1000, 2000, 4000]   # engine LAND_PRICES (ENGINE_NOTES B.1); order NE->SW->SE
 # (crop mix now lives in CROP_INFO caps + PLANT_ORDER + SEED_WANT below)
 LIQUIDATE_FROM_DAY = 28  # unsold inventory is worth $0 at the end — sell everything late
-SHED_FORCE_SELL = 92     # v89c: was 80.  The express (v87) fills the shed
-                         # same-day, so the any-price panic-dump fired
-                         # chronically 20 slots early — live: ~5 floor-units/
-                         # game sold at $1-3 with shed at 80-94 (cap is 100
-                         # and overflow only destroys at end-of-day).
+SHED_FORCE_SELL = 80     # shed cap is 100 and overflow is DESTROYED at end-of-day drop
 UNLOAD_AT = 8            # a unit carrying this many items runs them to the shed (sellable today)
 PREM_BANK_BUSY = 6       # v87b: premium load (wool+milk+egg) that overrides a
                          # busy unit's non-FEED task for a shed run (idle bar is 4)

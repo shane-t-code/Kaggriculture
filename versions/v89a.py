@@ -1,48 +1,12 @@
 """
 main.py — Kaggriculture agent.  ENTRY POINT (must be at archive root, must be named main.py).
 
-STATUS: v89c — PROMOTED, SUBMIT-FLAGGED : v89b +
-SHED_FORCE_SELL 80->92.  Gate: Amitesh no-harm +106±194 (latched
-+243±452), 0 flips — waste-removal bar passed (live evidence: ~5
-floor-units/game dumped at $1-3 with shed 80-94).  CONTAINS v89b's
-dig guard + v87/v88 (express + chain).  = tonight's submission.
-(orig:) v89b + SHED_FORCE_SELL
-80->92 (the express-induced panic-dump fix; ~5 floor-units/game at
-shed 80-94 measured live).  WOOL CHASSIS (v90a/b) FALSIFIED 5th and
-FINAL time same day — fully functional (12 placed, fed, 3rd carrier
-built) and still loses to BOTH the wool-mirror tape and Amitesh
-(6/8 seeds each; the sheep bill guts the STR cohort).  The lane
-needs Bharath's WHOLE economy (bought feed, no hands, matchup luck)
-= a rewrite, not a dial.  (v90 experimental code NOT carried — v89c
-is exactly v89b + this one constant; the 3rd-carrier split lives in
-versions/v90b.py if the herd ever scales.)
---- v89b layer: ---
-(was) STATUS: v89b — PROMOTED, SUBMIT-FLAGGED : STR
-CRASH-BRANCH CONFIRM GUARD.  GATE: killer NULL (−10±143 — true
-crashes still dig); holdpx tape (built from the live Samuel game
-where we dug 27 tiles at ~$200) +169±115 / latched +387±260;
-Amitesh −229±128 (its SCHEDULED late flood is the one class where
-holding costs — accepted).  Local pooled ≈ wash BECAUSE local worlds
-rarely arm the trap; THE DECISIVE EVIDENCE IS LIVE: 23/40 v88a games
-dug 15-30 producing tiles at $150-260 (wins included; 5 losses in
-this sample within the recovered range).  Digging a $200-producing
-tile for a $10 wheat replant is value-destruction at the moment it
-happens; the guard blocks it only when the live price contradicts
-the crash forecast.  (original candidate header:)
-GUARD (the real live leak) + late-hold dials.  Live v88a band-loss
-trace: str_dead fired ~d25 and DUG 19 STR tiles/game AT LIVE PRICES
-$164-221 (samples: 16@164, 29 tiles across d25-28 @ ~220) — the
-crash projection counts our own doubled capacity (35-38 tiles, the
-seed-cohort success) as supply and predicts crashes live towns
-absorb.  v83a's 17-tile farms never armed it: THIS is why v87/88
-tiles@d24 = 26.6 vs v83a's 33.6.  FIX: str_dead now ALSO requires
-live price <= STR_DEAD_CONFIRM_PX (60) — a $200 market is not dead.
-Plus v89a's dials (CONVERT 24->26, KEEP 34->38; byte-null vs tapes —
-they bind live when str_dead stays off).  True-crash worlds
-(px <= 60) keep the old behavior exactly.  GATE: Amitesh+infill
-(str_dead rarely fires vs tapes -> expect small/no diff; the change
-targets LIVE non-tape worlds — waste-guard bar: no-harm + the live
-trace) fresh 1765+.
+STATUS: v89a — CANDIDATE : LATE-STR HOLD EXTENSION.
+= v88a + STR_CONVERT_DAY 24->26 + KEEP 34->38.  Live v87/v88 decode:
+mid-window STR gap CLOSED (+559, was +5,538) but d22-29 gap +3,778
+(their 135u vs our 108; tiles@d28 10-11 vs 7-9).  v83a's 22->24 was
+the strongest gate ever — same lane, next notch.  str_dead branch
+unchanged.  GATE: 3 legs fresh 1765+.
 --- v88a layer: ---
 (was) STATUS: v88a — PROMOTED, SUBMIT-FLAGGED : CHAIN
 EVERYWHERE.  GATE at protocol-n for an occupancy-changing candidate
@@ -738,11 +702,7 @@ LAND_DAYS = [6, 10, 99]   # v5b: retry the 3rd quadrant now that fert + cash bug
 LAND_PRICES = [1000, 2000, 4000]   # engine LAND_PRICES (ENGINE_NOTES B.1); order NE->SW->SE
 # (crop mix now lives in CROP_INFO caps + PLANT_ORDER + SEED_WANT below)
 LIQUIDATE_FROM_DAY = 28  # unsold inventory is worth $0 at the end — sell everything late
-SHED_FORCE_SELL = 92     # v89c: was 80.  The express (v87) fills the shed
-                         # same-day, so the any-price panic-dump fired
-                         # chronically 20 slots early — live: ~5 floor-units/
-                         # game sold at $1-3 with shed at 80-94 (cap is 100
-                         # and overflow only destroys at end-of-day).
+SHED_FORCE_SELL = 80     # shed cap is 100 and overflow is DESTROYED at end-of-day drop
 UNLOAD_AT = 8            # a unit carrying this many items runs them to the shed (sellable today)
 PREM_BANK_BUSY = 6       # v87b: premium load (wool+milk+egg) that overrides a
                          # busy unit's non-FEED task for a shed run (idle bar is 4)
@@ -908,8 +868,6 @@ STR_ENDGAME_KEEP = 38  # v89a: was 34 (v83a; orig 18).  v72a was closed on ONE p
 # (floored market: d18 / keep 6) UNCHANGED — the crash case stays covered.
 STR_DEAD_FROM_DAY = 18   # v60a: market-aware wind-down may start here...
 STR_DEAD_PRICE = 5       # ...when the 5-day glut projection is at/below this
-STR_DEAD_CONFIRM_PX = 60 # v89b: AND the live price already confirms the crash —
-                         # a projection-only trigger dug $164-221 plantations
 STR_DEAD_KEEP = 6        # keepers in a dead market (was a static 18)
 
 WHEAT_FACTORY_DAY = 13   # v68a : was 22.  King decode
@@ -2359,16 +2317,7 @@ def agent(obs):
             _snet = (_town_drain_per_day("STRAWBERRY", shops)
                      - _inflow_per_day("STRAWBERRY", _mc, _ma)
                      - _inflow_per_day("STRAWBERRY", _oc2, _oa2))
-            # v89b : the projection alone is NOT enough — it counts
-            # our own (now doubled, 35-38 tile) capacity as incoming supply
-            # and predicted crashes that live towns absorbed.  Live v88a band
-            # losses: str_dead fired ~d25 and dug 19 tiles/game AT $164-221
-            # (v83a's 17-tile farms never triggered it — the seed-cohort
-            # success armed this trap).  A market selling at $200 TODAY is
-            # not dead today: require the CURRENT price to already confirm
-            # the crash before abandoning producers.
-            if (_glut_price("STRAWBERRY", max(0, _sx - _snet * 5)) <= STR_DEAD_PRICE
-                    and prices.get("STRAWBERRY", 0) <= STR_DEAD_CONFIRM_PX):
+            if _glut_price("STRAWBERRY", max(0, _sx - _snet * 5)) <= STR_DEAD_PRICE:
                 str_dead = True
 
     # ramp_fast (v18c): same herd-complete test the market code uses (total owned

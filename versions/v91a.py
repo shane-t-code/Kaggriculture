@@ -1,7 +1,27 @@
 """
 main.py — Kaggriculture agent.  ENTRY POINT (must be at archive root, must be named main.py).
 
-STATUS: v89c — PROMOTED, SUBMIT-FLAGGED : v89b +
+STATUS: v91a — FALSIFIED : v89c +
+STR_PLANT_CAP 40->33 (the ALLAI/UYH allocation port).
+VERDICT: ami margin-diff -3,688±700 (t=-5.27) flips +3/-21 (36->18!);
+holdpx -4,824±1,207 (t=-4.00) flips +0/-8.  Own bank FLAT both legs
+(+490/-565) — the wheat tiles replace STR revenue ~1:1 — but the
+OPPONENT gains 4-5k/game in BOTH classes: our 40-tile STR flood
+price-suppresses every STR-selling opponent (non-flooders included).
+LAW: on this chassis STR acreage is dual-purpose (revenue + denial);
+33 tiles only works with ALLAI's whole wheat+hands+fert machine.
+The REAL wheat starvation bug found the same night lives in v91b
+(same-tile PLANT feed-lock exemption).  (orig:) Decode of the
+2,200-2,500 tape family (both games, exec/order/board ledgers): the
+whole ~40k top-class gap = allocation, their freed d10-11 melon
+block becomes a 20-25 tile continuous wheat engine (3-day cycles,
+sells $44-47 late, self-feeds) while ours became 13 extra STR tiles
+that earn less than their 33 (185u@$145 vs 231u@$169 realized).
+Falsified same session: tick-flip arb (+$24-30/game only, engine
+L599 defends round-trips), capped-STR-accrual (0 tile-hours both
+sides).  GATE PENDING: 78 fresh seeds/leg (occupancy change), legs
+amitesh + holdpx (+ top tape), fingerprint first.  Base = v89c below.
+(was) STATUS: v89c — PROMOTED, SUBMIT-FLAGGED : v89b +
 SHED_FORCE_SELL 80->92.  Gate: Amitesh no-harm +106±194 (latched
 +243±452), 0 flips — waste-removal bar passed (live evidence: ~5
 floor-units/game dumped at $1-3 with shed 80-94).  CONTAINS v89b's
@@ -1093,17 +1113,29 @@ def _proj_drain_per_day(item, shops, day):
     remaining = min(remaining, 8 - len(shops))
     return _town_drain_per_day(item, shops) + remaining * _PROJ_GAIN.get(item, 0)
 
-# Dynamic STR cap: scale the tuned default (40 @ typical projected drain ~25/day)
-# by this town's projection.  Ratchet: only recomputed at hour 0; never above 48
-# (search bound), never below 12; and it can only DROP from day 6 (2+ shops seen).
+# v91a : STR plant cap 40 -> 33.  The 2,200-2,500
+# tape family (identical buy profiles = one bot) runs exactly 33 STR + 20-25
+# continuously-cycled wheat tiles from d12 — the freed d10-11 melon block goes
+# to WHEAT, not more STR.  Our 40 tiles earned LESS than their 33 in both live
+# games (185u @ $145/u realized vs 231u @ $169/u): marginal STR sells into the
+# glut we create, while wheat holds $44-47 late (6 shop types + both farms'
+# feed demand; log-0.20 glut, gentlest in the game).  With cap 33 the d11
+# STR top-up flood shrinks and PLANT_ORDER flows the freed tiles to the wheat
+# factory (unconditional from d13).  NOTE: CROP_INFO["STRAWBERRY"]["cap"]=40
+# stays as the static bound; this dynamic cap always binds below it.
+STR_PLANT_CAP = 33
+
+# Dynamic STR cap: scale the tuned default (STR_PLANT_CAP @ typical projected
+# drain ~25/day) by this town's projection.  Ratchet: only recomputed at hour
+# 0; never below 12; and it can only DROP from day 6 (2+ shops seen).
 def _dyn_str_cap(shops, day):
     proj = _proj_drain_per_day("STRAWBERRY", shops, day)
-    cap = int(round(40 * proj / 25.0))
-    cap = max(12, min(40, cap))
+    cap = int(round(STR_PLANT_CAP * proj / 25.0))
+    cap = max(12, min(STR_PLANT_CAP, cap))
     if day < 6:
-        cap = max(cap, 40)
+        cap = max(cap, STR_PLANT_CAP)
     return cap
-_DYN_STR_CAP = {0: 40, 1: 40}   # per seat, refreshed at hour 0
+_DYN_STR_CAP = {0: STR_PLANT_CAP, 1: STR_PLANT_CAP}   # per seat, refreshed at hour 0
 # v47b: the blueprint drops carrots by DEFAULT (most towns barely drain them),
 # but a PET_CAFE town eats 12-36/day — seed-12 disaster: 3x PET_CAFE, we
 # planted zero carrots, v45a monetized the town's only demand and won.
@@ -1455,7 +1487,7 @@ def _build_tasks(tiles, day, seeds, tape_mode=False, care_skip=(), crop_skip=(),
                     # the band banks ~$2k/game d15-21 melons where we sold 0.
                     cap = MELON_W2_CAP if day >= MELON_W2_FROM else 0
                 if c == "STRAWBERRY":
-                    cap = min(cap, _DYN_STR_CAP.get(_CUR_SEAT, 40))
+                    cap = min(cap, _DYN_STR_CAP.get(_CUR_SEAT, STR_PLANT_CAP))
                     if tape_mode:
                         # v50a: never plant into their 300-unit d16-29 flood
                         cap = min(cap, TAPE_STR_CAP)
@@ -2230,7 +2262,7 @@ def _market_orders(day, hour, money, seeds, shed, inventories, prices, hires_tod
             want = 4
         if crop == "WHEAT" and _FACTORY_NOW:
             want = WHEAT_FACTORY_SEED_WANT
-        if crop == "STRAWBERRY" and _DYN_STR_CAP.get(_CUR_SEAT, 40) <= 20:
+        if crop == "STRAWBERRY" and _DYN_STR_CAP.get(_CUR_SEAT, STR_PLANT_CAP) <= 20:
             continue
         if crop == "STRAWBERRY" and tape_mode:
             want = min(SEED_WANT[crop], 4)   # v50a: cap 24 needs few seeds

@@ -1,20 +1,21 @@
 """
 main.py — Kaggriculture agent.  ENTRY POINT (must be at archive root, must be named main.py).
 
-STATUS: v93d — PROMOTED, SUBMIT-FLAGGED .
-GATE (78/leg, seeds 2740-2895, vs v92b): Amitesh +2,154±915 t=2.35
-flips +22/−9 (wins 33→46, 42%→59% vs THE band-killer class) |
-holdpx +2,291±1,046 t=2.19 own-bank +3,225 (78-0 saturated).
-Pooled ≈ +2,223 t≈3.2 — strongest margin gate since v83a.
-CONTENTS: v92b (fert window→26 + P prio + keep 8 + px gate 100)
-+ tick-day PARITY application (no age-7/8 exemption), carrier-
-first FERTILIZE pass right after the urgent tier, fert+pickup at
-P_CHAIN, pickup threshold 1.  = Artyom's measured recipe (98%
-on-tick / 96% watered-same-night / 1.85 ticks-per-op vs our old
-0.8), production-reconciled.  Fingerprint: on-tick 83-96%,
-watered-same 89-91%, coverage 44% (base 35%), unfed BETTER
-(1.3-3.1% vs 8.4).  Occupancy changes (parity defers plantings).
-(v92b layer:) STATUS: v92b — PROMOTED .  GATE
+STATUS: v92c/v92d — BENCHED (Exp 115 close, Sep 18; 78 paired seeds
+2662-2739 vs v92b): margin −1,151±945 t=−1.22, own −353, flips
++16/−13 (29-flip re-roll storm — the 13th hand changes occupancy).
+CONTENTS (4 layers, all fingerprint-flat on coverage ~40-60%):
+carrier-first FERTILIZE pass, P_CHAIN tick-waters, tick-day parity
+fert, TARGET_HANDS 8→9 (13 hands).  LESSON: coverage 36→50% came
+from v92b's window/priority/keep; the LAST 30 points to killer-83%
+is not one dial — it's compounding disciplines (batch-parity
+planting, labor, supply) = the sync-planting design experiment,
+queued separately.  Margin at n decides: benched.  (orig:) v92b + carrier-
+first FERTILIZE scheduling (require-filtered tasks matched globally
+to carriers BEFORE the zoned sweep; they died in non-carriers'
+strips — 3.5 ops/day executed with 24-40 tiles uncovered and fert
+in pockets).  Target: coverage 44-54% → 65-83% (killer level).
+(v92b layer:) STATUS: v92b — PROMOTED, SUBMIT-FLAGGED .  GATE
 (4 blocks × 39 paired, seeds 2506-2661): ami reused +134 / ami
 FRESH +1,547 t=1.48 flips +6/−4 / hold reused +351 own +1,496 /
 hold FRESH +338 own +1,854 flips +1/−0.  POOLED n=156: +592±551
@@ -768,7 +769,15 @@ DEBUG = False
 # ----------------------------------------------------------------------------------
 # Tunables
 # ----------------------------------------------------------------------------------
-TARGET_HANDS = 8         # scale retest: 10 hands at 3 quadrants ($143/day fib)
+TARGET_HANDS = 9         # v92d : 8→9 = 13 hands at 3 quadrants.  The six
+                         # 756-900 band killers ALL run 13-14 hands (h12 read; the
+                         # old h0 read said 0 — hands expire at midnight).  The 13th
+                         # hand costs +$144/day (fib 232→376) and the fert machine
+                         # gives it ~15 ops/day of $100+ work (coverage stuck at
+                         # 40-54% on 12 hands = labor capacity, not scheduling; the
+                         # v77b hands-14 falsification predates this chassis AND the
+                         # fert machine — nothing valuable for hand 13 to do then).
+                         # (was 8: scale retest, 10 hands at 3 quadrants $143/day fib)
 HANDS_PER_EXTRA_QUADRANT = 2
 LAND_MAX_QUADRANTS = 4
 LAND_DAYS = [6, 10, 99]   # v5b: retry the 3rd quadrant now that fert + cash bugs are fixed
@@ -1448,6 +1457,7 @@ def _build_tasks(tiles, day, seeds, tape_mode=False, care_skip=(), crop_skip=(),
                         #      (tick at END of day D when (age+1-first) %
                         #      interval == 0; keep the +2).
                         _needed = dying
+                        _fert_tick = False
                         if not _needed and info:
                             _w0, _w1 = info["window"]
                             if _w1 >= _w0:
@@ -1456,8 +1466,15 @@ def _build_tasks(tiles, day, seeds, tape_mode=False, care_skip=(), crop_skip=(),
                                 _ivl = 2 if crop == "STRAWBERRY" else 1
                                 _needed = (age + 1 - first_age >= 0
                                            and (age + 1 - first_age) % _ivl == 0)
+                                # v92c: this water carries the WHOLE fert +2
+                                # tonight ($120-200) — urgent tier, not zone
+                                # backlog (measured watered-on-tick 45-70%;
+                                # feeds stay safe: focused-feeder reserves
+                                # wheat carriers for FEED regardless).
+                                _fert_tick = _needed
                         if _needed:
-                            tasks.append({"prio": P_SAVE if dying else P_WATER,
+                            tasks.append({"prio": P_SAVE if dying
+                                          else (P_CHAIN if _fert_tick else P_WATER),
                                           "x": x, "y": y, "op": ["WATER"]})
 
                 if crop in FERT_CROPS and (
@@ -1476,25 +1493,19 @@ def _build_tasks(tiles, day, seeds, tape_mode=False, care_skip=(), crop_skip=(),
                         # while the STR market is worth doubling into; else
                         # exact v89c behavior (window 7-15, P_FERT).
                         if _FERT_STR_ON:
-                            # v93d2: P_CHAIN — with tick-day-only emission the
-                            # demand is ~10 ops on alternate days, each worth
-                            # $150-400 (>= any same-tier op); at P_WATER the
-                            # urgent tier kept carriers busy and only 2.7/day
-                            # executed (need ~10 on tick days).  Harvests it
-                            # outranks by distance re-offer next hour.
-                            _fp = P_CHAIN
-                            # v93d TICK-DAY PARITY (Artyom's measured recipe:
-                            # 98% of his 80 applications land ON tick days,
-                            # watered same night 96% -> 1.85 ticks/op vs our
-                            # 0.8).  Apply only when the tile ticks TONIGHT;
-                            # the 3-day cover then catches tonight + day+2.
+                            _fp = P_WATER
+                            # v92d TICK-DAY PARITY (the ALLAI efficiency: 83%
+                            # coverage from ~109 ops vs our 60% from 112): an
+                            # op covers 3 days; applied ON a tick day it
+                            # catches TWO ticks (tonight + day+2), off-day
+                            # only one.  Apply on tick days only — halves the
+                            # op demand to ~11/day, which fits the labor
+                            # budget.  (age+1-first_yield_age) % 2 == 0 is
+                            # tick-tonight, same arithmetic as the water rule.
                             _dsf = age + 1 - 10
-                            # (no pre-production exemption: an age-7/8 op
-                            # is 1-tick value, lands 'off-tick', and its
-                            # 3-day cover suppresses the first true tick-day
-                            # application — measured: it ate most of the ON-
-                            # window ops.  Artyom: 98% pure tick-day.)
                             _parity_ok = _dsf >= 0 and _dsf % 2 == 0
+                            if age < 9:
+                                _parity_ok = age >= lo   # pre-production: any day primes the first tick
                         else:
                             hi = 15
                     if (lo <= age <= hi and _parity_ok
@@ -1627,13 +1638,9 @@ def _supply_tasks(tasks, n_feed, units, inventories, shed, tiles, day):
     # weeded out, 26 melon replants. Fertilizing is a luxury; restock at P_FERT(3).
     n_fert = sum(1 for t in tasks if t["op"][0] == "FERTILIZE")
     carried_fert = sum(inv.get("FERTILIZER", 0) for inv in inventories)
-    # v93d: threshold 3->1 and P_FERT->P_CHAIN — carriers pocket only 1-3
-    # units, so after ~7 tick-day applications the on-person supply is dry
-    # and the P3 restock never executed (the choke measured at ~5 of ~10
-    # needed ops per tick day, FERT_KEEP 8 sitting unused in the shed).
-    if n_fert - carried_fert >= 1 and shed.get("FERTILIZER", 0) > 0:
+    if n_fert - carried_fert >= 3 and shed.get("FERTILIZER", 0) > 0:
         n = min(n_fert - carried_fert, shed["FERTILIZER"])
-        tasks.append({"prio": P_CHAIN, "x": SHED_TILE[0], "y": SHED_TILE[1],
+        tasks.append({"prio": P_FERT, "x": SHED_TILE[0], "y": SHED_TILE[1],
                       "op": ["PICKUP", "FERTILIZER", n]})
 
     # One animal-pickup per turn: an animal sits in the shed and an empty structure waits.
@@ -1820,13 +1827,6 @@ def _assign(units, tasks, inventories, tiles, day, hour):
     # plant doesn't care about zones.
     greedy([ti for ti, t in enumerate(tasks) if t["prio"] < P_WATER])
 
-    # v93d: FERTILIZE tasks matched to their carriers RIGHT AFTER the
-    # urgent tier — before sticky-remembered re-glues carriers to
-    # yesterday's routes and before zones deal them water anyone could do.
-    # With tick-day parity above, each op lands the night it pays.
-    greedy([ti for ti, t in enumerate(tasks)
-            if not taken[ti] and t.get("require") and t["prio"] <= P_FERT])
-
     # STICKY TARGETS (v40a, from v33a): keep a still-valid routine target from
     # last turn.  Without this, the serpentine chunk boundaries shift every turn
     # as the task list changes and walking units get re-dealt mid-stride —
@@ -1843,6 +1843,16 @@ def _assign(units, tasks, inventories, tiles, day, hour):
                 assignment[ui] = task
                 taken[ti] = True
                 break
+
+    # v92c : require-filtered tasks (FERTILIZE) are matched to
+    # their carriers GLOBALLY before the zoned sweep.  A fert task landing
+    # in a non-carrier's serpentine strip died there (eligible() fails for
+    # a unit with no fertilizer) while the few carriers were dealt water
+    # anyone could do.  Measured (v92b seed 7): 24-40 uncovered STR tiles
+    # at midday WITH 14-17 fert sitting in pockets and 525 free carrier-
+    # hours — 3.5 fert ops/day executed, all crowded after h17.
+    greedy([ti for ti, t in enumerate(tasks)
+            if not taken[ti] and t.get("require") and t["prio"] <= P_FERT])
 
     # ZONED SWEEP for routine work (water/care/collect/plant/dig): order the remaining
     # tasks along a serpentine (row-by-row, alternating direction) and carve them into one

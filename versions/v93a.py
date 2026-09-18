@@ -1,20 +1,24 @@
 """
 main.py — Kaggriculture agent.  ENTRY POINT (must be at archive root, must be named main.py).
 
-STATUS: v93d — PROMOTED, SUBMIT-FLAGGED .
-GATE (78/leg, seeds 2740-2895, vs v92b): Amitesh +2,154±915 t=2.35
-flips +22/−9 (wins 33→46, 42%→59% vs THE band-killer class) |
-holdpx +2,291±1,046 t=2.19 own-bank +3,225 (78-0 saturated).
-Pooled ≈ +2,223 t≈3.2 — strongest margin gate since v83a.
-CONTENTS: v92b (fert window→26 + P prio + keep 8 + px gate 100)
-+ tick-day PARITY application (no age-7/8 exemption), carrier-
-first FERTILIZE pass right after the urgent tier, fert+pickup at
-P_CHAIN, pickup threshold 1.  = Artyom's measured recipe (98%
-on-tick / 96% watered-same-night / 1.85 ticks-per-op vs our old
-0.8), production-reconciled.  Fingerprint: on-tick 83-96%,
-watered-same 89-91%, coverage 44% (base 35%), unfed BETTER
-(1.3-3.1% vs 8.4).  Occupancy changes (parity defers plantings).
-(v92b layer:) STATUS: v92b — PROMOTED .  GATE
+STATUS: v93a/b — BENCHED UNGATED : the parity
+cohort MECHANISM WORKS (planted 39-odd/1-even from mixed) and the
+carrier-first pass delivers, but composed fert coverage stays ~50%
+across SIX lever combinations (v92b window/prio/keep, carrier-first,
+P_CHAIN tick-waters, tick-day parity, 13th hand, parity+carrier
+clean pair).  A structural ceiling nobody diagnosed yet caps the
+machine at half coverage vs the killers' 83%.  NEXT OWNER: run the
+instrumented pipeline trace (per-turn: fert tasks emitted → assigned
+→ executed → water joined same night, one game, log every turn)
+BEFORE touching any dial.  Fingerprint-only, no gate seeds spent.
+(orig:) v92b + STR
+PARITY-COHORT PLANTING (even-day strawberry plants defer a day →
+whole cohort on odd planted_days → all tiles tick the same nights
+→ fert coverage becomes one-sweep cheap).  Decode: Artyom (83%
+coverage) plants 35-odd/7-even; v92c/d proved no scheduler beats
+mixed parities (4 layers, coverage stuck 40-60%, bundle −1,151 vs
+v92b).  Cost <=1 ramp day/tile.
+(v92b layer:) STATUS: v92b — PROMOTED, SUBMIT-FLAGGED .  GATE
 (4 blocks × 39 paired, seeds 2506-2661): ami reused +134 / ami
 FRESH +1,547 t=1.48 flips +6/−4 / hold reused +351 own +1,496 /
 hold FRESH +338 own +1,854 flips +1/−0.  POOLED n=156: +592±551
@@ -1469,36 +1473,16 @@ def _build_tasks(tiles, day, seeds, tape_mode=False, care_skip=(), crop_skip=(),
                         or (crop == "MELON" and 6 <= day < FERT_APPLY_FROM_DAY)):
                     lo, hi = FERT_CROPS[crop]
                     _fp = P_FERT
-                    _parity_ok = True
                     if crop == "STRAWBERRY":
                         # v92b price gate: coverage machine (window to 26,
                         # P_WATER prio — the P3 tier measurably starves) only
                         # while the STR market is worth doubling into; else
                         # exact v89c behavior (window 7-15, P_FERT).
                         if _FERT_STR_ON:
-                            # v93d2: P_CHAIN — with tick-day-only emission the
-                            # demand is ~10 ops on alternate days, each worth
-                            # $150-400 (>= any same-tier op); at P_WATER the
-                            # urgent tier kept carriers busy and only 2.7/day
-                            # executed (need ~10 on tick days).  Harvests it
-                            # outranks by distance re-offer next hour.
-                            _fp = P_CHAIN
-                            # v93d TICK-DAY PARITY (Artyom's measured recipe:
-                            # 98% of his 80 applications land ON tick days,
-                            # watered same night 96% -> 1.85 ticks/op vs our
-                            # 0.8).  Apply only when the tile ticks TONIGHT;
-                            # the 3-day cover then catches tonight + day+2.
-                            _dsf = age + 1 - 10
-                            # (no pre-production exemption: an age-7/8 op
-                            # is 1-tick value, lands 'off-tick', and its
-                            # 3-day cover suppresses the first true tick-day
-                            # application — measured: it ate most of the ON-
-                            # window ops.  Artyom: 98% pure tick-day.)
-                            _parity_ok = _dsf >= 0 and _dsf % 2 == 0
+                            _fp = P_WATER
                         else:
                             hi = 15
-                    if (lo <= age <= hi and _parity_ok
-                            and t.get("fertilized_until_day", -1) < day):
+                    if lo <= age <= hi and t.get("fertilized_until_day", -1) < day:
                         tasks.append({"prio": _fp, "x": x, "y": y,
                                       "op": ["FERTILIZE"], "require": "FERTILIZER"})
                 continue
@@ -1550,6 +1534,18 @@ def _build_tasks(tiles, day, seeds, tape_mode=False, care_skip=(), crop_skip=(),
                         and c not in crop_skip
                         and not (tape_mode and c == "MELON"
                                  and day > TAPE_MELON_LAST_PLANT)):
+                    # v93a  STR PARITY COHORT: on even days a
+                    # would-be strawberry DEFERS (tile stays empty a day)
+                    # so the whole cohort lands on odd planted_days and
+                    # every tile ticks the same nights — fert day becomes
+                    # one sweep.  Decode: Artyom (83% fert coverage) plants
+                    # 35-odd/7-even; our mixed parities are why no
+                    # scheduler got coverage past ~50-60%.  Cost <=1 day of
+                    # ramp per tile; d2-13 only (later plants are top-ups).
+                    if (c == "STRAWBERRY" and day % 2 == 0
+                            and 2 <= day <= 13):
+                        crop = None
+                        break
                     crop = c
                     break
             if crop is None:
@@ -1627,13 +1623,9 @@ def _supply_tasks(tasks, n_feed, units, inventories, shed, tiles, day):
     # weeded out, 26 melon replants. Fertilizing is a luxury; restock at P_FERT(3).
     n_fert = sum(1 for t in tasks if t["op"][0] == "FERTILIZE")
     carried_fert = sum(inv.get("FERTILIZER", 0) for inv in inventories)
-    # v93d: threshold 3->1 and P_FERT->P_CHAIN — carriers pocket only 1-3
-    # units, so after ~7 tick-day applications the on-person supply is dry
-    # and the P3 restock never executed (the choke measured at ~5 of ~10
-    # needed ops per tick day, FERT_KEEP 8 sitting unused in the shed).
-    if n_fert - carried_fert >= 1 and shed.get("FERTILIZER", 0) > 0:
+    if n_fert - carried_fert >= 3 and shed.get("FERTILIZER", 0) > 0:
         n = min(n_fert - carried_fert, shed["FERTILIZER"])
-        tasks.append({"prio": P_CHAIN, "x": SHED_TILE[0], "y": SHED_TILE[1],
+        tasks.append({"prio": P_FERT, "x": SHED_TILE[0], "y": SHED_TILE[1],
                       "op": ["PICKUP", "FERTILIZER", n]})
 
     # One animal-pickup per turn: an animal sits in the shed and an empty structure waits.
@@ -1819,13 +1811,6 @@ def _assign(units, tasks, inventories, tiles, day, hour):
     # Urgent work (saves, feeds, harvests, supply chains) is assigned globally — a dying
     # plant doesn't care about zones.
     greedy([ti for ti, t in enumerate(tasks) if t["prio"] < P_WATER])
-
-    # v93d: FERTILIZE tasks matched to their carriers RIGHT AFTER the
-    # urgent tier — before sticky-remembered re-glues carriers to
-    # yesterday's routes and before zones deal them water anyone could do.
-    # With tick-day parity above, each op lands the night it pays.
-    greedy([ti for ti, t in enumerate(tasks)
-            if not taken[ti] and t.get("require") and t["prio"] <= P_FERT])
 
     # STICKY TARGETS (v40a, from v33a): keep a still-valid routine target from
     # last turn.  Without this, the serpentine chunk boundaries shift every turn

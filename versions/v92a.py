@@ -1,19 +1,11 @@
 """
 main.py — Kaggriculture agent.  ENTRY POINT (must be at archive root, must be named main.py).
 
-STATUS: v92b — PROMOTED, SUBMIT-FLAGGED .  GATE
-(4 blocks × 39 paired, seeds 2506-2661): ami reused +134 / ami
-FRESH +1,547 t=1.48 flips +6/−4 / hold reused +351 own +1,496 /
-hold FRESH +338 own +1,854 flips +1/−0.  POOLED n=156: +592±551
-t=1.08, own-bank +578, flips +11/−10.  ALL legs non-negative +
-fresh replication both tapes + live-decoded mechanism (coverage
-36%→44-54%, field 70%, killers 83%).  = v92a + PRICE
-GATE (FERT_STR_MIN_PX 100): the coverage machine runs only while
-live STR px >= 100; below it = exact v89c (window 7-15, P_FERT,
-keep 0, day cap 26) and the fert sells.  v92a blanket verdict at
-n=39: wash both legs BUT own-bank split −1,248 flooded / +1,270
-non-flooded → coverage is market-conditional; double into markets
-worth doubling into.  (v92a layer:) v89c + STR FERT
+STATUS: v92a — SUPERSEDED BY v92b same day : blanket
+coverage was a WASH at n=39 with own-bank split −1,248 flooded /
++1,270 non-flooded — coverage is market-conditional; v92b adds the
+FERT_STR_MIN_PX 100 price gate and PROMOTED on 156 paired seeds
+(pooled +592, all legs non-negative).  (orig:) v89c + STR FERT
 COVERAGE COMPLETION.  Live decode (40 v89b + 40 v89c replays, both
 x-rays, lb_2026-09-18): fert-covered STR production ticks 36% us vs
 70% field / 83% band-killers = ~+40 u/game ~ +$4-6k forfeited — the
@@ -949,10 +941,6 @@ WHEAT_FACTORY_SEED_WANT = 10  # replaces SEED_WANT 4 from factory day
 # Fertilize-only addition (v4c): a $90 fertilizer applied to a STRAWBERRY doubles its
 # production ticks while watered (engine-verified) — ~$200+ of berries. Melon: reaches its
 # 6-cap ~2 days earlier. Everything else is byte-identical to v3a.
-FERT_STR_MIN_PX = 100    # v92b: STR fert coverage runs only while live STR px
-                         # >= this (base 120; a flooded market runs 30-90 —
-                         # doubling production there is doubling into a crash).
-_FERT_STR_ON = False     # set per agent() call next to _FACTORY_NOW
 # v92a : STR max_age
 # 15 -> 26.  The (7,15) cap predates the v83a late-STR hold — tiles we now
 # keep producing to d26-29 had their last 4-5 ticks UNCOVERED by design.
@@ -1448,24 +1436,19 @@ def _build_tasks(tiles, day, seeds, tape_mode=False, care_skip=(), crop_skip=(),
                                           "x": x, "y": y, "op": ["WATER"]})
 
                 if crop in FERT_CROPS and (
-                        FERT_APPLY_FROM_DAY <= day < (27 if _FERT_STR_ON else 26)   # v92a/b: d26 op covers d26-28 ticks; v89c cap when gate off
+                        FERT_APPLY_FROM_DAY <= day < 27   # v92a: was 26 — an op at d26 covers d26-28 ticks
                         # v58c: melons are the exception to the fert flywheel —
                         # their whole growth window (ages 6-8 for the d0 wave)
                         # closes before day 10, and one $85 fert there buys +3
                         # units (~$600) plus a pre-wave d10 sell.
                         or (crop == "MELON" and 6 <= day < FERT_APPLY_FROM_DAY)):
                     lo, hi = FERT_CROPS[crop]
-                    _fp = P_FERT
-                    if crop == "STRAWBERRY":
-                        # v92b price gate: coverage machine (window to 26,
-                        # P_WATER prio — the P3 tier measurably starves) only
-                        # while the STR market is worth doubling into; else
-                        # exact v89c behavior (window 7-15, P_FERT).
-                        if _FERT_STR_ON:
-                            _fp = P_WATER
-                        else:
-                            hi = 15
                     if lo <= age <= hi and t.get("fertilized_until_day", -1) < day:
+                        # v92a: STR fert rides at P_WATER — the P_FERT(3) tier
+                        # measurably starves mid-game (PLANT at the same tier
+                        # executed 0-4/day with tasks emitted), and one STR
+                        # application is worth $150-400 (>= a water op's value).
+                        _fp = P_WATER if crop == "STRAWBERRY" else P_FERT
                         tasks.append({"prio": _fp, "x": x, "y": y,
                                       "op": ["FERTILIZE"], "require": "FERTILIZER"})
                 continue
@@ -2007,9 +1990,7 @@ def _market_orders(day, hour, money, seeds, shed, inventories, prices, hires_tod
             # Hold stock for crop fertilizing — but ONLY once the farm is liquid. In the
             # $0-bank opening, fertilizer sales are the survival cash that buys feed;
             # hoarding them starved the sheep that produce them (measured: 0-32 vs v3a).
-            # v92b: the keep exists for the coverage machine — when the STR
-            # price gate is off, sell the fertilizer (v89c behavior, keep 0).
-            stock -= FERT_KEEP if _FERT_STR_ON else 0
+            stock -= FERT_KEEP
         if item == "MELON" and 10 <= day <= 11 and _MEL_RACE.get(_CUR_SEAT, False):
             # v80a SAME-TURN SELL: unit deposits resolve BEFORE market orders
             # inside one engine step (kaggriculture.py interpreter: unit
@@ -2509,15 +2490,6 @@ def agent(obs):
             _GOOSE_TARGET[player] = 0
     _DEAD_TOWN_NOW = _WHEAT_TOWN.get(player, False)
     _FACTORY_NOW = day >= WHEAT_FACTORY_DAY or _DEAD_TOWN_NOW
-    # v92b : the fert-coverage machine is PRICE-GATED.  v92a's
-    # blanket coverage was a wash at n=39 with a clean own-bank SPLIT:
-    # −1,248 vs the Amitesh flood (extra units into a crashed price +
-    # fert withheld from sale) but +1,270 vs holdpx.  Coverage doubles
-    # STR ticks — double into a market worth doubling into; when STR is
-    # crashed, fall back to v89c exactly (window 7-15, P_FERT, keep 0)
-    # and sell the fertilizer instead.
-    global _FERT_STR_ON
-    _FERT_STR_ON = prices.get("STRAWBERRY", 0) >= FERT_STR_MIN_PX
     if ramp_fast and (_tom_px >= TOMATO_HINGE_CONFIRM
                       or (gamble and _tom_px >= BEHIND_TOMATO_PRICE)):
         tomato_cap = min(12, TOMATO_CAP_PER_SHOP * max(1, _tom_shops))

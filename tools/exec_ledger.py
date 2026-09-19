@@ -14,7 +14,8 @@ import json, sys
 from collections import defaultdict
 
 sys.stdout.reconfigure(encoding="utf-8", errors="replace")
-ANIMAL_COST = {"COW": 550, "SHEEP": 300, "GOOSE": 300, "CHICKEN": 150}
+# Engine-verified (kaggriculture.py L20-22; static, quoted directly at L605):
+ANIMAL_COST = {"COW": 400, "SHEEP": 500, "GOOSE": 300}
 SEED_COST = {"MELON": 80, "STRAWBERRY": 100, "TOMATO": 50, "CARROT": 20, "WHEAT": 10}
 GOODS = ["MELON", "STRAWBERRY", "TOMATO", "CARROT", "WHEAT", "MILK", "WOOL",
          "EGG", "FERTILIZER"]

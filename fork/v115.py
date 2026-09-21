@@ -6752,32 +6752,34 @@ def e410_agent(observation,configuration=None):
 
 
 
-# EXECUTOR fp9 — SUBSYSTEM PARTITION (herd frozen on tape).  Spec: review
-# REVIEW_2026-09-21 §1.2 + our route-query correction (unit-days are 60%
-# mixed, so NOT unit-level; hands expire midnight, so whole-day claim of a
-# hand with ZERO remaining animal actions today is corruption-free).
+# EXECUTOR fp9b — SUBSYSTEM PARTITION, net-positive crop scheduler.
+# (fp9a validated the framework: herd frozen on tape via zero-remaining-
+# animal-action claim = lossless, herd survives; but naive crop logic was a
+# liquidator: −24.7k, plants 58→0, harvest-early + dig-no-replant.)
 #
-# Each hour from _E3_DON: identify the tape's active route (match its emitted
-# action against the known route table), and for each HAND look ahead in that
-# route to the end of today.  A hand with NO remaining animal/courier action
-# today is CLAIMED for crops for the rest of today (its crop route is expend-
-# able — it respawns at midnight).  Claimed hands run a crop-only scheduler
-# (water live crops they'd tend + DIG inert strawberries + PLANT carrot/wheat,
-# water-paired).  The farmer and every unclaimed hand pass through the tape
-# action byte-for-byte -> the entire feed/care/courier choreography is intact.
-# Market: tape kept, crop seed buys appended.
-_E3_DON = 22
-_E3_PLANT_TO = 27
+# fp9b principle: claimed hands must FIRST do everything the tape would have
+# done with them today (the DUTY LIST, traced exactly from the tape's route:
+# positions are relative, so tracing moves from the hand's claim-time
+# position gives the exact tiles its WATER/HARVEST/PLANT would land on).
+# Only leftover hours go to RECYCLING PROJECTS: DIG an inert tile, PLANT
+# carrot, WATER it — 3 consecutive hours, same tile, same hand (satisfies
+# the same-night weed law).  Our planted tiles live in a persistent registry
+# and are serviced daily (water; harvest at maturity) with priority right
+# after duties.  The tape never knows: its own units occasionally water our
+# tiles for free when their route passes.
+_E3_DON = 20
+_E3_PLANT_TO = 26          # carrot needs ~2-3 days; plant ≤26 → harvest ≤29
+_E3_MAX_OWN = 6           # registry cap: never plant more than we can water
 _E3_ANIMAL_V = {"FEED", "CARE", "COLLECT_FERTILIZER", "PLACE"}
-_E3_CROP_CAP = {"COW": 6, "SHEEP": 6, "GOOSE": 4}
-_E3_TELEM = {"claimed_hand_hours": 0, "waters": 0, "harvs": 0, "digs": 0,
-             "plants": 0, "seed_buys": 0, "passthru": 0, "route_miss": 0,
-             "moves": 0, "idle": 0, "errors": 0}
+_E3_MOVES = {"EAST": (1, 0), "WEST": (-1, 0), "SOUTH": (0, 1), "NORTH": (0, -1)}
+_E3_TELEM = {"claimed_hand_hours": 0, "duty_waters": 0, "duty_harvs": 0,
+             "duty_plants": 0, "own_waters": 0, "own_harvs": 0,
+             "digs": 0, "plants": 0, "seed_buys": 0, "route_miss": 0,
+             "moves": 0, "idle": 0, "proj_started": 0, "errors": 0}
 _E3_STATE = {}
 
 
-def _e3_route_lookahead():
-    """Return the module-level tape route table {idx:[step,...]} or None."""
+def _e3_routes():
     try:
         return _IMPL.chassis.routes
     except Exception:
@@ -6785,8 +6787,6 @@ def _e3_route_lookahead():
 
 
 def _e3_active_route(seat):
-    """Read the tape's own current route index from chassis state
-    (chassis.players[seat]['route'])."""
     try:
         r = _IMPL.chassis.players.get(seat, {}).get("route")
         if r is not None and r in _IMPL.chassis.routes:
@@ -6796,23 +6796,48 @@ def _e3_active_route(seat):
     return None
 
 
-def _e3_hand_animal_free(routes, ridx, step, j, day_end_step):
-    """True if hand j has NO animal/courier action from `step` to day end."""
+def _e3_hand_done(routes, ridx, step, j, day_end, pos, tiles, day):
+    """A hand is claimable iff its ENTIRE remaining tape day is worth ~zero:
+    no animal/courier action, and every remaining WATER/HARVEST/PLANT lands
+    on a tile where it would be a no-op or waste (traced positionally).
+    fp9b lesson: NEVER substitute for productive tape hours — the chassis
+    adapts its route to live state, so any replication of ours diverges and
+    compounds.  The trace is used ONLY for this claim decision."""
     seq = routes.get(ridx)
     if seq is None:
         return False
-    for s in range(step, min(day_end_step + 1, len(seq))):
+    x, y = pos
+    for s in range(step, min(day_end + 1, len(seq))):
         hands = seq[s].get("hands") or []
-        if j >= len(hands):
+        if j >= len(hands) or not hands[j]:
             continue
         a = hands[j]
-        if not a:
-            continue
         v = a[0]
         if v in _E3_ANIMAL_V:
             return False
-        if v == "PICKUP" and len(a) > 1 and a[1] == "WHEAT":
+        if v == "PICKUP":
             return False
+        if v in _E3_MOVES:
+            dx, dy = _E3_MOVES[v]
+            x = min(9, max(0, x + dx))
+            y = min(9, max(0, y + dy))
+            continue
+        if v in ("WATER", "HARVEST", "PLANT", "FERTILIZE", "DIG",
+                 "BUILD_PASTURE", "BUILD_COOP", "DROP"):
+            t = tiles[y][x]
+            if v == "WATER":
+                # productive water = live non-inert plant not yet watered
+                if isinstance(t, dict) and t.get("kind") == "PLANT":
+                    yu = int(t.get("yield_units", 0))
+                    age = day - int(t.get("planted_day", day))
+                    if not (yu == 0 and age > 6):
+                        return False        # real watering remains
+                continue                    # inert/empty water = waste, ok
+            if v == "HARVEST":
+                if isinstance(t, dict) and int(t.get("yield_units", 0)) > 0:
+                    return False
+                continue
+            return False                    # any other work: not done
     return True
 
 
@@ -6834,129 +6859,191 @@ def agent(observation, configuration=None):
         n_h = len(hands)
         pos_h = [tuple(h) for h in hands]
 
-        routes = _e3_route_lookahead()
-        if routes is None:
-            return action
-        ridx = _e3_active_route(seat)
-        if ridx is None:
+        routes = _e3_routes()
+        ridx = _e3_active_route(seat) if routes else None
+        if routes is None or ridx is None:
             _E3_TELEM["route_miss"] += 1
-            return action     # can't identify route -> stay 100% on tape
+            return action
 
         day_end = day * 24 + 23
-        # which hands are claimable for crops for the rest of today?
         st = _E3_STATE.get(seat)
-        if st is None or st.get("day") != day:
-            st = _E3_STATE[seat] = {"day": day, "claimed": set()}
-        claimed = st["claimed"]
-        for j in range(n_h):
-            if j in claimed:
-                continue
-            if _e3_hand_animal_free(routes, ridx, step, j, day_end):
-                claimed.add(j)
+        if st is None:
+            st = _E3_STATE[seat] = {"day": -1, "claimed": {}, "own": {},
+                                    "proj": {}}
+        if st["day"] != day:
+            st["day"] = day
+            st["claimed"] = {}     # j -> {"duties":[...], "di":0}
+            st["proj"] = {}        # j -> ("DIG"/"PLANT"/"WATER", x, y)
+        own = st["own"]            # (x,y) -> planted_day (persists all days)
 
-        if not claimed:
+        # registry hygiene: drop tiles that are no longer our live plants
+        for p in list(own.keys()):
+            t = tiles[p[1]][p[0]]
+            if not (isinstance(t, dict) and t.get("kind") == "PLANT"):
+                own.pop(p, None)
+
+        # claim newly-eligible hands (remaining tape day worth ~zero)
+        for j in range(n_h):
+            if j in st["claimed"]:
+                continue
+            if _e3_hand_done(routes, ridx, step, j, day_end, pos_h[j],
+                             tiles, day):
+                st["claimed"][j] = {"di": 0}
+
+        if not st["claimed"]:
             return action
 
-        # ---- crop-only board scan ----
-        water_t, harv_t, dig_t, empty_t = [], [], [], []
+        # board facts for recycling — TRULY-spent tiles only.  Engine math:
+        # ongoing crops (STR/TOM) produce until age = first_yield_day +
+        # (max_yield-1)*interval (STR: 10+3*2=16); non-ongoing yield only
+        # in the water window ending max_yield_day.  fp9c lesson: the old
+        # test (yield 0 & age>6) dug MID-PRODUCTION strawberries (yield is
+        # 0 right after each tape harvest) and bled ~$1k/day.
+        _CD_LAST_AGE = {"WHEAT": 4, "CARROT": 3, "MELON": 12,
+                        "TOMATO": 8 + 3 * 1, "STRAWBERRY": 10 + 3 * 2}
+        inert = []
         for y in range(10):
             for x in range(10):
                 t = tiles[y][x]
-                if t is None:
-                    if (x, y) not in ((4, 4), (5, 4), (4, 5), (5, 5)):
-                        empty_t.append((x, y))
-                    continue
-                if not isinstance(t, dict) or t.get("kind") != "PLANT":
-                    continue
-                yu = int(t.get("yield_units", 0))
-                age = day - int(t.get("planted_day", day))
-                inert = yu == 0 and age > 6
-                if yu > 0 and age >= 2:
-                    harv_t.append((x, y))
-                if not t.get("watered_today") and not inert:
-                    water_t.append((x, y))
-                if inert and day <= _E3_PLANT_TO:
-                    dig_t.append((x, y))
+                if isinstance(t, dict) and t.get("kind") == "PLANT" \
+                        and (x, y) not in own:
+                    yu = int(t.get("yield_units", 0))
+                    age = day - int(t.get("planted_day", day))
+                    last = _CD_LAST_AGE.get(t.get("crop"))
+                    if yu == 0 and last is not None and age > last:
+                        inert.append((x, y))
 
         hands_out = [list(h) if h else ["PASS"]
-                     for h in (action.get("hands") or [["PASS"]] * n_h)]
+                     for h in (action.get("hands") or [])]
         while len(hands_out) < n_h:
             hands_out.append(["PASS"])
         taken = set()
-        avail = {"CARROT": int(seeds.get("CARROT", 0)),
-                 "WHEAT": int(seeds.get("WHEAT", 0))}
-        plants_turn = {"CARROT": 0, "WHEAT": 0}
 
-        def nearest_task(px, py, pool):
-            best = None
-            for (tx, ty) in pool:
-                if (tx, ty) in taken:
-                    continue
-                d = abs(tx - px) + abs(ty - py)
-                if best is None or d < best[0]:
-                    best = (d, tx, ty)
-            return best
+        # PLANT collective validation: count tape's own PLANTs this turn
+        plants_now = {"CARROT": 0, "WHEAT": 0}
+        fa = action.get("farmer") or []
+        if fa and fa[0] == "PLANT" and len(fa) > 1 and fa[1] in plants_now:
+            plants_now[fa[1]] += 1
+        for j, h in enumerate(hands_out):
+            if j not in st["claimed"] and h and h[0] == "PLANT" \
+                    and len(h) > 1 and h[1] in plants_now:
+                plants_now[h[1]] += 1
 
-        # priority: water live crops (completeness) > harvest > dig > plant
-        for j in sorted(claimed):
+        def move_toward(j, tx, ty):
+            px, py = pos_h[j]
+            hands_out[j] = ["EAST" if tx > px else "WEST" if tx < px
+                            else "SOUTH" if ty > py else "NORTH"]
+            _E3_TELEM["moves"] += 1
+
+        for j, cst in st["claimed"].items():
             if j >= n_h:
                 continue
-            px, py = pos_h[j]
             _E3_TELEM["claimed_hand_hours"] += 1
-            # same-tile first (walking law)
-            here = tiles[py][px] if 0 <= px < 10 and 0 <= py < 10 else None
-            did = False
-            if isinstance(here, dict) and here.get("kind") == "PLANT" \
-                    and (px, py) not in taken:
-                yu = int(here.get("yield_units", 0))
-                age = day - int(here.get("planted_day", day))
-                inert = yu == 0 and age > 6
-                if yu > 0 and age >= 2:
-                    hands_out[j] = ["HARVEST"]
-                    _E3_TELEM["harvs"] += 1
-                    taken.add((px, py))
-                    did = True
-                elif not here.get("watered_today") and not inert:
-                    hands_out[j] = ["WATER"]
-                    _E3_TELEM["waters"] += 1
-                    taken.add((px, py))
-                    did = True
-                elif inert and day <= _E3_PLANT_TO:
-                    hands_out[j] = ["DIG"]
-                    _E3_TELEM["digs"] += 1
-                    taken.add((px, py))
-                    did = True
-            if did:
-                continue
-            # else walk toward nearest crop task (water > harvest > dig)
-            tgt = (nearest_task(px, py, water_t) or nearest_task(px, py, harv_t)
-                   or nearest_task(px, py, dig_t))
-            if tgt is None:
-                _E3_TELEM["idle"] += 1
-                continue
-            _d, tx, ty = tgt
-            if (px, py) == (tx, ty):
-                tt = tiles[ty][tx]
-                yu = int(tt.get("yield_units", 0)) if isinstance(tt, dict) else 0
-                age = day - int(tt.get("planted_day", day)) if isinstance(tt, dict) else 0
-                if yu > 0 and age >= 2:
-                    hands_out[j] = ["HARVEST"]; _E3_TELEM["harvs"] += 1
-                elif isinstance(tt, dict) and yu == 0 and age > 6:
-                    hands_out[j] = ["DIG"]; _E3_TELEM["digs"] += 1
+            px, py = pos_h[j]
+            acted = False
+
+            # 1) active recycling project (finish it: dig->plant->water)
+            proj = st["proj"].get(j)
+            if proj:
+                stage, tx, ty = proj
+                if (px, py) != (tx, ty):
+                    move_toward(j, tx, ty)
+                    acted = True
                 else:
-                    hands_out[j] = ["WATER"]; _E3_TELEM["waters"] += 1
-                taken.add((tx, ty))
-            else:
-                hands_out[j] = ["EAST" if tx > px else "WEST" if tx < px
-                                else "SOUTH" if ty > py else "NORTH"]
-                _E3_TELEM["moves"] += 1
+                    t = tiles[ty][tx]
+                    if stage == "DIG":
+                        if isinstance(t, dict) and t.get("kind") == "PLANT":
+                            hands_out[j] = ["DIG"]
+                            _E3_TELEM["digs"] += 1
+                            st["proj"][j] = ("PLANT", tx, ty)
+                            acted = True
+                        else:
+                            st["proj"][j] = ("PLANT", tx, ty)
+                    if not acted and st["proj"].get(j, ("", 0, 0))[0] == "PLANT":
+                        crop = "CARROT" if int(seeds.get("CARROT", 0)) - \
+                            plants_now["CARROT"] > 0 else \
+                            ("WHEAT" if int(seeds.get("WHEAT", 0)) -
+                             plants_now["WHEAT"] > 0 else None)
+                        if t is None and crop:
+                            hands_out[j] = ["PLANT", crop]
+                            plants_now[crop] += 1
+                            _E3_TELEM["plants"] += 1
+                            own[(tx, ty)] = day
+                            st["proj"][j] = ("WATER", tx, ty)
+                            acted = True
+                        elif t is None and crop is None:
+                            acted = True   # wait for seeds (buys pending)
+                            hands_out[j] = ["PASS"]
+                        else:
+                            st["proj"].pop(j, None)
+                    elif not acted and st["proj"].get(j, ("", 0, 0))[0] == "WATER":
+                        if isinstance(t, dict) and not t.get("watered_today"):
+                            hands_out[j] = ["WATER"]
+                            _E3_TELEM["own_waters"] += 1
+                        st["proj"].pop(j, None)
+                        acted = True
+                if acted:
+                    continue
 
-        _E3_TELEM["passthru"] += n_h - len(claimed)
+            # 2) service OUR registry (water daily; harvest at maturity)
+            best = None
+            for (tx, ty), pd in own.items():
+                if (tx, ty) in taken:
+                    continue
+                t = tiles[ty][tx]
+                if not (isinstance(t, dict) and t.get("kind") == "PLANT"):
+                    continue
+                age = day - pd
+                need = None
+                if int(t.get("yield_units", 0)) > 0 and age >= 2:
+                    need = "HARVEST"
+                elif not t.get("watered_today"):
+                    need = "WATER"
+                if need:
+                    dd = abs(tx - px) + abs(ty - py)
+                    if best is None or dd < best[0]:
+                        best = (dd, tx, ty, need)
+            if best:
+                _d, tx, ty, need = best
+                if (px, py) != (tx, ty):
+                    move_toward(j, tx, ty)
+                else:
+                    hands_out[j] = [need]
+                    _E3_TELEM["own_harvs" if need == "HARVEST"
+                              else "own_waters"] += 1
+                    taken.add((tx, ty))
+                continue
 
-        # ---- market: keep tape, append crop seed floors on takeover ----
+            # 3) start a new recycling project (enough hours left: dig+plant
+            # +water = walk + 3; require slack before hour 19)
+            if (day <= _E3_PLANT_TO and hour <= 19 and len(own) < _E3_MAX_OWN
+                    and j not in st["proj"]):
+                cand = None
+                for (tx, ty) in inert:
+                    if (tx, ty) in taken:
+                        continue
+                    dd = abs(tx - px) + abs(ty - py)
+                    if dd + 3 <= (23 - hour) and (cand is None or dd < cand[0]):
+                        cand = (dd, tx, ty)
+                if cand:
+                    _d, tx, ty = cand
+                    st["proj"][j] = ("DIG", tx, ty)
+                    inert.remove((tx, ty))
+                    taken.add((tx, ty))
+                    _E3_TELEM["proj_started"] += 1
+                    if (px, py) != (tx, ty):
+                        move_toward(j, tx, ty)
+                    else:
+                        hands_out[j] = ["DIG"]
+                        _E3_TELEM["digs"] += 1
+                        st["proj"][j] = ("PLANT", tx, ty)
+                    continue
+            _E3_TELEM["idle"] += 1
+
+        # ---- market: keep tape, append carrot/wheat seed floors ----
         market = [list(o) for o in (action.get("market") or [])]
         if day <= _E3_PLANT_TO and farm.get("money", 0) > 1200:
-            for crop, floor_n in (("CARROT", 8), ("WHEAT", 6)):
+            for crop, floor_n in (("CARROT", 6), ("WHEAT", 4)):
                 held = int(seeds.get(crop, 0))
                 if held < floor_n and len(market) < 10 and \
                         not any(o[:2] == ["BUY_SEED", crop] for o in market):

@@ -40,3 +40,45 @@
 {"cfg": {"_ALT_MODE": "'TomatoInsteadOfCow'", "_CA_FEED_DAYS": "2"}, "mean": -2873.5, "n": 20, "fails": 0, "seeds": [200, 210]}
 {"cfg": {"_ALT_MODE": "'TomatoInsteadOfCow'", "_CA_MARGIN": "-15.0"}, "mean": -2729.3, "n": 20, "fails": 0, "seeds": [200, 210]}
 {"cfg": {"_ALT_MODE": "'TomatoInsteadOfCow'", "_CA_MARGIN": "-25.0"}, "mean": -3258.3, "n": 20, "fails": 0, "seeds": [200, 210]}
+{"cfg": {}, "mean": 873.6, "n": 40, "fails": 0, "seeds": [210, 230]}
+{"cfg": {"GLUTGATE": "on"}, "mean": 901.175, "n": 40, "fails": 0, "seeds": [210, 230]}
+{"cfg": {"GLUTGATE": "on", "_GG_TRICKLE": "12"}, "mean": 863.125, "n": 40, "fails": 0, "seeds": [210, 230]}
+{"cfg": {"_OR2_SLOT_MARGIN": "10.0"}, "mean": 872.625, "n": 40, "fails": 0, "seeds": [210, 230]}
+{"cfg": {"_OR2_SLOT_MARGIN": "10.0", "GLUTGATE": "on"}, "mean": 961.575, "n": 40, "fails": 0, "seeds": [210, 230]}
+{"cfg": {"_OR2_SLOT_MARGIN": "10.0", "GLUTGATE": "on", "_GG_TRICKLE": "12"}, "mean": 863.425, "n": 40, "fails": 0, "seeds": [210, 230]}
+{"cfg": {"_OR2_SLOT_MARGIN": "30.0"}, "mean": 831.8, "n": 40, "fails": 0, "seeds": [210, 230]}
+{"cfg": {"_OR2_SLOT_MARGIN": "30.0", "GLUTGATE": "on"}, "mean": 895.325, "n": 40, "fails": 0, "seeds": [210, 230]}
+{"cfg": {"_OR2_SLOT_MARGIN": "30.0", "GLUTGATE": "on", "_GG_TRICKLE": "12"}, "mean": 867.175, "n": 40, "fails": 0, "seeds": [210, 230]}
+{"cfg": {"_CA_FEED_DAYS": "2"}, "mean": 773.85, "n": 40, "fails": 0, "seeds": [210, 230]}
+{"cfg": {"_CA_FEED_DAYS": "2", "GLUTGATE": "on"}, "mean": 775.475, "n": 40, "fails": 0, "seeds": [210, 230]}
+{"cfg": {"_CA_FEED_DAYS": "2", "GLUTGATE": "on", "_GG_TRICKLE": "12"}, "mean": 734.575, "n": 40, "fails": 0, "seeds": [210, 230]}
+{"cfg": {"_CA_FEED_DAYS": "2", "_OR2_SLOT_MARGIN": "10.0"}, "mean": 772.875, "n": 40, "fails": 0, "seeds": [210, 230]}
+{"cfg": {"_CA_FEED_DAYS": "2", "_OR2_SLOT_MARGIN": "30.0"}, "mean": 731.65, "n": 40, "fails": 0, "seeds": [210, 230]}
+{"cfg": {"_CA_MARGIN": "-15.0"}, "mean": 1012.225, "n": 40, "fails": 0, "seeds": [210, 230]}
+{"cfg": {"_CA_MARGIN": "-15.0", "GLUTGATE": "on"}, "mean": 1076.7, "n": 40, "fails": 0, "seeds": [210, 230]}
+{"cfg": {"_CA_MARGIN": "-15.0", "GLUTGATE": "on", "_GG_TRICKLE": "12"}, "mean": 1074.0, "n": 40, "fails": 0, "seeds": [210, 230]}
+{"cfg": {"_CA_MARGIN": "-15.0", "_OR2_SLOT_MARGIN": "10.0"}, "mean": 1005.25, "n": 40, "fails": 0, "seeds": [210, 230]}
+{"cfg": {"_CA_MARGIN": "-15.0", "_OR2_SLOT_MARGIN": "30.0"}, "mean": 1015.875, "n": 40, "fails": 0, "seeds": [210, 230]}
+{"cfg": {"_CA_MARGIN": "-15.0", "_CA_FEED_DAYS": "2"}, "mean": 879.725, "n": 40, "fails": 0, "seeds": [210, 230]}
+{"cfg": {"_CA_MARGIN": "-25.0"}, "mean": 1083.85, "n": 40, "fails": 0, "seeds": [210, 230]}
+{"cfg": {"_CA_MARGIN": "-25.0", "GLUTGATE": "on"}, "mean": 1169.075, "n": 40, "fails": 0, "seeds": [210, 230]}
+{"cfg": {"_CA_MARGIN": "-25.0", "GLUTGATE": "on", "_GG_TRICKLE": "12"}, "mean": 1176.6, "n": 40, "fails": 0, "seeds": [210, 230]}
+{"cfg": {"_CA_MARGIN": "-25.0", "_OR2_SLOT_MARGIN": "10.0"}, "mean": 1081.075, "n": 40, "fails": 0, "seeds": [210, 230]}
+{"cfg": {"_CA_MARGIN": "-25.0", "_OR2_SLOT_MARGIN": "30.0"}, "mean": 1058.7, "n": 40, "fails": 0, "seeds": [210, 230]}
+{"cfg": {"_CA_MARGIN": "-25.0", "_CA_FEED_DAYS": "2"}, "mean": 874.125, "n": 40, "fails": 0, "seeds": [210, 230]}
+{"cfg": {"_ALT_MODE": "'EarlyCycle'"}, "mean": 879.6, "n": 40, "fails": 0, "seeds": [210, 230]}
+{"cfg": {"_ALT_MODE": "'EarlyCycle'", "GLUTGATE": "on"}, "mean": 907.175, "n": 40, "fails": 0, "seeds": [210, 230]}
+{"cfg": {"_ALT_MODE": "'EarlyCycle'", "GLUTGATE": "on", "_GG_TRICKLE": "12"}, "mean": 869.125, "n": 40, "fails": 0, "seeds": [210, 230]}
+{"cfg": {"_ALT_MODE": "'EarlyCycle'", "_OR2_SLOT_MARGIN": "10.0"}, "mean": 878.625, "n": 40, "fails": 0, "seeds": [210, 230]}
+{"cfg": {"_ALT_MODE": "'EarlyCycle'", "_OR2_SLOT_MARGIN": "30.0"}, "mean": 837.8, "n": 40, "fails": 0, "seeds": [210, 230]}
+{"cfg": {"_ALT_MODE": "'EarlyCycle'", "_CA_FEED_DAYS": "2"}, "mean": 779.85, "n": 40, "fails": 0, "seeds": [210, 230]}
+{"cfg": {"_ALT_MODE": "'EarlyCycle'", "_CA_MARGIN": "-15.0"}, "mean": 1018.225, "n": 40, "fails": 0, "seeds": [210, 230]}
+{"cfg": {"_ALT_MODE": "'EarlyCycle'", "_CA_MARGIN": "-25.0"}, "mean": 1089.85, "n": 40, "fails": 0, "seeds": [210, 230]}
+{"cfg": {"_ALT_MODE": "'TomatoInsteadOfCow'"}, "mean": -3470.725, "n": 40, "fails": 0, "seeds": [210, 230]}
+{"cfg": {"_ALT_MODE": "'TomatoInsteadOfCow'", "GLUTGATE": "on"}, "mean": -3453.125, "n": 40, "fails": 0, "seeds": [210, 230]}
+{"cfg": {"_ALT_MODE": "'TomatoInsteadOfCow'", "GLUTGATE": "on", "_GG_TRICKLE": "12"}, "mean": -3455.55, "n": 40, "fails": 0, "seeds": [210, 230]}
+{"cfg": {"_ALT_MODE": "'TomatoInsteadOfCow'", "_OR2_SLOT_MARGIN": "10.0"}, "mean": -3552.4, "n": 40, "fails": 0, "seeds": [210, 230]}
+{"cfg": {"_ALT_MODE": "'TomatoInsteadOfCow'", "_OR2_SLOT_MARGIN": "30.0"}, "mean": -3483.375, "n": 40, "fails": 0, "seeds": [210, 230]}
+{"cfg": {"_ALT_MODE": "'TomatoInsteadOfCow'", "_CA_FEED_DAYS": "2"}, "mean": -3588.225, "n": 40, "fails": 0, "seeds": [210, 230]}
+{"cfg": {"_ALT_MODE": "'TomatoInsteadOfCow'", "_CA_MARGIN": "-15.0"}, "mean": -3760.325, "n": 40, "fails": 0, "seeds": [210, 230]}
+{"cfg": {"_ALT_MODE": "'TomatoInsteadOfCow'", "_CA_MARGIN": "-25.0"}, "mean": -4668.1, "n": 40, "fails": 0, "seeds": [210, 230]}

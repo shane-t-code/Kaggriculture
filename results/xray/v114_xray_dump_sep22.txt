@@ -1,0 +1,371 @@
+
+===== cell 0 MARKDOWN =====
+The leaderboard gives your agent one number. Its replays give away everything else: whether it is a script anyone can copy verbatim, which opponents already play your exact plan, where its economy trails the leader, and whether the number under your name has even settled. This notebook reads all of it, for any submission. By default it hunts down **whoever is number one right now**, resolved at ru
+
+===== cell 1 MARKDOWN =====
+## 1. The submission and its ledger
+
+Put a submission id below, or leave "KING" to read today's number one. The listing alone already answers the first questions: how many games, the win-loss-tie ledger, and the margin of every episode in play order.
+
+===== cell 2 CODE (first 200 chars) =====
+SUBMISSION_ID = "56442257"     # <- put YOUR submission id here; "KING" resolves today's number one
+MAX_EPISODES  = 40         # newest first. NOT an arbitrary 40: measured on a
+                      
+
+===== cell 3 CODE (first 200 chars) =====
+def _resolve_king(seed=55897276, max_hops=15):
+    """Climb the live ladder: the matchmaker pairs similar ratings, so from
+    any live submission, hopping to the best-rated opponent seen in its
+    r
+
+===== cell 4 CODE (first 200 chars) =====
+PASSY = ("PASS", None)
+
+def macro_indicators(steps, me):
+    """The macroeconomic core of one episode, read from the replay: when land
+    arrived, the herd, CARE, endgame hygiene, and money by day.""
+
+===== cell 5 CODE (first 200 chars) =====
+eps = requests.post(LIST_URL, json={"submissionId": SUBMISSION_ID},
+                    timeout=30).json().get("episodes", [])
+eps = [e for e in eps if e.get("state") == "COMPLETED"]
+eps.sort(key=lamb
+submission 56442257: 191 episodes on the ladder, reading the newest 40
+W13-L21-T6, margin median -1, worst -1,851, best +3,942
+<Figure size 900x340 with 1 Axes>
+
+===== cell 6 CODE (first 200 chars) =====
+PASS = {"farmer": ["PASS"], "hands": [], "market": []}
+Z = lambda: [[0] * 10 for _ in range(10)]
+OCC, PRES, UNLOCKED = Z(), Z(), Z()
+OCC_DAY = {}
+OCC_HALF, PRES_HALF = [Z(), Z()], [Z(), Z()]
+rows = []
+  10/40 replays fetched
+  20/40 replays fetched
+  30/40 replays fetched
+  40/40 replays fetched
+40 replays loaded, 31 distinct shop pairs
+
+===== cell 7 MARKDOWN =====
+## 2. The stripes
+
+The stripe matrix compares every episode against the submission's own mode, turn by turn. Order inside the market list is meaningful in this game (orders settle index by index), so it is compared as a sequence, never sorted away.
+
+===== cell 8 CODE (first 200 chars) =====
+def canon(a):
+    if not a:
+        return ("PASS", (), ())
+    return (tuple(a.get("farmer") or ["PASS"]),
+            tuple(tuple(h) for h in (a.get("hands") or [])),
+            tuple(tuple(o) for 
+texture: green 60.3%, amber 8.1%, navy 31.6%
+
+===== cell 9 CODE (first 200 chars) =====
+def stripe_panel(rr, mm, subtitle, world_lines):
+    a = np.array(mm)
+    h = max(2.2, a.shape[0] / 9)
+    fig, ax = plt.subplots(figsize=(11, h + 1.6))
+    ax.imshow(a, aspect="auto", cmap=ListedColo
+<Figure size 1100x604.444 with 1 Axes>
+<Figure size 1100x604.444 with 1 Axes>
+
+===== cell 10 MARKDOWN =====
+## 3. How to read the panels
+
+The chart comes twice, because two orderings answer two different questions.
+
+A **WORLD** here is the ordered pair of the FIRST TWO town shops the episode revealed, at turns 72 and 144. The town keeps unlocking a shop every three days, up to nine in a season, so two is not a magic number and deserves its justification:
+
+* **Timing against sunk cost.** Land, herd and c
+
+===== cell 11 MARKDOWN =====
+## 4. Classification
+
+The texture has a name, and one number lies about a router, so I classify twice.
+
+**GLOBAL** compares all episodes together. **WITHIN-WORLD** groups episodes by the shop pair the town actually revealed and compares only inside each group. A shop router forks its plan at turns 72 and 144 with the draw, so it reads as wildly adaptive globally while each world's games are near-i
+
+===== cell 12 CODE (first 200 chars) =====
+CHANNELS = ("farmer", "hands", "market")
+
+def compare_streams(streams):
+    n = min(len(s) for s in streams)
+    chan = {c: 0 for c in CHANNELS}
+    first = None
+    varying = 0
+    for t in range(n):
+GLOBAL: ADAPTIVE  (varying 79.7%, first divergence t=144, channels {'farmer': 426, 'hands': 546, 'market': 511})
+  a plan fork in t=[72,144] tracks the shop draw: that is ROUTING; read the table below
+within-world verdict: {'ADAPTIVE': 9}
+<Figure size 900x306 with 1 Axes>
+                             world  n            cls   vary first
+0                   BAKERY__BAKERY  1  (one episode)             
+1              BAKERY__BRUNCH_SPOT  1  (one episode)             
+2           BAKERY__ICE_CREAM_SHOP  1  (one episode)             
+3                 BAKERY__PET_CAFE  2       ADAPTIVE  22.1%   301
+4            BAKERY__SMOOTHIE_SHOP  1  (one episode)             
+5              BRUNCH_SPOT__BAKERY  2       ADAPTIVE  35.6%   360
+6      BRUNCH_SPOT__ICE_CREAM_SHOP  1  (one episode)             
+7       BRUNCH_SPOT__SMOOTHIE_SHOP  1  (one episode)             
+8           FARMERS_MARKET__BAKERY  2       ADAPTIVE  25.7%   319
+9      FARMERS_MARKET__BRUNCH_SPOT  1  (one episode)             
+10  FARMERS_MARKET__FARMERS_MARKET  1  (one episode)             
+11      FARMERS_MARKET__PIZZA_SHOP  1  (one episode)             
+12   FARMERS_MARKET__SMOOTHIE_SHOP  2       ADAPTIVE  36.9%   358
+13      FARMERS_MARKET__YARN_STORE  2       ADAPTIVE  24.3%   326
+14     ICE_CREAM_SHOP__BRUNCH_SPOT  1  (one episode)             
+15        ICE_CREAM_SHOP__PET_CAFE  1  (one episode)             
+16      ICE_CREAM_SHOP__PIZZA_SHOP  1  (one episode)             
+17   ICE_CREAM_SHOP__SMOOTHIE_SHOP  2       ADAPTIVE  30.6%   183
+18           PET_CAFE__BRUNCH_SPOT  1  (one episode)             
+19            PET_CAFE__PIZZA_SHOP  1  (one episode)             
+20         PET_CAFE__SMOOTHIE_SHOP  1  (one episode)             
+21              PIZZA_SHOP__BAKERY  2       ADAPTIVE  37.4%   241
+22         PIZZA_SHOP__BRUNCH_SPOT  1  (one episode)             
+23      PIZZA_SHOP__ICE_CREAM_SHOP  1  (one episode)             
+24          PIZZA_SHOP__PIZZA_SHOP  1  (one episode)             
+25       PIZZA_SHOP__SMOOTHIE_SHOP  1  (one episode)             
+26          PIZZA_SHOP__YARN_STORE  2       ADAPTIVE  30.6%   373
+27           SMOOTHIE_SHOP__BAKERY  1  (one episode)             
+28       SMOOTHIE_SHOP__YARN_STORE  2       ADAPTIVE  61.1%   266
+29      YARN_STORE__FARMERS_MARKET  1  (one episode)             
+30          YARN_STORE__YARN_STORE  1  (one episode)             
+
+===== cell 13 MARKDOWN =====
+What each class means for the agent you are looking at.
+
+* **PURE_REPLAY**: byte-identical streams. Everything this submission will ever do is already public in its first episode, and anyone can replay it verbatim.
+* **REPAIRING_SCRIPT**: one plan, small localised differences, usually market-only. Most of the field looks like this, and the plan half is still harvestable.
+* **ADAPTIVE**: the plan i
+
+===== cell 14 MARKDOWN =====
+## 5. Kinship with the opponents
+
+A duel leaves both streams in the replay, so the same download that x-rayed you also holds every opponent you faced, and kinship between agents is measurable from actions alone.
+
+Three numbers per opponent:
+
+* **PLAN agreement**, the fraction of turns where farmer and hands are identical, finds the family: shared chassis, shared notebook, shared route.
+* **WHOLE a
+
+===== cell 15 CODE (first 200 chars) =====
+import hashlib
+STRUCT = {"HIRE", "BUY_LAND", "BUY_ANIMAL"}
+PROV = {"BUY_SEED", "BUY_PRODUCT"}
+
+def band(stream, day):
+    sig = []
+    for h in range(1, 5):
+        t = day * 24 + h
+        a = stream
+39 mirror games (plan >= 0.95), 0 sibling games (0.50-0.95), 1 unrelated
+against mirrors: 12W-21L-6T, margins [-1851, -1429, -1198, -719, -679, -666, -635, -572, -569, -529, -513, -466, -429, -324, -188, -186, -114, -92, -67, -14, -1, 0, 0, 0, 0, 0, 0, 18, 70, 104, 129, 159, 251, 344, 346, 459, 631, 1024, 1874]
+<Figure size 900x300 with 1 Axes>
+<pandas.io.formats.style.Styler at 0x7be280dbb830>
+
+===== cell 16 MARKDOWN =====
+And the opponents themselves fall into **genetic groups**. Two rivals from different worlds can still share a lineage, they just fork at the shop branches, so I group them by plan agreement over the OPENING window, the turns before the second branch at t=144, at a 0.98 threshold: connected components of "plays the same opening". Per group, the statistics that matter in a duel: how often you met it
+
+===== cell 17 CODE (first 200 chars) =====
+PRE = 144
+pre_c = [[canon(a)[:2] for a in r["opp_stream"][:PRE]] for r in rows]
+
+def pre_agree(i, j):
+    return sum(1 for a, b in zip(pre_c[i], pre_c[j]) if a == b) / PRE
+
+parent = list(range(len(row
+3 genetic groups among 40 opponents (3 with 2+ games, 0 singletons)
+<Figure size 900x220 with 1 Axes>
+  group            yours  games  submissions          lead      record  \
+0    G1  <- your lineage     35           33      Around30  W11-L18-T6   
+1    G2  <- your lineage      3            3  Hyunwoo_Park    W1-L2-T0   
+2    G3  <- your lineage      2            2   Artyom Lyan    W1-L1-T0   
+
+   margin_med  worst  best  plan_to_you  
+0          -1  -1851  1024        0.999  
+1         -92   -719  1874        0.976  
+2        3942   -666  3942        0.964  
+
+===== cell 18 MARKDOWN =====
+## 6. The macroeconomic x-ray
+
+The stripes show WHAT you play; the macroeconomic x-ray shows what your economy DID. When the second quadrant arrived, how much CARE the herd got, whether the endgame left tiles fallow and stock stranded at the bell, and how money accumulated day by day, one line per episode.
+
+The reference column is the shape of the number one **as of my 2026-08-30 capture**, measur
+
+===== cell 19 CODE (first 200 chars) =====
+def q(vals, p):
+    v = sorted(vals)
+    return v[min(len(v) - 1, int(p * len(v)))]
+
+M = [r["macro"] for r in rows]
+herd_med = {a: q([m["herd"].get(a, 0) for m in M], 0.5) for a in ("COW", "SHEEP", "G
+macro profile, median [p10, p90]; ref = the measured #1 shape
+  2nd quadrant, day                      6 [6, 6]    ref 5
+  care actions                         405 [398, 416]    ref 280
+  herd bought (median)           COW 6  SHEEP 4  GOOSE 2    ref 7 COW
+  endgame fallow tiles d25-29           10 [9, 25]    ref 13
+  stranded $ at the bell                 0 [0, 0]    ref 442
+  pass-with-work unit-turns            338 [328, 378]    ref low
+  shed-at-cap turns                      2 [1, 4]    ref 0
+  floor sells (price <= 2)              31 [15, 46]    ref 0
+<Figure size 900x450 with 1 Axes>
+
+===== cell 20 MARKDOWN =====
+And the same farm indicators as DISTRIBUTIONS rather than points, one dot per episode, jittered, alpha so concentration reads as density. The blue cloud is the leader of my 2026-08-30 macroeconomic x-ray capture, one dot per each of its 245 real episodes, embedded here so the chart works without extra downloads; the orange cloud is the submission you are reading. Everything is a multiple of the le
+
+===== cell 21 CODE (first 200 chars) =====
+import random
+LEADER_REF = json.loads('{"land2": [5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 
+<Figure size 920x520 with 1 Axes>
+
+===== cell 22 MARKDOWN =====
+### Actions on money, and the craters under the rival
+
+The bank curve above says *when* the money arrived. This chart says **what was done to make it move**, on the single most decisive episode of the sample (the largest margin either way): both money curves, every market order as a marker **sized by its dollar weight** (circle sell, square structural purchase, triangle other), so the buys that fi
+
+===== cell 23 CODE (first 200 chars) =====
+def _mf_events(stream, prices_t):
+    out = []
+    for t, act in enumerate(stream):
+        if not isinstance(act, dict): continue
+        for m in (act.get("market") or []):
+            if not (isins
+<Figure size 1300x800 with 2 Axes>
+craters dug by us that the rival sold into: CARROT -$141,398, CARROT -$78,144, WHEAT -$42,042, CARROT -$27,054, CARROT -$14,048, FERTILIZER -$6,001
+craters we sold into: CARROT -$1,187, CARROT -$1,063, CARROT -$689, CARROT -$257, CARROT -$257, CARROT -$221
+
+===== cell 24 MARKDOWN =====
+## 7. How the board is used
+
+Everything above reads a farm as a **bag**: how many tiles of wheat, how many animals, how much banked. The farm is a **10x10 grid** and the engine charges for distance, so *where* a thing sits is a decision that a bag cannot see.
+
+Two maps, and two controls that decide whether either is worth reading.
+
+**Occupancy** is what stands on a cell, per turn. **Presence** is 
+
+===== cell 25 CODE (first 200 chars) =====
+def _bh_corr(a, b):
+    xa = [v for row in a for v in row]; xb = [v for row in b for v in row]
+    ma = sum(xa) / len(xa); mb = sum(xb) / len(xb)
+    num = sum((p - ma) * (q - mb) for p, q in zip(xa, 
+<Figure size 1300x340 with 4 Axes>
+occupancy: chi2/dof 5,603.4 over 100 unlocked cells; the ten busiest hold 17.1% of the mass against 10.0% if the board were used evenly
+occupancy: half-split correlation r = +0.998   (below about +0.9, read the map as one season's noise)
+<Figure size 360x360 with 1 Axes>
+unit presence: chi2/dof 3,831.4 over 100 unlocked cells; the ten busiest hold 35.9% of the mass against 10.0% if the board were used evenly
+unit presence: half-split correlation r = +0.999   (below about +0.9, read the map as one season's noise)
+
+===== cell 26 MARKDOWN =====
+## 8. Productivity in time, against the leader's own band
+
+Every unit-turn goes into exactly one of four buckets: **work** (plant, water, harvest, feed, care, fertilize, dig, build), **carry** (pickup, place, drop), **move** (the four compass steps) and **idle** (PASS). The buckets are exhaustive on purpose, and anything the engine emits that is not in them is printed rather than dropped, so a new
+
+===== cell 27 CODE (first 200 chars) =====
+_PR_WORK  = {"PLANT","HARVEST","FEED","CARE","COLLECT_FERTILIZER","FERTILIZE",
+         "BUILD_PASTURE","BUILD_COOP","WATER","DIG"}
+_PR_CARRY = {"PICKUP","PLACE","DROP"}
+_PR_MOVE  = {"NORTH","SOUTH","
+king resolved by climbing the live ladder: 2,283 -> 2,282 -> 2,399 -> 2,730 -> 2,763 -> 2,342 -> 1,747 -> 1,803 -> 1,283 -> 2,554 -> 2,647 -> 2,233 -> 2,389 -> 2,522 -> 2,592
+<Figure size 1100x640 with 2 Axes>
+season-wide split of every unit-turn: work 43.6%  carry 5.2%  move 41.7%  idle 9.4%
+
+===== cell 28 MARKDOWN =====
+### Staffing in time, against the rivals you actually met
+
+The field agrees on hiring more than on anything else it does. Measured over **490 seat-seasons** (both seats of 245 full replays, many distinct teams), the interquartile spread of hands-on-the-board is **0-2 hands on every day of the season**: four hands to day 4, a ramp through 8 to eleven by day 10, and **twelve from day 13 to the bell*
+
+===== cell 29 CODE (first 200 chars) =====
+_hr_days = list(range(30))
+_hr_ours = [sorted(r["hands_me"][d] for r in rows)[len(rows)//2] for d in _hr_days]
+_hr_rows_op = [r["hands_op"] for r in rows]
+def _hr_q(d, p):
+    v = sorted(x[d] for x in
+<Figure size 1100x420 with 1 Axes>
+field-wide reference (490 seasons): 4 hands to day 4, 8 by day 6, 11 by day 10, 12 from day 13 to the bell; IQR 0-2 hands all season
+
+===== cell 30 MARKDOWN =====
+## 9. Convergence
+
+Before quoting the rating this submission holds, ask whether the number has stopped moving, and measure that in the only unit that works here: **the EPISODE, never the minute**. The leaderboard updates in batches, so dividing by wall-clock time counts minutes in which nothing happened; I have watched a per-hour average say a rating was crawling while per-episode sampling showed 
+
+===== cell 31 CODE (first 200 chars) =====
+THRESH = 1.0   # points per episode; state it with the verdict
+WIN = min(20, len(traj) - 1)
+if len(traj) < 4:
+    print(f"only {len(traj)} rated episodes: too few to classify, the rating is a rumour")
+SETTLED  (drift +0.64 pts/episode over the last 20, 13 sign flips, threshold 1.0, n=191 episodes, rating now 2,531.2)
+<Figure size 950x400 with 2 Axes>
+<Figure size 900x320 with 1 Axes>
+pairing rate: 6.8 episodes/hour lifetime, 4.8/hour in the last 24h
+at the current rate the 20-episode drift window refreshes in about 4 hours: that is when to read again
+
+===== cell 32 MARKDOWN =====
+## 10. The report
+
+Everything above in one block, the exact format my local instrument writes to **report.txt**: ledger, texture, classification, worlds, kinship, macro profile and convergence, ready to paste or diff.
+
+===== cell 33 CODE (first 200 chars) =====
+lab = f"submission {SUBMISSION_ID}"
+print(f"{lab}: {len(rows)} episodes, {len({r['pair'] for r in rows})} distinct worlds")
+mg2 = sorted(r["margin"] for r in rows)
+W2 = sum(1 for r in rows if r["margi
+submission 56442257: 40 episodes, 31 distinct worlds
+  ledger  W13-L21-T6, margin median -1, worst -1,851, best +3,942
+  texture green 60.3%  amber 8.1%  navy 31.6%
+
+  GLOBAL class: ADAPTIVE  (varying 79.7%, first divergence t=144, channels {'farmer': 426, 'hands': 546, 'market': 511})
+    NOTE a plan fork at t in [72, 144] with the shop draw is ROUTING, not reactivity; read the within-world table.
+
+  world                                n class               vary first_div
+  BAKERY__BAKERY                       1 (one episode)    
+  BAKERY__BRUNCH_SPOT                  1 (one episode)    
+  BAKERY__ICE_CREAM_SHOP               1 (one episode)    
+  BAKERY__PET_CAFE                     2 ADAPTIVE           22.1%       301
+  BAKERY__SMOOTHIE_SHOP                1 (one episode)    
+  BRUNCH_SPOT__BAKERY                  2 ADAPTIVE           35.6%       360
+  BRUNCH_SPOT__ICE_CREAM_SHOP          1 (one episode)    
+  BRUNCH_SPOT__SMOOTHIE_SHOP           1 (one episode)    
+  FARMERS_MARKET__BAKERY               2 ADAPTIVE           25.7%       319
+  FARMERS_MARKET__BRUNCH_SPOT          1 (one episode)    
+  FARMERS_MARKET__FARMERS_MARKET       1 (one episode)    
+  FARMERS_MARKET__PIZZA_SHOP           1 (one episode)    
+  FARMERS_MARKET__SMOOTHIE_SHOP        2 ADAPTIVE           36.9%       358
+  FARMERS_MARKET__YARN_STORE           2 ADAPTIVE           24.3%       326
+  ICE_CREAM_SHOP__BRUNCH_SPOT          1 (one episode)    
+  ICE_CREAM_SHOP__PET_CAFE             1 (one episode)    
+  ICE_CREAM_SHOP__PIZZA_SHOP           1 (one episode)    
+  ICE_CREAM_SHOP__SMOOTHIE_SHOP        2 ADAPTIVE           30.6%       183
+  PET_CAFE__BRUNCH_SPOT                1 (one episode)    
+  PET_CAFE__PIZZA_SHOP                 1 (one episode)    
+  PET_CAFE__SMOOTHIE_SHOP              1 (one episode)    
+  PIZZA_SHOP__BAKERY                   2 ADAPTIVE           37.4%       241
+  PIZZA_SHOP__BRUNCH_SPOT              1 (one episode)    
+  PIZZA_SHOP__ICE_CREAM_SHOP           1 (one episode)    
+  PIZZA_SHOP__PIZZA_SHOP               1 (one episode)    
+  PIZZA_SHOP__SMOOTHIE_SHOP            1 (one episode)    
+  PIZZA_SHOP__YARN_STORE               2 ADAPTIVE           30.6%       373
+  SMOOTHIE_SHOP__BAKERY                1 (one episode)    
+  SMOOTHIE_SHOP__YARN_STORE            2 ADAPTIVE           61.1%       266
+  YARN_STORE__FARMERS_MARKET           1 (one episode)    
+  YARN_STORE__YARN_STORE               1 (one episode)    
+
+  within-world verdict: {'ADAPTIVE': 9}
+  kinship: 39 mirrors, 0 siblings, 40 opponents read
+
+  macro profile, median [p10, p90]; ref = the measured #1 shape
+  2nd quadrant, day                      6 [6, 6]    ref 5
+  care actions                         405 [398, 416]    ref 280
+  herd bought (median)           COW 6  SHEEP 4  GOOSE 2    ref 7 COW
+  endgame fallow tiles d25-29           10 [9, 25]    ref 13
+  stranded $ at the bell                 0 [0, 0]    ref 442
+
+  convergence: SETTLED  (drift +0.64 pts/episode, 13 flips, threshold 1.0, n=191, rating 2,531.2)
+
+===== cell 34 MARKDOWN =====
+## 11. Caveats and credits
+
+* **The mode is computed from the episodes shown**, so with very few episodes the mode itself is weak.
+* **Nothing observable differs before turn 48** in this game, so early agreement between ANY two agents is the engine's determinism, not evidence of anything.
+* **The turn convention**: the action decided at turn t is stored at steps[t + 1] of the replay, and the day i

@@ -1,0 +1,549 @@
+{
+  "replay": "replays\\crushers\\episode-112897649-replay.json",
+  "seed": 1574411233,
+  "names": [
+    {
+      "Name": "Shane Thivaharraja",
+      "ThumbnailUrl": null
+    },
+    {
+      "Name": "midnq",
+      "ThumbnailUrl": null
+    }
+  ],
+  "original_rewards": [
+    57980.0,
+    75963.0
+  ],
+  "reproduced_rewards": [
+    57980.0,
+    75963.0
+  ],
+  "exact_match": true,
+  "by_seat_phase": [
+    {
+      "0-9": {
+        "BUY_PRODUCT:WHEAT": [
+          67,
+          2136
+        ],
+        "BUY_SEED:WHEAT": [
+          32,
+          320
+        ],
+        "HIRE:": [
+          55,
+          223.0
+        ],
+        "BUY_ANIMAL:COW": [
+          6,
+          2400
+        ],
+        "BUY_ANIMAL:SHEEP": [
+          6,
+          3000
+        ],
+        "BUY_SEED:MELON": [
+          12,
+          960
+        ],
+        "SELL:FERTILIZER": [
+          65,
+          5693
+        ],
+        "SELL:WHEAT": [
+          27,
+          838
+        ],
+        "BUY_SEED:STRAWBERRY": [
+          20,
+          2000
+        ],
+        "SELL:WOOL": [
+          20,
+          3607
+        ],
+        "BUY_LAND:": [
+          1,
+          1000.0
+        ],
+        "BUY_ANIMAL:GOOSE": [
+          2,
+          600
+        ],
+        "BUY_PRODUCT:FERTILIZER": [
+          5,
+          430
+        ],
+        "SELL:MILK": [
+          12,
+          2081
+        ]
+      },
+      "10-14": {
+        "SELL:FERTILIZER": [
+          70,
+          4584
+        ],
+        "HIRE:": [
+          48,
+          639.0
+        ],
+        "BUY_ANIMAL:GOOSE": [
+          3,
+          900
+        ],
+        "BUY_PRODUCT:FERTILIZER": [
+          12,
+          835
+        ],
+        "BUY_PRODUCT:WHEAT": [
+          51,
+          1894
+        ],
+        "SELL:MELON": [
+          72,
+          17440
+        ],
+        "BUY_SEED:WHEAT": [
+          38,
+          380
+        ],
+        "SELL:MILK": [
+          33,
+          2756
+        ],
+        "SELL:WHEAT": [
+          45,
+          1685
+        ],
+        "SELL:EGG": [
+          16,
+          832
+        ],
+        "BUY_LAND:": [
+          1,
+          2000.0
+        ],
+        "BUY_SEED:STRAWBERRY": [
+          13,
+          1300
+        ],
+        "SELL:WOOL": [
+          20,
+          903
+        ],
+        "BUY_SEED:CARROT": [
+          12,
+          240
+        ]
+      },
+      "15-29": {
+        "SELL:MILK": [
+          93,
+          1643
+        ],
+        "SELL:EGG": [
+          149,
+          6236
+        ],
+        "HIRE:": [
+          163,
+          3302.0
+        ],
+        "SELL:FERTILIZER": [
+          200,
+          5089
+        ],
+        "BUY_PRODUCT:FERTILIZER": [
+          71,
+          1533
+        ],
+        "SELL:WHEAT": [
+          199,
+          7184
+        ],
+        "BUY_SEED:WHEAT": [
+          59,
+          590
+        ],
+        "BUY_SEED:CARROT": [
+          56,
+          1120
+        ],
+        "SELL:STRAWBERRY": [
+          247,
+          843
+        ],
+        "SELL:WOOL": [
+          114,
+          10830
+        ],
+        "SELL:CARROT": [
+          207,
+          10643
+        ],
+        "BUY_PRODUCT:WHEAT": [
+          3,
+          105
+        ]
+      },
+      "0-29": {
+        "BUY_PRODUCT:WHEAT": [
+          121,
+          4135
+        ],
+        "BUY_SEED:WHEAT": [
+          129,
+          1290
+        ],
+        "HIRE:": [
+          266,
+          4164.0
+        ],
+        "BUY_ANIMAL:COW": [
+          6,
+          2400
+        ],
+        "BUY_ANIMAL:SHEEP": [
+          6,
+          3000
+        ],
+        "BUY_SEED:MELON": [
+          12,
+          960
+        ],
+        "SELL:FERTILIZER": [
+          335,
+          15366
+        ],
+        "SELL:WHEAT": [
+          271,
+          9707
+        ],
+        "BUY_SEED:STRAWBERRY": [
+          33,
+          3300
+        ],
+        "SELL:WOOL": [
+          154,
+          15340
+        ],
+        "BUY_LAND:": [
+          2,
+          3000.0
+        ],
+        "BUY_ANIMAL:GOOSE": [
+          5,
+          1500
+        ],
+        "BUY_PRODUCT:FERTILIZER": [
+          88,
+          2798
+        ],
+        "SELL:MILK": [
+          138,
+          6480
+        ],
+        "SELL:MELON": [
+          72,
+          17440
+        ],
+        "SELL:EGG": [
+          165,
+          7068
+        ],
+        "BUY_SEED:CARROT": [
+          68,
+          1360
+        ],
+        "SELL:STRAWBERRY": [
+          247,
+          843
+        ],
+        "SELL:CARROT": [
+          207,
+          10643
+        ]
+      }
+    },
+    {
+      "0-9": {
+        "HIRE:": [
+          53,
+          289.0
+        ],
+        "BUY_ANIMAL:SHEEP": [
+          4,
+          2000
+        ],
+        "BUY_PRODUCT:WHEAT": [
+          52,
+          1575
+        ],
+        "BUY_SEED:MELON": [
+          8,
+          640
+        ],
+        "BUY_ANIMAL:COW": [
+          5,
+          2000
+        ],
+        "BUY_SEED:WHEAT": [
+          53,
+          530
+        ],
+        "SELL:FERTILIZER": [
+          57,
+          5080
+        ],
+        "BUY_SEED:STRAWBERRY": [
+          19,
+          1900
+        ],
+        "SELL:WHEAT": [
+          41,
+          1186
+        ],
+        "BUY_LAND:": [
+          2,
+          3000.0
+        ],
+        "SELL:WOOL": [
+          22,
+          4206
+        ],
+        "BUY_SEED:CARROT": [
+          4,
+          80
+        ],
+        "BUY_ANIMAL:GOOSE": [
+          10,
+          3000
+        ],
+        "BUY_SEED:TOMATO": [
+          1,
+          50
+        ],
+        "SELL:MILK": [
+          12,
+          1719
+        ],
+        "SELL:CARROT": [
+          7,
+          271
+        ]
+      },
+      "10-14": {
+        "HIRE:": [
+          54,
+          1126.0
+        ],
+        "SELL:WOOL": [
+          26,
+          1737
+        ],
+        "SELL:FERTILIZER": [
+          59,
+          3881
+        ],
+        "BUY_PRODUCT:WHEAT": [
+          18,
+          646
+        ],
+        "BUY_SEED:MELON": [
+          3,
+          240
+        ],
+        "BUY_SEED:WHEAT": [
+          16,
+          160
+        ],
+        "BUY_SEED:CARROT": [
+          20,
+          400
+        ],
+        "SELL:MILK": [
+          18,
+          1498
+        ],
+        "SELL:MELON": [
+          6,
+          1266
+        ],
+        "SELL:EGG": [
+          66,
+          3437
+        ],
+        "SELL:CARROT": [
+          14,
+          677
+        ],
+        "SELL:WHEAT": [
+          49,
+          1794
+        ],
+        "SELL:STRAWBERRY": [
+          24,
+          3133
+        ],
+        "BUY_PRODUCT:FERTILIZER": [
+          4,
+          240
+        ]
+      },
+      "15-29": {
+        "HIRE:": [
+          180,
+          6640.0
+        ],
+        "SELL:STRAWBERRY": [
+          100,
+          2422
+        ],
+        "SELL:EGG": [
+          279,
+          11671
+        ],
+        "SELL:MILK": [
+          87,
+          1183
+        ],
+        "SELL:FERTILIZER": [
+          163,
+          4025
+        ],
+        "SELL:CARROT": [
+          560,
+          32092
+        ],
+        "SELL:TOMATO": [
+          34,
+          2356
+        ],
+        "BUY_SEED:CARROT": [
+          152,
+          3040
+        ],
+        "BUY_SEED:WHEAT": [
+          30,
+          300
+        ],
+        "SELL:WOOL": [
+          68,
+          6219
+        ],
+        "SELL:WHEAT": [
+          52,
+          1860
+        ],
+        "BUY_SEED:MELON": [
+          2,
+          160
+        ],
+        "SELL:MELON": [
+          71,
+          11559
+        ],
+        "BUY_PRODUCT:WHEAT": [
+          51,
+          1839
+        ],
+        "BUY_SEED:TOMATO": [
+          4,
+          200
+        ],
+        "BUY_PRODUCT:FERTILIZER": [
+          15,
+          254
+        ]
+      },
+      "0-29": {
+        "HIRE:": [
+          287,
+          8055.0
+        ],
+        "BUY_ANIMAL:SHEEP": [
+          4,
+          2000
+        ],
+        "BUY_PRODUCT:WHEAT": [
+          121,
+          4060
+        ],
+        "BUY_SEED:MELON": [
+          13,
+          1040
+        ],
+        "BUY_ANIMAL:COW": [
+          5,
+          2000
+        ],
+        "BUY_SEED:WHEAT": [
+          99,
+          990
+        ],
+        "SELL:FERTILIZER": [
+          279,
+          12986
+        ],
+        "BUY_SEED:STRAWBERRY": [
+          19,
+          1900
+        ],
+        "SELL:WHEAT": [
+          142,
+          4840
+        ],
+        "BUY_LAND:": [
+          2,
+          3000.0
+        ],
+        "SELL:WOOL": [
+          116,
+          12162
+        ],
+        "BUY_SEED:CARROT": [
+          176,
+          3520
+        ],
+        "BUY_ANIMAL:GOOSE": [
+          10,
+          3000
+        ],
+        "BUY_SEED:TOMATO": [
+          5,
+          250
+        ],
+        "SELL:MILK": [
+          117,
+          4400
+        ],
+        "SELL:CARROT": [
+          581,
+          33040
+        ],
+        "SELL:MELON": [
+          77,
+          12825
+        ],
+        "SELL:EGG": [
+          345,
+          15108
+        ],
+        "SELL:STRAWBERRY": [
+          124,
+          5555
+        ],
+        "BUY_PRODUCT:FERTILIZER": [
+          19,
+          494
+        ],
+        "SELL:TOMATO": [
+          34,
+          2356
+        ]
+      }
+    }
+  ]
+}

@@ -27,7 +27,11 @@ def fib_wages(h):
 def main():
     path, seat = sys.argv[1], int(sys.argv[2])
     label = sys.argv[3] if len(sys.argv) > 3 else f"seat{seat}"
-    rep = json.load(open(path, encoding="utf-8"))
+    if path.endswith(".gz"):
+        import gzip
+        rep = json.load(gzip.open(path, "rt", encoding="utf-8"))
+    else:
+        rep = json.load(open(path, encoding="utf-8"))
     steps = rep["steps"]
     print(f"{label}: {path}  ({len(steps)} steps)")
     obs0 = steps[0][0]["observation"]

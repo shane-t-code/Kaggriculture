@@ -1,0 +1,7 @@
+{"seed": 7400, "head2": {"us": 38243.0, "opp": 74645.0, "margin": -36402.0, "rp_plants": 42, "rp_wheat_plants": 76, "rp_wheat_sold": 131, "rp_emergency_wheat": 29, "rp_errors": 0}, "diff_vs_hand": -8257.0}
+{"seed": 7415, "head2": {"us": 56860.0, "opp": 102520.0, "margin": -45660.0, "rp_plants": 37, "rp_wheat_plants": 71, "rp_wheat_sold": 121, "rp_emergency_wheat": 30, "rp_errors": 0}, "diff_vs_hand": -12967.0}
+{"seed": 7419, "head2": {"us": 56004.0, "opp": 98391.0, "margin": -42387.0, "rp_plants": 48, "rp_wheat_plants": 74, "rp_wheat_sold": 114, "rp_emergency_wheat": 26, "rp_errors": 0}, "diff_vs_hand": 1198.0}
+{"seed": 7427, "head2": {"us": 56361.0, "opp": 88878.0, "margin": -32517.0, "rp_plants": 38, "rp_wheat_plants": 83, "rp_wheat_sold": 145, "rp_emergency_wheat": 26, "rp_errors": 0}, "diff_vs_hand": -3435.0}
+{"seed": 7456, "head2": {"us": 39137.0, "opp": 71935.0, "margin": -32798.0, "rp_plants": 43, "rp_wheat_plants": 76, "rp_wheat_sold": 148, "rp_emergency_wheat": 27, "rp_errors": 0}, "diff_vs_hand": -3980.0}
+{"seed": 7458, "head2": {"us": 41604.0, "opp": 78499.0, "margin": -36895.0, "rp_plants": 45, "rp_wheat_plants": 82, "rp_wheat_sold": 151, "rp_emergency_wheat": 26, "rp_errors": 0}, "diff_vs_hand": -5008.0}
+{"seed": 7460, "head2": {"us": 53425.0, "opp": 105768.0, "margin": -52343.0, "rp_plants": 43, "rp_wheat_plants": 79, "rp_wheat_sold": 144, "rp_emergency_wheat": 26, "rp_errors": 0}, "diff_vs_hand": -1182.0}

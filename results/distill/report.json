@@ -1,0 +1,106 @@
+{
+ "baseline_mean": {
+  "val": 4.2325850511446115,
+  "test": 3.9143258319788146
+ },
+ "baseline_day": {
+  "val": 2.6782866256550473,
+  "test": 2.636581122227055
+ },
+ "baseline_shops_day": {
+  "val": 3.3887843803277486,
+  "test": 3.5020512990511072
+ },
+ "ridge_full": {
+  "val": 2.3639178034353203,
+  "lam_per_target": {
+   "WHEAT": 300.0,
+   "CARROT": 300.0,
+   "TOMATO": 1000.0,
+   "STRAWBERRY": 1000.0,
+   "MELON": 1.0,
+   "HIRES": 1000.0
+  },
+  "test": 2.3728829647677956
+ },
+ "top_weights": {
+  "WHEAT": {
+   "shop_PET_CAFE": -0.979,
+   "shop_PIZZA_SHOP": 0.78,
+   "quads": 0.694,
+   "shop_BAKERY": 0.546,
+   "my_GOOSE": -0.533,
+   "p_WHEAT": 0.518
+  },
+  "CARROT": {
+   "shop_PET_CAFE": 1.234,
+   "minv_CARROT": -0.86,
+   "p_CARROT": 0.843,
+   "my_TOMATO": -0.59,
+   "shop_PIZZA_SHOP": -0.571,
+   "shop_BRUNCH_SPOT": -0.53
+  },
+  "TOMATO": {
+   "my_TOMATO": 0.195,
+   "quads": 0.175,
+   "my_GOOSE": 0.126,
+   "my_empty": 0.126,
+   "shop_SMOOTHIE_SHOP": -0.112,
+   "prev_crew": 0.078
+  },
+  "STRAWBERRY": {
+   "my_GOOSE": -0.07,
+   "op_GOOSE": -0.067,
+   "my_empty": 0.063,
+   "op_SHEEP": 0.055,
+   "my_STRAWBERRY": -0.054,
+   "my_SHEEP": 0.05
+  },
+  "MELON": {
+   "day": 0.0,
+   "days_left": 0.0,
+   "shop_BAKERY": 0.0,
+   "shop_PIZZA_SHOP": 0.0,
+   "shop_BRUNCH_SPOT": 0.0,
+   "shop_YARN_STORE": 0.0
+  }
+ },
+ "per_target_test": {
+  "WHEAT": {
+   "mae_model": 4.622958799450139,
+   "mae_day": 5.515876468029579,
+   "corr": 0.854,
+   "mean_true": 21.65
+  },
+  "CARROT": {
+   "mae_model": 5.560997409641013,
+   "mae_day": 6.366898651587647,
+   "corr": 0.616,
+   "mean_true": 8.85
+  },
+  "TOMATO": {
+   "mae_model": 1.3198239869501633,
+   "mae_day": 1.2946933449325793,
+   "corr": 0.559,
+   "mean_true": 1.08
+  },
+  "STRAWBERRY": {
+   "mae_model": 1.2955287966704734,
+   "mae_day": 1.0328403653762503,
+   "corr": 0.626,
+   "mean_true": 1.39
+  },
+  "MELON": {
+   "mae_model": 0.004784688995215311,
+   "mae_day": 0.004784688995215311,
+   "corr": NaN,
+   "mean_true": 0.0
+  },
+  "HIRES": {
+   "mae_model": 1.4332041068997714,
+   "mae_day": 1.6043932144410615,
+   "corr": 0.96,
+   "mean_true": 31.94
+  }
+ }
+}

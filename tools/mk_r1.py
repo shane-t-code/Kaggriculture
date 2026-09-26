@@ -18,8 +18,13 @@ Attachment per note: _X_PARENT = cha20_entry_agent; wrapper is the
 file's last callable; telemetry chained; kaggle_agent rebound.
 """
 
+import json as _json
+
 SRC = open(r'fork\c23s.py', encoding='utf-8').read()
 assert '_RP_' not in SRC
+
+# the distilled crop-mix head : tools/mk_distill.py -> literals
+_HEAD_LIT = _json.load(open(r'results\distill\head_lit.json', encoding='utf-8'))
 
 COMMON = '''
 
@@ -59,6 +64,85 @@ _RP_ONE_SHOT = {"WHEAT": (4, 6), "CARROT": (3, 4), "MELON": (12, 6)}
 _RP_ONGOING = {"TOMATO": 8, "STRAWBERRY": 10}
 _RP_WHE_SHOPS = ("BAKERY", "PIZZA_SHOP", "BRUNCH_SPOT", "ICE_CREAM_SHOP",
                  "FARMERS_MARKET")
+
+# ---------------------------------------------------------------------------
+# The distilled CROP-MIX HEAD : a linear
+# model over 65 acting-player-visible features, trained on the top-10
+# teams' 29 public episodes (split by episode; held-out test beat the
+# calendar and shops baselines; carrot head learned +PET_CAFE +price
+# -market-glut, wheat head learned -PET_CAFE +PIZZA +land).  It predicts
+# the teacher's LANDED plants over the next 3 days.  Pure-Python dot
+# product — no imports, trivially inside the step budget.
+# ---------------------------------------------------------------------------
+_RP_USE_HEAD = __USE_HEAD__
+_RP_HEAD = __HEAD_LIT__
+_RP_HEAD_SHOPS = ["BAKERY", "PIZZA_SHOP", "BRUNCH_SPOT", "YARN_STORE",
+                  "ICE_CREAM_SHOP", "PET_CAFE", "SMOOTHIE_SHOP",
+                  "FARMERS_MARKET"]
+_RP_HEAD_PRODUCTS = ["WHEAT", "CARROT", "TOMATO", "STRAWBERRY", "MELON",
+                     "EGG", "MILK", "WOOL", "FERTILIZER"]
+_RP_HEAD_CROPS = ["WHEAT", "CARROT", "TOMATO", "STRAWBERRY", "MELON"]
+
+
+def _rp_head_counts(farm):
+    crop_n = {c: 0 for c in _RP_HEAD_CROPS}
+    ani_n = {"GOOSE": 0, "COW": 0, "SHEEP": 0}
+    empt = weed = 0
+    for row in farm["tiles"]:
+        for t in row:
+            if t is None:
+                empt += 1
+            elif isinstance(t, dict):
+                if t.get("kind") == "PLANT":
+                    crop_n[t.get("crop")] = crop_n.get(t.get("crop"), 0) + 1
+                elif t.get("kind") == "WEED":
+                    weed += 1
+                elif "animal" in t:
+                    ani_n[t.get("animal")] = ani_n.get(t.get("animal"), 0) + 1
+    return crop_n, ani_n, empt, weed
+
+
+def _rp_head_targets(observation, seat, prev_crew):
+    """(wheat, carrot) plants the teachers would land over the NEXT 3 DAYS.
+    Features are built by NAME and selected per the exported feature list,
+    so training-side feature changes cannot silently misalign."""
+    day = int(observation["step"]) // 24
+    d = str(min(28, max(10, day)))
+    farm = observation["farms"][seat]
+    opp = observation["farms"][1 - seat]
+    priv = observation["private"]
+    prices = observation["market"]["prices"]
+    inv = observation["market"]["inventory"]
+    shops = observation["town"].get("unlocked_shops", [])
+    cn, an, empt, weed = _rp_head_counts(farm)
+    on, oan, oempt, _w = _rp_head_counts(opp)
+    vals = {"day": day, "days_left": 29 - day,
+            "money": float(farm.get("money", 0)) / 1000.0,
+            "prev_crew": prev_crew,
+            "quads": len(farm.get("unlocked_quadrants", [])),
+            "my_empty": empt, "my_weed": weed,
+            "opp_money": float(opp.get("money", 0)) / 1000.0,
+            "opp_empty": oempt}
+    for s in _RP_HEAD_SHOPS:
+        vals["shop_" + s] = shops.count(s)
+    for p in _RP_HEAD_PRODUCTS:
+        vals["p_" + p] = int(prices.get(p, 0))
+        vals["minv_" + p] = int(inv.get(p, 0)) / 1000.0
+        vals["shed_" + p] = int(priv["shed"].get(p, 0))
+    for c in _RP_HEAD_CROPS:
+        vals["seed_" + c] = int(priv["seeds"].get(c, 0))
+        vals["my_" + c] = cn[c]
+        vals["op_" + c] = on[c]
+    for a in ("GOOSE", "COW", "SHEEP"):
+        vals["my_" + a] = an[a]
+        vals["op_" + a] = oan[a]
+    x = [vals[n] for n in _RP_HEAD["feature_names"]]
+    mu, sd = _RP_HEAD["mu"], _RP_HEAD["sd"]
+    z = [(x[i] - mu[i]) / sd[i] for i in range(len(mu))] + [1.0]
+    w = sum(z[i] * _RP_HEAD["W_wheat"][i] for i in range(len(z)))
+    c = sum(z[i] * _RP_HEAD["W_carrot"][i] for i in range(len(z)))
+    return (w + _RP_HEAD["day_mean_wheat"][d],
+            c + _RP_HEAD["day_mean_carrot"][d])
 
 
 def _rp_jobs(observation, seat):
@@ -159,18 +243,40 @@ def _rp_plan(observation, seat, st):
                     if isinstance(t, dict) and "animal" in t)
     whe_standing = sum(1 for row in farm["tiles"] for t in row
                        if isinstance(t, dict) and t.get("crop") == "WHEAT")
+    if hour == 12:
+        st["crew_prev"] = n_units - 1
     car_target = whe_target = 0
     if day <= 26 and hour <= 20:
-        if p_c >= 30:
-            car_target = min(16, 4 * shops.count("PET_CAFE")
-                             + 2 * shops.count("FARMERS_MARKET"))
-        # 1 standing tile ~ 1 u/day; feed burn = n_animals/day.  Burn-matched
-        # measured best (1.5x overloads the crew: 65,080/66,750 vs 67,605).
-        want_standing = n_animals if day <= 24 else 0
-        whe_buyers = sum(1 for s in shops if s in _RP_WHE_SHOPS)
-        if p_w >= 22 and whe_buyers >= 2 and day <= 24:
-            want_standing += min(6, 2 * whe_buyers)
-        whe_target = max(0, min(8, want_standing - whe_standing))
+        if _RP_USE_HEAD:
+            # THE HEAD sets the quotas (closed-loop test of the distilled
+            # crop-mix model); hand heuristics keep only safety floors.
+            if st.get("head_day") != day:
+                st["head_day"] = day
+                try:
+                    w3, c3 = _rp_head_targets(observation, seat,
+                                              st.get("crew_prev", 10))
+                except Exception:
+                    w3, c3 = 0.0, 0.0
+                    _RP_REPORT["rp_errors"] += 1
+                st["head_w"], st["head_c"] = w3, c3
+            car_target = max(0, min(16, int(round(st["head_c"] / 3.0))))
+            whe_target = max(0, min(8, int(round(st["head_w"] / 3.0))))
+            if p_c < 20:
+                car_target = 0
+        else:
+            # v5 hand quotas (the tuned incumbent)
+            if p_c >= 30:
+                car_target = min(16, 4 * shops.count("PET_CAFE")
+                                 + 2 * shops.count("FARMERS_MARKET"))
+            want_standing = n_animals if day <= 24 else 0
+            whe_buyers = sum(1 for s in shops if s in _RP_WHE_SHOPS)
+            if p_w >= 22 and whe_buyers >= 2 and day <= 24:
+                want_standing += min(6, 2 * whe_buyers)
+            whe_target = max(0, min(8, want_standing - whe_standing))
+        # feed never depends on a model: burn floor when stock is thin
+        if (day <= 24 and int(priv["shed"].get("WHEAT", 0)) < n_animals
+                and whe_standing + whe_target < n_animals):
+            whe_target = max(whe_target, min(8, n_animals - whe_standing))
     plant_target = car_target + whe_target
     plant_quota = max(0, plant_target - st["planted_n"] - st["planted_w"])
     seeds_free = int(priv["seeds"].get("CARROT", 0))
@@ -492,9 +598,15 @@ kaggle_agent = cha20_entry_agent
 
 import ast
 
+import sys as _sys
+_USE_HEAD = '--hand' not in _sys.argv
+_R1_OUT = r'fork\r1_hand.py' if not _USE_HEAD else r'fork\r1_head.py'
+
 for path, name, kind, body in (
-        (r'fork\r1.py', 'R1 TAKEOVER', 'maintenance takeover', PLANNER),
+        (_R1_OUT, 'R1 TAKEOVER', 'maintenance takeover', PLANNER),
         (r'fork\rc0.py', 'RC0 CONTROL', 'planting-suppression control', SUPPRESSOR)):
+    body = body.replace('__HEAD_LIT__', repr(_HEAD_LIT))
+    body = body.replace('__USE_HEAD__', repr(_USE_HEAD))
     out = SRC.rstrip('\n') + (COMMON % {'name': name, 'kind': kind}) + body + FOOTER
     ast.parse(out)
     open(path, 'w', encoding='utf-8', newline='\n').write(out)

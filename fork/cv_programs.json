@@ -1,0 +1,9596 @@
+{
+ "0": [
+  {
+   "tile": [
+    5,
+    0
+   ],
+   "clear": {
+    "step": 486,
+    "actor": 5,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 510,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    21,
+    22,
+    23,
+    24
+   ],
+   "harvest_days": [
+    23,
+    24
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 609
+  },
+  {
+   "tile": [
+    6,
+    0
+   ],
+   "clear": {
+    "step": 490,
+    "actor": 9,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 513,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    21,
+    22,
+    23,
+    24
+   ],
+   "harvest_days": [
+    23,
+    24
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 613
+  },
+  {
+   "tile": [
+    7,
+    1
+   ],
+   "clear": {
+    "step": 494,
+    "actor": 9,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 517,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    21,
+    22,
+    23,
+    24
+   ],
+   "harvest_days": [
+    23,
+    24
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 616
+  },
+  {
+   "tile": [
+    4,
+    6
+   ],
+   "clear": {
+    "step": 555,
+    "actor": 7,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 579,
+    "actor": 3,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "harvest_days": [
+    26,
+    27
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 675
+  },
+  {
+   "tile": [
+    3,
+    5
+   ],
+   "clear": {
+    "step": 556,
+    "actor": 4,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 580,
+    "actor": 4,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "harvest_days": [
+    26,
+    27
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 674
+  },
+  {
+   "tile": [
+    3,
+    6
+   ],
+   "clear": {
+    "step": 573,
+    "actor": 5,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 581,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "harvest_days": [
+    26,
+    27
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 661
+  },
+  {
+   "tile": [
+    4,
+    7
+   ],
+   "clear": {
+    "step": 560,
+    "actor": 7,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 582,
+    "actor": 3,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "harvest_days": [
+    26,
+    27
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 656
+  },
+  {
+   "tile": [
+    3,
+    7
+   ],
+   "clear": {
+    "step": 575,
+    "actor": 5,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 584,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "harvest_days": [
+    26,
+    27
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 654
+  }
+ ],
+ "1": [
+  {
+   "tile": [
+    5,
+    1
+   ],
+   "clear": {
+    "step": 448,
+    "actor": 9,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 461,
+    "actor": 1,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    19,
+    20,
+    21,
+    22
+   ],
+   "harvest_days": [
+    21,
+    22
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 558
+  },
+  {
+   "tile": [
+    7,
+    3
+   ],
+   "clear": {
+    "step": 438,
+    "actor": 3,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 462,
+    "actor": 7,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    19,
+    20,
+    21,
+    22
+   ],
+   "harvest_days": [
+    21,
+    22
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 557
+  },
+  {
+   "tile": [
+    6,
+    1
+   ],
+   "clear": {
+    "step": 445,
+    "actor": 9,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 464,
+    "actor": 1,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    19,
+    20,
+    21,
+    22
+   ],
+   "harvest_days": [
+    21,
+    22
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 559
+  },
+  {
+   "tile": [
+    8,
+    4
+   ],
+   "clear": {
+    "step": 446,
+    "actor": 3,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 466,
+    "actor": 7,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    19,
+    20,
+    21,
+    22
+   ],
+   "harvest_days": [
+    21,
+    22
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 567
+  },
+  {
+   "tile": [
+    9,
+    4
+   ],
+   "clear": {
+    "step": 448,
+    "actor": 3,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 469,
+    "actor": 7,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    19,
+    20,
+    21,
+    22
+   ],
+   "harvest_days": [
+    21,
+    22
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 571
+  },
+  {
+   "tile": [
+    6,
+    0
+   ],
+   "clear": {
+    "step": 491,
+    "actor": 1,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 513,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    21,
+    22,
+    23,
+    24
+   ],
+   "harvest_days": [
+    23,
+    24
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 612
+  },
+  {
+   "tile": [
+    7,
+    1
+   ],
+   "clear": {
+    "step": 495,
+    "actor": 1,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 517,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    21,
+    22,
+    23,
+    24
+   ],
+   "harvest_days": [
+    23,
+    24
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 609
+  },
+  {
+   "tile": [
+    4,
+    5
+   ],
+   "clear": {
+    "step": 559,
+    "actor": 6,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 578,
+    "actor": 0,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "harvest_days": [
+    26,
+    27
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 674
+  }
+ ],
+ "2": [
+  {
+   "tile": [
+    5,
+    0
+   ],
+   "clear": {
+    "step": 486,
+    "actor": 5,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 510,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    21,
+    22,
+    23,
+    24
+   ],
+   "harvest_days": [
+    23,
+    24
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 609
+  },
+  {
+   "tile": [
+    6,
+    0
+   ],
+   "clear": {
+    "step": 490,
+    "actor": 9,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 513,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    21,
+    22,
+    23,
+    24
+   ],
+   "harvest_days": [
+    23,
+    24
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 613
+  },
+  {
+   "tile": [
+    7,
+    1
+   ],
+   "clear": {
+    "step": 494,
+    "actor": 9,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 517,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    21,
+    22,
+    23,
+    24
+   ],
+   "harvest_days": [
+    23,
+    24
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 616
+  },
+  {
+   "tile": [
+    4,
+    6
+   ],
+   "clear": {
+    "step": 555,
+    "actor": 7,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 579,
+    "actor": 3,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "harvest_days": [
+    26,
+    27
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 675
+  },
+  {
+   "tile": [
+    3,
+    5
+   ],
+   "clear": {
+    "step": 556,
+    "actor": 4,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 580,
+    "actor": 4,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "harvest_days": [
+    26,
+    27
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 674
+  },
+  {
+   "tile": [
+    3,
+    6
+   ],
+   "clear": {
+    "step": 573,
+    "actor": 5,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 581,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "harvest_days": [
+    26,
+    27
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 661
+  },
+  {
+   "tile": [
+    4,
+    7
+   ],
+   "clear": {
+    "step": 560,
+    "actor": 7,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 582,
+    "actor": 3,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "harvest_days": [
+    26,
+    27
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 656
+  },
+  {
+   "tile": [
+    3,
+    7
+   ],
+   "clear": {
+    "step": 575,
+    "actor": 5,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 584,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "harvest_days": [
+    26,
+    27
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 654
+  }
+ ],
+ "3": [
+  {
+   "tile": [
+    5,
+    1
+   ],
+   "clear": {
+    "step": 448,
+    "actor": 9,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 461,
+    "actor": 1,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    19,
+    20,
+    21,
+    22
+   ],
+   "harvest_days": [
+    21,
+    22
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 558
+  },
+  {
+   "tile": [
+    7,
+    3
+   ],
+   "clear": {
+    "step": 438,
+    "actor": 3,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 462,
+    "actor": 7,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    19,
+    20,
+    21,
+    22
+   ],
+   "harvest_days": [
+    21,
+    22
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 557
+  },
+  {
+   "tile": [
+    6,
+    1
+   ],
+   "clear": {
+    "step": 445,
+    "actor": 9,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 464,
+    "actor": 1,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    19,
+    20,
+    21,
+    22
+   ],
+   "harvest_days": [
+    21,
+    22
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 559
+  },
+  {
+   "tile": [
+    8,
+    4
+   ],
+   "clear": {
+    "step": 446,
+    "actor": 3,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 466,
+    "actor": 7,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    19,
+    20,
+    21,
+    22
+   ],
+   "harvest_days": [
+    21,
+    22
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 567
+  },
+  {
+   "tile": [
+    9,
+    4
+   ],
+   "clear": {
+    "step": 448,
+    "actor": 3,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 469,
+    "actor": 7,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    19,
+    20,
+    21,
+    22
+   ],
+   "harvest_days": [
+    21,
+    22
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 571
+  },
+  {
+   "tile": [
+    6,
+    0
+   ],
+   "clear": {
+    "step": 491,
+    "actor": 1,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 513,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    21,
+    22,
+    23,
+    24
+   ],
+   "harvest_days": [
+    23,
+    24
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 612
+  },
+  {
+   "tile": [
+    7,
+    1
+   ],
+   "clear": {
+    "step": 495,
+    "actor": 1,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 517,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    21,
+    22,
+    23,
+    24
+   ],
+   "harvest_days": [
+    23,
+    24
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 609
+  },
+  {
+   "tile": [
+    4,
+    5
+   ],
+   "clear": {
+    "step": 559,
+    "actor": 6,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 578,
+    "actor": 0,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "harvest_days": [
+    26,
+    27
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 674
+  }
+ ],
+ "4": [
+  {
+   "tile": [
+    5,
+    1
+   ],
+   "clear": {
+    "step": 448,
+    "actor": 9,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 461,
+    "actor": 1,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    19,
+    20,
+    21,
+    22
+   ],
+   "harvest_days": [
+    21,
+    22
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 558
+  },
+  {
+   "tile": [
+    7,
+    3
+   ],
+   "clear": {
+    "step": 438,
+    "actor": 3,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 462,
+    "actor": 7,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    19,
+    20,
+    21,
+    22
+   ],
+   "harvest_days": [
+    21,
+    22
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 557
+  },
+  {
+   "tile": [
+    6,
+    1
+   ],
+   "clear": {
+    "step": 445,
+    "actor": 9,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 464,
+    "actor": 1,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    19,
+    20,
+    21,
+    22
+   ],
+   "harvest_days": [
+    21,
+    22
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 559
+  },
+  {
+   "tile": [
+    8,
+    4
+   ],
+   "clear": {
+    "step": 446,
+    "actor": 3,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 466,
+    "actor": 7,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    19,
+    20,
+    21,
+    22
+   ],
+   "harvest_days": [
+    21,
+    22
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 567
+  },
+  {
+   "tile": [
+    9,
+    4
+   ],
+   "clear": {
+    "step": 448,
+    "actor": 3,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 469,
+    "actor": 7,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    19,
+    20,
+    21,
+    22
+   ],
+   "harvest_days": [
+    21,
+    22
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 571
+  },
+  {
+   "tile": [
+    6,
+    0
+   ],
+   "clear": {
+    "step": 491,
+    "actor": 1,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 513,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    21,
+    22,
+    23,
+    24
+   ],
+   "harvest_days": [
+    23,
+    24
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 612
+  },
+  {
+   "tile": [
+    7,
+    1
+   ],
+   "clear": {
+    "step": 495,
+    "actor": 1,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 517,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    21,
+    22,
+    23,
+    24
+   ],
+   "harvest_days": [
+    23,
+    24
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 609
+  },
+  {
+   "tile": [
+    4,
+    5
+   ],
+   "clear": {
+    "step": 559,
+    "actor": 6,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 578,
+    "actor": 0,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "harvest_days": [
+    26,
+    27
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 674
+  }
+ ],
+ "5": [
+  {
+   "tile": [
+    5,
+    1
+   ],
+   "clear": {
+    "step": 448,
+    "actor": 9,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 461,
+    "actor": 1,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    19,
+    20,
+    21,
+    22
+   ],
+   "harvest_days": [
+    21,
+    22
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 558
+  },
+  {
+   "tile": [
+    7,
+    3
+   ],
+   "clear": {
+    "step": 438,
+    "actor": 3,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 462,
+    "actor": 7,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    19,
+    20,
+    21,
+    22
+   ],
+   "harvest_days": [
+    21,
+    22
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 557
+  },
+  {
+   "tile": [
+    6,
+    1
+   ],
+   "clear": {
+    "step": 445,
+    "actor": 9,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 464,
+    "actor": 1,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    19,
+    20,
+    21,
+    22
+   ],
+   "harvest_days": [
+    21,
+    22
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 559
+  },
+  {
+   "tile": [
+    8,
+    4
+   ],
+   "clear": {
+    "step": 446,
+    "actor": 3,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 466,
+    "actor": 7,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    19,
+    20,
+    21,
+    22
+   ],
+   "harvest_days": [
+    21,
+    22
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 567
+  },
+  {
+   "tile": [
+    9,
+    4
+   ],
+   "clear": {
+    "step": 448,
+    "actor": 3,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 469,
+    "actor": 7,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    19,
+    20,
+    21,
+    22
+   ],
+   "harvest_days": [
+    21,
+    22
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 571
+  },
+  {
+   "tile": [
+    6,
+    0
+   ],
+   "clear": {
+    "step": 491,
+    "actor": 1,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 513,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    21,
+    22,
+    23,
+    24
+   ],
+   "harvest_days": [
+    23,
+    24
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 612
+  },
+  {
+   "tile": [
+    7,
+    1
+   ],
+   "clear": {
+    "step": 495,
+    "actor": 1,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 517,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    21,
+    22,
+    23,
+    24
+   ],
+   "harvest_days": [
+    23,
+    24
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 609
+  },
+  {
+   "tile": [
+    4,
+    5
+   ],
+   "clear": {
+    "step": 559,
+    "actor": 6,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 578,
+    "actor": 0,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "harvest_days": [
+    26,
+    27
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 674
+  }
+ ],
+ "6": [
+  {
+   "tile": [
+    5,
+    1
+   ],
+   "clear": {
+    "step": 448,
+    "actor": 9,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 461,
+    "actor": 1,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    19,
+    20,
+    21,
+    22
+   ],
+   "harvest_days": [
+    21,
+    22
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 558
+  },
+  {
+   "tile": [
+    7,
+    3
+   ],
+   "clear": {
+    "step": 438,
+    "actor": 3,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 462,
+    "actor": 7,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    19,
+    20,
+    21,
+    22
+   ],
+   "harvest_days": [
+    21,
+    22
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 557
+  },
+  {
+   "tile": [
+    6,
+    1
+   ],
+   "clear": {
+    "step": 445,
+    "actor": 9,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 464,
+    "actor": 1,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    19,
+    20,
+    21,
+    22
+   ],
+   "harvest_days": [
+    21,
+    22
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 559
+  },
+  {
+   "tile": [
+    8,
+    4
+   ],
+   "clear": {
+    "step": 446,
+    "actor": 3,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 466,
+    "actor": 7,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    19,
+    20,
+    21,
+    22
+   ],
+   "harvest_days": [
+    21,
+    22
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 567
+  },
+  {
+   "tile": [
+    9,
+    4
+   ],
+   "clear": {
+    "step": 448,
+    "actor": 3,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 469,
+    "actor": 7,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    19,
+    20,
+    21,
+    22
+   ],
+   "harvest_days": [
+    21,
+    22
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 571
+  },
+  {
+   "tile": [
+    6,
+    0
+   ],
+   "clear": {
+    "step": 491,
+    "actor": 1,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 513,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    21,
+    22,
+    23,
+    24
+   ],
+   "harvest_days": [
+    23,
+    24
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 612
+  },
+  {
+   "tile": [
+    7,
+    1
+   ],
+   "clear": {
+    "step": 495,
+    "actor": 1,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 517,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    21,
+    22,
+    23,
+    24
+   ],
+   "harvest_days": [
+    23,
+    24
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 609
+  },
+  {
+   "tile": [
+    4,
+    5
+   ],
+   "clear": {
+    "step": 559,
+    "actor": 6,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 578,
+    "actor": 0,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "harvest_days": [
+    26,
+    27
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 674
+  }
+ ],
+ "7": [
+  {
+   "tile": [
+    5,
+    1
+   ],
+   "clear": {
+    "step": 448,
+    "actor": 9,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 461,
+    "actor": 1,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    19,
+    20,
+    21,
+    22
+   ],
+   "harvest_days": [
+    21,
+    22
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 558
+  },
+  {
+   "tile": [
+    7,
+    3
+   ],
+   "clear": {
+    "step": 438,
+    "actor": 3,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 462,
+    "actor": 7,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    19,
+    20,
+    21,
+    22
+   ],
+   "harvest_days": [
+    21,
+    22
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 557
+  },
+  {
+   "tile": [
+    6,
+    1
+   ],
+   "clear": {
+    "step": 445,
+    "actor": 9,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 464,
+    "actor": 1,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    19,
+    20,
+    21,
+    22
+   ],
+   "harvest_days": [
+    21,
+    22
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 559
+  },
+  {
+   "tile": [
+    8,
+    4
+   ],
+   "clear": {
+    "step": 446,
+    "actor": 3,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 466,
+    "actor": 7,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    19,
+    20,
+    21,
+    22
+   ],
+   "harvest_days": [
+    21,
+    22
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 567
+  },
+  {
+   "tile": [
+    9,
+    4
+   ],
+   "clear": {
+    "step": 448,
+    "actor": 3,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 469,
+    "actor": 7,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    19,
+    20,
+    21,
+    22
+   ],
+   "harvest_days": [
+    21,
+    22
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 571
+  },
+  {
+   "tile": [
+    6,
+    0
+   ],
+   "clear": {
+    "step": 491,
+    "actor": 1,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 513,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    21,
+    22,
+    23,
+    24
+   ],
+   "harvest_days": [
+    23,
+    24
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 612
+  },
+  {
+   "tile": [
+    7,
+    1
+   ],
+   "clear": {
+    "step": 495,
+    "actor": 1,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 517,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    21,
+    22,
+    23,
+    24
+   ],
+   "harvest_days": [
+    23,
+    24
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 609
+  },
+  {
+   "tile": [
+    4,
+    5
+   ],
+   "clear": {
+    "step": 559,
+    "actor": 6,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 578,
+    "actor": 0,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "harvest_days": [
+    26,
+    27
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 674
+  }
+ ],
+ "8": [
+  {
+   "tile": [
+    5,
+    1
+   ],
+   "clear": {
+    "step": 448,
+    "actor": 9,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 461,
+    "actor": 1,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    19,
+    20,
+    21,
+    22
+   ],
+   "harvest_days": [
+    21,
+    22
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 558
+  },
+  {
+   "tile": [
+    7,
+    3
+   ],
+   "clear": {
+    "step": 438,
+    "actor": 3,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 462,
+    "actor": 7,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    19,
+    20,
+    21,
+    22
+   ],
+   "harvest_days": [
+    21,
+    22
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 557
+  },
+  {
+   "tile": [
+    6,
+    1
+   ],
+   "clear": {
+    "step": 445,
+    "actor": 9,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 464,
+    "actor": 1,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    19,
+    20,
+    21,
+    22
+   ],
+   "harvest_days": [
+    21,
+    22
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 559
+  },
+  {
+   "tile": [
+    8,
+    4
+   ],
+   "clear": {
+    "step": 446,
+    "actor": 3,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 466,
+    "actor": 7,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    19,
+    20,
+    21,
+    22
+   ],
+   "harvest_days": [
+    21,
+    22
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 567
+  },
+  {
+   "tile": [
+    9,
+    4
+   ],
+   "clear": {
+    "step": 448,
+    "actor": 3,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 469,
+    "actor": 7,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    19,
+    20,
+    21,
+    22
+   ],
+   "harvest_days": [
+    21,
+    22
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 571
+  },
+  {
+   "tile": [
+    6,
+    0
+   ],
+   "clear": {
+    "step": 491,
+    "actor": 1,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 513,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    21,
+    22,
+    23,
+    24
+   ],
+   "harvest_days": [
+    23,
+    24
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 612
+  },
+  {
+   "tile": [
+    7,
+    1
+   ],
+   "clear": {
+    "step": 495,
+    "actor": 1,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 517,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    21,
+    22,
+    23,
+    24
+   ],
+   "harvest_days": [
+    23,
+    24
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 609
+  },
+  {
+   "tile": [
+    4,
+    5
+   ],
+   "clear": {
+    "step": 559,
+    "actor": 6,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 578,
+    "actor": 0,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "harvest_days": [
+    26,
+    27
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 674
+  }
+ ],
+ "9": [
+  {
+   "tile": [
+    5,
+    1
+   ],
+   "clear": {
+    "step": 448,
+    "actor": 9,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 461,
+    "actor": 1,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    19,
+    20,
+    21,
+    22
+   ],
+   "harvest_days": [
+    21,
+    22
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 558
+  },
+  {
+   "tile": [
+    7,
+    3
+   ],
+   "clear": {
+    "step": 438,
+    "actor": 3,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 462,
+    "actor": 7,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    19,
+    20,
+    21,
+    22
+   ],
+   "harvest_days": [
+    21,
+    22
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 557
+  },
+  {
+   "tile": [
+    6,
+    1
+   ],
+   "clear": {
+    "step": 445,
+    "actor": 9,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 464,
+    "actor": 1,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    19,
+    20,
+    21,
+    22
+   ],
+   "harvest_days": [
+    21,
+    22
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 559
+  },
+  {
+   "tile": [
+    8,
+    4
+   ],
+   "clear": {
+    "step": 446,
+    "actor": 3,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 466,
+    "actor": 7,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    19,
+    20,
+    21,
+    22
+   ],
+   "harvest_days": [
+    21,
+    22
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 567
+  },
+  {
+   "tile": [
+    9,
+    4
+   ],
+   "clear": {
+    "step": 448,
+    "actor": 3,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 469,
+    "actor": 7,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    19,
+    20,
+    21,
+    22
+   ],
+   "harvest_days": [
+    21,
+    22
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 571
+  },
+  {
+   "tile": [
+    6,
+    0
+   ],
+   "clear": {
+    "step": 491,
+    "actor": 1,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 513,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    21,
+    22,
+    23,
+    24
+   ],
+   "harvest_days": [
+    23,
+    24
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 612
+  },
+  {
+   "tile": [
+    7,
+    1
+   ],
+   "clear": {
+    "step": 495,
+    "actor": 1,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 517,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    21,
+    22,
+    23,
+    24
+   ],
+   "harvest_days": [
+    23,
+    24
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 609
+  },
+  {
+   "tile": [
+    4,
+    5
+   ],
+   "clear": {
+    "step": 559,
+    "actor": 6,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 578,
+    "actor": 0,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "harvest_days": [
+    26,
+    27
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 674
+  }
+ ],
+ "10": [
+  {
+   "tile": [
+    5,
+    1
+   ],
+   "clear": {
+    "step": 448,
+    "actor": 9,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 461,
+    "actor": 1,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    19,
+    20,
+    21,
+    22
+   ],
+   "harvest_days": [
+    21,
+    22
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 558
+  },
+  {
+   "tile": [
+    7,
+    3
+   ],
+   "clear": {
+    "step": 438,
+    "actor": 3,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 462,
+    "actor": 7,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    19,
+    20,
+    21,
+    22
+   ],
+   "harvest_days": [
+    21,
+    22
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 557
+  },
+  {
+   "tile": [
+    6,
+    1
+   ],
+   "clear": {
+    "step": 445,
+    "actor": 9,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 464,
+    "actor": 1,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    19,
+    20,
+    21,
+    22
+   ],
+   "harvest_days": [
+    21,
+    22
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 559
+  },
+  {
+   "tile": [
+    8,
+    4
+   ],
+   "clear": {
+    "step": 446,
+    "actor": 3,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 466,
+    "actor": 7,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    19,
+    20,
+    21,
+    22
+   ],
+   "harvest_days": [
+    21,
+    22
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 567
+  },
+  {
+   "tile": [
+    9,
+    4
+   ],
+   "clear": {
+    "step": 448,
+    "actor": 3,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 469,
+    "actor": 7,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    19,
+    20,
+    21,
+    22
+   ],
+   "harvest_days": [
+    21,
+    22
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 571
+  },
+  {
+   "tile": [
+    6,
+    0
+   ],
+   "clear": {
+    "step": 491,
+    "actor": 1,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 513,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    21,
+    22,
+    23,
+    24
+   ],
+   "harvest_days": [
+    23,
+    24
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 612
+  },
+  {
+   "tile": [
+    7,
+    1
+   ],
+   "clear": {
+    "step": 495,
+    "actor": 1,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 517,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    21,
+    22,
+    23,
+    24
+   ],
+   "harvest_days": [
+    23,
+    24
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 609
+  },
+  {
+   "tile": [
+    4,
+    5
+   ],
+   "clear": {
+    "step": 559,
+    "actor": 6,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 578,
+    "actor": 0,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "harvest_days": [
+    26,
+    27
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 674
+  }
+ ],
+ "11": [
+  {
+   "tile": [
+    5,
+    1
+   ],
+   "clear": {
+    "step": 448,
+    "actor": 9,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 461,
+    "actor": 1,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    19,
+    20,
+    21,
+    22
+   ],
+   "harvest_days": [
+    21,
+    22
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 558
+  },
+  {
+   "tile": [
+    7,
+    3
+   ],
+   "clear": {
+    "step": 438,
+    "actor": 3,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 462,
+    "actor": 7,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    19,
+    20,
+    21,
+    22
+   ],
+   "harvest_days": [
+    21,
+    22
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 557
+  },
+  {
+   "tile": [
+    6,
+    1
+   ],
+   "clear": {
+    "step": 445,
+    "actor": 9,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 464,
+    "actor": 1,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    19,
+    20,
+    21,
+    22
+   ],
+   "harvest_days": [
+    21,
+    22
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 559
+  },
+  {
+   "tile": [
+    8,
+    4
+   ],
+   "clear": {
+    "step": 446,
+    "actor": 3,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 466,
+    "actor": 7,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    19,
+    20,
+    21,
+    22
+   ],
+   "harvest_days": [
+    21,
+    22
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 567
+  },
+  {
+   "tile": [
+    9,
+    4
+   ],
+   "clear": {
+    "step": 448,
+    "actor": 3,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 469,
+    "actor": 7,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    19,
+    20,
+    21,
+    22
+   ],
+   "harvest_days": [
+    21,
+    22
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 571
+  },
+  {
+   "tile": [
+    6,
+    0
+   ],
+   "clear": {
+    "step": 491,
+    "actor": 1,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 513,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    21,
+    22,
+    23,
+    24
+   ],
+   "harvest_days": [
+    23,
+    24
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 612
+  },
+  {
+   "tile": [
+    7,
+    1
+   ],
+   "clear": {
+    "step": 495,
+    "actor": 1,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 517,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    21,
+    22,
+    23,
+    24
+   ],
+   "harvest_days": [
+    23,
+    24
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 609
+  },
+  {
+   "tile": [
+    4,
+    5
+   ],
+   "clear": {
+    "step": 559,
+    "actor": 6,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 578,
+    "actor": 0,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "harvest_days": [
+    26,
+    27
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 674
+  }
+ ],
+ "12": [
+  {
+   "tile": [
+    5,
+    1
+   ],
+   "clear": {
+    "step": 448,
+    "actor": 9,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 461,
+    "actor": 1,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    19,
+    20,
+    21,
+    22
+   ],
+   "harvest_days": [
+    21,
+    22
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 558
+  },
+  {
+   "tile": [
+    7,
+    3
+   ],
+   "clear": {
+    "step": 438,
+    "actor": 3,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 462,
+    "actor": 7,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    19,
+    20,
+    21,
+    22
+   ],
+   "harvest_days": [
+    21,
+    22
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 557
+  },
+  {
+   "tile": [
+    6,
+    1
+   ],
+   "clear": {
+    "step": 445,
+    "actor": 9,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 464,
+    "actor": 1,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    19,
+    20,
+    21,
+    22
+   ],
+   "harvest_days": [
+    21,
+    22
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 559
+  },
+  {
+   "tile": [
+    8,
+    4
+   ],
+   "clear": {
+    "step": 446,
+    "actor": 3,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 466,
+    "actor": 7,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    19,
+    20,
+    21,
+    22
+   ],
+   "harvest_days": [
+    21,
+    22
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 567
+  },
+  {
+   "tile": [
+    9,
+    4
+   ],
+   "clear": {
+    "step": 448,
+    "actor": 3,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 469,
+    "actor": 7,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    19,
+    20,
+    21,
+    22
+   ],
+   "harvest_days": [
+    21,
+    22
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 571
+  },
+  {
+   "tile": [
+    6,
+    0
+   ],
+   "clear": {
+    "step": 491,
+    "actor": 1,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 513,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    21,
+    22,
+    23,
+    24
+   ],
+   "harvest_days": [
+    23,
+    24
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 612
+  },
+  {
+   "tile": [
+    7,
+    1
+   ],
+   "clear": {
+    "step": 495,
+    "actor": 1,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 517,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    21,
+    22,
+    23,
+    24
+   ],
+   "harvest_days": [
+    23,
+    24
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 609
+  },
+  {
+   "tile": [
+    4,
+    5
+   ],
+   "clear": {
+    "step": 559,
+    "actor": 6,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 578,
+    "actor": 0,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "harvest_days": [
+    26,
+    27
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 674
+  }
+ ],
+ "100": [
+  {
+   "tile": [
+    5,
+    0
+   ],
+   "clear": {
+    "step": 486,
+    "actor": 5,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 510,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    21,
+    22,
+    23,
+    24
+   ],
+   "harvest_days": [
+    23,
+    24
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 609
+  },
+  {
+   "tile": [
+    6,
+    0
+   ],
+   "clear": {
+    "step": 490,
+    "actor": 9,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 513,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    21,
+    22,
+    23,
+    24
+   ],
+   "harvest_days": [
+    23,
+    24
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 613
+  },
+  {
+   "tile": [
+    7,
+    1
+   ],
+   "clear": {
+    "step": 494,
+    "actor": 9,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 517,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    21,
+    22,
+    23,
+    24
+   ],
+   "harvest_days": [
+    23,
+    24
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 616
+  },
+  {
+   "tile": [
+    4,
+    6
+   ],
+   "clear": {
+    "step": 555,
+    "actor": 7,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 579,
+    "actor": 3,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "harvest_days": [
+    26,
+    27
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 675
+  },
+  {
+   "tile": [
+    3,
+    5
+   ],
+   "clear": {
+    "step": 556,
+    "actor": 4,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 580,
+    "actor": 4,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "harvest_days": [
+    26,
+    27
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 674
+  },
+  {
+   "tile": [
+    3,
+    6
+   ],
+   "clear": {
+    "step": 573,
+    "actor": 5,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 581,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "harvest_days": [
+    26,
+    27
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 661
+  },
+  {
+   "tile": [
+    4,
+    7
+   ],
+   "clear": {
+    "step": 560,
+    "actor": 7,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 582,
+    "actor": 3,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "harvest_days": [
+    26,
+    27
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 656
+  },
+  {
+   "tile": [
+    3,
+    7
+   ],
+   "clear": {
+    "step": 575,
+    "actor": 5,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 584,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "harvest_days": [
+    26,
+    27
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 654
+  }
+ ],
+ "101": [
+  {
+   "tile": [
+    5,
+    0
+   ],
+   "clear": {
+    "step": 488,
+    "actor": 7,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 510,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    21,
+    22,
+    23,
+    24
+   ],
+   "harvest_days": [
+    23,
+    24
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 609
+  },
+  {
+   "tile": [
+    6,
+    0
+   ],
+   "clear": {
+    "step": 490,
+    "actor": 7,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 513,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    21,
+    22,
+    23,
+    24
+   ],
+   "harvest_days": [
+    23,
+    24
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 613
+  },
+  {
+   "tile": [
+    7,
+    1
+   ],
+   "clear": {
+    "step": 494,
+    "actor": 9,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 517,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    21,
+    22,
+    23,
+    24
+   ],
+   "harvest_days": [
+    23,
+    24
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 617
+  },
+  {
+   "tile": [
+    4,
+    6
+   ],
+   "clear": {
+    "step": 555,
+    "actor": 7,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 579,
+    "actor": 3,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "harvest_days": [
+    26,
+    27
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 675
+  },
+  {
+   "tile": [
+    3,
+    5
+   ],
+   "clear": {
+    "step": 556,
+    "actor": 4,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 580,
+    "actor": 4,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "harvest_days": [
+    26,
+    27
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 674
+  },
+  {
+   "tile": [
+    3,
+    6
+   ],
+   "clear": {
+    "step": 573,
+    "actor": 5,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 581,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "harvest_days": [
+    26,
+    27
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 661
+  },
+  {
+   "tile": [
+    4,
+    7
+   ],
+   "clear": {
+    "step": 560,
+    "actor": 7,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 582,
+    "actor": 3,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "harvest_days": [
+    26,
+    27
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 656
+  },
+  {
+   "tile": [
+    3,
+    7
+   ],
+   "clear": {
+    "step": 575,
+    "actor": 5,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 584,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "harvest_days": [
+    26,
+    27
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 654
+  }
+ ],
+ "103": [
+  {
+   "tile": [
+    5,
+    0
+   ],
+   "clear": {
+    "step": 486,
+    "actor": 5,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 510,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    21,
+    22,
+    23,
+    24
+   ],
+   "harvest_days": [
+    23,
+    24
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 609
+  },
+  {
+   "tile": [
+    6,
+    0
+   ],
+   "clear": {
+    "step": 490,
+    "actor": 9,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 513,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    21,
+    22,
+    23,
+    24
+   ],
+   "harvest_days": [
+    23,
+    24
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 613
+  },
+  {
+   "tile": [
+    7,
+    1
+   ],
+   "clear": {
+    "step": 494,
+    "actor": 9,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 517,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    21,
+    22,
+    23,
+    24
+   ],
+   "harvest_days": [
+    23,
+    24
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 616
+  },
+  {
+   "tile": [
+    4,
+    6
+   ],
+   "clear": {
+    "step": 555,
+    "actor": 7,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 579,
+    "actor": 3,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "harvest_days": [
+    26,
+    27
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 675
+  },
+  {
+   "tile": [
+    3,
+    5
+   ],
+   "clear": {
+    "step": 556,
+    "actor": 4,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 580,
+    "actor": 4,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "harvest_days": [
+    26,
+    27
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 674
+  },
+  {
+   "tile": [
+    3,
+    6
+   ],
+   "clear": {
+    "step": 573,
+    "actor": 5,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 581,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "harvest_days": [
+    26,
+    27
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 661
+  },
+  {
+   "tile": [
+    4,
+    7
+   ],
+   "clear": {
+    "step": 560,
+    "actor": 7,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 582,
+    "actor": 3,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "harvest_days": [
+    26,
+    27
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 656
+  },
+  {
+   "tile": [
+    3,
+    7
+   ],
+   "clear": {
+    "step": 575,
+    "actor": 5,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 584,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "harvest_days": [
+    26,
+    27
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 654
+  }
+ ],
+ "104": [
+  {
+   "tile": [
+    5,
+    0
+   ],
+   "clear": {
+    "step": 486,
+    "actor": 5,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 510,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    21,
+    22,
+    23,
+    24
+   ],
+   "harvest_days": [
+    23,
+    24
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 609
+  },
+  {
+   "tile": [
+    6,
+    0
+   ],
+   "clear": {
+    "step": 490,
+    "actor": 9,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 513,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    21,
+    22,
+    23,
+    24
+   ],
+   "harvest_days": [
+    23,
+    24
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 613
+  },
+  {
+   "tile": [
+    7,
+    1
+   ],
+   "clear": {
+    "step": 494,
+    "actor": 9,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 517,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    21,
+    22,
+    23,
+    24
+   ],
+   "harvest_days": [
+    23,
+    24
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 616
+  },
+  {
+   "tile": [
+    4,
+    6
+   ],
+   "clear": {
+    "step": 555,
+    "actor": 7,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 579,
+    "actor": 3,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "harvest_days": [
+    26,
+    27
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 675
+  },
+  {
+   "tile": [
+    3,
+    5
+   ],
+   "clear": {
+    "step": 556,
+    "actor": 4,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 580,
+    "actor": 4,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "harvest_days": [
+    26,
+    27
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 674
+  },
+  {
+   "tile": [
+    3,
+    6
+   ],
+   "clear": {
+    "step": 573,
+    "actor": 5,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 581,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "harvest_days": [
+    26,
+    27
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 661
+  },
+  {
+   "tile": [
+    4,
+    7
+   ],
+   "clear": {
+    "step": 560,
+    "actor": 7,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 582,
+    "actor": 3,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "harvest_days": [
+    26,
+    27
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 656
+  },
+  {
+   "tile": [
+    3,
+    7
+   ],
+   "clear": {
+    "step": 575,
+    "actor": 5,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 584,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "harvest_days": [
+    26,
+    27
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 654
+  }
+ ],
+ "105": [
+  {
+   "tile": [
+    5,
+    0
+   ],
+   "clear": {
+    "step": 488,
+    "actor": 7,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 510,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    21,
+    22,
+    23,
+    24
+   ],
+   "harvest_days": [
+    23,
+    24
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 609
+  },
+  {
+   "tile": [
+    6,
+    0
+   ],
+   "clear": {
+    "step": 490,
+    "actor": 7,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 513,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    21,
+    22,
+    23,
+    24
+   ],
+   "harvest_days": [
+    23,
+    24
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 613
+  },
+  {
+   "tile": [
+    7,
+    1
+   ],
+   "clear": {
+    "step": 494,
+    "actor": 9,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 517,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    21,
+    22,
+    23,
+    24
+   ],
+   "harvest_days": [
+    23,
+    24
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 617
+  },
+  {
+   "tile": [
+    4,
+    6
+   ],
+   "clear": {
+    "step": 555,
+    "actor": 7,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 579,
+    "actor": 3,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "harvest_days": [
+    26,
+    27
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 675
+  },
+  {
+   "tile": [
+    3,
+    5
+   ],
+   "clear": {
+    "step": 556,
+    "actor": 4,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 580,
+    "actor": 4,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "harvest_days": [
+    26,
+    27
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 674
+  },
+  {
+   "tile": [
+    3,
+    6
+   ],
+   "clear": {
+    "step": 573,
+    "actor": 5,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 581,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "harvest_days": [
+    26,
+    27
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 661
+  },
+  {
+   "tile": [
+    4,
+    7
+   ],
+   "clear": {
+    "step": 560,
+    "actor": 7,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 582,
+    "actor": 3,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "harvest_days": [
+    26,
+    27
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 656
+  },
+  {
+   "tile": [
+    3,
+    7
+   ],
+   "clear": {
+    "step": 575,
+    "actor": 5,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 584,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "harvest_days": [
+    26,
+    27
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 654
+  }
+ ],
+ "106": [
+  {
+   "tile": [
+    5,
+    0
+   ],
+   "clear": {
+    "step": 488,
+    "actor": 7,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 510,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    21,
+    22,
+    23,
+    24
+   ],
+   "harvest_days": [
+    23,
+    24
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 609
+  },
+  {
+   "tile": [
+    6,
+    0
+   ],
+   "clear": {
+    "step": 490,
+    "actor": 7,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 513,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    21,
+    22,
+    23,
+    24
+   ],
+   "harvest_days": [
+    23,
+    24
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 613
+  },
+  {
+   "tile": [
+    7,
+    1
+   ],
+   "clear": {
+    "step": 494,
+    "actor": 9,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 517,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    21,
+    22,
+    23,
+    24
+   ],
+   "harvest_days": [
+    23,
+    24
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 617
+  },
+  {
+   "tile": [
+    4,
+    6
+   ],
+   "clear": {
+    "step": 555,
+    "actor": 7,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 579,
+    "actor": 3,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "harvest_days": [
+    26,
+    27
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 675
+  },
+  {
+   "tile": [
+    3,
+    5
+   ],
+   "clear": {
+    "step": 556,
+    "actor": 4,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 580,
+    "actor": 4,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "harvest_days": [
+    26,
+    27
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 674
+  },
+  {
+   "tile": [
+    3,
+    6
+   ],
+   "clear": {
+    "step": 573,
+    "actor": 5,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 581,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "harvest_days": [
+    26,
+    27
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 661
+  },
+  {
+   "tile": [
+    4,
+    7
+   ],
+   "clear": {
+    "step": 560,
+    "actor": 7,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 582,
+    "actor": 3,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "harvest_days": [
+    26,
+    27
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 656
+  },
+  {
+   "tile": [
+    3,
+    7
+   ],
+   "clear": {
+    "step": 575,
+    "actor": 5,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 584,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "harvest_days": [
+    26,
+    27
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 654
+  }
+ ],
+ "107": [
+  {
+   "tile": [
+    5,
+    0
+   ],
+   "clear": {
+    "step": 488,
+    "actor": 7,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 510,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    21,
+    22,
+    23,
+    24
+   ],
+   "harvest_days": [
+    23,
+    24
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 609
+  },
+  {
+   "tile": [
+    6,
+    0
+   ],
+   "clear": {
+    "step": 490,
+    "actor": 7,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 513,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    21,
+    22,
+    23,
+    24
+   ],
+   "harvest_days": [
+    23,
+    24
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 613
+  },
+  {
+   "tile": [
+    7,
+    1
+   ],
+   "clear": {
+    "step": 494,
+    "actor": 9,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 517,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    21,
+    22,
+    23,
+    24
+   ],
+   "harvest_days": [
+    23,
+    24
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 617
+  },
+  {
+   "tile": [
+    4,
+    6
+   ],
+   "clear": {
+    "step": 555,
+    "actor": 7,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 579,
+    "actor": 3,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "harvest_days": [
+    26,
+    27
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 675
+  },
+  {
+   "tile": [
+    3,
+    5
+   ],
+   "clear": {
+    "step": 556,
+    "actor": 4,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 580,
+    "actor": 4,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "harvest_days": [
+    26,
+    27
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 674
+  },
+  {
+   "tile": [
+    3,
+    6
+   ],
+   "clear": {
+    "step": 573,
+    "actor": 5,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 581,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "harvest_days": [
+    26,
+    27
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 661
+  },
+  {
+   "tile": [
+    4,
+    7
+   ],
+   "clear": {
+    "step": 560,
+    "actor": 7,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 582,
+    "actor": 3,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "harvest_days": [
+    26,
+    27
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 656
+  },
+  {
+   "tile": [
+    3,
+    7
+   ],
+   "clear": {
+    "step": 575,
+    "actor": 5,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 584,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "harvest_days": [
+    26,
+    27
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 654
+  }
+ ],
+ "108": [
+  {
+   "tile": [
+    5,
+    0
+   ],
+   "clear": {
+    "step": 488,
+    "actor": 7,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 510,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    21,
+    22,
+    23,
+    24
+   ],
+   "harvest_days": [
+    23,
+    24
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 609
+  },
+  {
+   "tile": [
+    6,
+    0
+   ],
+   "clear": {
+    "step": 490,
+    "actor": 7,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 513,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    21,
+    22,
+    23,
+    24
+   ],
+   "harvest_days": [
+    23,
+    24
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 613
+  },
+  {
+   "tile": [
+    7,
+    1
+   ],
+   "clear": {
+    "step": 494,
+    "actor": 9,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 517,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    21,
+    22,
+    23,
+    24
+   ],
+   "harvest_days": [
+    23,
+    24
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 616
+  },
+  {
+   "tile": [
+    4,
+    6
+   ],
+   "clear": {
+    "step": 555,
+    "actor": 7,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 579,
+    "actor": 3,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "harvest_days": [
+    26,
+    27
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 675
+  },
+  {
+   "tile": [
+    3,
+    5
+   ],
+   "clear": {
+    "step": 556,
+    "actor": 4,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 580,
+    "actor": 4,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "harvest_days": [
+    26,
+    27
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 674
+  },
+  {
+   "tile": [
+    3,
+    6
+   ],
+   "clear": {
+    "step": 573,
+    "actor": 5,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 581,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "harvest_days": [
+    26,
+    27
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 661
+  },
+  {
+   "tile": [
+    4,
+    7
+   ],
+   "clear": {
+    "step": 560,
+    "actor": 7,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 582,
+    "actor": 3,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "harvest_days": [
+    26,
+    27
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 656
+  },
+  {
+   "tile": [
+    3,
+    7
+   ],
+   "clear": {
+    "step": 575,
+    "actor": 5,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 584,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "harvest_days": [
+    26,
+    27
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 654
+  }
+ ],
+ "109": [
+  {
+   "tile": [
+    5,
+    1
+   ],
+   "clear": {
+    "step": 448,
+    "actor": 9,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 461,
+    "actor": 1,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    19,
+    20,
+    21,
+    22
+   ],
+   "harvest_days": [
+    21,
+    22
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 558
+  },
+  {
+   "tile": [
+    7,
+    3
+   ],
+   "clear": {
+    "step": 438,
+    "actor": 3,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 462,
+    "actor": 7,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    19,
+    20,
+    21,
+    22
+   ],
+   "harvest_days": [
+    21,
+    22
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 557
+  },
+  {
+   "tile": [
+    6,
+    1
+   ],
+   "clear": {
+    "step": 445,
+    "actor": 9,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 464,
+    "actor": 1,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    19,
+    20,
+    21,
+    22
+   ],
+   "harvest_days": [
+    21,
+    22
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 559
+  },
+  {
+   "tile": [
+    8,
+    4
+   ],
+   "clear": {
+    "step": 446,
+    "actor": 3,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 466,
+    "actor": 7,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    19,
+    20,
+    21,
+    22
+   ],
+   "harvest_days": [
+    21,
+    22
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 567
+  },
+  {
+   "tile": [
+    9,
+    4
+   ],
+   "clear": {
+    "step": 448,
+    "actor": 3,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 469,
+    "actor": 7,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    19,
+    20,
+    21,
+    22
+   ],
+   "harvest_days": [
+    21,
+    22
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 571
+  },
+  {
+   "tile": [
+    6,
+    0
+   ],
+   "clear": {
+    "step": 491,
+    "actor": 1,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 513,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    21,
+    22,
+    23,
+    24
+   ],
+   "harvest_days": [
+    23,
+    24
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 612
+  },
+  {
+   "tile": [
+    7,
+    1
+   ],
+   "clear": {
+    "step": 495,
+    "actor": 1,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 517,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    21,
+    22,
+    23,
+    24
+   ],
+   "harvest_days": [
+    23,
+    24
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 609
+  },
+  {
+   "tile": [
+    4,
+    5
+   ],
+   "clear": {
+    "step": 559,
+    "actor": 6,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 578,
+    "actor": 0,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "harvest_days": [
+    26,
+    27
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 674
+  }
+ ],
+ "110": [
+  {
+   "tile": [
+    5,
+    0
+   ],
+   "clear": {
+    "step": 486,
+    "actor": 5,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 510,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    21,
+    22,
+    23,
+    24
+   ],
+   "harvest_days": [
+    23,
+    24
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 609
+  },
+  {
+   "tile": [
+    6,
+    0
+   ],
+   "clear": {
+    "step": 490,
+    "actor": 9,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 513,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    21,
+    22,
+    23,
+    24
+   ],
+   "harvest_days": [
+    23,
+    24
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 613
+  },
+  {
+   "tile": [
+    7,
+    1
+   ],
+   "clear": {
+    "step": 494,
+    "actor": 9,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 517,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    21,
+    22,
+    23,
+    24
+   ],
+   "harvest_days": [
+    23,
+    24
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 616
+  },
+  {
+   "tile": [
+    4,
+    6
+   ],
+   "clear": {
+    "step": 555,
+    "actor": 7,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 579,
+    "actor": 3,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "harvest_days": [
+    26,
+    27
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 675
+  },
+  {
+   "tile": [
+    3,
+    5
+   ],
+   "clear": {
+    "step": 556,
+    "actor": 4,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 580,
+    "actor": 4,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "harvest_days": [
+    26,
+    27
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 674
+  },
+  {
+   "tile": [
+    3,
+    6
+   ],
+   "clear": {
+    "step": 573,
+    "actor": 5,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 581,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "harvest_days": [
+    26,
+    27
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 661
+  },
+  {
+   "tile": [
+    4,
+    7
+   ],
+   "clear": {
+    "step": 560,
+    "actor": 7,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 582,
+    "actor": 3,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "harvest_days": [
+    26,
+    27
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 656
+  },
+  {
+   "tile": [
+    3,
+    7
+   ],
+   "clear": {
+    "step": 575,
+    "actor": 5,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 584,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "harvest_days": [
+    26,
+    27
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 654
+  }
+ ],
+ "111": [
+  {
+   "tile": [
+    5,
+    0
+   ],
+   "clear": {
+    "step": 486,
+    "actor": 5,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 510,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    21,
+    22,
+    23,
+    24
+   ],
+   "harvest_days": [
+    23,
+    24
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 609
+  },
+  {
+   "tile": [
+    6,
+    0
+   ],
+   "clear": {
+    "step": 490,
+    "actor": 9,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 513,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    21,
+    22,
+    23,
+    24
+   ],
+   "harvest_days": [
+    23,
+    24
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 613
+  },
+  {
+   "tile": [
+    7,
+    1
+   ],
+   "clear": {
+    "step": 494,
+    "actor": 9,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 517,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    21,
+    22,
+    23,
+    24
+   ],
+   "harvest_days": [
+    23,
+    24
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 616
+  },
+  {
+   "tile": [
+    4,
+    6
+   ],
+   "clear": {
+    "step": 555,
+    "actor": 7,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 579,
+    "actor": 3,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "harvest_days": [
+    26,
+    27
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 675
+  },
+  {
+   "tile": [
+    3,
+    5
+   ],
+   "clear": {
+    "step": 556,
+    "actor": 4,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 580,
+    "actor": 4,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "harvest_days": [
+    26,
+    27
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 674
+  },
+  {
+   "tile": [
+    3,
+    6
+   ],
+   "clear": {
+    "step": 573,
+    "actor": 5,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 581,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "harvest_days": [
+    26,
+    27
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 661
+  },
+  {
+   "tile": [
+    4,
+    7
+   ],
+   "clear": {
+    "step": 560,
+    "actor": 7,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 582,
+    "actor": 3,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "harvest_days": [
+    26,
+    27
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 656
+  },
+  {
+   "tile": [
+    3,
+    7
+   ],
+   "clear": {
+    "step": 575,
+    "actor": 5,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 584,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "harvest_days": [
+    26,
+    27
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 654
+  }
+ ],
+ "112": [
+  {
+   "tile": [
+    5,
+    0
+   ],
+   "clear": {
+    "step": 488,
+    "actor": 7,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 510,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    21,
+    22,
+    23,
+    24
+   ],
+   "harvest_days": [
+    23,
+    24
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 609
+  },
+  {
+   "tile": [
+    6,
+    0
+   ],
+   "clear": {
+    "step": 490,
+    "actor": 7,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 513,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    21,
+    22,
+    23,
+    24
+   ],
+   "harvest_days": [
+    23,
+    24
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 613
+  },
+  {
+   "tile": [
+    7,
+    1
+   ],
+   "clear": {
+    "step": 494,
+    "actor": 9,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 517,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    21,
+    22,
+    23,
+    24
+   ],
+   "harvest_days": [
+    23,
+    24
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 617
+  },
+  {
+   "tile": [
+    4,
+    6
+   ],
+   "clear": {
+    "step": 555,
+    "actor": 7,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 579,
+    "actor": 3,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "harvest_days": [
+    26,
+    27
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 675
+  },
+  {
+   "tile": [
+    3,
+    5
+   ],
+   "clear": {
+    "step": 556,
+    "actor": 4,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 580,
+    "actor": 4,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "harvest_days": [
+    26,
+    27
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 674
+  },
+  {
+   "tile": [
+    3,
+    6
+   ],
+   "clear": {
+    "step": 573,
+    "actor": 5,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 581,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "harvest_days": [
+    26,
+    27
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 661
+  },
+  {
+   "tile": [
+    4,
+    7
+   ],
+   "clear": {
+    "step": 560,
+    "actor": 7,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 582,
+    "actor": 3,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "harvest_days": [
+    26,
+    27
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 656
+  },
+  {
+   "tile": [
+    3,
+    7
+   ],
+   "clear": {
+    "step": 575,
+    "actor": 5,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 584,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "harvest_days": [
+    26,
+    27
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 654
+  }
+ ],
+ "113": [
+  {
+   "tile": [
+    5,
+    0
+   ],
+   "clear": {
+    "step": 488,
+    "actor": 7,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 510,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    21,
+    22,
+    23,
+    24
+   ],
+   "harvest_days": [
+    23,
+    24
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 609
+  },
+  {
+   "tile": [
+    6,
+    0
+   ],
+   "clear": {
+    "step": 490,
+    "actor": 7,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 513,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    21,
+    22,
+    23,
+    24
+   ],
+   "harvest_days": [
+    23,
+    24
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 613
+  },
+  {
+   "tile": [
+    7,
+    1
+   ],
+   "clear": {
+    "step": 494,
+    "actor": 9,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 517,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    21,
+    22,
+    23,
+    24
+   ],
+   "harvest_days": [
+    23,
+    24
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 617
+  },
+  {
+   "tile": [
+    4,
+    6
+   ],
+   "clear": {
+    "step": 555,
+    "actor": 7,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 579,
+    "actor": 3,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "harvest_days": [
+    26,
+    27
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 675
+  },
+  {
+   "tile": [
+    3,
+    5
+   ],
+   "clear": {
+    "step": 556,
+    "actor": 4,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 580,
+    "actor": 4,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "harvest_days": [
+    26,
+    27
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 674
+  },
+  {
+   "tile": [
+    3,
+    6
+   ],
+   "clear": {
+    "step": 573,
+    "actor": 5,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 581,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "harvest_days": [
+    26,
+    27
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 661
+  },
+  {
+   "tile": [
+    4,
+    7
+   ],
+   "clear": {
+    "step": 560,
+    "actor": 7,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 582,
+    "actor": 3,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "harvest_days": [
+    26,
+    27
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 656
+  },
+  {
+   "tile": [
+    3,
+    7
+   ],
+   "clear": {
+    "step": 575,
+    "actor": 5,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 584,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "harvest_days": [
+    26,
+    27
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 654
+  }
+ ],
+ "114": [
+  {
+   "tile": [
+    5,
+    0
+   ],
+   "clear": {
+    "step": 488,
+    "actor": 7,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 510,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    21,
+    22,
+    23,
+    24
+   ],
+   "harvest_days": [
+    23,
+    24
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 609
+  },
+  {
+   "tile": [
+    6,
+    0
+   ],
+   "clear": {
+    "step": 490,
+    "actor": 7,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 513,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    21,
+    22,
+    23,
+    24
+   ],
+   "harvest_days": [
+    23,
+    24
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 613
+  },
+  {
+   "tile": [
+    7,
+    1
+   ],
+   "clear": {
+    "step": 494,
+    "actor": 9,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 517,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    21,
+    22,
+    23,
+    24
+   ],
+   "harvest_days": [
+    23,
+    24
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 617
+  },
+  {
+   "tile": [
+    4,
+    6
+   ],
+   "clear": {
+    "step": 555,
+    "actor": 7,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 579,
+    "actor": 3,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "harvest_days": [
+    26,
+    27
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 675
+  },
+  {
+   "tile": [
+    3,
+    5
+   ],
+   "clear": {
+    "step": 556,
+    "actor": 4,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 580,
+    "actor": 4,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "harvest_days": [
+    26,
+    27
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 674
+  },
+  {
+   "tile": [
+    3,
+    6
+   ],
+   "clear": {
+    "step": 573,
+    "actor": 5,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 581,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "harvest_days": [
+    26,
+    27
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 661
+  },
+  {
+   "tile": [
+    4,
+    7
+   ],
+   "clear": {
+    "step": 560,
+    "actor": 7,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 582,
+    "actor": 3,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "harvest_days": [
+    26,
+    27
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 656
+  },
+  {
+   "tile": [
+    3,
+    7
+   ],
+   "clear": {
+    "step": 575,
+    "actor": 5,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 584,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "harvest_days": [
+    26,
+    27
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 654
+  }
+ ],
+ "115": [
+  {
+   "tile": [
+    5,
+    0
+   ],
+   "clear": {
+    "step": 488,
+    "actor": 7,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 510,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    21,
+    22,
+    23,
+    24
+   ],
+   "harvest_days": [
+    23,
+    24
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 609
+  },
+  {
+   "tile": [
+    6,
+    0
+   ],
+   "clear": {
+    "step": 490,
+    "actor": 7,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 513,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    21,
+    22,
+    23,
+    24
+   ],
+   "harvest_days": [
+    23,
+    24
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 613
+  },
+  {
+   "tile": [
+    7,
+    1
+   ],
+   "clear": {
+    "step": 494,
+    "actor": 9,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 517,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    21,
+    22,
+    23,
+    24
+   ],
+   "harvest_days": [
+    23,
+    24
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 617
+  },
+  {
+   "tile": [
+    4,
+    6
+   ],
+   "clear": {
+    "step": 555,
+    "actor": 7,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 579,
+    "actor": 3,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "harvest_days": [
+    26,
+    27
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 675
+  },
+  {
+   "tile": [
+    3,
+    5
+   ],
+   "clear": {
+    "step": 556,
+    "actor": 4,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 580,
+    "actor": 4,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "harvest_days": [
+    26,
+    27
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 674
+  },
+  {
+   "tile": [
+    3,
+    6
+   ],
+   "clear": {
+    "step": 573,
+    "actor": 5,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 581,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "harvest_days": [
+    26,
+    27
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 661
+  },
+  {
+   "tile": [
+    4,
+    7
+   ],
+   "clear": {
+    "step": 560,
+    "actor": 7,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 582,
+    "actor": 3,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "harvest_days": [
+    26,
+    27
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 656
+  },
+  {
+   "tile": [
+    3,
+    7
+   ],
+   "clear": {
+    "step": 575,
+    "actor": 5,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 584,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "harvest_days": [
+    26,
+    27
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 654
+  }
+ ],
+ "116": [
+  {
+   "tile": [
+    5,
+    0
+   ],
+   "clear": {
+    "step": 488,
+    "actor": 7,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 510,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    21,
+    22,
+    23,
+    24
+   ],
+   "harvest_days": [
+    23,
+    24
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 609
+  },
+  {
+   "tile": [
+    6,
+    0
+   ],
+   "clear": {
+    "step": 490,
+    "actor": 7,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 513,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    21,
+    22,
+    23,
+    24
+   ],
+   "harvest_days": [
+    23,
+    24
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 613
+  },
+  {
+   "tile": [
+    7,
+    1
+   ],
+   "clear": {
+    "step": 494,
+    "actor": 9,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 517,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    21,
+    22,
+    23,
+    24
+   ],
+   "harvest_days": [
+    23,
+    24
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 617
+  },
+  {
+   "tile": [
+    4,
+    6
+   ],
+   "clear": {
+    "step": 555,
+    "actor": 7,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 579,
+    "actor": 3,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "harvest_days": [
+    26,
+    27
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 675
+  },
+  {
+   "tile": [
+    3,
+    5
+   ],
+   "clear": {
+    "step": 556,
+    "actor": 4,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 580,
+    "actor": 4,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "harvest_days": [
+    26,
+    27
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 674
+  },
+  {
+   "tile": [
+    3,
+    6
+   ],
+   "clear": {
+    "step": 573,
+    "actor": 5,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 581,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "harvest_days": [
+    26,
+    27
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 661
+  },
+  {
+   "tile": [
+    4,
+    7
+   ],
+   "clear": {
+    "step": 560,
+    "actor": 7,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 582,
+    "actor": 3,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "harvest_days": [
+    26,
+    27
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 656
+  },
+  {
+   "tile": [
+    3,
+    7
+   ],
+   "clear": {
+    "step": 575,
+    "actor": 5,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 584,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "harvest_days": [
+    26,
+    27
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 654
+  }
+ ],
+ "117": [
+  {
+   "tile": [
+    5,
+    0
+   ],
+   "clear": {
+    "step": 486,
+    "actor": 5,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 510,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    21,
+    22,
+    23,
+    24
+   ],
+   "harvest_days": [
+    23,
+    24
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 609
+  },
+  {
+   "tile": [
+    6,
+    0
+   ],
+   "clear": {
+    "step": 490,
+    "actor": 9,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 513,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    21,
+    22,
+    23,
+    24
+   ],
+   "harvest_days": [
+    23,
+    24
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 613
+  },
+  {
+   "tile": [
+    7,
+    1
+   ],
+   "clear": {
+    "step": 494,
+    "actor": 9,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 517,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    21,
+    22,
+    23,
+    24
+   ],
+   "harvest_days": [
+    23,
+    24
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 616
+  },
+  {
+   "tile": [
+    4,
+    6
+   ],
+   "clear": {
+    "step": 555,
+    "actor": 7,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 579,
+    "actor": 3,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "harvest_days": [
+    26,
+    27
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 675
+  },
+  {
+   "tile": [
+    3,
+    5
+   ],
+   "clear": {
+    "step": 556,
+    "actor": 4,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 580,
+    "actor": 4,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "harvest_days": [
+    26,
+    27
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 674
+  },
+  {
+   "tile": [
+    3,
+    6
+   ],
+   "clear": {
+    "step": 573,
+    "actor": 5,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 581,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "harvest_days": [
+    26,
+    27
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 661
+  },
+  {
+   "tile": [
+    4,
+    7
+   ],
+   "clear": {
+    "step": 560,
+    "actor": 7,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 582,
+    "actor": 3,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "harvest_days": [
+    26,
+    27
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 656
+  },
+  {
+   "tile": [
+    3,
+    7
+   ],
+   "clear": {
+    "step": 575,
+    "actor": 5,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 584,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "harvest_days": [
+    26,
+    27
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 654
+  }
+ ],
+ "118": [
+  {
+   "tile": [
+    5,
+    0
+   ],
+   "clear": {
+    "step": 486,
+    "actor": 5,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 510,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    21,
+    22,
+    23,
+    24
+   ],
+   "harvest_days": [
+    23,
+    24
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 609
+  },
+  {
+   "tile": [
+    6,
+    0
+   ],
+   "clear": {
+    "step": 490,
+    "actor": 9,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 513,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    21,
+    22,
+    23,
+    24
+   ],
+   "harvest_days": [
+    23,
+    24
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 613
+  },
+  {
+   "tile": [
+    7,
+    1
+   ],
+   "clear": {
+    "step": 494,
+    "actor": 9,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 517,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    21,
+    22,
+    23,
+    24
+   ],
+   "harvest_days": [
+    23,
+    24
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 617
+  },
+  {
+   "tile": [
+    4,
+    6
+   ],
+   "clear": {
+    "step": 555,
+    "actor": 7,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 579,
+    "actor": 3,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "harvest_days": [
+    26,
+    27
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 675
+  },
+  {
+   "tile": [
+    3,
+    5
+   ],
+   "clear": {
+    "step": 556,
+    "actor": 4,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 580,
+    "actor": 4,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "harvest_days": [
+    26,
+    27
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 674
+  },
+  {
+   "tile": [
+    3,
+    6
+   ],
+   "clear": {
+    "step": 573,
+    "actor": 5,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 581,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "harvest_days": [
+    26,
+    27
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 661
+  },
+  {
+   "tile": [
+    4,
+    7
+   ],
+   "clear": {
+    "step": 560,
+    "actor": 7,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 582,
+    "actor": 3,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "harvest_days": [
+    26,
+    27
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 656
+  },
+  {
+   "tile": [
+    3,
+    7
+   ],
+   "clear": {
+    "step": 575,
+    "actor": 5,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 584,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "harvest_days": [
+    26,
+    27
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 654
+  }
+ ],
+ "119": [
+  {
+   "tile": [
+    5,
+    0
+   ],
+   "clear": {
+    "step": 488,
+    "actor": 7,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 510,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    21,
+    22,
+    23,
+    24
+   ],
+   "harvest_days": [
+    23,
+    24
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 609
+  },
+  {
+   "tile": [
+    6,
+    0
+   ],
+   "clear": {
+    "step": 490,
+    "actor": 7,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 513,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    21,
+    22,
+    23,
+    24
+   ],
+   "harvest_days": [
+    23,
+    24
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 613
+  },
+  {
+   "tile": [
+    7,
+    1
+   ],
+   "clear": {
+    "step": 494,
+    "actor": 9,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 517,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    21,
+    22,
+    23,
+    24
+   ],
+   "harvest_days": [
+    23,
+    24
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 617
+  },
+  {
+   "tile": [
+    4,
+    6
+   ],
+   "clear": {
+    "step": 555,
+    "actor": 7,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 579,
+    "actor": 3,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "harvest_days": [
+    26,
+    27
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 675
+  },
+  {
+   "tile": [
+    3,
+    5
+   ],
+   "clear": {
+    "step": 556,
+    "actor": 4,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 580,
+    "actor": 4,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "harvest_days": [
+    26,
+    27
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 674
+  },
+  {
+   "tile": [
+    3,
+    6
+   ],
+   "clear": {
+    "step": 573,
+    "actor": 5,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 581,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "harvest_days": [
+    26,
+    27
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 661
+  },
+  {
+   "tile": [
+    4,
+    7
+   ],
+   "clear": {
+    "step": 560,
+    "actor": 7,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 582,
+    "actor": 3,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "harvest_days": [
+    26,
+    27
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 656
+  },
+  {
+   "tile": [
+    3,
+    7
+   ],
+   "clear": {
+    "step": 575,
+    "actor": 5,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 584,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "harvest_days": [
+    26,
+    27
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 654
+  }
+ ],
+ "120": [
+  {
+   "tile": [
+    5,
+    0
+   ],
+   "clear": {
+    "step": 488,
+    "actor": 7,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 510,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    21,
+    22,
+    23,
+    24
+   ],
+   "harvest_days": [
+    23,
+    24
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 609
+  },
+  {
+   "tile": [
+    6,
+    0
+   ],
+   "clear": {
+    "step": 490,
+    "actor": 7,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 513,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    21,
+    22,
+    23,
+    24
+   ],
+   "harvest_days": [
+    23,
+    24
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 613
+  },
+  {
+   "tile": [
+    7,
+    1
+   ],
+   "clear": {
+    "step": 494,
+    "actor": 9,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 517,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    21,
+    22,
+    23,
+    24
+   ],
+   "harvest_days": [
+    23,
+    24
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 617
+  },
+  {
+   "tile": [
+    4,
+    6
+   ],
+   "clear": {
+    "step": 555,
+    "actor": 7,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 579,
+    "actor": 3,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "harvest_days": [
+    26,
+    27
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 675
+  },
+  {
+   "tile": [
+    3,
+    5
+   ],
+   "clear": {
+    "step": 556,
+    "actor": 4,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 580,
+    "actor": 4,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "harvest_days": [
+    26,
+    27
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 674
+  },
+  {
+   "tile": [
+    3,
+    6
+   ],
+   "clear": {
+    "step": 573,
+    "actor": 5,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 581,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "harvest_days": [
+    26,
+    27
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 661
+  },
+  {
+   "tile": [
+    4,
+    7
+   ],
+   "clear": {
+    "step": 560,
+    "actor": 7,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 582,
+    "actor": 3,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "harvest_days": [
+    26,
+    27
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 656
+  },
+  {
+   "tile": [
+    3,
+    7
+   ],
+   "clear": {
+    "step": 575,
+    "actor": 5,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 584,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "harvest_days": [
+    26,
+    27
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 654
+  }
+ ],
+ "121": [
+  {
+   "tile": [
+    5,
+    0
+   ],
+   "clear": {
+    "step": 488,
+    "actor": 7,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 510,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    21,
+    22,
+    23,
+    24
+   ],
+   "harvest_days": [
+    23,
+    24
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 609
+  },
+  {
+   "tile": [
+    6,
+    0
+   ],
+   "clear": {
+    "step": 490,
+    "actor": 7,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 513,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    21,
+    22,
+    23,
+    24
+   ],
+   "harvest_days": [
+    23,
+    24
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 613
+  },
+  {
+   "tile": [
+    7,
+    1
+   ],
+   "clear": {
+    "step": 494,
+    "actor": 9,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 517,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    21,
+    22,
+    23,
+    24
+   ],
+   "harvest_days": [
+    23,
+    24
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 616
+  },
+  {
+   "tile": [
+    4,
+    6
+   ],
+   "clear": {
+    "step": 555,
+    "actor": 7,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 579,
+    "actor": 3,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "harvest_days": [
+    26,
+    27
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 675
+  },
+  {
+   "tile": [
+    3,
+    5
+   ],
+   "clear": {
+    "step": 556,
+    "actor": 4,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 580,
+    "actor": 4,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "harvest_days": [
+    26,
+    27
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 674
+  },
+  {
+   "tile": [
+    3,
+    6
+   ],
+   "clear": {
+    "step": 573,
+    "actor": 5,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 581,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "harvest_days": [
+    26,
+    27
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 661
+  },
+  {
+   "tile": [
+    4,
+    7
+   ],
+   "clear": {
+    "step": 560,
+    "actor": 7,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 582,
+    "actor": 3,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "harvest_days": [
+    26,
+    27
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 656
+  },
+  {
+   "tile": [
+    3,
+    7
+   ],
+   "clear": {
+    "step": 575,
+    "actor": 5,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 584,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "harvest_days": [
+    26,
+    27
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 654
+  }
+ ],
+ "122": [
+  {
+   "tile": [
+    5,
+    0
+   ],
+   "clear": {
+    "step": 488,
+    "actor": 7,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 510,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    21,
+    22,
+    23,
+    24
+   ],
+   "harvest_days": [
+    23,
+    24
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 609
+  },
+  {
+   "tile": [
+    6,
+    0
+   ],
+   "clear": {
+    "step": 490,
+    "actor": 7,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 513,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    21,
+    22,
+    23,
+    24
+   ],
+   "harvest_days": [
+    23,
+    24
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 613
+  },
+  {
+   "tile": [
+    7,
+    1
+   ],
+   "clear": {
+    "step": 494,
+    "actor": 9,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 517,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    21,
+    22,
+    23,
+    24
+   ],
+   "harvest_days": [
+    23,
+    24
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 616
+  },
+  {
+   "tile": [
+    4,
+    6
+   ],
+   "clear": {
+    "step": 555,
+    "actor": 7,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 579,
+    "actor": 3,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "harvest_days": [
+    26,
+    27
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 675
+  },
+  {
+   "tile": [
+    3,
+    5
+   ],
+   "clear": {
+    "step": 556,
+    "actor": 4,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 580,
+    "actor": 4,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "harvest_days": [
+    26,
+    27
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 674
+  },
+  {
+   "tile": [
+    3,
+    6
+   ],
+   "clear": {
+    "step": 573,
+    "actor": 5,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 581,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "harvest_days": [
+    26,
+    27
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 661
+  },
+  {
+   "tile": [
+    4,
+    7
+   ],
+   "clear": {
+    "step": 560,
+    "actor": 7,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 582,
+    "actor": 3,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "harvest_days": [
+    26,
+    27
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 656
+  },
+  {
+   "tile": [
+    3,
+    7
+   ],
+   "clear": {
+    "step": 575,
+    "actor": 5,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 584,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "harvest_days": [
+    26,
+    27
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 654
+  }
+ ],
+ "123": [
+  {
+   "tile": [
+    5,
+    0
+   ],
+   "clear": {
+    "step": 488,
+    "actor": 7,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 510,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    21,
+    22,
+    23,
+    24
+   ],
+   "harvest_days": [
+    23,
+    24
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 609
+  },
+  {
+   "tile": [
+    6,
+    0
+   ],
+   "clear": {
+    "step": 490,
+    "actor": 7,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 513,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    21,
+    22,
+    23,
+    24
+   ],
+   "harvest_days": [
+    23,
+    24
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 613
+  },
+  {
+   "tile": [
+    7,
+    1
+   ],
+   "clear": {
+    "step": 494,
+    "actor": 9,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 517,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    21,
+    22,
+    23,
+    24
+   ],
+   "harvest_days": [
+    23,
+    24
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 617
+  },
+  {
+   "tile": [
+    4,
+    6
+   ],
+   "clear": {
+    "step": 555,
+    "actor": 7,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 579,
+    "actor": 3,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "harvest_days": [
+    26,
+    27
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 675
+  },
+  {
+   "tile": [
+    3,
+    5
+   ],
+   "clear": {
+    "step": 556,
+    "actor": 4,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 580,
+    "actor": 4,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "harvest_days": [
+    26,
+    27
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 674
+  },
+  {
+   "tile": [
+    3,
+    6
+   ],
+   "clear": {
+    "step": 573,
+    "actor": 5,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 581,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "harvest_days": [
+    26,
+    27
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 661
+  },
+  {
+   "tile": [
+    4,
+    7
+   ],
+   "clear": {
+    "step": 560,
+    "actor": 7,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 582,
+    "actor": 3,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "harvest_days": [
+    26,
+    27
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 656
+  },
+  {
+   "tile": [
+    3,
+    7
+   ],
+   "clear": {
+    "step": 575,
+    "actor": 5,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 584,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "harvest_days": [
+    26,
+    27
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 654
+  }
+ ],
+ "124": [
+  {
+   "tile": [
+    5,
+    0
+   ],
+   "clear": {
+    "step": 488,
+    "actor": 7,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 510,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    21,
+    22,
+    23,
+    24
+   ],
+   "harvest_days": [
+    23,
+    24
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 609
+  },
+  {
+   "tile": [
+    6,
+    0
+   ],
+   "clear": {
+    "step": 490,
+    "actor": 7,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 513,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    21,
+    22,
+    23,
+    24
+   ],
+   "harvest_days": [
+    23,
+    24
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 613
+  },
+  {
+   "tile": [
+    7,
+    1
+   ],
+   "clear": {
+    "step": 494,
+    "actor": 9,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 517,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    21,
+    22,
+    23,
+    24
+   ],
+   "harvest_days": [
+    23,
+    24
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 616
+  },
+  {
+   "tile": [
+    4,
+    6
+   ],
+   "clear": {
+    "step": 555,
+    "actor": 7,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 579,
+    "actor": 3,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "harvest_days": [
+    26,
+    27
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 675
+  },
+  {
+   "tile": [
+    3,
+    5
+   ],
+   "clear": {
+    "step": 556,
+    "actor": 4,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 580,
+    "actor": 4,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "harvest_days": [
+    26,
+    27
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 674
+  },
+  {
+   "tile": [
+    3,
+    6
+   ],
+   "clear": {
+    "step": 573,
+    "actor": 5,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 581,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "harvest_days": [
+    26,
+    27
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 661
+  },
+  {
+   "tile": [
+    4,
+    7
+   ],
+   "clear": {
+    "step": 560,
+    "actor": 7,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 582,
+    "actor": 3,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "harvest_days": [
+    26,
+    27
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 656
+  },
+  {
+   "tile": [
+    3,
+    7
+   ],
+   "clear": {
+    "step": 575,
+    "actor": 5,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 584,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "harvest_days": [
+    26,
+    27
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 654
+  }
+ ],
+ "125": [
+  {
+   "tile": [
+    5,
+    0
+   ],
+   "clear": {
+    "step": 488,
+    "actor": 7,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 510,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    21,
+    22,
+    23,
+    24
+   ],
+   "harvest_days": [
+    23,
+    24
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 609
+  },
+  {
+   "tile": [
+    6,
+    0
+   ],
+   "clear": {
+    "step": 490,
+    "actor": 7,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 513,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    21,
+    22,
+    23,
+    24
+   ],
+   "harvest_days": [
+    23,
+    24
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 613
+  },
+  {
+   "tile": [
+    7,
+    1
+   ],
+   "clear": {
+    "step": 494,
+    "actor": 9,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 517,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    21,
+    22,
+    23,
+    24
+   ],
+   "harvest_days": [
+    23,
+    24
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 617
+  },
+  {
+   "tile": [
+    4,
+    6
+   ],
+   "clear": {
+    "step": 555,
+    "actor": 7,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 579,
+    "actor": 3,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "harvest_days": [
+    26,
+    27
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 675
+  },
+  {
+   "tile": [
+    3,
+    5
+   ],
+   "clear": {
+    "step": 556,
+    "actor": 4,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 580,
+    "actor": 4,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "harvest_days": [
+    26,
+    27
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 674
+  },
+  {
+   "tile": [
+    3,
+    6
+   ],
+   "clear": {
+    "step": 573,
+    "actor": 5,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 581,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "harvest_days": [
+    26,
+    27
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 661
+  },
+  {
+   "tile": [
+    4,
+    7
+   ],
+   "clear": {
+    "step": 560,
+    "actor": 7,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 582,
+    "actor": 3,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "harvest_days": [
+    26,
+    27
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 656
+  },
+  {
+   "tile": [
+    3,
+    7
+   ],
+   "clear": {
+    "step": 575,
+    "actor": 5,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 584,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "harvest_days": [
+    26,
+    27
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 654
+  }
+ ],
+ "126": [
+  {
+   "tile": [
+    5,
+    0
+   ],
+   "clear": {
+    "step": 488,
+    "actor": 7,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 510,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    21,
+    22,
+    23,
+    24
+   ],
+   "harvest_days": [
+    23,
+    24
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 609
+  },
+  {
+   "tile": [
+    6,
+    0
+   ],
+   "clear": {
+    "step": 490,
+    "actor": 7,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 513,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    21,
+    22,
+    23,
+    24
+   ],
+   "harvest_days": [
+    23,
+    24
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 613
+  },
+  {
+   "tile": [
+    7,
+    1
+   ],
+   "clear": {
+    "step": 494,
+    "actor": 9,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 517,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    21,
+    22,
+    23,
+    24
+   ],
+   "harvest_days": [
+    23,
+    24
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 617
+  },
+  {
+   "tile": [
+    4,
+    6
+   ],
+   "clear": {
+    "step": 555,
+    "actor": 7,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 579,
+    "actor": 3,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "harvest_days": [
+    26,
+    27
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 675
+  },
+  {
+   "tile": [
+    3,
+    5
+   ],
+   "clear": {
+    "step": 556,
+    "actor": 4,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 580,
+    "actor": 4,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "harvest_days": [
+    26,
+    27
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 674
+  },
+  {
+   "tile": [
+    3,
+    6
+   ],
+   "clear": {
+    "step": 573,
+    "actor": 5,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 581,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "harvest_days": [
+    26,
+    27
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 661
+  },
+  {
+   "tile": [
+    4,
+    7
+   ],
+   "clear": {
+    "step": 560,
+    "actor": 7,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 582,
+    "actor": 3,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "harvest_days": [
+    26,
+    27
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 656
+  },
+  {
+   "tile": [
+    3,
+    7
+   ],
+   "clear": {
+    "step": 575,
+    "actor": 5,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 584,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "harvest_days": [
+    26,
+    27
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 654
+  }
+ ],
+ "127": [
+  {
+   "tile": [
+    5,
+    1
+   ],
+   "clear": {
+    "step": 448,
+    "actor": 9,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 461,
+    "actor": 1,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    19,
+    20,
+    21,
+    22
+   ],
+   "harvest_days": [
+    21,
+    22
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 558
+  },
+  {
+   "tile": [
+    7,
+    3
+   ],
+   "clear": {
+    "step": 438,
+    "actor": 3,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 462,
+    "actor": 7,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    19,
+    20,
+    21,
+    22
+   ],
+   "harvest_days": [
+    21,
+    22
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 557
+  },
+  {
+   "tile": [
+    6,
+    1
+   ],
+   "clear": {
+    "step": 445,
+    "actor": 9,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 464,
+    "actor": 1,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    19,
+    20,
+    21,
+    22
+   ],
+   "harvest_days": [
+    21,
+    22
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 559
+  },
+  {
+   "tile": [
+    8,
+    4
+   ],
+   "clear": {
+    "step": 446,
+    "actor": 3,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 466,
+    "actor": 7,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    19,
+    20,
+    21,
+    22
+   ],
+   "harvest_days": [
+    21,
+    22
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 567
+  },
+  {
+   "tile": [
+    9,
+    4
+   ],
+   "clear": {
+    "step": 448,
+    "actor": 3,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 469,
+    "actor": 7,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    19,
+    20,
+    21,
+    22
+   ],
+   "harvest_days": [
+    21,
+    22
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 571
+  },
+  {
+   "tile": [
+    6,
+    0
+   ],
+   "clear": {
+    "step": 491,
+    "actor": 1,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 513,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    21,
+    22,
+    23,
+    24
+   ],
+   "harvest_days": [
+    23,
+    24
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 612
+  },
+  {
+   "tile": [
+    7,
+    1
+   ],
+   "clear": {
+    "step": 495,
+    "actor": 1,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 517,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    21,
+    22,
+    23,
+    24
+   ],
+   "harvest_days": [
+    23,
+    24
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 609
+  },
+  {
+   "tile": [
+    4,
+    5
+   ],
+   "clear": {
+    "step": 559,
+    "actor": 6,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 578,
+    "actor": 0,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "harvest_days": [
+    26,
+    27
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 674
+  }
+ ],
+ "128": [
+  {
+   "tile": [
+    5,
+    1
+   ],
+   "clear": {
+    "step": 448,
+    "actor": 9,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 461,
+    "actor": 1,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    19,
+    20,
+    21,
+    22
+   ],
+   "harvest_days": [
+    21,
+    22
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 558
+  },
+  {
+   "tile": [
+    7,
+    3
+   ],
+   "clear": {
+    "step": 438,
+    "actor": 3,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 462,
+    "actor": 7,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    19,
+    20,
+    21,
+    22
+   ],
+   "harvest_days": [
+    21,
+    22
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 557
+  },
+  {
+   "tile": [
+    6,
+    1
+   ],
+   "clear": {
+    "step": 445,
+    "actor": 9,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 464,
+    "actor": 1,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    19,
+    20,
+    21,
+    22
+   ],
+   "harvest_days": [
+    21,
+    22
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 559
+  },
+  {
+   "tile": [
+    8,
+    4
+   ],
+   "clear": {
+    "step": 446,
+    "actor": 3,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 466,
+    "actor": 7,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    19,
+    20,
+    21,
+    22
+   ],
+   "harvest_days": [
+    21,
+    22
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 567
+  },
+  {
+   "tile": [
+    9,
+    4
+   ],
+   "clear": {
+    "step": 448,
+    "actor": 3,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 469,
+    "actor": 7,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    19,
+    20,
+    21,
+    22
+   ],
+   "harvest_days": [
+    21,
+    22
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 571
+  },
+  {
+   "tile": [
+    6,
+    0
+   ],
+   "clear": {
+    "step": 491,
+    "actor": 1,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 513,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    21,
+    22,
+    23,
+    24
+   ],
+   "harvest_days": [
+    23,
+    24
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 612
+  },
+  {
+   "tile": [
+    7,
+    1
+   ],
+   "clear": {
+    "step": 495,
+    "actor": 1,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 517,
+    "actor": 5,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    21,
+    22,
+    23,
+    24
+   ],
+   "harvest_days": [
+    23,
+    24
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 609
+  },
+  {
+   "tile": [
+    4,
+    5
+   ],
+   "clear": {
+    "step": 559,
+    "actor": 6,
+    "orig": "HARVEST"
+   },
+   "plant": {
+    "step": 578,
+    "actor": 0,
+    "orig": "FERTILIZE"
+   },
+   "water_days": [
+    24,
+    25,
+    26,
+    27
+   ],
+   "harvest_days": [
+    26,
+    27
+   ],
+   "displaced": "STRAWBERRY",
+   "displaced_harvests": 2,
+   "interval_end": 674
+  }
+ ]
+}

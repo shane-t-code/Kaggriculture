@@ -7524,11 +7524,16 @@ _P1_REPORT = {"p1_targets": 0, "p1_feed_suppressed": 0, "p1_escapes": 0,
               "p1_plants": 0, "p1_plant_no_seed": 0, "p1_waters": 0,
               "p1_harvest_units": 0, "p1_delivered": 0, "p1_sold": 0,
               "p1_tiles_lost": 0, "p1_parent_cmd_overridden": 0,
+              "p1_admits": 0, "p1_decl_ev": 0, "p1_decl_cert": 0,
+              "p1_decl_rival": 0, "p1_decl_yield": 0, "p1_cycles": 0,
               "p1_errors": 0}
+_P1_ADMLOG = []        # reviewable admission records ( review-4 ask)
 _P1_ACCESS = ((4, 4), (5, 4), (4, 5), (5, 5))
 _P1_FROM = 15          # first starve day (6/8 shop draws in by ~d17 escape)
-_P1_TO = 27            # last starve day (escape by 29 frees nothing usable)
-_P1_EV_BAR = -5.0      # shed when the animal loses > $5/day at quotes
+_P1_TO = 25            # last admission day (needs escape + one full cycle)
+_P1_MARGIN = 300       # RELEASE must beat KEEP by this over the horizon
+_P1_INTERVAL = {"COW": 2, "GOOSE": 1}
+_P1_PRODUCT = {"COW": "MILK", "GOOSE": "EGG"}
 _P1_LAST_PLANT = 26    # crop planted day <= 26 still banks by day 29
 _P1_MIN_PC = 35        # carrot admission on freed tiles
 _P1_MIN_PW = 22        # wheat admission on freed tiles
@@ -7549,7 +7554,7 @@ def _p1_state(seat, step):
             "last": step, "day": -1, "own": set(), "hired": 0, "pending": None,
             "no_hire": False, "targets": {}, "freed": set(), "tiles": {},
             "spare": {"CARROT": 0, "WHEAT": 0}, "credit": {"CARROT": 0, "WHEAT": 0},
-            "planted_today": 0}
+            "planted_today": 0, "visits": {}, "cycled": set(), "had_crop": set()}
     st["last"] = step
     return st
 
@@ -7606,19 +7611,87 @@ def _p1_apply(observation, action):
         st["no_hire"] = False; st["planted_today"] = 0
         for c in st["spare"]:
             st["spare"][c] = min(st["spare"][c], int(priv["seeds"].get(c, 0)))
-        # --- daily target evaluation: price-led per-animal EV ---
-        if _P1_FROM <= day <= _P1_TO:
+        # --- daily RETAIN-vs-RELEASE admission ( review 4, lane a) ---
+        # one conversion in the starve->dig->first-cycle pipeline at a time;
+        # KEEP is care-adjusted (a cared cow banks (1+interval)/interval
+        # units/day, engine :823-830); RELEASE needs an observed-service
+        # certificate and must not enrich a rival still farming the species.
+        pipeline_open = (not st["targets"]
+                         and not (st["freed"] - st["cycled"]))
+        if _P1_FROM <= day <= _P1_TO and pipeline_open:
             p_w = int(prices.get("WHEAT", 0))
-            fert = min(3, int(prices.get("FERTILIZER", 3)))
-            ev = {"COW": int(prices.get("MILK", 0)) / 2.0 + fert - p_w,
-                  "GOOSE": int(prices.get("EGG", 0)) + fert - p_w}
-            for y, row in enumerate(tiles):
-                for x, t in enumerate(row):
-                    if (isinstance(t, dict) and t.get("animal") in ev
-                            and (x, y) not in st["targets"]
-                            and ev[t["animal"]] < _P1_EV_BAR):
-                        st["targets"][(x, y)] = t["animal"]
-                        _P1_REPORT["p1_targets"] += 1
+            p_fert = min(8, int(prices.get("FERTILIZER", 0)))
+            crop_now = _p1_cell_crop(shops, prices)
+            opp = observation["farms"][1 - seat]
+            opp_sp = {}
+            for row_ in opp["tiles"]:
+                for t_ in row_:
+                    if isinstance(t_, dict) and "animal" in t_:
+                        opp_sp[t_["animal"]] = opp_sp.get(t_["animal"], 0) + 1
+            remaining = 29 - day
+            best = None
+            for y, row_ in enumerate(tiles):
+                for x, t in enumerate(row_):
+                    if not (isinstance(t, dict)
+                            and t.get("animal") in _P1_INTERVAL):
+                        continue
+                    sp = t["animal"]
+                    rec = {"day": day, "pos": (x, y), "sp": sp}
+                    if crop_now is None:
+                        continue
+                    if int(t.get("yield_units", 0)) > 0:
+                        _P1_REPORT["p1_decl_yield"] += 1
+                        continue           # harvest-before-starve
+                    if opp_sp.get(sp, 0) > 0:
+                        _P1_REPORT["p1_decl_rival"] += 1
+                        rec["decline"] = "rival:%d" % opp_sp[sp]
+                        _P1_ADMLOG.append(rec)
+                        continue
+                    vh = st["visits"].get((x, y), {})
+                    traffic = vh.get(day - 1, 0) + vh.get(day - 2, 0)
+                    if traffic < 4:        # ~2 service visits/day observed
+                        _P1_REPORT["p1_decl_cert"] += 1
+                        rec["decline"] = "cert:%d" % traffic
+                        _P1_ADMLOG.append(rec)
+                        continue
+                    iv = _P1_INTERVAL[sp]
+                    p_prod = int(prices.get(_P1_PRODUCT[sp], 0))
+                    keep_d = ((1.0 + iv) / iv) * p_prod + p_fert - 0.8 * p_w
+                    myd, seed_cost = _P1_CROP[crop_now]
+                    p_crop = int(prices.get(crop_now, 0))
+                    units = 3.5 if crop_now == "CARROT" else 5.0
+                    crop_d = (units * p_crop - seed_cost) / (myd + 1.0)
+                    rel_d = 0.8 * p_w + crop_d
+                    gain = (rel_d - keep_d) * max(0, remaining - 3)
+                    rec.update(keep_d=round(keep_d, 1), rel_d=round(rel_d, 1),
+                               gain=round(gain), traffic=traffic)
+                    if gain < _P1_MARGIN:
+                        _P1_REPORT["p1_decl_ev"] += 1
+                        rec["decline"] = "ev"
+                        _P1_ADMLOG.append(rec)
+                        continue
+                    if best is None or gain > best[0]:
+                        best = (gain, (x, y), sp, rec)
+            if best is not None:
+                _, pos_, sp_, rec = best
+                st["targets"][pos_] = sp_
+                rec["decline"] = None
+                _P1_ADMLOG.append(rec)
+                _P1_REPORT["p1_targets"] += 1
+                _P1_REPORT["p1_admits"] += 1
+
+    # --- observe service traffic at animal tiles (the certificate's data):
+    # count units standing on cow/goose tiles executing FEED/CARE/COLLECT ---
+    if _P1_FROM - 3 <= day <= _P1_TO:
+        _acts = [action.get("farmer")] + list(action.get("hands") or [])
+        _pos = [tuple(farm["farmer"])] + [tuple(h) for h in farm["hands"]]
+        for _i, _c in enumerate(_acts):
+            if (_i < len(_pos) and isinstance(_c, list) and _c
+                    and _c[0] in ("FEED", "CARE", "COLLECT_FERTILIZER")):
+                _t = tiles[_pos[_i][1]][_pos[_i][0]]
+                if isinstance(_t, dict) and _t.get("animal") in _P1_INTERVAL:
+                    vh = st["visits"].setdefault(_pos[_i], {})
+                    vh[day] = vh.get(day, 0) + 1
 
     if not (st["targets"] or st["tiles"] or st["own"]
             or any(st["credit"].values())):
@@ -7655,7 +7728,13 @@ def _p1_apply(observation, action):
         if not (isinstance(t, dict) and t.get("crop") == pcrop
                 and int(t.get("planted_day", -9)) == pd):
             st["tiles"].pop(pos)
-            _P1_REPORT["p1_tiles_lost"] += 1
+            # a resolved freed tile (harvested by anyone, replanted, or even
+            # weeded) completes its pipeline slot; only weeds count as losses
+            if pos in st["freed"] and pos not in st["cycled"]:
+                st["cycled"].add(pos)
+                _P1_REPORT["p1_cycles"] += 1
+            if isinstance(t, dict) and t.get("kind") == "WEED":
+                _P1_REPORT["p1_tiles_lost"] += 1
     held0 = {c: int(priv["seeds"].get(c, 0)) for c in _P1_CROP}
     plants0 = {c: sum(1 for u in units
                       if isinstance(u, list) and len(u) > 1
@@ -7666,7 +7745,12 @@ def _p1_apply(observation, action):
             break
         pos = positions[i]
         op = cmd[0] if isinstance(cmd, list) and cmd else "PASS"
-        if op == "FEED" and pos in st["targets"]:
+        #  review-4 one-line repair: suppress FEED only while the animal
+        # is still on the tile — a FEED aimed at the bare structure is a DEAD
+        # command that must fall through and become the DIG.
+        if (op == "FEED" and pos in st["targets"]
+                and isinstance(tiles[pos[1]][pos[0]], dict)
+                and tiles[pos[1]][pos[0]].get("animal")):
             units[i] = ["PASS"]
             _P1_REPORT["p1_feed_suppressed"] += 1
             changed = True
@@ -7686,6 +7770,9 @@ def _p1_apply(observation, action):
                 st["credit"][pcrop] += int(t.get("yield_units", 0))
                 _P1_REPORT["p1_harvest_units"] += int(t.get("yield_units", 0))
                 st["tiles"].pop(pos)
+                if pos in st["freed"] and pos not in st["cycled"]:
+                    st["cycled"].add(pos)
+                    _P1_REPORT["p1_cycles"] += 1
                 changed = True
         elif (pos in st["freed"] and isinstance(t, dict)
                 and t.get("kind") in ("COOP", "PASTURE")
@@ -7869,6 +7956,7 @@ def p1_agent(observation, configuration=None):
     if int(observation.get("step", 0)) == 0:
         for _k in _P1_REPORT:
             _P1_REPORT[_k] = 0
+        del _P1_ADMLOG[:]
     action = _P1_PARENT(observation, configuration)
     try:
         standard = configuration is None or all(

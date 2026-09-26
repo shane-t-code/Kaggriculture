@@ -7523,6 +7523,8 @@ _RP_REPORT = {"rp_committed": 0, "rp_hires": 0, "rp_jobs_done": 0,
               "rp_collects": 0, "rp_pickups": 0, "rp_sell_units": 0,
               "rp_plants": 0, "rp_plant_no_tile": 0, "rp_plant_no_seed": 0,
               "rp_plant_jobs": 0, "rp_plant_unassigned": 0,
+              "rp_wheat_plants": 0, "rp_wheat_sold": 0,
+              "rp_emergency_wheat": 0, "rp_delivered": 0,
               "rp_suppressed": 0, "rp_errors": 0}
 _RP_ACCESS = ((4, 4), (5, 4), (4, 5), (5, 5))
 

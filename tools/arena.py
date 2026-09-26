@@ -83,7 +83,13 @@ def cmd_run(args):
         with _silence_fds():
             env = make("kaggriculture",
                        configuration={"episodeSteps": 720, "seed": seed})
-            env.run([agent_file, tape_agent(rep, opp_seat)])
+            #  review-4 fix (note): the candidate must sit in the
+            # REFERENCE team's actual seat — weed RNG consumes farm 0's empty
+            # tiles first, so seats are not interchangeable.
+            pair = [None, None]
+            pair[ref_seat] = agent_file
+            pair[opp_seat] = tape_agent(rep, opp_seat)
+            env.run(pair)
         final = env.steps[-1]
     finally:
         shop_pin.uninstall()
@@ -94,14 +100,14 @@ def cmd_run(args):
                      else json.dumps(env.toJSON()))
     row = {
         "tag": tag, "episode": os.path.basename(rp),
-        "world_shops": seq, "seed": seed,
+        "world_shops": seq, "seed": seed, "seat": ref_seat,
         "ref_team": teams[ref_seat], "opp_team": teams[opp_seat],
         "ref_bank": float(rewards[ref_seat] or 0),
         "opp_bank_real": float(rewards[opp_seat] or 0),
-        "our_bank": float(final[0].reward or 0),
-        "tape_bank_now": float(final[1].reward or 0),
-        "gap_vs_ref": float(final[0].reward or 0) - float(rewards[ref_seat] or 0),
-        "margin_vs_tape": float(final[0].reward or 0) - float(final[1].reward or 0),
+        "our_bank": float(final[ref_seat].reward or 0),
+        "tape_bank_now": float(final[opp_seat].reward or 0),
+        "gap_vs_ref": float(final[ref_seat].reward or 0) - float(rewards[ref_seat] or 0),
+        "margin_vs_tape": float(final[ref_seat].reward or 0) - float(final[opp_seat].reward or 0),
         "statuses": [s.status for s in final],
     }
     with open(out, "a", encoding="utf-8") as fh:

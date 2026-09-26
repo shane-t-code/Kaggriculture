@@ -60,8 +60,12 @@ def play_one(job):
 
 def cmd_run(args):
     ash, bsh = _sha8(args.a), _sha8(args.b)
+    if args.seed_list:
+        seed_iter = [int(x) for x in args.seed_list.split(",")]
+    else:
+        seed_iter = range(args.start_seed, args.start_seed + args.seeds)
     jobs = [(args.a, args.b, s, seat, args.tag, ash, bsh)
-            for s in range(args.start_seed, args.start_seed + args.seeds)
+            for s in seed_iter
             for seat in (0, 1)]
     with Pool(args.procs) as pool:
         rows = pool.map(play_one, jobs)
@@ -71,8 +75,9 @@ def cmd_run(args):
     bad = [r for r in rows if r["status"] != "OK"]
     w = sum(r["res"] == "W" for r in rows); l = sum(r["res"] == "L" for r in rows)
     t = sum(r["res"] == "T" for r in rows)
-    print(f"{args.tag}: {len(rows)} games (seeds {args.start_seed}-"
-          f"{args.start_seed + args.seeds - 1} x 2 seats)  W{w}-L{l}-T{t}"
+    span = (args.seed_list if args.seed_list
+            else f"{args.start_seed}-{args.start_seed + args.seeds - 1}")
+    print(f"{args.tag}: {len(rows)} games (seeds {span} x 2 seats)  W{w}-L{l}-T{t}"
           + (f"  !! {len(bad)} INVALID: " + ", ".join(
                 f"seed {r['seed']} seat {r['seat']} {r['status']}" for r in bad)
              if bad else ""))
@@ -160,8 +165,10 @@ def main():
     r = sub.add_parser("run")
     r.add_argument("--a", required=True, help="CANDIDATE agent file")
     r.add_argument("--b", required=True, help="opponent agent file")
-    r.add_argument("--seeds", type=int, required=True)
-    r.add_argument("--start-seed", type=int, required=True)
+    r.add_argument("--seeds", type=int, default=0)
+    r.add_argument("--start-seed", type=int, default=0)
+    r.add_argument("--seed-list", default=None,
+                   help="comma-separated explicit seeds (overrides --seeds/--start-seed)")
     r.add_argument("--tag", required=True)
     r.add_argument("--out", required=True)
     r.add_argument("--procs", type=int, default=max(1, (os.cpu_count() or 4) - 1))

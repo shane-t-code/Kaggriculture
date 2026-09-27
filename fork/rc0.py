@@ -7521,6 +7521,7 @@ _RP_STATE = {}
 _RP_REPORT = {"rp_committed": 0, "rp_hires": 0, "rp_jobs_done": 0,
               "rp_feeds": 0, "rp_waters": 0, "rp_harvests": 0, "rp_cares": 0,
               "rp_collects": 0, "rp_pickups": 0, "rp_sell_units": 0,
+              "rp_survival_moves": 0, "rp_survival_waters": 0,
               "rp_plants": 0, "rp_plant_no_tile": 0, "rp_plant_no_seed": 0,
               "rp_plant_jobs": 0, "rp_plant_unassigned": 0,
               "rp_wheat_plants": 0, "rp_wheat_sold": 0,

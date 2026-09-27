@@ -7521,6 +7521,7 @@ _RP_STATE = {}
 _RP_REPORT = {"rp_committed": 0, "rp_hires": 0, "rp_jobs_done": 0,
               "rp_feeds": 0, "rp_waters": 0, "rp_harvests": 0, "rp_cares": 0,
               "rp_collects": 0, "rp_pickups": 0, "rp_sell_units": 0,
+              "rp_survival_moves": 0, "rp_survival_waters": 0,
               "rp_plants": 0, "rp_plant_no_tile": 0, "rp_plant_no_seed": 0,
               "rp_plant_jobs": 0, "rp_plant_unassigned": 0,
               "rp_wheat_plants": 0, "rp_wheat_sold": 0,
@@ -7558,7 +7559,7 @@ _RP_WHE_SHOPS = ("BAKERY", "PIZZA_SHOP", "BRUNCH_SPOT", "ICE_CREAM_SHOP",
 # product — no imports, trivially inside the step budget.
 # ---------------------------------------------------------------------------
 _RP_USE_HEAD = False
-_RP_HEAD = {'feature_names': ['day', 'days_left', 'shop_BAKERY', 'shop_PIZZA_SHOP', 'shop_BRUNCH_SPOT', 'shop_YARN_STORE', 'shop_ICE_CREAM_SHOP', 'shop_PET_CAFE', 'shop_SMOOTHIE_SHOP', 'shop_FARMERS_MARKET', 'p_WHEAT', 'p_CARROT', 'p_TOMATO', 'p_STRAWBERRY', 'p_MELON', 'p_EGG', 'p_MILK', 'p_WOOL', 'p_FERTILIZER', 'minv_WHEAT', 'minv_CARROT', 'minv_TOMATO', 'minv_STRAWBERRY', 'minv_MELON', 'minv_EGG', 'minv_MILK', 'minv_WOOL', 'minv_FERTILIZER', 'money', 'prev_crew', 'quads', 'shed_WHEAT', 'shed_CARROT', 'shed_TOMATO', 'shed_STRAWBERRY', 'shed_MELON', 'shed_EGG', 'shed_MILK', 'shed_WOOL', 'shed_FERTILIZER', 'seed_WHEAT', 'seed_CARROT', 'seed_TOMATO', 'seed_STRAWBERRY', 'seed_MELON', 'my_WHEAT', 'my_CARROT', 'my_TOMATO', 'my_STRAWBERRY', 'my_MELON', 'my_GOOSE', 'my_COW', 'my_SHEEP', 'my_empty', 'my_weed', 'opp_money', 'op_WHEAT', 'op_CARROT', 'op_TOMATO', 'op_STRAWBERRY', 'op_MELON', 'op_GOOSE', 'op_COW', 'op_SHEEP', 'opp_empty'], 'mu': [19.0, 10.0, 0.368421, 1.045372, 0.84755, 0.569873, 0.796733, 0.831216, 0.836661, 0.598911, 36.513612, 41.849365, 69.854809, 135.339383, 141.324864, 46.577132, 99.098004, 70.428312, 39.874773, 9.845766, 9.91161, 9.919829, 9.968969, 10.10004, 10.057951, 10.026902, 10.042434, 10.300662, 47.741136, 11.264973, 3.490018, 30.032668, 5.941924, 2.838475, 13.123412, 0.751361, 6.475499, 5.174229, 4.595281, 8.562613, 7.725953, 1.551724, 0.829401, 0.058076, 0.0, 24.798548, 8.352087, 5.77314, 22.274047, 1.53539, 5.190563, 8.716878, 4.987296, 4.333938, 1.041742, 47.481819, 24.321234, 8.139746, 5.606171, 22.001815, 1.749546, 5.206897, 8.493648, 4.883848, 4.076225], 'sd': [5.477226, 5.477226, 0.482376, 1.082668, 0.916866, 0.74651, 0.800674, 0.741929, 0.686001, 0.614937, 5.30617, 5.96671, 9.326541, 69.884446, 45.139406, 4.898696, 70.397713, 72.294805, 18.901327, 0.102342, 0.076164, 0.061703, 0.064071, 0.03132, 0.125929, 0.038286, 0.023712, 0.094417, 30.408723, 0.814249, 0.4999, 13.039338, 8.382652, 6.053696, 12.796864, 2.842169, 6.059808, 5.675316, 5.071315, 3.989003, 7.329133, 2.458467, 1.709355, 0.319203, 1e-06, 9.667676, 8.934293, 7.784838, 12.405843, 2.966559, 3.383259, 3.128765, 3.354687, 6.527695, 2.025267, 29.781259, 9.767733, 8.789352, 7.700324, 12.085224, 3.022432, 3.276827, 3.344071, 3.11852, 6.407912], 'W_wheat': [0.035193, -0.035193, 0.33359, 0.438561, 0.221273, -0.067344, -0.032311, -0.591846, -0.245451, -0.162589, 0.238723, -0.367527, -0.002857, -0.220656, -0.007056, 0.200541, -0.072878, -0.017554, 0.113651, -0.215783, 0.371763, -0.039302, 0.181036, -0.016049, -0.142094, 0.082467, -0.055518, -0.11302, 0.048475, 0.214381, 0.455818, -0.093902, 0.106838, -0.179607, -0.127696, -0.125654, -0.163708, -0.205235, -0.090684, -0.127703, 0.618345, -0.242395, 0.115105, -0.032165, 0.0, 0.271258, 0.205876, -0.025724, 0.112501, -0.170309, -0.363498, 0.062181, 0.221726, 0.161615, -0.089643, 0.055764, 0.110192, 0.042755, 0.091201, -0.029454, 0.1383, -0.049648, -0.007938, 0.012763, 0.171039, 0.0], 'W_carrot': [-0.157661, 0.157661, -0.038754, -0.23763, -0.199509, -0.181535, -0.355114, 0.730335, -0.154531, 0.266921, -0.008171, 0.524594, 0.152745, 0.059342, 0.027596, -0.089633, -0.210013, -0.14764, 0.195368, 0.147618, -0.53204, -0.130941, 0.117911, -0.007787, 0.045828, 0.241905, 0.039595, -0.197112, -0.139083, -0.061388, -0.106824, -0.084921, 0.056969, 0.082415, -0.054748, -0.131262, -0.046854, -0.163694, -0.081634, 0.019713, 0.115267, 0.637156, -0.001682, -0.102247, 0.0, -0.001727, 0.304212, -0.186643, -0.130095, 0.045071, 0.066102, -0.160903, -0.122711, -0.036062, -0.042128, -0.153365, -0.176496, 0.060456, 0.209174, -0.157312, -0.003284, 0.239278, -0.170422, -0.167186, -0.080551, -0.0], 'day_mean_wheat': {'10': 24.207, '11': 20.379, '12': 19.379, '13': 18.448, '14': 18.655, '15': 16.793, '16': 17.034, '17': 18.897, '18': 21.414, '19': 23.724, '20': 29.241, '21': 31.379, '22': 31.793, '23': 28.034, '24': 24.241, '25': 19.379, '26': 10.448, '27': 3.655, '28': 0.138}, 'day_mean_carrot': {'10': 4.241, '11': 6.0, '12': 6.103, '13': 5.69, '14': 4.621, '15': 4.862, '16': 4.759, '17': 6.069, '18': 7.759, '19': 9.31, '20': 12.069, '21': 13.897, '22': 17.931, '23': 19.552, '24': 23.31, '25': 18.414, '26': 11.448, '27': 2.207, '28': 0.0}}
+_RP_HEAD = {'feature_names': ['day', 'days_left', 'shop_BAKERY', 'shop_PIZZA_SHOP', 'shop_BRUNCH_SPOT', 'shop_YARN_STORE', 'shop_ICE_CREAM_SHOP', 'shop_PET_CAFE', 'shop_SMOOTHIE_SHOP', 'shop_FARMERS_MARKET', 'p_WHEAT', 'p_CARROT', 'p_TOMATO', 'p_STRAWBERRY', 'p_MELON', 'p_EGG', 'p_MILK', 'p_WOOL', 'p_FERTILIZER', 'minv_WHEAT', 'minv_CARROT', 'minv_TOMATO', 'minv_STRAWBERRY', 'minv_MELON', 'minv_EGG', 'minv_MILK', 'minv_WOOL', 'minv_FERTILIZER', 'money', 'prev_crew', 'quads', 'shed_WHEAT', 'shed_CARROT', 'shed_TOMATO', 'shed_STRAWBERRY', 'shed_MELON', 'shed_EGG', 'shed_MILK', 'shed_WOOL', 'shed_FERTILIZER', 'my_WHEAT', 'my_CARROT', 'my_TOMATO', 'my_STRAWBERRY', 'my_MELON', 'my_GOOSE', 'my_COW', 'my_SHEEP', 'my_empty', 'my_weed', 'opp_money', 'op_WHEAT', 'op_CARROT', 'op_TOMATO', 'op_STRAWBERRY', 'op_MELON', 'op_GOOSE', 'op_COW', 'op_SHEEP', 'opp_empty'], 'mu': [19.0, 10.0, 0.368421, 1.045372, 0.84755, 0.569873, 0.796733, 0.831216, 0.836661, 0.598911, 36.513612, 41.849365, 69.854809, 135.339383, 141.324864, 46.577132, 99.098004, 70.428312, 39.874773, 9.845766, 9.91161, 9.919829, 9.968969, 10.10004, 10.057951, 10.026902, 10.042434, 10.300662, 47.741136, 11.264973, 3.490018, 30.032668, 5.941924, 2.838475, 13.123412, 0.751361, 6.475499, 5.174229, 4.595281, 8.562613, 24.798548, 8.352087, 5.77314, 22.274047, 1.53539, 5.190563, 8.716878, 4.987296, 4.333938, 1.041742, 47.481819, 24.321234, 8.139746, 5.606171, 22.001815, 1.749546, 5.206897, 8.493648, 4.883848, 4.076225], 'sd': [5.477226, 5.477226, 0.482376, 1.082668, 0.916866, 0.74651, 0.800674, 0.741929, 0.686001, 0.614937, 5.30617, 5.96671, 9.326541, 69.884446, 45.139406, 4.898696, 70.397713, 72.294805, 18.901327, 0.102342, 0.076164, 0.061703, 0.064071, 0.03132, 0.125929, 0.038286, 0.023712, 0.094417, 30.408723, 0.814249, 0.4999, 13.039338, 8.382652, 6.053696, 12.796864, 2.842169, 6.059808, 5.675316, 5.071315, 3.989003, 9.667676, 8.934293, 7.784838, 12.405843, 2.966559, 3.383259, 3.128765, 3.354687, 6.527695, 2.025267, 29.781259, 9.767733, 8.789352, 7.700324, 12.085224, 3.022432, 3.276827, 3.344071, 3.11852, 6.407912], 'W_wheat': [0.031826, -0.031826, 0.619383, 0.868028, 0.299388, -0.155527, -0.055917, -1.134757, -0.418851, -0.27646, 0.714025, -0.561987, -0.019244, -0.477418, -0.030508, 0.21297, -0.130701, -0.036584, 0.27672, -0.600437, 0.565128, -0.121525, 0.372735, -0.032359, -0.094849, 0.189393, -0.075749, -0.274069, 0.079495, 0.283457, 0.916524, -0.314146, 0.297485, -0.530363, -0.285005, -0.256756, -0.136375, -0.343748, -0.12118, -0.221139, 0.263135, 0.670219, -0.148117, 0.369765, -0.421287, -0.627735, 0.067026, 0.505242, 0.230179, -0.226417, 0.078636, -0.087894, 0.288496, 0.04037, 0.015162, 0.370452, -0.00424, -0.027954, -0.003224, 0.339405, 0.0], 'W_carrot': [-0.304396, 0.304396, 0.000781, -0.560023, -0.367424, -0.302244, -0.655038, 1.438663, -0.117309, 0.265949, -0.009061, 0.837109, 0.234537, 0.160031, 0.027448, -0.145569, -0.347695, -0.318656, 0.39028, 0.34382, -0.859985, -0.18945, 0.265827, 0.059693, -0.110521, 0.431029, -0.086832, -0.394625, -0.207747, 0.01237, -0.119912, -0.117227, -0.175851, 0.244407, -0.057113, -0.253948, -0.235088, -0.18842, -0.099909, 0.100241, 0.145024, 0.485941, -0.465683, -0.204899, -0.005188, -0.144456, -0.026108, -0.177944, 0.038921, 0.062752, -0.214199, -0.215819, -0.160307, 0.381429, -0.299493, -0.166043, 0.243428, -0.117353, -0.260411, -0.140482, -0.0], 'day_mean_wheat': {'10': 24.207, '11': 20.379, '12': 19.379, '13': 18.448, '14': 18.655, '15': 16.793, '16': 17.034, '17': 18.897, '18': 21.414, '19': 23.724, '20': 29.241, '21': 31.379, '22': 31.793, '23': 28.034, '24': 24.241, '25': 19.379, '26': 10.448, '27': 3.655, '28': 0.138}, 'day_mean_carrot': {'10': 4.241, '11': 6.0, '12': 6.103, '13': 5.69, '14': 4.621, '15': 4.862, '16': 4.759, '17': 6.069, '18': 7.759, '19': 9.31, '20': 12.069, '21': 13.897, '22': 17.931, '23': 19.552, '24': 23.31, '25': 18.414, '26': 11.448, '27': 2.207, '28': 0.0}}
 _RP_HEAD_SHOPS = ["BAKERY", "PIZZA_SHOP", "BRUNCH_SPOT", "YARN_STORE",
                   "ICE_CREAM_SHOP", "PET_CAFE", "SMOOTHIE_SHOP",
                   "FARMERS_MARKET"]
@@ -7586,7 +7587,9 @@ def _rp_head_counts(farm):
 
 
 def _rp_head_targets(observation, seat, prev_crew):
-    """(wheat, carrot) plants the teachers would land over the NEXT 3 DAYS."""
+    """(wheat, carrot) plants the teachers would land over the NEXT 3 DAYS.
+    Features are built by NAME and selected per the exported feature list,
+    so training-side feature changes cannot silently misalign."""
     day = int(observation["step"]) // 24
     d = str(min(28, max(10, day)))
     farm = observation["farms"][seat]
@@ -7597,20 +7600,27 @@ def _rp_head_targets(observation, seat, prev_crew):
     shops = observation["town"].get("unlocked_shops", [])
     cn, an, empt, weed = _rp_head_counts(farm)
     on, oan, oempt, _w = _rp_head_counts(opp)
-    x = ([day, 29 - day]
-         + [shops.count(s) for s in _RP_HEAD_SHOPS]
-         + [int(prices.get(p, 0)) for p in _RP_HEAD_PRODUCTS]
-         + [int(inv.get(p, 0)) / 1000.0 for p in _RP_HEAD_PRODUCTS]
-         + [float(farm.get("money", 0)) / 1000.0, prev_crew,
-            len(farm.get("unlocked_quadrants", []))]
-         + [int(priv["shed"].get(p, 0)) for p in _RP_HEAD_PRODUCTS]
-         + [int(priv["seeds"].get(c, 0)) for c in _RP_HEAD_CROPS]
-         + [cn[c] for c in _RP_HEAD_CROPS]
-         + [an[a] for a in ("GOOSE", "COW", "SHEEP")]
-         + [empt, weed, float(opp.get("money", 0)) / 1000.0]
-         + [on[c] for c in _RP_HEAD_CROPS]
-         + [oan[a] for a in ("GOOSE", "COW", "SHEEP")]
-         + [oempt])
+    vals = {"day": day, "days_left": 29 - day,
+            "money": float(farm.get("money", 0)) / 1000.0,
+            "prev_crew": prev_crew,
+            "quads": len(farm.get("unlocked_quadrants", [])),
+            "my_empty": empt, "my_weed": weed,
+            "opp_money": float(opp.get("money", 0)) / 1000.0,
+            "opp_empty": oempt}
+    for s in _RP_HEAD_SHOPS:
+        vals["shop_" + s] = shops.count(s)
+    for p in _RP_HEAD_PRODUCTS:
+        vals["p_" + p] = int(prices.get(p, 0))
+        vals["minv_" + p] = int(inv.get(p, 0)) / 1000.0
+        vals["shed_" + p] = int(priv["shed"].get(p, 0))
+    for c in _RP_HEAD_CROPS:
+        vals["seed_" + c] = int(priv["seeds"].get(c, 0))
+        vals["my_" + c] = cn[c]
+        vals["op_" + c] = on[c]
+    for a in ("GOOSE", "COW", "SHEEP"):
+        vals["my_" + a] = an[a]
+        vals["op_" + a] = oan[a]
+    x = [vals[n] for n in _RP_HEAD["feature_names"]]
     mu, sd = _RP_HEAD["mu"], _RP_HEAD["sd"]
     z = [(x[i] - mu[i]) / sd[i] for i in range(len(mu))] + [1.0]
     w = sum(z[i] * _RP_HEAD["W_wheat"][i] for i in range(len(z)))
@@ -7782,35 +7792,41 @@ def _rp_plan(observation, seat, st):
             market.append(["HIRE"])
             _RP_REPORT["rp_hires"] += 1
 
+    # DAY-29 VALUED CLOSURE (rung 2): feeding/caring/fertilizing pay out
+    # only AFTER the final acting step — zero salvage value on the last
+    # day.  HARVEST and COLLECT convert to cash, and so does WATER on a
+    # RIPE one-shot tile: the in-window water bonus (+1 yield, engine
+    # :440-443) is banked by the same-day harvest — dropping those waters
+    # measured −3.8k/−7.3k on the all-PET challenges.  The hire calculation
+    # above still sees the full job list ( probe 1's crew-sizing bug);
+    # stranding is handled by the departure deadline + idle sweep below.
+    if day == 29:
+        keep_jobs = []
+        for j in jobs:
+            if j[1] in ("HARVEST", "COLLECT"):
+                keep_jobs.append(j)
+            elif j[1] == "WATER":
+                t_ = farm["tiles"][j[0][1]][j[0][0]]
+                if isinstance(t_, dict):
+                    cr_ = t_.get("crop")
+                    ag_ = day - int(t_.get("planted_day", day))
+                    if cr_ in _RP_ONE_SHOT and ag_ >= _RP_ONE_SHOT[cr_][0]:
+                        keep_jobs.append(j)
+        jobs = keep_jobs
+        feed_jobs = []
+
     # market housekeeping (orders process IN LIST ORDER, so sells free shed
-    # room before buys — engine :667 refuses BUY_PRODUCT into a full shed)
+    # room before buys — engine :667 refuses BUY_PRODUCT into a full shed).
+    # RUNG 2 : sell orders are now built at the
+    # END of the planner from the PROJECTED shed (unit actions execute
+    # before market orders, so this turn's PLACE deposits are sellable same
+    # turn) and PREPENDED so sells still precede buys.
     shed_total = sum(int(v) for v in priv["shed"].values())
     sell_now = (hour == 1 or hour >= 18 or day == 29 or shed_total > 60
                 or int(priv["shed"].get("CARROT", 0)) >= 8)
-    if hour >= 1 and sell_now:
-        # wheat above the feed reserve is a SALE crop (the grain engine's
-        # whole point); on day 29 the reserve is worthless — sell it all
-        reserve_w = 2 * n_animals + 4 if day < 29 else 0
-        for item, q in sorted(priv["shed"].items(),
-                              key=lambda kv: -int(prices.get(kv[0], 0))):
-            if int(q) <= 0 or item in ("GOOSE", "COW", "SHEEP"):
-                continue
-            if int(prices.get(item, 0)) < 2:
-                continue
-            if len(market) >= 9:
-                break
-            n = int(q)
-            if item == "WHEAT":
-                n = max(0, int(q) - reserve_w)
-                if n <= 0:
-                    continue
-                _RP_REPORT["rp_wheat_sold"] += n
-            elif item == "CARROT":
-                n = min(n, 12)
-            market.append(["SELL", item, n])
-            _RP_REPORT["rp_sell_units"] += n
-    # feed: EMERGENCY buys only (grain engine grows the rest — Exp 156)
-    if hour in (1, 13):
+    # feed: EMERGENCY buys only (grain engine grows the rest — Exp 156);
+    # none on day 29 — feeding has no salvage value on the last day
+    if hour in (1, 13) and day < 29:
         need_today = n_animals + 1
         have = shed_wheat + sum(carried_wheat)
         if have < need_today and len(market) < 10:
@@ -7845,13 +7861,49 @@ def _rp_plan(observation, seat, st):
     carried_fert = [int((invs[i] if i < len(invs) else {}).get("FERTILIZER", 0))
                     for i in range(n_units)]
 
+    # RUNG 2 : per-unit day-29 departure deadline replaces the
+    # blanket hour-14 recall.  Final acting step is 718 (= hour 22): a unit
+    # must arrive AND spend one PLACE per cargo type by then.  Near units
+    # keep harvesting hours longer; far heavy units leave earlier instead of
+    # stranding goods.  One hour of safety buffer.
+    must_leave = set()
+    if day == 29:
+        for i, pos in enumerate(positions):
+            inv_i = invs[i] if i < len(invs) else {}
+            n_types = sum(1 for v in inv_i.values() if int(v or 0) > 0)
+            if not n_types:
+                continue
+            dist = min(abs(a[0] - pos[0]) + abs(a[1] - pos[1])
+                       for a in _RP_ACCESS)
+            if hour >= 22 - dist - n_types:
+                must_leave.add(i)
+
+    def _unfed_at(p):
+        t_ = farm["tiles"][p[1]][p[0]]
+        return int(t_.get("consecutive_unfed", 0)) if isinstance(t_, dict) else 0
+
+    def _unwatered_at(p):
+        t_ = farm["tiles"][p[1]][p[0]]
+        return int(t_.get("consecutive_unwatered", 0)) if isinstance(t_, dict) else 0
+
     # pass 1: jobs on the tile we stand on
     for i, pos in enumerate(positions):
+        if i in must_leave:
+            continue           # its remaining hours belong to the shed run
         here = [j for j in jobs if j[0] == pos and j not in claimed]
         here.sort(key=lambda j: _RP_TIER[j[1]])
         acted = False
         for j in here:
             kind = j[1]
+            # RUNG 1 : a wheat carrier must not do on-tile chores
+            # while an animal elsewhere is on death row (unfed >= 1 escapes
+            # at midnight, engine :817-819).  7709 forensic: u6 stood one
+            # tile from the dying cow doing CARE/COLLECT for two hours.
+            if (day < 29 and kind in ("CARE", "COLLECT", "FERT")
+                    and carried_wheat[i] > 0
+                    and any(j2 not in claimed and j2[0] != pos
+                            and _unfed_at(j2[0]) >= 1 for j2 in feed_jobs)):
+                continue
             if kind == "FEED" and carried_wheat[i] > 0:
                 do(i, ["FEED"]); carried_wheat[i] -= 1
                 _RP_REPORT["rp_feeds"] += 1
@@ -7895,17 +7947,81 @@ def _rp_plan(observation, seat, st):
             shed_wheat -= n
             _RP_REPORT["rp_pickups"] += 1
 
+    # planter roster decided early: survival dispatch below may conscript a
+    # planter only for a death-row feed (unfed >= 1)
+    n_planters = 0
+    if plant_target > 0 and n_units >= 3:
+        n_planters = max(0, min(3, -(-plant_target // 6), n_units - 2))
+    planter_ix = set(range(n_units - n_planters, n_units))
+
+    # RUNG-1 SURVIVAL DISPATCH : the 7709 cow
+    # died because evening delivery (hour >= 19) walked wheat carriers home
+    # first — u4 was 4 steps away with 5 hours left and unloaded fertilizer
+    # instead.  Feeding OUTRANKS delivery — but only when the day is running
+    # out: all-day dispatch measured −9,726 on pinned 7709 s0 (labor drained
+    # from watering/harvest).  Mornings stay organic (v5 fed those fine);
+    # from hour 15 route wheat carriers to open feeds, death-row (unfed>=1)
+    # tiles any hour and they alone may conscript a planter.
+    if day < 29:
+        for j in sorted((j for j in feed_jobs if j not in claimed),
+                        key=lambda j: -_unfed_at(j[0])):
+            urgent = _unfed_at(j[0]) >= 1
+            if not urgent and hour < 15:
+                continue
+            cand = [i for i in range(n_units)
+                    if units[i] == ["PASS"] and carried_wheat[i] > 0
+                    and (urgent or i not in planter_ix)]
+            if not cand:
+                continue
+            i = min(cand, key=lambda k: abs(j[0][0] - positions[k][0])
+                    + abs(j[0][1] - positions[k][1]))
+            claimed.add(j)
+            units[i] = _rp_step_toward(positions[i], j[0])
+            carried_wheat[i] -= 1      # earmarked for this animal
+            _RP_REPORT["rp_survival_moves"] += 1
+
+    # DYING-CROP DISPATCH : a tile on its
+    # second dry day weeds at midnight.  7427 anatomy: 45 deaths/game, zero
+    # seed-day misses — established plants starved of visits by nearest-job
+    # churn and evening delivery.  ⚠ UNCAPPED dispatch measured −4,149 mean
+    # margin and MORE deaths (walkers drained routine service, creating
+    # tomorrow's dying tiles).  Cap: 3 rescue walkers, nearest pairs, only
+    # when they can physically arrive before midnight.
+    if day < 29 and hour >= 12:
+        dying = [j for j in jobs if j[1] == "WATER" and j not in claimed
+                 and _unwatered_at(j[0]) >= 1]
+        for _ in range(min(3, len(dying))):
+            best = None
+            for j in dying:
+                if j in claimed:
+                    continue
+                for i in range(n_units):
+                    if units[i] != ["PASS"] or i in planter_ix:
+                        continue
+                    dd = (abs(j[0][0] - positions[i][0])
+                          + abs(j[0][1] - positions[i][1]))
+                    if dd <= 23 - hour and (best is None or dd < best[0]):
+                        best = (dd, i, j)
+            if best is None:
+                break
+            _, i, j = best
+            claimed.add(j)
+            units[i] = _rp_step_toward(positions[i], j[0])
+            _RP_REPORT["rp_survival_waters"] += 1
+
     # DELIVERY : harvested goods are worth NOTHING carried — the
     # shed is the only sellable stock, and the game ends with no midnight
     # deposit before scoring (engine: final acting step 718).  Every evening
     # cargo goes home; on day 29 everything goes home from hour 14.
     # r1's audited leaks: 495 carrots harvested / 449 sold, 111 wool / 103,
     # 72 melons / 61.  PLACE is capacity-capped and never destroys (:394).
-    deliver_all = day == 29 and hour >= 14
+    deliver_all = day == 29
     if hour >= 19 or deliver_all:
         for i, pos in enumerate(positions):
             if units[i] != ["PASS"]:
                 continue
+            if deliver_all and i not in must_leave:
+                continue       # day 29: pre-deadline units keep working
             inv_i = invs[i] if i < len(invs) else {}
             cargo = {k: int(v) for k, v in inv_i.items()
                      if int(v or 0) > 0 and (deliver_all or k != "WHEAT")}
@@ -7922,11 +8038,8 @@ def _rp_plan(observation, seat, st):
 
     # PLANTER ROLES: the last P units do nothing but plant and give their
     # own plant its same-day water (nearest-job greedy starves planting —
-    # measured: 3,608/4,019 plant jobs unassigned on seed 7456)
-    n_planters = 0
-    if plant_target > 0 and n_units >= 3:
-        n_planters = max(0, min(3, -(-plant_target // 6), n_units - 2))
-    planter_ix = set(range(n_units - n_planters, n_units))
+    # measured: 3,608/4,019 plant jobs unassigned on seed 7456).
+    # (planter_ix computed above, before the survival dispatch)
     taken_empties = set()
     for i in sorted(planter_ix):
         if units[i] != ["PASS"]:
@@ -8001,7 +8114,61 @@ def _rp_plan(observation, seat, st):
         if tier == 2:
             _RP_REPORT["rp_plant_unassigned"] += sum(1 for j in pool if j[1] == "PLANT")
 
-    return {"farmer": units[0], "hands": units[1:], "market": market}
+    # day-29 second delivery sweep (rung 2): a unit pass 2 left IDLE with
+    # cargo heads home now — deposits must trickle in all day because the
+    # carrot sell cap is 12/turn; hoarding until the deadline measured −235
+    # mean margin (late dump can't clear before the final step)
+    if day == 29:
+        for i, pos in enumerate(positions):
+            if units[i] != ["PASS"]:
+                continue
+            inv_i = invs[i] if i < len(invs) else {}
+            cargo = {k: int(v) for k, v in inv_i.items() if int(v or 0) > 0}
+            if not cargo:
+                continue
+            if pos in _RP_ACCESS:
+                item = max(cargo, key=lambda k: cargo[k] * int(prices.get(k, 1)))
+                do(i, ["PLACE", item, cargo[item]])
+                _RP_REPORT["rp_delivered"] += cargo[item]
+            else:
+                tgt = min(_RP_ACCESS, key=lambda a: abs(a[0] - pos[0])
+                          + abs(a[1] - pos[1]))
+                units[i] = _rp_step_toward(pos, tgt)
+
+    # SELL from the PROJECTED shed (rung 2): pre-action shed + this turn's
+    # PLACE deposits.  The old loop read the stale shed, so the last
+    # delivery of the day was never sold — on day 29 that stranded value.
+    sells = []
+    if hour >= 1 and sell_now:
+        proj = {k: int(v) for k, v in priv["shed"].items()}
+        for c in units:
+            if isinstance(c, list) and len(c) > 2 and c[0] == "PLACE":
+                proj[c[1]] = proj.get(c[1], 0) + int(c[2])
+        # wheat above the feed reserve is a SALE crop (the grain engine's
+        # whole point); on day 29 the reserve is worthless — sell it all
+        reserve_w = 2 * n_animals + 4 if day < 29 else 0
+        for item, q in sorted(proj.items(),
+                              key=lambda kv: -int(prices.get(kv[0], 0))):
+            if int(q) <= 0 or item in ("GOOSE", "COW", "SHEEP"):
+                continue
+            # $1 floor sells DO execute (engine :654): take them on day 29
+            # when the alternative is $0; skip mid-game (price may recover)
+            if int(prices.get(item, 0)) < 2 and day < 29:
+                continue
+            if len(sells) + len(market) >= 10:
+                break
+            n = int(q)
+            if item == "WHEAT":
+                n = max(0, n - reserve_w)
+                if n <= 0:
+                    continue
+                _RP_REPORT["rp_wheat_sold"] += n
+            elif item == "CARROT":
+                n = min(n, 12)
+            sells.append(["SELL", item, n])
+            _RP_REPORT["rp_sell_units"] += n
+
+    return {"farmer": units[0], "hands": units[1:], "market": sells + market}
 
 
 def rp_agent(observation, configuration=None):

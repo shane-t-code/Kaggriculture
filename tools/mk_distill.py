@@ -116,26 +116,24 @@ def extract():
                      + [float(opp.get("money", 0)) / 1000.0]
                      + [on[c] for c in CROPS] + [oan[a] for a in ANIMALS]
                      + [oempt])
-                # target: landed plants by crop during this day
+                # target: PHYSICAL plant births + hand-count increases (
+                # review 5 §4: request-level counting was wrong on 50/760 rows
+                # — seed contention, competing workers, silent fails; count the
+                # tile transition None -> PLANT born this day instead)
                 y = {c: 0 for c in CROPS}
                 hires = 0
                 for t in range(t0, min(t0 + 24, len(steps) - 1)):
                     fnow = steps[t][0]["observation"]["farms"][seat]
-                    pos = [tuple(fnow["farmer"])] + [tuple(h) for h in fnow["hands"]]
-                    act = steps[t + 1][seat].get("action") or {}
-                    if not isinstance(act, dict):
-                        continue
-                    units = [act.get("farmer")] + list(act.get("hands") or [])
-                    for i, u in enumerate(units):
-                        if (isinstance(u, list) and len(u) > 1
-                                and u[0] == "PLANT" and u[1] in y
-                                and i < len(pos)):
-                            x_, y_ = pos[i]
-                            if fnow["tiles"][y_][x_] is None:
-                                y[u[1]] += 1
-                    for o in (act.get("market") or []):
-                        if isinstance(o, list) and o and o[0] == "HIRE":
-                            hires += 1
+                    fnext = steps[t + 1][0]["observation"]["farms"][seat]
+                    for y_ in range(len(fnow["tiles"])):
+                        for x_, told in enumerate(fnow["tiles"][y_]):
+                            tnew = fnext["tiles"][y_][x_]
+                            if (told is None and isinstance(tnew, dict)
+                                    and tnew.get("kind") == "PLANT"
+                                    and tnew.get("planted_day") == d
+                                    and tnew.get("crop") in y):
+                                y[tnew["crop"]] += 1
+                    hires += max(0, len(fnext["hands"]) - len(fnow["hands"]))
                 X.append(x)
                 Y.append([y[c] for c in CROPS] + [hires])
                 meta.append({"episode": eid, "seat": seat, "team": team,

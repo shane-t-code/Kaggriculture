@@ -7661,7 +7661,11 @@ def _p1_apply(observation, action):
                     p_crop = int(prices.get(crop_now, 0))
                     units = 3.5 if crop_now == "CARROT" else 5.0
                     crop_d = (units * p_crop - seed_cost) / (myd + 1.0)
-                    rel_d = 0.8 * p_w + crop_d
+                    # rel_d is the crop's daily value ALONE: keep_d already
+                    # subtracts the 0.8*p_w feed cost, so adding the feed
+                    # saving here would count it twice ( review 5 §5:
+                    # the old `0.8*p_w + crop_d` produced a 2f error).
+                    rel_d = crop_d
                     gain = (rel_d - keep_d) * max(0, remaining - 3)
                     rec.update(keep_d=round(keep_d, 1), rel_d=round(rel_d, 1),
                                gain=round(gain), traffic=traffic)

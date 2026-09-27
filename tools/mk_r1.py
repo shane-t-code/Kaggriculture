@@ -147,11 +147,16 @@ def _rp_head_targets(observation, seat, prev_crew):
             c + _RP_HEAD["day_mean_carrot"][d])
 
 
-def _rp_jobs(observation, seat, shed=()):
+def _rp_jobs(observation, seat, cycles=None):
     """(pos, kind) job list from live farm state. kinds: WATER, FEED, CARE,
-    COLLECT, HARVEST.  FEED requires the unit to carry wheat.  Tiles in
-    `shed` are deliberately unserviced (valued allocator): salvage-harvest
-    any standing yield, never water or fertilize again."""
+    COLLECT, HARVEST.  FEED requires the unit to carry wheat.  `cycles`
+    is the APPOINTMENT BOOK (scheduler v2): tiles we planted carry their
+    scheduled water ages — only the PAYING days (age 0 for survival, the
+    bonus window (myd+1)//2..myd for +1 yield each); the skipped age-1
+    visit is safe under the 2-dry rule and its labor is what admission
+    re-spends.  Inherited tiles (no record) keep daily watering.  Safety:
+    a tile that ever shows consecutive_unwatered >= 1 on a scheduled-skip
+    day is watered anyway."""
     farm = observation["farms"][seat]
     day = int(observation["step"]) // 24
     jobs = []
@@ -160,23 +165,21 @@ def _rp_jobs(observation, seat, shed=()):
             if not isinstance(tile, dict):
                 continue
             kind = tile.get("kind")
-            if kind == "PLANT" and (x, y) in shed:
-                if int(tile.get("yield_units", 0)) > 0:
-                    jobs.append(((x, y), "HARVEST"))
-                continue
             if kind == "PLANT":
                 crop = tile.get("crop")
                 age = day - int(tile.get("planted_day", day))
-                # DAILY WATERING (kept after two measured rung-3 kills,
-                # Sep 27): the champion skips age-1 waters on one-shot
-                # crops (no bonus, no survival need) and reinvests ~143
-                # unit-hours — but OUR greedy executor cannot convert the
-                # freed labor: skip-only screened −1,107 (13 seeds, both
-                # seats), skip+wheat-filler +450, both within ±2k noise →
-                # reverted per predeclared rule.  Reopen only inside the
-                # route scheduler where freed slots are explicitly re-spent.
+                rec = (cycles or {}).get((x, y))
+                booked = (rec is not None
+                          and rec.get("pd") == int(tile.get("planted_day", -1)))
                 if not tile.get("watered_today"):
-                    jobs.append(((x, y), "WATER"))
+                    # (WATERU tier-0 promotion measured −8.4k fixture:
+                    # booked tiles wake "thirsty" by design, so tier-0
+                    # flooding starved harvests.  Tier-1 + noon rescue.)
+                    if (booked and age not in rec["ages"]
+                            and int(tile.get("consecutive_unwatered", 0)) == 0):
+                        pass       # scheduled dry day; next booked water resets
+                    else:
+                        jobs.append(((x, y), "WATER"))
                 if int(tile.get("fertilized_until_day", -1)) < day:
                     if (crop in _RP_ONGOING or
                             (crop in _RP_ONE_SHOT and age < _RP_ONE_SHOT[crop][0])):
@@ -204,8 +207,8 @@ def _rp_jobs(observation, seat, shed=()):
     return jobs
 
 
-_RP_TIER = {"FEED": 0, "WATER": 1, "HARVEST": 2, "PLANT": 2, "COLLECT": 3,
-            "CARE": 3, "DIG": 3, "FERT": 4}
+_RP_TIER = {"FEED": 0, "WATERU": 0, "WATER": 1, "HARVEST": 2, "PLANT": 2,
+            "COLLECT": 3, "CARE": 3, "DIG": 3, "FERT": 4}
 
 
 def _rp_step_toward(pos, target):
@@ -230,7 +233,7 @@ def _rp_plan(observation, seat, st):
     units = [["PASS"] for _ in range(n_units)]
     market = []
 
-    jobs = _rp_jobs(observation, seat)
+    jobs = _rp_jobs(observation, seat, cycles=st.setdefault("cycles", {}))
 
     # RUNG 2 — the demand pipeline: carrots against revealed PET_CAFE demand
     # (12/day each; FARMERS_MARKET 6), price-gated, plant day <= 26.
@@ -244,6 +247,10 @@ def _rp_plan(observation, seat, st):
         st["plant_day"] = day
         st["planted_n"] = 0
         st["planted_w"] = 0
+        # capacity self-calibration: yesterday's REALIZED productive
+        # actions are today's budget (guessed fractions killed v1/v1b)
+        st["prev_actions"] = st.get("day_actions", 0)
+        st["day_actions"] = 0
     shops = observation["town"].get("unlocked_shops", [])
     p_c = int(prices.get("CARROT", 0))
     p_w = int(prices.get("WHEAT", 0))
@@ -290,15 +297,61 @@ def _rp_plan(observation, seat, st):
                 and whe_standing + whe_target < n_animals):
             whe_target = max(whe_target, min(8, n_animals - whe_standing))
 
-        # RUNG-3 SCHEDULER ATTEMPTS (Sep 27, both REVERTED — see
-        # docs/BUILD_A_PLAN.md): (v1) feasibility-only ledger admission
-        # measured −26k mean (refused $50 carrots to keep watering junk);
-        # (v1b) value-per-action allocator with deliberate shedding
-        # measured −48k mean — its hour-0 daily lock missed the HOURLY
-        # carrot-price windows v5's quota check catches (0 carrot births
-        # on the fixture), and crude keep-values abandoned young wheat.
-        # The rung needs cycle templates with reserved routes and exact
-        # bookkeeping (review §6), built fresh — not scalar heuristics.
+        # APPOINTMENT-BOOK ADMISSION (scheduler v2, Exp 160).  Differences
+        # from the two killed rung-3 designs: (i) runs HOURLY with live
+        # prices (v1b's hour-0 lock missed the intra-day carrot windows —
+        # 0 births); (ii) capacity is MEASURED (yesterday's realized
+        # productive actions), not a guessed fraction (v1 refused $50
+        # carrots on a bad guess); (iii) load comes from the book itself,
+        # so every scheduled skip automatically frees room for another
+        # admission — the reinvestment the dial versions lacked.
+        cyc = st.setdefault("cycles", {})
+        for pos_ in list(cyc):
+            t_ = farm["tiles"][pos_[1]][pos_[0]]
+            if not (isinstance(t_, dict) and t_.get("kind") == "PLANT"
+                    and int(t_.get("planted_day", -1)) == cyc[pos_]["pd"]):
+                del cyc[pos_]
+        cap_est = max(int(st.get("prev_actions") or 0),
+                      int(24 * n_units * 0.45), 60)
+        load = [8.0 + 2.3 * n_animals] * 5     # delivery/market + animals
+        for pos_, rec_ in cyc.items():
+            ag0_ = day - rec_["pd"]
+            myd_ = _RP_ONE_SHOT.get(rec_["crop"], (99,))[0]
+            for d2 in range(5):
+                a_ = ag0_ + d2
+                if a_ in rec_["ages"]:
+                    load[d2] += 1.0
+                if a_ == myd_:
+                    load[d2] += 1.4
+        for y_, row_ in enumerate(farm["tiles"]):
+            for x_, t_ in enumerate(row_):
+                if not (isinstance(t_, dict) and t_.get("kind") == "PLANT"
+                        and (x_, y_) not in cyc):
+                    continue
+                cr_ = t_.get("crop")
+                ag_ = day - int(t_.get("planted_day", day))
+                if cr_ in _RP_ONE_SHOT:
+                    left_ = max(0, _RP_ONE_SHOT[cr_][0] - ag_)
+                    for d2 in range(0, min(5, left_ + 1)):
+                        load[d2] += 1.4 if d2 == left_ else 1.0
+                else:
+                    for d2 in range(5):
+                        load[d2] += 1.2       # ongoing: water + cadence
+        slack = min(cap_est - load[d2] for d2 in range(5))
+        k_new = int(max(0.0, slack) / 1.3)
+        base_car = car_target
+        # cap branch DISABLED for isolation (fired 60x on the fixture,
+        # prime suspect for its −3.7k; v5's implicit capacity was fine
+        # there) — v2c tests book + skip + EXPANSION only
+        if False and car_target + whe_target > k_new:
+            car_target = max(min(base_car, 8),
+                             min(base_car, k_new - whe_target))
+            _RP_REPORT["rp_adm_capped"] += 1
+        elif (p_c >= 30 and shops.count("PET_CAFE") >= 2
+              and k_new > car_target + whe_target + 3):
+            car_target = min(24, base_car
+                             + (k_new - base_car - whe_target) // 2)
+            _RP_REPORT["rp_adm_expanded"] += 1
     plant_target = car_target + whe_target
     plant_quota = max(0, plant_target - st["planted_n"] - st["planted_w"])
     seeds_free = int(priv["seeds"].get("CARROT", 0))
@@ -343,7 +396,7 @@ def _rp_plan(observation, seat, st):
         for j in jobs:
             if j[1] in ("HARVEST", "COLLECT"):
                 keep_jobs.append(j)
-            elif j[1] == "WATER":
+            elif j[1] in ("WATER", "WATERU"):
                 t_ = farm["tiles"][j[0][1]][j[0][0]]
                 if isinstance(t_, dict):
                     cr_ = t_.get("crop")
@@ -395,6 +448,7 @@ def _rp_plan(observation, seat, st):
     def do(i, cmd):
         units[i] = cmd
         _RP_REPORT["rp_jobs_done"] += 1
+        st["day_actions"] = st.get("day_actions", 0) + 1
 
     carried_fert = [int((invs[i] if i < len(invs) else {}).get("FERTILIZER", 0))
                     for i in range(n_units)]
@@ -445,7 +499,7 @@ def _rp_plan(observation, seat, st):
             if kind == "FEED" and carried_wheat[i] > 0:
                 do(i, ["FEED"]); carried_wheat[i] -= 1
                 _RP_REPORT["rp_feeds"] += 1
-            elif kind == "WATER":
+            elif kind in ("WATER", "WATERU"):
                 do(i, ["WATER"]); _RP_REPORT["rp_waters"] += 1
             elif kind == "HARVEST":
                 do(i, ["HARVEST"]); _RP_REPORT["rp_harvests"] += 1
@@ -593,10 +647,15 @@ def _rp_plan(observation, seat, st):
             if st["planted_w"] < whe_target and seeds_w_free - planned_w >= 1:
                 do(i, ["PLANT", "WHEAT"])
                 st["planted_w"] += 1
+                # book the cycle: water age 0 (survival) + window 2..myd
+                st["cycles"][pos] = {"pd": day, "crop": "WHEAT",
+                                     "ages": (0, 2, 3, 4)}
                 _RP_REPORT["rp_wheat_plants"] += 1
             elif st["planted_n"] < car_target and seeds_free - planned_c >= 1:
                 do(i, ["PLANT", "CARROT"])
                 st["planted_n"] += 1
+                st["cycles"][pos] = {"pd": day, "crop": "CARROT",
+                                     "ages": (0, 2, 3)}
                 _RP_REPORT["rp_plants"] += 1
             else:
                 _RP_REPORT["rp_plant_no_seed"] += 1

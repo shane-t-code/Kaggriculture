@@ -7522,7 +7522,6 @@ _RP_REPORT = {"rp_committed": 0, "rp_hires": 0, "rp_jobs_done": 0,
               "rp_feeds": 0, "rp_waters": 0, "rp_harvests": 0, "rp_cares": 0,
               "rp_collects": 0, "rp_pickups": 0, "rp_sell_units": 0,
               "rp_survival_moves": 0, "rp_survival_waters": 0,
-              "rp_adm_capped": 0, "rp_adm_expanded": 0, "rp_adm_shed": 0,
               "rp_plants": 0, "rp_plant_no_tile": 0, "rp_plant_no_seed": 0,
               "rp_plant_jobs": 0, "rp_plant_unassigned": 0,
               "rp_wheat_plants": 0, "rp_wheat_sold": 0,
@@ -7630,11 +7629,9 @@ def _rp_head_targets(observation, seat, prev_crew):
             c + _RP_HEAD["day_mean_carrot"][d])
 
 
-def _rp_jobs(observation, seat, shed=()):
+def _rp_jobs(observation, seat):
     """(pos, kind) job list from live farm state. kinds: WATER, FEED, CARE,
-    COLLECT, HARVEST.  FEED requires the unit to carry wheat.  Tiles in
-    `shed` are deliberately unserviced (valued allocator): salvage-harvest
-    any standing yield, never water or fertilize again."""
+    COLLECT, HARVEST.  FEED requires the unit to carry wheat."""
     farm = observation["farms"][seat]
     day = int(observation["step"]) // 24
     jobs = []
@@ -7643,21 +7640,17 @@ def _rp_jobs(observation, seat, shed=()):
             if not isinstance(tile, dict):
                 continue
             kind = tile.get("kind")
-            if kind == "PLANT" and (x, y) in shed:
-                if int(tile.get("yield_units", 0)) > 0:
-                    jobs.append(((x, y), "HARVEST"))
-                continue
             if kind == "PLANT":
                 crop = tile.get("crop")
                 age = day - int(tile.get("planted_day", day))
-                # DAILY WATERING (kept after two measured rung-3 kills,
-                # Sep 27): the champion skips age-1 waters on one-shot
-                # crops (no bonus, no survival need) and reinvests ~143
-                # unit-hours — but OUR greedy executor cannot convert the
-                # freed labor: skip-only screened −1,107 (13 seeds, both
-                # seats), skip+wheat-filler +450, both within ±2k noise →
-                # reverted per predeclared rule.  Reopen only inside the
-                # route scheduler where freed slots are explicitly re-spent.
+                # SMART WATERING : weeds need TWO consecutive
+                # dry days (engine: consecutive_unwatered, plant day counts),
+                # and the water yield bonus only pays inside the ripening
+                # window of one-shot crops (:440).  Watering everything daily
+                # burned ~40% of the crew — that was the real capacity wall.
+                # daily watering: the alternate-day variant measured WORSE
+                # (65,577/66,750 vs 67,605) — freed labor idles while
+                # strawberries die earlier; keep it simple and safe
                 if not tile.get("watered_today"):
                     jobs.append(((x, y), "WATER"))
                 if int(tile.get("fertilized_until_day", -1)) < day:
@@ -7761,10 +7754,6 @@ def _rp_plan(observation, seat, st):
                                  + 2 * shops.count("FARMERS_MARKET"))
             want_standing = n_animals if day <= 24 else 0
             whe_buyers = sum(1 for s in shops if s in _RP_WHE_SHOPS)
-            # rung-3b wheat filler (buyers>=1 & p_w>=15 → up to 12 sale
-            # tiles, glut-guarded) tested Sep 27: 13-seed both-seat screen
-            # mean +450 SE ~2,000 = WASH (predeclared rule) — reverted to
-            # the v5 quota; the filler design is killed, not the lane.
             if p_w >= 22 and whe_buyers >= 2 and day <= 24:
                 want_standing += min(6, 2 * whe_buyers)
             whe_target = max(0, min(8, want_standing - whe_standing))
@@ -7772,16 +7761,6 @@ def _rp_plan(observation, seat, st):
         if (day <= 24 and int(priv["shed"].get("WHEAT", 0)) < n_animals
                 and whe_standing + whe_target < n_animals):
             whe_target = max(whe_target, min(8, n_animals - whe_standing))
-
-        # RUNG-3 SCHEDULER ATTEMPTS (Sep 27, both REVERTED — see
-        # docs/BUILD_A_PLAN.md): (v1) feasibility-only ledger admission
-        # measured −26k mean (refused $50 carrots to keep watering junk);
-        # (v1b) value-per-action allocator with deliberate shedding
-        # measured −48k mean — its hour-0 daily lock missed the HOURLY
-        # carrot-price windows v5's quota check catches (0 carrot births
-        # on the fixture), and crude keep-values abandoned young wheat.
-        # The rung needs cycle templates with reserved routes and exact
-        # bookkeeping (review §6), built fresh — not scalar heuristics.
     plant_target = car_target + whe_target
     plant_quota = max(0, plant_target - st["planted_n"] - st["planted_w"])
     seeds_free = int(priv["seeds"].get("CARROT", 0))
@@ -8175,13 +8154,6 @@ def _rp_plan(observation, seat, st):
             # $1 floor sells DO execute (engine :654): take them on day 29
             # when the alternative is $0; skip mid-game (price may recover)
             if int(prices.get(item, 0)) < 2 and day < 29:
-                continue
-            # FERT SELL TIMING (rung 3c, market-only class): don't dump
-            # fert the hour it lands — c23s times fert sales (~$8.6k vs
-            # our ~$4.4k on the fixture).  Hold below $8 unless the game
-            # is ending or the shed needs the room.
-            if (item == "FERTILIZER" and day < 28 and shed_total <= 80
-                    and int(prices.get(item, 0)) < 8):
                 continue
             if len(sells) + len(market) >= 10:
                 break

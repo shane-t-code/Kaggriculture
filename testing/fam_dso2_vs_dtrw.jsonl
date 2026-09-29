@@ -1,0 +1,6 @@
+{"seed": 8527, "pid": 0, "margin": -519.0, "res": "L", "max_ms": 614, "statuses": ["DONE", "DONE"]}
+{"seed": 8527, "pid": 1, "margin": -519.0, "res": "L", "max_ms": 727, "statuses": ["DONE", "DONE"]}
+{"seed": 8528, "pid": 0, "margin": 460.0, "res": "W", "max_ms": 485, "statuses": ["DONE", "DONE"]}
+{"seed": 8528, "pid": 1, "margin": -314.0, "res": "L", "max_ms": 454, "statuses": ["DONE", "DONE"]}
+{"seed": 8529, "pid": 0, "margin": -380.0, "res": "L", "max_ms": 145, "statuses": ["DONE", "DONE"]}
+{"seed": 8529, "pid": 1, "margin": -380.0, "res": "L", "max_ms": 103, "statuses": ["DONE", "DONE"]}

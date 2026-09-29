@@ -7,3 +7,10 @@
 {"tool": "grow_census", "tag": "W3", "start": 8375, "count": 150, "stride": 6, "offset": 3, "ts": "2026-09-28 22:30:30"}
 {"tool": "grow_census", "tag": "W0", "start": 8375, "count": 150, "stride": 6, "offset": 0, "ts": "2026-09-28 22:30:30"}
 {"tool": "grow_census", "tag": "W2", "start": 8375, "count": 150, "stride": 6, "offset": 2, "ts": "2026-09-28 22:30:30"}
+{"tool": "family_duel", "var": "dtrw", "opp": "s1009r", "start": 8527, "count": 10, "ts": "2026-09-29 17:42:48"}
+{"tool": "family_duel", "var": "dso", "opp": "ca22", "start": 8527, "count": 10, "ts": "2026-09-29 17:42:48"}
+{"tool": "family_duel", "var": "dtrw", "opp": "ca22", "start": 8527, "count": 10, "ts": "2026-09-29 17:42:48"}
+{"tool": "family_duel", "var": "dso", "opp": "dtrw", "start": 8527, "count": 10, "ts": "2026-09-29 17:42:48"}
+{"tool": "family_duel", "var": "dso", "opp": "s1009r", "start": 8527, "count": 10, "ts": "2026-09-29 17:42:48"}
+{"tool": "family_duel", "var": "dso2", "opp": "dtrw", "start": 8527, "count": 3, "ts": "2026-09-29 17:46:22"}
+{"tool": "family_duel", "var": "dsl", "opp": "dtrw", "start": 8527, "count": 3, "ts": "2026-09-29 17:48:41"}

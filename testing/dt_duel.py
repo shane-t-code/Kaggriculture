@@ -3,7 +3,8 @@
 # direct measurement, no census control needed (candidate-vs-candidate is a
 # structural tie). Gates in build_dt.py header: (W-L)>0, ZERO losses, every
 # callback of BOTH agents < 900ms.
-# Usage: python dt_duel.py <seeds_json>   Output: dt_duel_rows.jsonl (resumable)
+# Usage: python dt_duel.py <seeds_json> [variant]   (default variant: dt)
+# Output: <variant>_duel_rows.jsonl (resumable)
 import json
 import sys
 import time
@@ -18,7 +19,8 @@ with _silence_fds():
 
 GROW = Path(r"C:\Kaggriculture\work\build_a\grow")
 CAND = Path(r"C:\Kaggriculture\work\\review10\candidate.py")
-OUT = GROW / "dt_duel_rows.jsonl"
+VARIANT = sys.argv[2] if len(sys.argv) > 2 else "dt"
+OUT = GROW / f"{VARIANT}_duel_rows.jsonl"
 
 def load(p):
     return get_last_callable(p.read_text(encoding="utf-8"), path=str(p))
@@ -50,7 +52,8 @@ def main():
             rec_dt = {"max_ms": 0.0, "max_step": -1}
             rec_c = {"max_ms": 0.0, "max_step": -1}
             agents = [None, None]
-            agents[pid] = timed(load(GROW / "variants" / "dt.py"), rec_dt)
+            agents[pid] = timed(load(GROW / "variants" / f"{VARIANT}.py"),
+                                rec_dt)
             agents[1 - pid] = timed(load(CAND), rec_c)
             t0 = time.time()
             with _silence_fds():

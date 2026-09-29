@@ -1,0 +1,16 @@
+{"seed": 8527, "pid": 0, "margin": 89.0, "res": "W", "max_ms": 1381, "statuses": ["DONE", "DONE"]}
+{"seed": 8527, "pid": 1, "margin": 89.0, "res": "W", "max_ms": 1346, "statuses": ["DONE", "DONE"]}
+{"seed": 8528, "pid": 0, "margin": 387.0, "res": "W", "max_ms": 933, "statuses": ["DONE", "DONE"]}
+{"seed": 8528, "pid": 1, "margin": -387.0, "res": "L", "max_ms": 737, "statuses": ["DONE", "DONE"]}
+{"seed": 8529, "pid": 0, "margin": 0.0, "res": "T", "max_ms": 172, "statuses": ["DONE", "DONE"]}
+{"seed": 8529, "pid": 1, "margin": 0.0, "res": "T", "max_ms": 170, "statuses": ["DONE", "DONE"]}
+{"seed": 8530, "pid": 0, "margin": 1.0, "res": "W", "max_ms": 566, "statuses": ["DONE", "DONE"]}
+{"seed": 8530, "pid": 1, "margin": 1.0, "res": "W", "max_ms": 280, "statuses": ["DONE", "DONE"]}
+{"seed": 8531, "pid": 0, "margin": 0.0, "res": "T", "max_ms": 606, "statuses": ["DONE", "DONE"]}
+{"seed": 8531, "pid": 1, "margin": 0.0, "res": "T", "max_ms": 593, "statuses": ["DONE", "DONE"]}
+{"seed": 8532, "pid": 0, "margin": 0.0, "res": "T", "max_ms": 110, "statuses": ["DONE", "DONE"]}
+{"seed": 8532, "pid": 1, "margin": 0.0, "res": "T", "max_ms": 90, "statuses": ["DONE", "DONE"]}
+{"seed": 8533, "pid": 0, "margin": 1.0, "res": "W", "max_ms": 242, "statuses": ["DONE", "DONE"]}
+{"seed": 8533, "pid": 1, "margin": 1.0, "res": "W", "max_ms": 212, "statuses": ["DONE", "DONE"]}
+{"seed": 8534, "pid": 0, "margin": 2.0, "res": "W", "max_ms": 183, "statuses": ["DONE", "DONE"]}
+{"seed": 8534, "pid": 1, "margin": 2.0, "res": "W", "max_ms": 177, "statuses": ["DONE", "DONE"]}

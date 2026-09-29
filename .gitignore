@@ -10,3 +10,69 @@ __pycache__/
 # Search/runner state
 search_state.json
 logs/
+
+# Public kernel pulls: re-downloadable from Kaggle any time
+work/pulls/
+
+# Experiment bulk output (game traces, per-cell result dumps, audits, logs):
+# fully regenerable from the tracked .py harnesses + seed ledgers. Keep the
+# code (*.py), reports (*.md), seed ledgers (*.jsonl), and the small frozen
+# certificates/manifests via the negations below.
+work//**/*.json
+work//**/*.json.gz
+work//**/*.log
+work//**/*.err
+work//**/*.zip
+!work//**/FROZEN*.json
+!work//**/*MANIFEST*.json
+!work//**/*certificate*.json
+!work//**/*certificates*.json
+!work//**/*validation*.json
+!work//**/*summary*.json
+!work//**/herd_cumulative.json
+# review12 replay-decode dumps: 88 per-game files, regenerable by autopsy.py
+# (their *.summary.json names would otherwise slip through the negation above)
+work//review12/decoded/
+
+# review10/11 generated 1.2MB experiment agents + roster copies (~35MB):
+# rebuilt byte-identically by their tracked build_*/setup scripts, or
+# duplicates of tracked originals. KEEP submitted/submittable bytes:
+# candidate.py (SUBMITTED, sha a3fc41e8) and fallback.py stay tracked.
+work//review10/base.py
+work//review10/ca22.py
+work//review10/r6.py
+work//review10/scaled1000.py
+work//review10/takeover_*.py
+work//review11/base.py
+work//review11/ca22.py
+work//review11/candidate.py
+work//review11/r6.py
+work//review11/exact.py
+work//review11/exact[0-9].py
+work//review11/first_yield.py
+work//review11/goose.py
+work//review11/growth.py
+work//review11/one_yarn.py
+work//review11/second.py
+work//review11/second2.py
+
+# build_a bulk: run logs, saved profiling replays, trace dumps
+work/build_a/*.log
+work/build_a/prof_s1009r/
+work/build_a/*_trace.json.gz
+
+# reserved suite bulk (228MB of per-game traces; regenerable, verdict runs
+# off rows.jsonl which stays tracked along with LEDGER.jsonl)
+work/build_a/reserved/*_trace.json.gz
+work/build_a/reserved/*.log
+
+# grow search bulk: game-result dumps are regenerable from the tracked
+# build_*.py / census.py / screen.py harnesses + seed panels (seeds_*.json
+# and SEEDS.jsonl stay tracked). Generated variant agents (~1.2MB each) are
+# rebuilt byte-identically by their build scripts — keep only dt.py, the
+# SUBMITTED bytes, plus the sha MANIFEST.
+work/build_a/grow/census_rows_*.jsonl
+work/build_a/grow/screen_rows_*.jsonl
+work/build_a/grow/dt_duel_rows.jsonl
+work/build_a/grow/variants/*.py
+!work/build_a/grow/variants/dt.py

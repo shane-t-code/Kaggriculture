@@ -1,0 +1,33 @@
+{
+  "src_sha": "a3fc41e84509cda19d9d388726a8c6d8a3c7bf9f8fd7c485588c1cd46fb0a165",
+  "variants": {
+    "yarn1": {
+      "sha256": "2a96297b98037ce099668df3d71d00780e39fa4c49bdcb5797353fc3d85dc24c",
+      "subs": 1
+    },
+    "wool120": {
+      "sha256": "91e276ac6c2d15e2602d75e7ea4b1203d342f0939d0dbbc20b0edb670c5e937a",
+      "subs": 1
+    },
+    "wool100": {
+      "sha256": "3ab379e7bb39a0acaf3797fbc6ac8efb994bd55fec27e75d3ae45514eb8865ce",
+      "subs": 1
+    },
+    "wheat80": {
+      "sha256": "40279dadf0542fe6cf804a3ee9de320fbdbcdc28d57fd2af441436ced88be438",
+      "subs": 1
+    },
+    "win12_19": {
+      "sha256": "30337882a604a8e7738b7f9d867b1c20d39101248b0d564dbd29f6f3b4ba471d",
+      "subs": 1
+    },
+    "win11_19": {
+      "sha256": "ecec390bd6ac61fee795632fe62b4b757e03d2c6607e41d0b4c39251e52cb748",
+      "subs": 1
+    },
+    "net500": {
+      "sha256": "9f8955cf7dd72e885ce83ae904124a33f37261924e7ee3542f699973a625bb4b",
+      "subs": 1
+    }
+  }
+}

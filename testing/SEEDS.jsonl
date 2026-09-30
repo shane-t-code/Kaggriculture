@@ -14,3 +14,25 @@
 {"tool": "family_duel", "var": "dso", "opp": "s1009r", "start": 8527, "count": 10, "ts": "2026-09-29 17:42:48"}
 {"tool": "family_duel", "var": "dso2", "opp": "dtrw", "start": 8527, "count": 3, "ts": "2026-09-29 17:46:22"}
 {"tool": "family_duel", "var": "dsl", "opp": "dtrw", "start": 8527, "count": 3, "ts": "2026-09-29 17:48:41"}
+{"tool": "gods_duel", "start": 8537, "count": 6, "ts": "2026-09-29 18:41:58"}
+{"tool": "p1_break", "mode": "W", "start": 8543, "count": 20, "ts": "2026-09-29 20:52:12"}
+{"tool": "mgx_p2_test", "label": "mgx1", "opp": "dtrw", "start": 8563, "count": 6, "ts": "2026-09-29 21:44:30"}
+{"tool": "mgx_p2_test", "label": "mgx2", "opp": "dtrw", "start": 8563, "count": 6, "ts": "2026-09-29 21:48:07"}
+{"tool": "mgx_p2_test", "label": "mgx3", "opp": "dtrw", "start": 8563, "count": 6, "ts": "2026-09-29 21:50:09"}
+{"tool": "mgx_p2_test", "label": "mgx4", "opp": "dtrw", "start": 8563, "count": 6, "ts": "2026-09-29 21:51:33"}
+{"tool": "mgx_p2_test", "label": "mgx5", "opp": "dtrw", "start": 8563, "count": 6, "ts": "2026-09-29 21:56:21"}
+{"tool": "mgx_p2_test", "label": "mgx6_72", "opp": "dtrw", "start": 8563, "count": 6, "ts": "2026-09-29 21:58:51"}
+{"tool": "mgx_p2_test", "label": "mgx6_144", "opp": "dtrw", "start": 8563, "count": 6, "ts": "2026-09-29 22:00:03"}
+{"tool": "mgx_p2_test", "label": "mgx7_577", "opp": "dtrw", "start": 8563, "count": 6, "ts": "2026-09-29 22:06:27"}
+{"tool": "mgx_p2_test", "label": "tk288", "opp": "dtrw", "start": 8563, "count": 6, "ts": "2026-09-29 22:17:34"}
+{"tool": "mgx_p2_test", "label": "mgx8_demand", "opp": "dtrw", "start": 8563, "count": 6, "ts": "2026-09-29 22:20:05"}
+{"tool": "mgx_p2_test", "label": "mgx9_roll", "opp": "dtrw", "start": 8563, "count": 6, "ts": "2026-09-29 22:30:53"}
+{"tool": "mgx_p2_test", "label": "mgx10_roll", "opp": "dtrw", "start": 8563, "count": 6, "ts": "2026-09-29 22:36:42"}
+{"tool": "mgx_p2_test", "label": "mgx11_roll", "opp": "dtrw", "start": 8563, "count": 6, "ts": "2026-09-29 22:40:44"}
+{"tool": "tomato_test", "opp": "dtrw", "start": 8569, "count": 30, "ts": "2026-09-29 22:56:43"}
+{"tool": "tomato_test", "opp": "dtrw", "start": 8599, "count": 16, "ts": "2026-09-29 23:02:20"}
+{"tool": "tomato_test", "opp": "majkel", "start": 0, "count": 0, "ts": "2026-09-29 23:06:15"}
+{"tool": "tomato_test", "opp": "majkel", "start": 0, "count": 0, "ts": "2026-09-29 23:06:35"}
+{"tool": "tomato_test", "opp": "ca22", "start": 0, "count": 0, "ts": "2026-09-29 23:06:55"}
+{"tool": "tomato_test", "opp": "ca22", "start": 0, "count": 0, "ts": "2026-09-29 23:07:23"}
+{"tool": "variant_test", "var": "dtrwtc", "opp": "dtrw", "start": 8615, "count": 8, "preset": "YARN2", "ts": "2026-09-29 23:11:29"}

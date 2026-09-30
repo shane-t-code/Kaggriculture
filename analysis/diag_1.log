@@ -1,0 +1,4 @@
+  File "C:\Kaggriculture\work\build_a\arena\desync_diag.py", line 14
+    rows = [json.loads(l) for f in glob.glob(r"C:Kaggricultureworkbuild_arena
+                                             ^
+SyntaxError: unterminated string literal (detected at line 14)

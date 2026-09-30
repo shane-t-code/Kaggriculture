@@ -1,0 +1,30 @@
+28 target games; 0 done
+episode-115398578-replay.json [('Andrew Reed', 2107.0, 'W', 99815.0), ('Shane Thivaharraja', -2107.0, 'L', 97708.0)] errors 0
+episode-115395187-replay.json [('StupidXie', -125.0, 'L', 131221.0), ('Shane Thivaharraja', 125.0, 'W', 131346.0)] errors 0
+episode-115374188-replay.json [('Shane Thivaharraja', 838.0, 'W', 119253.0), ('kiki yi2', -838.0, 'L', 118415.0)] errors 0
+episode-115370680-replay.json [('Shane Thivaharraja', -344.0, 'L', 69670.0), ('Paarth Patel', 344.0, 'W', 70014.0)] errors 0
+episode-115364234-replay.json [('Shane Thivaharraja', -16929.0, 'L', 103809.0), ('codex还我pro20x', 16929.0, 'W', 120738.0)] errors 0
+episode-115354567-replay.json [('Shane Thivaharraja', -634.0, 'L', 81547.0), ('Артём Свинобоев', 634.0, 'W', 82181.0)] errors 0
+episode-115338750-replay.json [('xxxx0314', 1144.0, 'W', 118492.0), ('Shane Thivaharraja', -1144.0, 'L', 117348.0)] errors 0
+episode-115335692-replay.json [('DeeSaa', 267.0, 'W', 103328.0), ('Shane Thivaharraja', -267.0, 'L', 103061.0)] errors 0
+episode-115293810-replay.json [('Artur Markosyan', 921.0, 'W', 115181.0), ('Shane Thivaharraja', -921.0, 'L', 114260.0)] errors 0
+episode-115282944-replay.json [('Shane Thivaharraja', 18619.0, 'W', 127295.0), ('mbscgi', -18619.0, 'L', 108676.0)] errors 0
+episode-115273934-replay.json [('colum2131', -917.0, 'L', 111831.0), ('Shane Thivaharraja', 917.0, 'W', 112748.0)] errors 0
+episode-115250187-replay.json [('Shane Thivaharraja', -13053.0, 'L', 66988.0), ('byncpy', 13053.0, 'W', 80041.0)] errors 0
+episode-115249126-replay.json [('トゲアリトゲナシトゲトゲ', 12596.0, 'W', 77898.0), ('Shane Thivaharraja', -12596.0, 'L', 65302.0)] errors 0
+episode-115238142-replay.json [('Shane Thivaharraja', -914.0, 'L', 95629.0), ('Maximo Uribarri', 914.0, 'W', 96543.0)] errors 0
+episode-115230946-replay.json [('没落者', 5644.0, 'W', 116882.0), ('Shane Thivaharraja', -5644.0, 'L', 111238.0)] errors 0
+episode-115197827-replay.json [('hatata', 2792.0, 'W', 108061.0), ('Shane Thivaharraja', -2792.0, 'L', 105269.0)] errors 0
+episode-115189351-replay.json [('ykuroka', 1014.0, 'W', 76992.0), ('Shane Thivaharraja', -1014.0, 'L', 75978.0)] errors 0
+episode-115167915-replay.json [('Shane Thivaharraja', -2590.0, 'L', 100109.0), ('xiao xiongwei', 2590.0, 'W', 102699.0)] errors 0
+episode-115165862-replay.json [('Mike Murunov', -811.0, 'L', 67556.0), ('Shane Thivaharraja', 811.0, 'W', 68367.0)] errors 0
+episode-115162879-replay.json [('Shane Thivaharraja', -9480.0, 'L', 92978.0), ('offhand', 9480.0, 'W', 102458.0)] errors 0
+episode-115148838-replay.json [('Shane Thivaharraja', -2441.0, 'L', 109706.0), ('Hackoholics', 2441.0, 'W', 112147.0)] errors 0
+episode-115144629-replay.json [('YumeNeko', 8518.0, 'W', 129129.0), ('Shane Thivaharraja', -8518.0, 'L', 120611.0)] errors 0
+episode-115121762-replay.json [('Shane Thivaharraja', -11288.0, 'L', 74258.0), ('lumen', 11288.0, 'W', 85546.0)] errors 0
+episode-115310513-replay.json [('Shane Thivaharraja', -3876.0, 'L', 111065.0), ('Hackoholics', 3876.0, 'W', 114941.0)] errors 0
+episode-115306238-replay.json [('Shane Thivaharraja', -6803.0, 'L', 118973.0), ('sbol ball', 6803.0, 'W', 125776.0)] errors 0
+episode-115300160-replay.json [('taiseiu', 713.0, 'W', 78181.0), ('Shane Thivaharraja', -713.0, 'L', 77468.0)] errors 0
+episode-115274105-replay.json [('Shane Thivaharraja', -20645.0, 'L', 101980.0), ('kitano0104', 20645.0, 'W', 122625.0)] errors 0
+episode-115231402-replay.json [('Shawn404', 1604.0, 'W', 124188.0), ('Shane Thivaharraja', -1604.0, 'L', 122584.0)] errors 0
+H2H DONE

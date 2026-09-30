@@ -76,3 +76,7 @@ work/build_a/grow/screen_rows_*.jsonl
 work/build_a/grow/dt_duel_rows.jsonl
 work/build_a/grow/variants/*.py
 !work/build_a/grow/variants/dt.py
+
+# public episode dataset tables (170MB, re-downloadable) and replay scratch
+work/build_a/arena/ds/*.csv
+work/build_a/arena/h2h/tmp_clone/

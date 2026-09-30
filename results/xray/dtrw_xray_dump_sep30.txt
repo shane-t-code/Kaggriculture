@@ -1,0 +1,128 @@
+SUBMISSION_ID = "56672257"     # <- put YOUR submission id here; "KING" resolves today's number one
+[cell 5] submission 56672257: 228 episodes on the ladder, reading the newest 40
+W10-L30-T0, margin median -153, worst -8,499, best +5,562
+[cell 6]   10/40 replays fetched
+  20/40 replays fetched
+  30/40 replays fetched
+  40/40 replays fetched
+40 replays loaded, 29 distinct shop pairs
+[cell 8] texture: green 53.2%, amber 6.8%, navy 40.0%
+[cell 12] GLOBAL: ADAPTIVE  (varying 79.7%, first divergence t=144, channels {'farmer': 431, 'hands': 546, 'market': 508})
+  a plan fork in t=[72,144] tracks the shop draw: that is ROUTING; read the table below
+within-world verdict: {'ADAPTIVE': 9}
+[cell 12]                             world  n            cls   vary first
+0          BAKERY__FARMERS_MARKET  1  (one episode)             
+1          BAKERY__ICE_CREAM_SHOP  2       ADAPTIVE  21.8%   187
+2                BAKERY__PET_CAFE  1  (one episode)             
+3              BAKERY__PIZZA_SHOP  1  (one episode)             
+4           BAKERY__SMOOTHIE_SHOP  2       ADAPTIVE  15.6%   441
+5     BRUNCH_SPOT__FARMERS_MARKET  2       ADAPTIVE  33.1%   187
+6           BRUNCH_SPOT__PET_CAFE  1  (one episode)             
+7         BRUNCH_SPOT__YARN_STORE  3       ADAPTIVE  62.0%   214
+8     FARMERS_MARKET__BRUNCH_SPOT  3       ADAPTIVE  25.6%   207
+9        FARMERS_MARKET__PET_CAFE  1  (one episode)             
+10  FARMERS_MARKET__SMOOTHIE_SHOP  1  (one episode)             
+11     FARMERS_MARKET__YARN_STORE  1  (one episode)             
+12    ICE_CREAM_SHOP__BRUNCH_SPOT  1  (one episode)             
+13               PET_CAFE__BAKERY  1  (one episode)             
+14       PET_CAFE__FARMERS_MARKET  1  (one episode)             
+15       PET_CAFE__ICE_CREAM_SHOP  2       ADAPTIVE  37.1%   361
+16           PET_CAFE__YARN_STORE  1  (one episode)             
+17             PIZZA_SHOP__BAKERY  2       ADAPTIVE  32.4%   241
+18         PIZZA_SHOP__PIZZA_SHOP  1  (one episode)             
+19          SMOOTHIE_SHOP__BAKERY  1  (one episode)             
+20  SMOOTHIE_SHOP__FARMERS_MARKET  1  (one episode)             
+21   SMOOTHIE_SHOP__SMOOTHIE_SHOP  1  (one episode)             
+22      SMOOTHIE_SHOP__YARN_STORE  1  (one episode)             
+23             YARN_STORE__BAKERY  1  (one episode)             
+24        YARN_STORE__BRUNCH_SPOT  2       ADAPTIVE  29.9%   326
+25     YARN_STORE__FARMERS_MARKET  1  (one episode)             
+26           YARN_STORE__PET_CAFE  1  (one episode)             
+27         YARN_STORE__PIZZA_SHOP  2       ADAPTIVE  18.4%   322
+28      YARN_STORE__SMOOTHIE_SHOP  1  (one episode)
+[cell 15] 29 mirror games (plan >= 0.95), 8 sibling games (0.50-0.95), 3 unrelated
+against mirrors: 8W-21L-0T, margins [-1435, -745, -575, -381, -263, -251, -247, -246, -235, -219, -215, -198, -153, -121, -116, -63, -57, -38, -33, -23, -15, 1, 33, 46, 46, 58, 101, 112, 152]
+[cell 17] 5 genetic groups among 40 opponents (1 with 2+ games, 4 singletons)
+[cell 17]   group            yours  games  submissions            lead      record  \
+0    G1  <- your lineage     36           36       ctree4113  W10-L26-T0   
+1    G2                       1            1  joy of harvest    W0-L1-T0   
+2    G3                       1            1  Kazuo Watanabe    W0-L1-T0   
+3    G4                       1            1    Efnutrrionpy    W0-L1-T0   
+4    G5                       1            1        @mldsdev    W0-L1-T0   
+
+   margin_med  worst  best  plan_to_you  
+0        -121  -2604  5562        0.989  
+1       -4364  -4364 -4364        0.006  
+2       -8499  -8499 -8499        0.010  
+3       -4534  -4534 -4534        0.011  
+4         -39    -39   -39        0.907
+[cell 19] macro profile, median [p10, p90]; ref = the measured #1 shape
+  2nd quadrant, day                      6 [6, 6]    ref 5
+  care actions                         389 [382, 480]    ref 280
+  herd bought (median)           COW 5  SHEEP 4  GOOSE 2    ref 7 COW
+  endgame fallow tiles d25-29           10 [0, 25]    ref 13
+  stranded $ at the bell                 0 [0, 0]    ref 442
+  pass-with-work unit-turns            338 [331, 382]    ref low
+  shed-at-cap turns                      3 [1, 4]    ref 0
+  floor sells (price <= 2)              31 [16, 46]    ref 0
+[cell 23] craters dug by us that the rival sold into: STRAWBERRY -$3,214, MELON -$2,256, MELON -$2,010, MELON -$1,974, MELON -$1,752, STRAWBERRY -$1,672
+craters we sold into: MELON -$3,120, STRAWBERRY -$1,485, MELON -$1,248, STRAWBERRY -$1,133, STRAWBERRY -$1,120, STRAWBERRY -$1,005
+[cell 25] occupancy: chi2/dof 5,843.0 over 100 unlocked cells; the ten busiest hold 17.2% of the mass against 10.0% if the board were used evenly
+occupancy: half-split correlation r = +1.000   (below about +0.9, read the map as one season's noise)
+[cell 25] unit presence: chi2/dof 3,782.8 over 100 unlocked cells; the ten busiest hold 35.7% of the mass against 10.0% if the board were used evenly
+unit presence: half-split correlation r = +1.000   (below about +0.9, read the map as one season's noise)
+[cell 27] king resolved by climbing the live ladder: 2,283 -> 2,282 -> 2,399 -> 2,730 -> 2,763 -> 2,342 -> 1,747 -> 1,803 -> 1,283 -> 2,554 -> 2,647 -> 2,233 -> 2,313 -> 2,080 -> 2,145
+[cell 27] season-wide split of every unit-turn: work 43.4%  carry 5.1%  move 41.8%  idle 9.7%
+[cell 29] field-wide reference (490 seasons): 4 hands to day 4, 8 by day 6, 11 by day 10, 12 from day 13 to the bell; IQR 0-2 hands all season
+[cell 31] SETTLING  (drift -2.57 pts/episode over the last 20, 6 sign flips, threshold 1.0, n=228 episodes, rating now 1,712.7)
+[cell 31] pairing rate: 6.9 episodes/hour lifetime, 5.7/hour in the last 24h
+at the current rate the 20-episode drift window refreshes in about 4 hours: that is when to read again
+[cell 33] submission 56672257: 40 episodes, 29 distinct worlds
+  ledger  W10-L30-T0, margin median -153, worst -8,499, best +5,562
+  texture green 53.2%  amber 6.8%  navy 40.0%
+
+  GLOBAL class: ADAPTIVE  (varying 79.7%, first divergence t=144, channels {'farmer': 431, 'hands': 546, 'market': 508})
+    NOTE a plan fork at t in [72, 144] with the shop draw is ROUTING, not reactivity; read the within-world table.
+
+  world                                n class               vary first_div
+  BAKERY__FARMERS_MARKET               1 (one episode)    
+  BAKERY__ICE_CREAM_SHOP               2 ADAPTIVE           21.8%       187
+  BAKERY__PET_CAFE                     1 (one episode)    
+  BAKERY__PIZZA_SHOP                   1 (one episode)    
+  BAKERY__SMOOTHIE_SHOP                2 ADAPTIVE           15.6%       441
+  BRUNCH_SPOT__FARMERS_MARKET          2 ADAPTIVE           33.1%       187
+  BRUNCH_SPOT__PET_CAFE                1 (one episode)    
+  BRUNCH_SPOT__YARN_STORE              3 ADAPTIVE           62.0%       214
+  FARMERS_MARKET__BRUNCH_SPOT          3 ADAPTIVE           25.6%       207
+  FARMERS_MARKET__PET_CAFE             1 (one episode)    
+  FARMERS_MARKET__SMOOTHIE_SHOP        1 (one episode)    
+  FARMERS_MARKET__YARN_STORE           1 (one episode)    
+  ICE_CREAM_SHOP__BRUNCH_SPOT          1 (one episode)    
+  PET_CAFE__BAKERY                     1 (one episode)    
+  PET_CAFE__FARMERS_MARKET             1 (one episode)    
+  PET_CAFE__ICE_CREAM_SHOP             2 ADAPTIVE           37.1%       361
+  PET_CAFE__YARN_STORE                 1 (one episode)    
+  PIZZA_SHOP__BAKERY                   2 ADAPTIVE           32.4%       241
+  PIZZA_SHOP__PIZZA_SHOP               1 (one episode)    
+  SMOOTHIE_SHOP__BAKERY                1 (one episode)    
+  SMOOTHIE_SHOP__FARMERS_MARKET        1 (one episode)    
+  SMOOTHIE_SHOP__SMOOTHIE_SHOP         1 (one episode)    
+  SMOOTHIE_SHOP__YARN_STORE            1 (one episode)    
+  YARN_STORE__BAKERY                   1 (one episode)    
+  YARN_STORE__BRUNCH_SPOT              2 ADAPTIVE           29.9%       326
+  YARN_STORE__FARMERS_MARKET           1 (one episode)    
+  YARN_STORE__PET_CAFE                 1 (one episode)    
+  YARN_STORE__PIZZA_SHOP               2 ADAPTIVE           18.4%       322
+  YARN_STORE__SMOOTHIE_SHOP            1 (one episode)    
+
+  within-world verdict: {'ADAPTIVE': 9}
+  kinship: 29 mirrors, 8 siblings, 40 opponents read
+
+  macro profile, median [p10, p90]; ref = the measured #1 shape
+  2nd quadrant, day                      6 [6, 6]    ref 5
+  care actions                         389 [382, 480]    ref 280
+  herd bought (median)           COW 5  SHEEP 4  GOOSE 2    ref 7 COW
+  endgame fallow tiles d25-29           10 [0, 25]    ref 13
+  stranded $ at the bell                 0 [0, 0]    ref 442
+
+  convergence: SETTLING  (drift -2.57 pts/episode, 6 flips, threshold 1.0, n=228, rating 1,712.7)

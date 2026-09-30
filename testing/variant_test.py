@@ -16,9 +16,12 @@ def game(var, opp, seed, pid, preset):
         from kaggle_environments.agent import get_last_callable
     sys.path.insert(0, str(GROW))
     from family_duel import FAM, load, timed
-    for v in ("dtrwt", "dtrwtc", "dtrwc", "dtrwtr", "dtrwtl", "dtrwtd", "dtrwtcs", "dtrwtb"):
+    for v in ("dtrwt", "dtrwtc", "dtrwc", "dtrwtr", "dtrwtl", "dtrwtd", "dtrwtcs", "dtrwtb", "dtrwtf", "dtrwts"):
         FAM[v] = GROW / "variants" / f"{v}.py"
     FAM["majkel"] = Path(r"C:\Kaggriculture") / "work" / "" / "review9" / "majkel.py"
+    FAM["evg31"] = Path(r"C:\Kaggriculture") / "work" / "external" / "nb" / "evg31.py"
+    for v in ("l48wf", "l48mc", "l48cg"):
+        FAM[v] = Path(r"C:\Kaggriculture") / "work" / "external" / "l48" / f"{v}.py"
     rec = [0.0]
     fn = load(FAM[var])
     ags = [None, None]; ags[pid] = timed(fn, rec); ags[1 - pid] = load(FAM[opp])

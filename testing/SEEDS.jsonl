@@ -36,3 +36,10 @@
 {"tool": "tomato_test", "opp": "ca22", "start": 0, "count": 0, "ts": "2026-09-29 23:06:55"}
 {"tool": "tomato_test", "opp": "ca22", "start": 0, "count": 0, "ts": "2026-09-29 23:07:23"}
 {"tool": "variant_test", "var": "dtrwtc", "opp": "dtrw", "start": 8615, "count": 8, "preset": "YARN2", "ts": "2026-09-29 23:11:29"}
+{"tool": "variant_test", "var": "dtrwtr", "opp": "dtrw", "start": 8623, "count": 20, "preset": null, "ts": "2026-09-29 23:28:18"}
+{"tool": "variant_test", "var": "dtrwtr", "opp": "ca22", "start": 8643, "count": 12, "preset": null, "ts": "2026-09-29 23:35:27"}
+{"tool": "variant_test", "var": "dtrwtr", "opp": "majkel", "start": 8655, "count": 8, "preset": null, "ts": "2026-09-29 23:39:14"}
+{"tool": "variant_test", "var": "dtrwtl", "opp": "dtrw", "start": 8661, "count": 16, "preset": null, "ts": "2026-09-29 23:43:10"}
+{"tool": "variant_test", "var": "dtrwtd", "opp": "dtrw", "start": 8661, "count": 16, "preset": null, "ts": "2026-09-29 23:47:51"}
+{"tool": "variant_test", "var": "dtrwtcs", "opp": "dtrw", "start": 8661, "count": 16, "preset": null, "ts": "2026-09-29 23:52:34"}
+{"tool": "variant_test", "var": "dtrwtb", "opp": "dtrw", "start": 8661, "count": 16, "preset": null, "ts": "2026-09-29 23:57:17"}

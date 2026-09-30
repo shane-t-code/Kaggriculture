@@ -16,7 +16,7 @@ def game(var, opp, seed, pid, preset):
         from kaggle_environments.agent import get_last_callable
     sys.path.insert(0, str(GROW))
     from family_duel import FAM, load, timed
-    for v in ("dtrwt", "dtrwtc", "dtrwc"):
+    for v in ("dtrwt", "dtrwtc", "dtrwc", "dtrwtr", "dtrwtl", "dtrwtd", "dtrwtcs", "dtrwtb"):
         FAM[v] = GROW / "variants" / f"{v}.py"
     FAM["majkel"] = Path(r"C:\Kaggriculture") / "work" / "" / "review9" / "majkel.py"
     rec = [0.0]
@@ -57,17 +57,18 @@ def main():
     preset = sys.argv[6] if len(sys.argv) > 6 else None
     with (GROW / "SEEDS.jsonl").open("a", encoding="utf-8") as f:
         f.write(json.dumps({"tool": "variant_test", "var": var, "opp": opp, "start": s0, "count": n, "preset": preset, "ts": time.strftime("%Y-%m-%d %H:%M:%S")}) + "\n")
-    jobs = [(v, opp, s, p, preset) for s in range(s0, s0 + n) for p in (0, 1) for v in (var, "dtrw")]
+    ctrl = os.environ.get("VT_CONTROL", "dtrw")
+    jobs = [(v, opp, s, p, preset) for s in range(s0, s0 + n) for p in (0, 1) for v in (var, ctrl)]
     res = {}
     with Pool(procs) as pool:
         for r in pool.imap_unordered(job, jobs):
             with OUT.open("a", encoding="utf-8") as f: f.write(json.dumps(r) + "\n")
             res[(r["var"], r["seed"], r["pid"])] = r
-    print(f"{var} vs {opp} (preset {preset}); paired with dtrw vs {opp}; margin = us - them")
+    print(f"{var} vs {opp} (preset {preset}); paired with {ctrl} vs {opp}; margin = us - them")
     diffs = []
     for s in range(s0, s0 + n):
         for p in (0, 1):
-            a, b = res.get((var, s, p)), res.get(("dtrw", s, p))
+            a, b = res.get((var, s, p)), res.get((ctrl, s, p))
             if not a or not b: continue
             d = a["margin"] - b["margin"]; diffs.append(d)
             flip = ("W" if a["margin"] > 0 else "L" if a["margin"] < 0 else "T") + "<-" + ("W" if b["margin"] > 0 else "L" if b["margin"] < 0 else "T")

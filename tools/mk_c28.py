@@ -31,8 +31,8 @@ LAYER = '''
 
 # ---------------------------------------------------------------------------
 # CP LAYER: compiled strawberry-takeover programs .
-# Offline compiler: tools/route_compiler.py; spec: docs/COMPILER_PLAN.md;
-# mechanism proof: work//review2/splice_proof.json ( review 2).
+# Offline compiler: tools/route_compiler.py;
+# mechanism proof: work/review2/splice_proof.json ( review 2).
 # ---------------------------------------------------------------------------
 import json as _cp_json
 _CP_TABLE = _cp_json.loads(%r)

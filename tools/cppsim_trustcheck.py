@@ -2,7 +2,7 @@
 PASS = final rewards identical. Also times both paths."""
 import importlib.util, time, os, sys
 
-sys.path.insert(0, r"C:\Kaggriculture")
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 def load_agent(path, modname):
     spec = importlib.util.spec_from_file_location(modname, path)

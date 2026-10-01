@@ -6,7 +6,7 @@ collect/plant/dig) is carved into one serpentine chunk per free unit so each wor
 its own strip; urgent work (saves/feeds/harvests/chains) stays globally assigned. Effect:
 idle PASS turns fell ~12% -> ~6%; workers find work faster.
 A/B record: v5a beat v4 27-5 (84.4%, +2,483) | v4c beat v3 28-4 | v3a beat v2 30-2 |
-v2a beat v1 32-0 | v1 beat v0 32-0.  Full lineage + rejected experiments: docs/PLAN.md.
+v2a beat v1 32-0 | v1 beat v0 32-0.
 
 Everything from v1 (task list, greedy assignment, stickiness, 4 hands, melon-12 + carrot mix,
 day-29 endgame) plus the livestock pipeline:

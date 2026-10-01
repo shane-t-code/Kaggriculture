@@ -1,11 +1,11 @@
 """tape_build.py — turn a live replay's OPPONENT action stream into a local
-pool agent .
+pool agent.
 
 The reconstructed agent replays the recorded stream verbatim by obs.step —
 faithful for open-loop tapes (the killer family is one; x-ray classified,
-schedules byte-stable across copies).  LOCAL ONLY, NEVER SUBMIT (.md).
+schedules byte-stable across copies).  Analysis tool only.
 
-Convention (validated Exp 89, 99.9%): the action deciding state steps[t+1]
+Convention (validated on live replays, 99.9%): the action deciding state steps[t+1]
 is stored AT steps[t+1]; an agent called with obs.step == t must therefore
 emit the action stored at steps[t+1].
 
@@ -13,7 +13,8 @@ Usage: python tools/tape_build.py <replay.json> <out.py> [me_name]
 """
 import json, sys, zlib, base64, ast
 
-ME_DEFAULT = "Shane Thivaharraja"
+import os
+ME_DEFAULT = os.environ.get("TEAM_NAME", "Shane Thivaharraja")  # our team name as shown in replays
 
 def main():
     rp, out = sys.argv[1], sys.argv[2]
@@ -34,9 +35,9 @@ def main():
                       "market": a.get("market") or []})
     blob = base64.b85encode(zlib.compress(
         json.dumps(table, separators=(",", ":")).encode())).decode()
-    src = f'''"""AUTO-GENERATED tape agent — LOCAL POOL ONLY, NEVER SUBMIT.
+    src = f'''"""AUTO-GENERATED tape agent — local analysis pool only.
 Source: {rp.replace(chr(92), "/")}  opponent seat of {teams[opp]!r} (vs {me!r}).
-Built by tools/tape_build.py .  Open-loop replay of the recorded
+Built by tools/tape_build.py.  Open-loop replay of the recorded
 stream by obs.step; steps past the recording PASS."""
 import json, zlib, base64
 

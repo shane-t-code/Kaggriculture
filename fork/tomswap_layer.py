@@ -13,7 +13,7 @@
 # tail-idle labor, wheat-swap, Q4 patch).  Kept for the mechanism library:
 # the swap trick itself (rewrite tape PLANT commands) is sound and reusable.
 # ---------------------------------------------------------------------------
-#  TOMSWAP layer (Shane Thivaharraja fork, Exp 123): the tomato program
+#  TOMSWAP layer (fork): the tomato program
 # with ZERO added labor — "swap, don't staff".
 #
 # Lesson of v98a/v98b: the fib wage law kills any extra hand.  Lesson of the

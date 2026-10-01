@@ -6,7 +6,7 @@ Usage: python tools/kagsim_pin_check.py [preset] [seed]
 """
 import importlib.util, time, os, sys
 
-sys.path.insert(0, r"C:\Kaggriculture")
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 os.chdir(r"C:\Kaggriculture")
 
 PRESET = sys.argv[1].upper() if len(sys.argv) > 1 else "MILK1"

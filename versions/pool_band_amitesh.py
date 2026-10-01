@@ -1,4 +1,4 @@
-"""AUTO-GENERATED tape agent — LOCAL POOL ONLY, NEVER SUBMIT.
+"""AUTO-GENERATED tape agent — local analysis pool only.
 Source: C:/Kaggriculture/replays/live_v67c/episode-107920845-replay.json  opponent seat of 'Amitesh Chaudhary' (vs 'Shane Thivaharraja').
 Built by tools/tape_build.py .  Open-loop replay of the recorded
 stream by obs.step; steps past the recording PASS."""

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""labor_trace.py — Exp 83a: per-unit-turn labor split, ours vs a target agent.
+"""labor_trace.py —: per-unit-turn labor split, ours vs a target agent.
 
 Runs paired local games and classifies EVERY unit-turn per seat:
   MOVE  = NORTH/SOUTH/EAST/WEST

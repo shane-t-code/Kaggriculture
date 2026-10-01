@@ -1,5 +1,4 @@
-# BUILD DIAL SWEEP — _CA_MARGIN beyond the public frontier (EXP 182b,
-# Sep 29 ~12:20am, queued behind the knob screens).
+# BUILD DIAL SWEEP — _CA_MARGIN beyond the public frontier .
 #
 # The carrot dial is the proven WITHIN-PLAN reallocation lever (zero new
 # land, zero new hires): more negative = more wheat->carrot planting swaps

@@ -1,7 +1,7 @@
 # EXECUTOR SPEC — v108 (fork/executor_layer.py on pipe16 base)
 
 The one remaining door to the top-10 second half (all additive doors measured
-shut — see PLAN Exp 126-128). Complete-by-construction late-game owner.
+shut). Complete-by-construction late-game owner.
 
 ## Core decisions (each paid for by a falsification)
 - **PERMANENT takeover from D_ON=22** (config; try 22 first, then 20/18).

@@ -1,4 +1,4 @@
-"""shop_pin.py — pin the town's shop-unlock sequence in local games .
+"""shop_pin.py — pin the town's shop-unlock sequence in local games.
 
 WHY (the re-roll trap, engine-verified): each evening a per-day RNG first spends
 one draw per EMPTY TILE on both farms (weeds), then draws the next shop from the

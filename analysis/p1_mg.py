@@ -1,9 +1,9 @@
-# PHASE 1 MEASUREMENT A2  — one top submission, many games: is its
+# SHOP DETERMINISM (many games of one submission) — one top submission, many games: is its
 # farm decided by the shops seen so far?  Shops appear at steps 72, 144, 216,
 # 288 ... (every 3 days, up to 8).  For every pair of games that share the
 # first k shops, check whether the two farms are identical until the (k+1)th
 # shop appears.  Also: how many distinct shop prefixes the games cover.
-# PREDECLARED READING: >= 80% of same-prefix pairs identical (strict) or
+# DECISION RULE (fixed in advance): >= 80% of same-prefix pairs identical (strict) or
 # >= 90% identical at census level (counts of each crop/animal, land, hands)
 # => the build is a function of the shops => a tree of stored plans works.
 # Usage: python -X utf8 p1_mg.py <tag> <team_name>
@@ -14,7 +14,7 @@ import sys
 from collections import Counter, defaultdict
 from pathlib import Path
 
-R = Path(r"C:\Kaggriculture")
+R = Path(__file__).resolve().parents[1]
 
 
 def tile_sig(t):

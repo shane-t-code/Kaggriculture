@@ -1,5 +1,4 @@
-# BUILD BD — the SE BUNDLE (EXP 182, Sep 28 ~11:40pm, the structural
-# directive: co-designed multi-organ block, not a bolted-on organ).
+# BUILD BD — the SE BUNDLE .
 #
 # One admission (day 11-13), one $4,000 SE lease, one shared crew:
 #   EARLY-TOM: 8 tomato tiles (5..8, 5..6) planted day s      -> sell ~s+9..s+13

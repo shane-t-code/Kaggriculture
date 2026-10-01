@@ -1,5 +1,5 @@
 # BUILD T8 — early tomato block .
-# Source spec: work//review12/SPECS.md (T8) + GAP_LEDGER rank 3.
+# Source spec: work/review12/SPECS.md (T8) + GAP_LEDGER rank 3.
 #
 # Design (predeclared):
 #   Admission: day 11-13 hour<=1; >=1 PIZZA_SHOP/FARMERS_MARKET revealed;

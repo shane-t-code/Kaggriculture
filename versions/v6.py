@@ -8,7 +8,7 @@ with a 4-day feed cushion + wheat dowry; seeds respect a held-back feed budget).
 The identical scale config lost 12-20 as v4a while carrying five since-fixed bugs —
 scale was never the problem, its diseases were.
 A/B record: v5b beat v5 31-1 (96.9%, +12,754) | v5a beat v4 27-5 | v4c beat v3 28-4 |
-v3a beat v2 30-2 | v2a beat v1 32-0 | v1 beat v0 32-0.  Lineage: docs/PLAN.md.
+v3a beat v2 30-2 | v2a beat v1 32-0 | v1 beat v0 32-0.
 
 Everything from v1 (task list, greedy assignment, stickiness, 4 hands, melon-12 + carrot mix,
 day-29 endgame) plus the livestock pipeline:

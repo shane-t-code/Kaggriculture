@@ -1,4 +1,4 @@
-# GROW SCREEN — EXP 180 stage 2 (Sep 28). Runs ONE variant on a selected
+# GROW SCREEN — experiment stage 2 (Sep 28). Runs ONE variant on a selected
 # seed list, paired cell-for-cell against the census control games.
 #
 # PREDECLARED GATES (set before any stage-2 game ran — see also driver notes):

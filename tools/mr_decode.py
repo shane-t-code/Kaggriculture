@@ -6,7 +6,7 @@ TAPE_SELLS, but the order-level schedules extracted from the notebook blob
 (results/decodes/route_sells.json) are spam-inflated — the engine clips sell
 orders silently against held inventory and market absorption.  Ground truth =
 market-inventory deltas attributed to the seat that ordered the sell that step
-(same method as tools/true_sells.py, validated in Exp 78).
+(same method as tools/true_sells.py, validated in).
 
 Runs main.py vs the pool multi_route agent on N seeds x both seats on the REAL
 engine, decodes each game in-process (no giant replay dumps), and writes one

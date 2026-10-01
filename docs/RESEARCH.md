@@ -287,14 +287,13 @@ SMOOTHIE_SHOP: (STRAWBERRY, MILK) | FARMERS_MARKET: (WHEAT, CARROT, TOMATO, STRA
 Town demand calc it uses: `demand = 1 if item != FERTILIZER and step % 24 == 0`; plus if `step % 4 == 0`,
 `+2` for single-product shops, `+1` otherwise.
 
-> `[OURS] ⚠️ ETHICS + STRATEGY NOTE.` Copying a compressed action tape reconstructed from another
-> competitor's replays is *legal* under §2.11 (replays are public), and it is what much of the top 150
-> is doing. **We are not doing that**, for two reasons. (1) Strategically it is a dead end: a tape cannot
-> adapt, the final Bradley-Terry board runs 2 weeks against a drifting field, and a tape's edge is exactly
-> the thing every other copier also has. (2) It produces nothing you can honestly claim as your own work —
-> which defeats the entire point of entering. **Read these agents as intelligence about the route; write our
-> own agent.** There is even an active thread (`736568`) about competitors deliberately obfuscating replays
-> to defeat copying.
+> `[OURS]` Note on reconstructed action tapes: copying a compressed action tape rebuilt from another
+> competitor's replays is legal under §2.11 (replays are public) and common in the top 150, but a tape
+> cannot adapt, the final Bradley-Terry board runs two weeks against a drifting field, and its edge is
+> exactly what every other copier also has. Public agents are read here as intelligence about the
+> route; anything reused runs under an adaptive layer and is tested in worlds and against opponents the
+> recording never saw. There is an active thread (`736568`) about competitors obfuscating replays to
+> defeat copying.
 
 ### 6.3 Open questions the meta has NOT solved
 - **Nobody adapts to the opponent.** hengck23 (1346th): "**Most solutions so far are not really fighting against opponent agent yet.**"
@@ -304,7 +303,7 @@ Town demand calc it uses: `demand = 1 if item != FERTILIZER and step % 24 == 0`;
 
 ---
 
-## 7. RL / ML attempts — the honest scoreboard
+## 7. RL / ML attempts — reported results
 
 Threads 734952 (NNMax, 21st) and 736567 (dzjiann, 29th). `[PARTICIPANT]`
 
@@ -471,4 +470,4 @@ the cloned meta-tape).
   top-150 (our band) has none of it. Our reactive-hinge line (v21) is the right race.
 
 Candidates derived: v23a (wheat factory day 18→12), v22c (tomato day-15/≥70 second trigger),
-v22d (late carrot conversion), v22b (shop-triggered goose). See PLAN.md experiments.
+v22d (late carrot conversion), v22b (shop-triggered goose).

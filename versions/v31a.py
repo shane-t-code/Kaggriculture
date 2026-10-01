@@ -2,7 +2,7 @@
 main.py — Kaggriculture agent.  ENTRY POINT (must be at archive root, must be named main.py).
 
 STATUS: v31a — CANDIDATE (= v25 + CONDITIONAL EARLY WHEAT FACTORY).
-Exp 48-49 found the herd family's worst towns are dead-premium draws
+-49 found the herd family's worst towns are dead-premium draws
 (no strawberry/milk-eating shop early) — exactly where the wheat-native
 v30a prototype WINS (wheat demand never gluts: 6 shop types eat it).
 The shop draw is public, one shop unlocks every 3 days, and the day-6
@@ -13,9 +13,7 @@ factory at the latch day instead.  Trigger reads shops only; games
 where it never fires are byte-identical to v25.
 
 Underlying: v25 — Phase 6 fix #11 (PROMOTED, = v24 + SEARCHED OPENING).  The
-first search-discovered shape change (Exp 47: 29-generation pod search
-over 14 opening dials, honest gate = dWins>=+10 AND dBank>0 AND
-field-legs>=0 on 200 held-out seeds).  Six genes moved vs v24: cow_pause
+first search-discovered shape change.  Six genes moved vs v24: cow_pause
 5->3, resume_day 11->9, str_want 6->7, wheat_cap 20->22, TARGET_HANDS
 6->8 (= 12 hands at 3 quadrants — the elite labor level), factory_day
 18->22.  The shape story: berries interleave from the 3rd cow (not 5th),
@@ -217,7 +215,7 @@ margin -48.5k (v8: -54.0k, v7: -59.5k), sd 10.5k (was 16.0k); still 0-16 — the
 the gap is production, targeted next (strawberry volume, opening speed).
 A/B record: v7a beat v7 51-13 over 64 (79.7%) | v6a beat v6 46-18 (71.9%) | v5b beat
 v5 31-1 | v5a beat v4 27-5 | v4c beat v3 28-4 | v3a beat v2 30-2 | v2a beat v1 32-0 |
-v1 beat v0 32-0.  Bank-diff risk (v7b): WASH, shelved for Phase 6.  docs/PLAN.md has all.
+v1 beat v0 32-0.  Bank-diff risk (v7b): WASH, shelved for Phase 6.
 
 Everything from v1 (task list, greedy assignment, stickiness, 4 hands, melon-12 + carrot mix,
 day-29 endgame) plus the livestock pipeline:

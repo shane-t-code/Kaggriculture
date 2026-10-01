@@ -1,5 +1,4 @@
-"""Build the replanner rung-1 pair (Exp 150, per  review 3's corrected
-contract):
+"""Build the replanner rung-1 pair:
 
 fork/r1.py  = c23s + FULL TAKEOVER at day 10 in gated worlds (PET_CAFE >= 2
               among revealed draws AND p_carrot >= 35 at step 240), running a
@@ -421,7 +420,7 @@ def _rp_plan(observation, seat, st):
     shed_total = sum(int(v) for v in priv["shed"].values())
     sell_now = (hour == 1 or hour >= 18 or day == 29 or shed_total > 60
                 or int(priv["shed"].get("CARROT", 0)) >= 8)
-    # feed: EMERGENCY buys only (grain engine grows the rest — Exp 156);
+    # feed: EMERGENCY buys only (grain engine grows the rest —);
     # none on day 29 — feeding has no salvage value on the last day
     if hour in (1, 13) and day < 29:
         need_today = n_animals + 1

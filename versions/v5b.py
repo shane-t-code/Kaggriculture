@@ -6,7 +6,6 @@ FERTILIZATION: our animals' daily fertilizer stream is applied to strawberries (
 their production ticks) and melons (hit the 6-cap sooner) instead of being sold outright —
 gated so the holdback never starves early-game feed cash (day >= 8), and restock trips
 never outrank watering.  A/B record: v4c beat v3 28-4 (87.5%, +4,260).
-Full lineage and every rejected experiment: docs/PLAN.md.
 
 Everything from v1 (task list, greedy assignment, stickiness, 4 hands, melon-12 + carrot mix,
 day-29 endgame) plus the livestock pipeline:

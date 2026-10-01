@@ -1,4 +1,4 @@
-# GROW VERDICT — EXP 180. Evaluates every screen_rows_*.jsonl against the
+# GROW VERDICT — experiment. Evaluates every screen_rows_*.jsonl against the
 # PREDECLARED gates (screen.py header, set before any stage-2 game ran):
 #   KEEP  iff mean paired > 0 AND zero losing flips AND majkel stratum
 #         mean >= -250 with stratum score_delta >= 0 AND paired == 0 on

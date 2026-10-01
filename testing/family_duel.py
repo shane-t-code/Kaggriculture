@@ -1,32 +1,37 @@
-# FAMILY DUEL  — variant vs each family member, both seats.
-# PREDECLARED gate (before any game): for dso to be a submission candidate:
-#   vs every family opponent: wins > losses; vs dtrw (the live agent it would
-#   replace): ZERO losses in cells where dtrw-vs-dtrw would tie; 0 errors;
-#   max callback < 900ms. Then a tape no-harm screen before any submit talk.
-# Usage: python family_duel.py <variant> <opp> <seed_start> <n_seeds>
+# FAMILY DUEL — one agent vs another, both seats, paired by seed.
+# GATE (fixed before any game) used for every submission candidate: vs every
+# opponent wins > losses; vs the agent it would replace, zero losses in cells
+# where that agent vs itself would tie; 0 errors; max callback < 900 ms.
+# Usage: python family_duel.py <agent> <opponent> <seed_start> <n_seeds>
+#   <agent>/<opponent> = a name from ROSTER or a path to an agent .py file.
 import json
 import sys
 import time
 from pathlib import Path
 
-sys.path.insert(0, r"C:\Kaggriculture")
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT))
 sys.dont_write_bytecode = True
 from run_local import _silence_fds
 with _silence_fds():
     from kaggle_environments import make
     from kaggle_environments.agent import get_last_callable
 
-GROW = Path(r"C:\Kaggriculture\work\build_a\grow")
-FAM = {
-    "dtrw": GROW / "variants" / "dtrw.py",
-    "dt": GROW / "variants" / "dt.py",
-    "dso": GROW / "variants" / "dso.py",
-    "dso2": GROW / "variants" / "dso2.py",
-    "dsl": GROW / "variants" / "dsl.py",
-    "ca22": Path(r"C:\Kaggriculture\work\build_a\s1009r_ca22.py"),
-    "s1009r": Path(r"C:\Kaggriculture\work\build_a\step1009r.py"),
-    "candidate": Path(r"C:\Kaggriculture\work\\review10\candidate.py"),
+DATA = ROOT / "data"
+ROSTER = {
+    "final": ROOT / "agent" / "main.py",
 }
+
+
+class _Roster(dict):
+    """Names from ROSTER, or any path to an agent file."""
+
+    def __missing__(self, key):
+        return Path(key)
+
+
+FAM = _Roster(ROSTER)
+GROW = DATA
 
 
 def load(p):
@@ -45,8 +50,9 @@ def timed(fn, rec):
 
 def main():
     var, opp, s0, n = sys.argv[1], sys.argv[2], int(sys.argv[3]), int(sys.argv[4])
-    out = GROW / f"fam_{var}_vs_{opp}.jsonl"
-    with (GROW / "SEEDS.jsonl").open("a", encoding="utf-8") as f:
+    DATA.mkdir(exist_ok=True)
+    out = DATA / f"duel_{Path(str(var)).stem}_vs_{Path(str(opp)).stem}.jsonl"
+    with (DATA / "SEEDS.jsonl").open("a", encoding="utf-8") as f:
         f.write(json.dumps({"tool": "family_duel", "var": var, "opp": opp,
                             "start": s0, "count": n,
                             "ts": time.strftime("%Y-%m-%d %H:%M:%S")}) + "\n")

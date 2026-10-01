@@ -1,17 +1,18 @@
-# GATE PROBE  — in live games where a same-opening copy bought the
+# GATE PROBE — in live games where a same-opening copy bought the
 # third plot + tomato and we did not (or the reverse), print the public state
 # both sides saw on day 18 so we can see WHICH condition of our own tomato
-# project gate (dtrw.py ~1269-1285: money >= 12000, tomato price floor,
+# project gate (agent/main.py, _v219_qualifies: money >= 12000, tomato price floor,
 # >= 3 pizza/farmers-market shops unlocked, SE still locked) held us back.
 # No games played, no seeds spent. download -> read -> delete.
 # Usage: python -X utf8 gate_probe.py <episode_id> [...]
 import json
+import os
 import sys
 
-sys.path.insert(0, r"C:\Kaggriculture\work\build_a\arena")
+sys.path.insert(0, str(Path(__file__).resolve().parent))
 from clone_diff import fetch, ME  # noqa: E402
 
-H2H = r"C:\Kaggriculture\work\build_a\arena\h2h\rows.jsonl"
+H2H = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data", "h2h_rows.jsonl")
 
 
 def main():

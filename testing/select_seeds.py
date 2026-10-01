@@ -1,4 +1,4 @@
-# GROW SEED SELECTOR — EXP 180. Reads the census and, per variant knob,
+# GROW SEED SELECTOR — experiment. Reads the census and, per variant knob,
 # selects the seeds where that knob CAN bind (denominators lesson: measure
 # activation and effect separately; don't waste games on worlds where the
 # variant is provably byte-identical to control).

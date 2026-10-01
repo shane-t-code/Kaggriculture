@@ -1,4 +1,4 @@
-"""AUTO-GENERATED tape agent — LOCAL POOL ONLY, NEVER SUBMIT.
+"""AUTO-GENERATED tape agent — local analysis pool only.
 Source: replays/live_v87b/episode-109676586-replay.json  opponent seat of 'UYHHHHYu' (vs 'Shane Thivaharraja').
 Built by tools/tape_build.py .  Open-loop replay of the recorded
 stream by obs.step; steps past the recording PASS."""

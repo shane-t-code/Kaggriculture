@@ -1,21 +1,22 @@
-# LINEAGE  — which top teams open exactly like OUR family, and which
+# LINEAGE — which top teams open exactly like our family, and which
 # replay one fixed opening?  Pure table work on the public dataset
 # georgymamarin/kaggriculture-episodes (no games, no seeds, no replays).
 #   stream_hNN = sha256 of a seat's action stream through turn NN.
 #   Same h48 on two seats = byte-identical actions through turn 48.
-# PREDECLARED READING (before looking):
+# DECISION RULE (fixed before the data was looked at):
 #   "same family as us"  = a submission whose MODAL h48 equals our modal h48.
 #   "fixed opening"      = one h48 value covers >= 80% of that submission's games.
 #   Donor-compatible     = top-30 team, newest submission, same family as us.
 # Usage: python -X utf8 lineage.py
 import csv
+import os
 import glob
 import sys
 from collections import Counter, defaultdict
 
-DS = r"C:\Kaggriculture\work\build_a\arena\ds"
-LB = sorted(glob.glob(r"C:\Kaggriculture\work\build_a\arena\lb\*.csv"))[-1]
-OUR_TEAM = "Shane Thivaharraja"
+DS = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data", "kaggriculture-episodes")
+LB = sorted(glob.glob(os.path.join(os.path.dirname(DS), "leaderboard", "*.csv")))[-1]
+OUR_TEAM = os.environ.get("TEAM_NAME", "Shane Thivaharraja")  # team name as shown on the leaderboard
 CUTS = ["stream_h24", "stream_h48", "stream_h100", "stream_h136", "stream_h200"]
 
 
@@ -57,7 +58,7 @@ def main():
         v, n = c.most_common(1)[0]
         return v, n / sum(c.values()), len(c)
 
-    # OUR family fingerprints (every submission of ours in the dataset)
+    # our family fingerprints (every submission of ours in the dataset)
     ours = name2id.get(OUR_TEAM)
     print(f"our team id {ours}; our submissions in dataset:")
     our_h = defaultdict(Counter)

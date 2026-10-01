@@ -1,4 +1,4 @@
-# MGX  — "borrowed playbook" agent.
+# MGX — "borrowed playbook" agent (experimental; not the submitted agent).
 # Carries a library of complete recorded games of one top team (the donor,
 # Mother-Goose) and FOLLOWS one of them, switching to a better-matching game
 # each time the town reveals a new shop (steps 72, 144, ... 576).  Reflexes

@@ -1,4 +1,4 @@
-# PHASE 1 FETCH  — pull every public game of ONE top submission via
+# FETCH — pull every public game of ONE top submission via
 # the public replay API (same read-only endpoints as tools/fetch_top_eps.py;
 # no credentials, no account actions).  Gzipped replays -> replays/<tag>/.
 # Usage: python -X utf8 p1_fetch.py <submission_id> <tag> [max_games]
@@ -9,8 +9,8 @@ import time
 import urllib.request
 from pathlib import Path
 
-R = Path(r"C:\Kaggriculture")
-sys.path.insert(0, str(R / "work" / "build_a" / "arena"))
+R = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(Path(__file__).resolve().parent))
 from team_now import games  # noqa: E402
 
 

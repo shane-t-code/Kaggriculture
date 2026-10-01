@@ -1,9 +1,9 @@
-# MGX PLAN STORE BUILDER  — turn every public game of the
+# PLAN STORE BUILDER — turn every public game of the
 # donor team (Mother-Goose) into a compact PLAN: the team's recorded moves,
 # its money and hand-count curves (for the cash guard / hire match), the
 # town's shop sequence, and a per-day farm census (for choosing the plan
 # whose farm is closest to ours when we must switch).
-# Output: work/build_a/mgx/plans.json.gz  (one list; loaded by the agent
+# Output: playbook/plans.json.gz  (one list; loaded by the agent
 # builder, which embeds it into the submission file).
 # Usage: python -X utf8 build_store.py [replay_dir] [team]
 import ast
@@ -13,8 +13,8 @@ import sys
 from collections import Counter
 from pathlib import Path
 
-R = Path(r"C:\Kaggriculture")
-OUT = R / "work" / "build_a" / "mgx" / "plans.json.gz"
+R = Path(__file__).resolve().parents[1]
+OUT = R / "playbook" / "plans.json.gz"
 
 
 def tile_sig(t):

@@ -1,4 +1,4 @@
-# PLAN FOLLOWER v0  — a top team's whole recorded game used as a
+# PLAN FOLLOWER — a top team's whole recorded game used as a
 # PLAN (not replayed blindly).  Local research tool for Phase 1; it answers
 # one question: are the breaks of a moved recording the repairable kind?
 # The plan carries, per step: the recorded moves AND the money the real game
@@ -16,7 +16,7 @@
 #                    let their empty purse cap it.  We hire exactly as many
 #                    hands as the real game ended up with at that step, and
 #                    catch up later in the day if a hire was missed.
-# LOCAL ONLY — never submitted as is.
+# Analysis tool; not part of the submission.
 import json
 
 from kaggle_environments.envs.kaggriculture.kaggriculture import CROPS

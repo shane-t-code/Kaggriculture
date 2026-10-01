@@ -1,5 +1,5 @@
 # ---------------------------------------------------------------------------
-#  VARIANCE layer (Shane Thivaharraja fork, Exp 123): bank-differential
+#  VARIANCE layer (fork): bank-differential
 # risk.  Rating counts WINS only (Pr[win]=Phi(mu/sigma), destbreso), and both
 # banks are public every turn — so when we are BEHIND late, extra variance is
 # free win-probability, and when ahead it is poison.  The 2945 base's games

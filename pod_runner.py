@@ -6,7 +6,7 @@ opponent on identical seeds, both seats) but:
   - runs games in parallel across all cores (multiprocessing, ~Nx faster)
   - calls the engine directly (no run_local subprocess / stdout parsing)
   - reports W-L-T explicitly (pool_ab counted mirror TIES as A-losses —
-    harness law, Exp 45) and mirror dWins excludes ties
+    harness law) and mirror dWins excludes ties
   - writes one JSON line per game for stratified decodes (fired-game
     analysis without rerunning anything)
 

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """search_params.py — overnight coordinate-descent over main.py's tuned constants.
 
-Why: every hand-designed mechanism card is closed (PLAN.md experiments 20-29);
+Why: every hand-designed mechanism card is closed;
 the remaining path to +15-25k median bank includes tuning the ~10 constants we
 set by judgment, not measurement.  Local games are free; this drives thousands.
 

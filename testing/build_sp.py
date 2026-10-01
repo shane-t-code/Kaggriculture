@@ -4,7 +4,7 @@
 # GAP_LEDGER rank 1. Market-orders-only change: town draw stays a control.
 #
 # PREDECLARED policy (before any game):
-#   V2 (declared Sep 29 ~12:20am after v1's fixture KILL — v1 stranded
+#   V2 (declared after v1's fixture KILL — v1 stranded
 #   trimmed units: native credit treats them as sold, so blocked releases
 #   rot in the shed; 11/12 cells negative, worst -12,285):
 #   Scope: STRAWBERRY, days 14-29. Daily cap = engine drain (1+6*inst);

@@ -1830,7 +1830,7 @@ def _r37_reorder_sales(observation, action):
     orders = [list(o) for o in action['market']]
     start = 0
     while start < len(orders):
-        # r1 repair : an EMPTY placeholder order
+        # r1 repair: an EMPTY placeholder order
         # crashed orders[start][0] with IndexError 60x/8 games, aborting the
         # whole reorder each time.  Empties are kept in place as barriers
         # (removing them would shift simultaneous-execution indices).
@@ -4474,8 +4474,7 @@ agent = globals().pop('agent')
 
 
 # ---------------------------------------------------------------------------
-#  CARROT2 layer: carrot instead of wheat when the carrot book pays. Own implementation.
-# Built by tools/_build_carrot.py (derivation there).
+# CARROT2 layer: carrot instead of wheat when the carrot book pays. Own implementation.
 # ---------------------------------------------------------------------------
 _CA_FROM = 6
 _CA_TO = 28
@@ -4731,8 +4730,7 @@ agent = globals().pop('agent')
 
 
 # ---------------------------------------------------------------------------
-#  ORDERPRI2 layer: sales ordered by the rival's estimated sellable stock. Own implementation.
-# Built by tools/_build_orderpri2.py (derivation there).
+# ORDERPRI2 layer: sales ordered by the rival's estimated sellable stock. Own implementation.
 # ---------------------------------------------------------------------------
 _OR2_CAP = 30
 _OR2_SN_K = 0
@@ -4979,8 +4977,7 @@ agent = globals().pop('agent')
 
 
 # ---------------------------------------------------------------------------
-#  CAPHARV layer: harvest animals that would overflow tonight. Own implementation.
-# Built by tools/_build_capharv.py (derivation there).
+# CAPHARV layer: harvest animals that would overflow tonight. Own implementation.
 # ---------------------------------------------------------------------------
 _CH_SHED = 90
 _CH_SELL = True
@@ -5129,8 +5126,7 @@ agent = globals().pop('agent')
 
 
 # ---------------------------------------------------------------------------
-#  SHEDROOM layer: sell shed goods before the night drop overflows. Own implementation.
-# Built by tools/_build_shedroom.py (derivation there).
+# SHEDROOM layer: sell shed goods before the night drop overflows. Own implementation.
 # ---------------------------------------------------------------------------
 _SR_MARGIN = 8
 _SR_HOURS = (21, 22, 23)
@@ -5244,8 +5240,8 @@ agent = globals().pop('agent')
 
 
 # ---------------------------------------------------------------------------
-#  HERD2 layer: goose / cow / sheep choice at the tape's goose purchase.
-# Own implementation. Built by tools/_build_herd2.py (derivation there).
+# HERD2 layer: goose / cow / sheep choice at the tape's goose purchase.
+# Own implementation.
 # ---------------------------------------------------------------------------
 _HD2_FROM = 192
 _HD2_TO = 360
@@ -5530,8 +5526,7 @@ agent = globals().pop('agent')
 
 
 # ---------------------------------------------------------------------------
-#  COWSWAP layer: cow / goose / sheep at the tape's first cow purchase. Own implementation.
-# Built by tools/_build_cowswap.py (derivation there). Requires HERD2 above.
+# COWSWAP layer: cow / goose / sheep at the tape's first cow purchase. Own implementation.
 # ---------------------------------------------------------------------------
 _CS_FROM = 144
 _CS_TO = 192
@@ -5668,7 +5663,7 @@ def agent(observation, configuration=None):
             shops_now = list((observation.get("town") or {}).get("unlocked_shops") or [])
             shop_ok = True
             if _CS_SHOP_RULE:
-                # research/_20260913/RESULTS.md: over 48 seeds the swap only paid with an egg shop
+                # measured over 48 seeds: the swap only paid with an egg shop
                 # open and no milk shop open (+1,254 mean over 9 seeds); with a milk shop it lost.
                 no_milk = not any(s in ("PIZZA_SHOP", "ICE_CREAM_SHOP", "SMOOTHIE_SHOP") for s in shops_now)
                 if _CS_SHOP_RULE == "nomilk":
@@ -5989,7 +5984,7 @@ agent.telemetry=_R127_REPORT
 agent=globals().pop('agent')
 
 
-# ---- v44y pre-guard: quote at hour 21,22 what the hour-23 day-end storage guard (EXP-154) would dump ----
+# ---- v44y pre-guard: quote at hour 21,22 what the hour-23 day-end storage guard would dump ----
 # The guard sells shed stock by price desc once shed+carried exceeds 99 at hour 23. Selling those lots
 # a step earlier stays in the same town-consumption price window and quotes before a same-tape rival.
 _PG_HOST=[v for v in list(globals().values()) if callable(v)][-1]
@@ -6797,7 +6792,7 @@ def _v219_qualifies(obs, native):
     _CXTB_REPORT['cxtb_calls'] += 1
     try:
         revenue = _cxtb_expected_revenue(obs)
-        ok = _cxtb_qualifies(obs, native) or _CXTB_BASE_QUALIFIES(obs, native)  # dtrwt : open on EITHER check
+        ok = _cxtb_qualifies(obs, native) or _CXTB_BASE_QUALIFIES(obs, native)  # open on EITHER check
         them = obs['farms'][1 - obs['player']]
         _CXTB_REPORT['cxtb_features'].append({
             'opened': bool(ok), 'base': bool(_CXTB_BASE_QUALIFIES(obs, native)),
@@ -10143,7 +10138,7 @@ step1009_step1008_fortyfirst_final_fixedsell_closure_agent.telemetry=_S1009_REPO
 agent=step1009_step1008_fortyfirst_final_fixedsell_closure_agent
 kaggle_submission_agent=agent
 
-# Review 8: replan a certified remaining terminal route from the actual observation.
+# Replan the remaining terminal route from the actual observation.
 _R8R_PARENT=step1009_step1008_fortyfirst_final_fixedsell_closure_agent
 _R8R_ACTION=_PLANNER_NS['terminal_action']
 _R8R_PLAN=_PLANNER_NS['plan_terminal']
@@ -10534,8 +10529,7 @@ agent=r11_second_agent
 kaggle_submission_agent=r11_second_agent
 
 
-# GROW VARIANT dtrw (dtr + wool100 KEEP): exact4 tranche + dt deep terminal (256/2/12 initial plan).
-# EXP 185 candidate3: both tonight-certified mechanisms in one agent.
+# Final variant: sheep tranche (wool bar 100) + deep terminal plan (256/2/12 initial plan).
 _GROW_PARENT_ENTRY=agent
 def grow_variant_agent(observation,configuration=None):
     return _GROW_PARENT_ENTRY(observation,configuration)

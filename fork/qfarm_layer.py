@@ -11,9 +11,9 @@
 # builds pastures on our plots (collisions damage the route's own economy).
 # The mechanics WORK (25-38 toms harvested when staffed); the staffing
 # model is what's dead.  Only live successor design: tail-idle
-# commandeering (see PLAN.md Exp 122c) — ceiling measured +0-1k, down-ranked.
+# commandeering — ceiling measured +0-1k, down-ranked.
 # ---------------------------------------------------------------------------
-#  QFARM layer (Shane Thivaharraja fork, Exp 122b): the 4th-quadrant
+#  QFARM layer (fork): the 4th-quadrant
 # micro-farm.  The route chassis only ever buys 3 quadrants (measured; SE
 # stays locked all game with $15-66k banked).  We buy it ($4k), staff it with
 # TWO dedicated extra hands the tape never commands, and run it as our own

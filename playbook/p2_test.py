@@ -1,4 +1,4 @@
-# MGX TEST  — the borrowed-playbook agent vs a real opponent on
+# MGX TEST — the borrowed-playbook agent vs a real opponent on
 # FRESH natural worlds, both seats, paired by seed.  Margin and W-L first.
 # Usage: python -X utf8 p2_test.py <label> <opponent_path> <seed_start> <n_seeds> <procs>
 import json
@@ -8,11 +8,11 @@ import time
 from multiprocessing import Pool
 from pathlib import Path
 
-R = Path(r"C:\Kaggriculture")
+R = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(R))
-sys.path.insert(0, str(R / "work" / "build_a" / "mgx"))
+sys.path.insert(0, str(Path(__file__).resolve().parent))
 sys.dont_write_bytecode = True
-OUT = R / "work" / "build_a" / "mgx" / "rows.jsonl"
+OUT = R / "data" / "playbook_rows.jsonl"
 
 
 def run(job):
@@ -48,7 +48,7 @@ def run(job):
 def main():
     label, opp, s0, n, procs = (sys.argv[1], sys.argv[2], int(sys.argv[3]),
                                 int(sys.argv[4]), int(sys.argv[5]))
-    with open(R / "work" / "build_a" / "grow" / "SEEDS.jsonl", "a",
+    with open(R / "data" / "SEEDS.jsonl", "a",
               encoding="utf-8") as fh:
         fh.write(json.dumps({"tool": "mgx_p2_test", "label": label,
                              "opp": Path(opp).stem, "start": s0, "count": n,

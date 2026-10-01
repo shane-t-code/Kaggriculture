@@ -1,23 +1,23 @@
-# PHASE 1 BREAK STUDY  — what happens to a TOP TEAM's
+# BREAK STUDY — what happens to a top team's
 # whole recorded game when it is moved?  The recording plays the top team's
 # seat; nothing of ours is bolted on.
 #   mode F  same world, same opponent recording   (harness check: must
 #           reproduce the real bank exactly)
 #   mode O  same world (same seed, same shops), DIFFERENT opponent = our live
-#           agent dtrw playing for real in the other seat
-#   mode W  DIFFERENT world (fresh seed, natural shops), opponent = dtrw
+#           playing for real in the other seat
+#   mode W  DIFFERENT world (fresh seed, natural shops), opponent = our agent
 # For every run we compare the recording's farm, step by step, with the farm
 # in the real game and report: bank kept, first step the farm differs, what
 # differs there (weed / missing plant / missing animal / missing land / fewer
 # hands), and the money gap by day.
-# PREDECLARED READING (written before any run):
+# DECISION RULE (fixed before any run):
 #   "repairable"  = in mode O the median recording keeps >= 85% of its real
 #                   bank, or the first farm differences are of ONE or TWO
 #                   kinds that a reflex can fix (weed on a tile, purchase
 #                   one or two turns late).
 #   "not storable" = in mode W the median recording keeps < 60% of its bank
 #                   even before any farm difference matters (wrong town).
-# LOCAL ONLY. Recordings are never submitted as they are.
+# Analysis tool; not part of the submission.
 # Usage: python -X utf8 p1_break.py <mode F|O|W> <per_team> <procs> [first_seed]
 import ast
 import json
@@ -27,11 +27,11 @@ from collections import Counter, defaultdict
 from multiprocessing import Pool
 from pathlib import Path
 
-R = Path(r"C:\Kaggriculture")
+R = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(R))
 sys.dont_write_bytecode = True
-OUT = R / "work" / "build_a" / "arena" / "p1_break_rows.jsonl"
-DTRW = str(R / "work" / "build_a" / "grow" / "variants" / "dtrw.py")
+OUT = R / "data" / "break_study_rows.jsonl"
+AGENT = str(R / "agent" / "main.py")
 TOP = ["DSM", "M & M & P & Q", "Boey", "Vadim Vasilenko", "Unknown Mother-Goose",
        "Fourth Quadrant", "DECEM", "THIRD FARM CLUB", "Smackaveli", "TheEggman"]
 
@@ -77,12 +77,12 @@ def run(job):
     pair = [None, None]
     base = mode[0]
     if len(mode) > 1:
-        sys.path.insert(0, str(R / "work" / "build_a" / "arena"))
+        sys.path.insert(0, str(Path(__file__).resolve().parent))
         import p1_follow
         pair[seat] = p1_follow.follower(rep, seat, r3=(mode[1] >= "g"))
     else:
         pair[seat] = tape_agent(rep, seat)
-    pair[1 - seat] = tape_agent(rep, 1 - seat) if base == "F" else DTRW
+    pair[1 - seat] = tape_agent(rep, 1 - seat) if base == "F" else AGENT
     use_seed = seed if base in ("F", "O") else seed_new
     t0 = time.time()
     # S = new seed, recording's whole town; A/B/C = new seed, only the first
@@ -190,7 +190,7 @@ def main():
                 jobs.append((f, s, mode, sd))
     print(f"mode {mode}: {len(jobs)} games to run on {procs} processes", flush=True)
     if mode == "W" and jobs:  # follower reruns reuse the same seeds (paired)
-        with open(R / "work" / "build_a" / "grow" / "SEEDS.jsonl", "a",
+        with open(R / "data" / "SEEDS.jsonl", "a",
                   encoding="utf-8") as fh:
             fh.write(json.dumps({"tool": "p1_break", "mode": "W", "start": seed0,
                                  "count": k,

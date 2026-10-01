@@ -1,5 +1,5 @@
 # ---------------------------------------------------------------------------
-#  MIRRORSORT layer (Shane Thivaharraja fork, Exp 123): steepest book
+#  MIRRORSORT layer (fork): steepest book
 # first — the intra-turn market race.
 #
 # Engine (kaggriculture.py L545-628): market lists execute slot-by-slot, and

@@ -1,9 +1,9 @@
 """
 main.py — Kaggriculture agent.  ENTRY POINT (must be at archive root, must be named main.py).
 
-STATUS: v1 — Phase 2: multi-unit task scheduler + daily hiring.  See docs/PLAN.md.
+STATUS: v1 — Phase 2: multi-unit task scheduler + daily hiring.
 
-The three ideas (from PLAN.md Phase 2, all measured by competitors):
+The three ideas (all measured by competitors):
   1. Rebuild a TASK LIST every turn: every tile that needs WATER / HARVEST / DIG / PLANT
      becomes a task with a priority ("a plant that missed watering yesterday dies tonight"
      outranks everything).

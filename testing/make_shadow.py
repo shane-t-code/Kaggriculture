@@ -1,4 +1,4 @@
-# GROW SHADOW TRANCHE — EXP 180 stage 3 (Sep 28 ~10:55pm).
+# GROW SHADOW TRANCHE — experiment stage 3 ().
 #
 # Builds variants/shadow.py from review11's exact4.py (the sticky-acceptance
 # smart-forecast tranche): the daily worst-case forecast is COMPUTED AND

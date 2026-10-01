@@ -4,7 +4,7 @@
 Reads results/top10/crawl.json (from top10_scrape.py), selects episodes,
 downloads each replay from the public CDN into SCRATCH, encodes every
 top-10-team seat into a compact .npz under results/top10/traj/, and deletes
-the raw 31MB JSON immediately. Aborts if free disk < 2 GB (mistake 19).
+the raw 31MB JSON immediately. Aborts if free disk < 2 GB.
 
 Usage: python tools/traj_encode.py <max_episodes> [--all-vs]
   default selection: top10-vs-top10 episodes only, newest first.

@@ -1,4 +1,4 @@
-# TEAM NOW  — what do the best teams of OUR opening family run today?
+# TEAM NOW — which submissions does a team run today, and how do they score?
 # Read-only public API (same one tools/fetch_top_eps.py uses; ListEpisodes by
 # submissionId only — teamId is rejected).  Bounded crawl: start from a known
 # old submission of the team, walk to its strongest opponents' submissions,

@@ -1,6 +1,4 @@
-# BUILD TAKEOVER V5 — blueprint patches on the LIVE _ta engine (EXP 186,
-# Sep 29 ~2am; first build patched the superseded _tkv engine — dead code,
-# caught by entry assert + reading the tail: _tkv_action=_ta_action).
+# BUILD TAKEOVER V5 — blueprint patches on the LIVE _ta engine .
 # Live-engine deltas from the AUTOPSY blueprint:
 #   P1 berries 18->22 and window d12->d14 (leaders 20-36 by d15).
 #   P2 land proactive from day 8 when funded (leaders 2nd d8.2-9.2, 3rd d10.5).

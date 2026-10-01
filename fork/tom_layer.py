@@ -1,5 +1,5 @@
 # ---------------------------------------------------------------------------
-#  TOM layer (Shane Thivaharraja fork, Exp 122): the tomato program the
+#  TOM layer (fork): the tomato program the
 # 2945 Farm's author names as his unsolved problem (section 6: top-10 farms
 # buy ~9 tomato seeds from day ~12, hold ~10 tiles at day 20, sell ~71 at
 # $114 into an empty book; every graft he tried failed because the route's

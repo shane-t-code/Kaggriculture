@@ -1,19 +1,20 @@
-# BEST COPY  — how do the HIGHEST-rated copies of our opening family
+# BEST COPY — how do the HIGHEST-rated copies of our opening family
 # earn their rating?  Pure table work on the public dataset (no games, no
 # seeds, no replays).  For each target submission: record vs same-opening
 # opponents ("copy games") and vs everyone else, split by opponent rating, and
 # the list of copy-game episode ids (for clone_diff-style decoding).
-# PREDECLARED READING (before looking):
+# DECISION RULE (fixed before the data was looked at):
 #   If a target wins >= 75% of its copy games, its rating comes from beating
 #   copies -> its post-opening edits are what we must port.
 #   If it wins < 60% of copy games but is rated high, the rating comes from
 #   elsewhere (luck / few games) and it is NOT a model to copy.
 # Usage: python -X utf8 best_copy.py
 import csv
+import os
 import sys
 from collections import defaultdict
 
-DS = r"C:\Kaggriculture\work\build_a\arena\ds"
+DS = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data", "kaggriculture-episodes")
 TARGETS = {"56591730": "E. Honda (new)", "56571320": "E. Honda (old)",
            "56502673": "Anton Tikhonov", "56371926": "Artyom Lyan"}
 CUTS = ["stream_h24", "stream_h48", "stream_h100", "stream_h136",

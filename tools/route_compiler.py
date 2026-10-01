@@ -7,9 +7,7 @@ followed by a native WATER on the SAME tile LATER THE SAME DAY — plants
 die if unwatered on plant day), and forward water coverage without two
 consecutive dry days.  Emits fork/cv_programs.json for the runtime layer.
 
-Spec: docs/COMPILER_PLAN.md.  Proof of mechanism: work//review2/.
-
-Usage: python tools/route_compiler.py work//review2/routes_7000.json fork/cv_programs.json
+Usage: python tools/route_compiler.py work/review2/routes_7000.json fork/cv_programs.json
 """
 import json, sys
 from collections import defaultdict

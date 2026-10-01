@@ -5,7 +5,7 @@ run_local.py — Kaggriculture local evaluation harness.
 Why this exists: submissions are the scarce resource (5/day, only latest 2 active).
 Local games are free and unlimited. Every hypothesis should be tested here first.
 
-Design follows the measurement protocol in .md:
+Design follows the measurement protocol in docs/RESEARCH.md:
   * PAIRED same-seed A/B (unpaired is ~67x noisier)
   * BOTH SEATS (seat 0 and seat 1) for every seed
   * Reports WIN RATE as the headline number, not mean bank
@@ -120,7 +120,7 @@ def main() -> None:
     ap.add_argument("--replay", action="store_true", help="dump replay JSON per seed")
     ap.add_argument("--debug", action="store_true", help="engine debug output (shows invalid actions!)")
     ap.add_argument("--shops", default=None,
-                    help="PIN the town shop sequence (kills the re-roll bias; Exp 89). "
+                    help="PIN the town shop sequence (removes the re-roll bias). "
                          "A preset (MILK0/MILK1/MILK3/YARN2/MIXED) or comma list of shop names.")
     args = ap.parse_args()
 
@@ -171,7 +171,7 @@ def main() -> None:
     winrate = a_wins / n if n else 0.0
     mean_margin = statistics.mean(margins) if margins else 0.0
     sd_margin = statistics.pstdev(margins) if len(margins) > 1 else 0.0
-    # mu/sigma is the quantity that actually predicts win probability (see .md)
+    # mu/sigma is the quantity that actually predicts win probability (see docs/RESEARCH.md)
     mu_over_sigma = (mean_margin / sd_margin) if sd_margin else float("nan")
 
     print("\n" + "=" * 62)

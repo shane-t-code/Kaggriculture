@@ -1,4 +1,4 @@
-# GROW CENSUS — stage 1 of the EXP 180 overnight grower search (Sep 28 ~10:25pm).
+# GROW CENSUS — stage 1 of the experiment overnight grower search ().
 #
 # For each fresh seed: run the 4 CONTROL cells (candidate vs ca22 & majkel,
 # both seats), capturing world features (shop draw / wool / wheat / quadrants

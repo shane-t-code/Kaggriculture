@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""walk_trace.py — Exp 83b: WHY the walking — path anatomy per seat.
+"""walk_trace.py —: WHY the walking — path anatomy per seat.
 
 From a local paired game, tracks every unit's position each step and
 segments its day into walks (runs of MOVE) ending in either a work
@@ -38,9 +38,9 @@ def trace(a, b, seed):
         works = 0
         shed_trips = 0
         streaks = []               # consecutive work actions on the same tile
-        # Exp 84a: ANIMAL-STOP anatomy — one "stop" = consecutive work actions
+        #: ANIMAL-STOP anatomy — one "stop" = consecutive work actions
         # on one animal tile; the King's canonical stop is FEED+CARE+COLLECT
-        # (2.48 ops/stop vs our greedy's 1.41, Exp 83b).
+        # (2.48 ops/stop vs our greedy's 1.41).
         animal_stops = []          # list of tuple(sorted ops) per stop
         stop_state = {}            # ui -> {"pos": (x,y), "ops": [..]} current stop
         cur = {}                   # ui -> {"len": int, "last": op, "streak": int, "pos": (x,y)}

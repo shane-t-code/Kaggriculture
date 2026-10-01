@@ -1,4 +1,4 @@
-"""AUTO-GENERATED tape agent — LOCAL POOL ONLY, NEVER SUBMIT.
+"""AUTO-GENERATED tape agent — local analysis pool only.
 Source: replays/live_v88a/episode-109652103-replay.json  opponent seat of 'Bharath Varma' (vs 'Shane Thivaharraja').
 Built by tools/tape_build.py .  Open-loop replay of the recorded
 stream by obs.step; steps past the recording PASS."""

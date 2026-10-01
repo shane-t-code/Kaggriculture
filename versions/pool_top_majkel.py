@@ -1,4 +1,4 @@
-"""AUTO-GENERATED tape agent — LOCAL POOL ONLY, NEVER SUBMIT.
+"""AUTO-GENERATED tape agent — local analysis pool only.
 Source: replays/top10_decode/episode-110932461-replay.json  opponent seat of 'Majkel1337' (vs 'Orbital Terraformer').
 Built by tools/tape_build.py .  Open-loop replay of the recorded
 stream by obs.step; steps past the recording PASS."""

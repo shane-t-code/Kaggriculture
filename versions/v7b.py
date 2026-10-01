@@ -9,7 +9,7 @@ hold premium stock for price spikes (x1.25 on the static threshold — the ratio
 cap still salvages genuinely dead markets).  Market-orders-only change.
 A/B record: v6a beat v6 46-18 over 64 games (71.9%) | v5b beat v5 31-1 (96.9%) |
 v5a beat v4 27-5 | v4c beat v3 28-4 | v3a beat v2 30-2 | v2a beat v1 32-0 |
-v1 beat v0 32-0.  Full lineage + every rejected experiment: docs/PLAN.md.
+v1 beat v0 32-0.
 
 Everything from v1 (task list, greedy assignment, stickiness, 4 hands, melon-12 + carrot mix,
 day-29 endgame) plus the livestock pipeline:

@@ -131,7 +131,7 @@ margin -48.5k (v8: -54.0k, v7: -59.5k), sd 10.5k (was 16.0k); still 0-16 — the
 the gap is production, targeted next (strawberry volume, opening speed).
 A/B record: v7a beat v7 51-13 over 64 (79.7%) | v6a beat v6 46-18 (71.9%) | v5b beat
 v5 31-1 | v5a beat v4 27-5 | v4c beat v3 28-4 | v3a beat v2 30-2 | v2a beat v1 32-0 |
-v1 beat v0 32-0.  Bank-diff risk (v7b): WASH, shelved for Phase 6.  docs/PLAN.md has all.
+v1 beat v0 32-0.  Bank-diff risk (v7b): WASH, shelved for Phase 6.
 
 Everything from v1 (task list, greedy assignment, stickiness, 4 hands, melon-12 + carrot mix,
 day-29 endgame) plus the livestock pipeline:

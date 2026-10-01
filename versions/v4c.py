@@ -3,7 +3,7 @@ main.py — Kaggriculture agent.  ENTRY POINT (must be at archive root, must be 
 
 STATUS: v3 — Phase 4: v2 (scheduler + 6 cows/2 sheep + CARE + fertilizer) + NE LAND +
 diversified crops (melon 12 / wheat-as-feed 10 / strawberry 10 / carrot 12) + hands scale
-with land.  A/B record: v3a beat v2 30-2 (93.8%).  Full lineage in docs/PLAN.md.
+with land.  A/B record: v3a beat v2 30-2 (93.8%).
 
 Everything from v1 (task list, greedy assignment, stickiness, 4 hands, melon-12 + carrot mix,
 day-29 endgame) plus the livestock pipeline:

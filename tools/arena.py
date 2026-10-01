@@ -1,14 +1,14 @@
-"""arena.py — the Top-10 Margin Matrix .
+"""arena.py — the top-team margin matrix.
 
 Turns a public replay into a coin-faithful local fixture (seed + pinned shop
-sequence + opponent tape, per Exp 89/93 conventions) and plays OUR agent in
+sequence + opponent tape) and plays OUR agent in
 the seat of the reference team, against the reconstructed opponent.
 
 The row's key number is our_bank - ref_bank: how much less we make than the
 top team IN THE SAME WORLD against THE SAME OPPONENT.  Margin vs the tape is
 secondary (the tape can't adapt to us; the world is what's controlled).
 
-LOCAL ONLY: reconstructed tapes are never submitted (.md).
+Analysis tool: reconstructed tapes are never part of a submission.
 
 Usage:
   python tools/arena.py run <replay.json> <ref_team_name> <agent.py> [tag] [out.jsonl]
@@ -59,7 +59,7 @@ def tape_agent(rep, seat):
 def cmd_run(args):
     rp, ref_team, agent_file = args[0], args[1], args[2]
     tag = args[3] if len(args) > 3 else os.path.basename(agent_file)
-    out = args[4] if len(args) > 4 else r"results\arena.jsonl"
+    out = args[4] if len(args) > 4 else os.path.join("data", "arena.jsonl")
     save = args[5] if len(args) > 5 else None
     rep = load_replay(rp)
     teams = rep["info"].get("TeamNames")
@@ -83,7 +83,7 @@ def cmd_run(args):
         with _silence_fds():
             env = make("kaggriculture",
                        configuration={"episodeSteps": 720, "seed": seed})
-            #  review-4 fix (note): the candidate must sit in the
+            # the candidate must sit in the
             # REFERENCE team's actual seat — weed RNG consumes farm 0's empty
             # tiles first, so seats are not interchangeable.
             pair = [None, None]
@@ -120,7 +120,7 @@ def cmd_run(args):
 
 
 def cmd_sum(args):
-    path = args[0] if args else r"results\arena.jsonl"
+    path = args[0] if args else os.path.join("data", "arena.jsonl")
     rows = [json.loads(l) for l in open(path, encoding="utf-8")]
     by_tag = {}
     for r in rows:

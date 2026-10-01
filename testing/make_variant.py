@@ -1,4 +1,4 @@
-# GROW VARIANT FACTORY — EXP 180 (Sep 28 ~10:35pm).
+# GROW VARIANT FACTORY — experiment ().
 #
 # Generates single-knob variants of the CERTIFIED sheep project inside
 # candidate.py (the _r9_* scaled1000 layer) by exact-string substitution.

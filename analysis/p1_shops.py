@@ -1,10 +1,10 @@
-# PHASE 1 MEASUREMENT A  — is a top team's farm decided by the shops
+# SHOP DETERMINISM — is a top team's farm decided by the shops
 # it has seen so far?  For every pair of games played by the SAME submission
 # (replays already on disk, no games run) find
 #   s_shop = first step where the two towns' shop lists differ
 #   s_farm = first step where the two farms differ (tiles, land, hands)
 #   s_move = first step where the recorded moves differ
-# PREDECLARED READING: if in >= 80% of pairs the farms stay identical until
+# DECISION RULE (fixed in advance): if in >= 80% of pairs the farms stay identical until
 # the towns differ (s_farm >= s_shop - 24), the team's build is a function of
 # the shops and can be stored as a tree of plans that branches at each new
 # shop.  If farms differ well before the towns do, the build also depends on
@@ -16,7 +16,7 @@ import sys
 from collections import defaultdict
 from pathlib import Path
 
-R = Path(r"C:\Kaggriculture")
+R = Path(__file__).resolve().parents[1]
 
 
 def tile_sig(t):

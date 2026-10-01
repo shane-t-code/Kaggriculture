@@ -1,18 +1,18 @@
-# PHASE 1 SWITCH TEST  — can we follow plan A and switch to plan B
+# PLAN SWITCH TEST — can we follow plan A and switch to plan B
 # (same team, same first shops, different game) when the town says so?
-# Runs in B's world (B's seed and B's shops) against our live agent dtrw:
+# Runs in B's world (B's seed and B's shops) against our agent:
 #   control = B alone;  test = A until the switch step, then B.
-# PREDECLARED READING: switching is usable if the test keeps >= 90% of the
+# DECISION RULE (fixed in advance): switching is usable if the test keeps >= 90% of the
 # control's bank in the median pair.
 # Usage: python -X utf8 p1_switch.py <tag> <team> <switch_step> <n_pairs> <procs>
 import ast, gzip, json, sys, time
 from collections import defaultdict
 from multiprocessing import Pool
 from pathlib import Path
-R = Path(r"C:\Kaggriculture"); sys.path.insert(0, str(R)); sys.dont_write_bytecode = True
-sys.path.insert(0, str(R / "work" / "build_a" / "arena"))
-DTRW = str(R / "work" / "build_a" / "grow" / "variants" / "dtrw.py")
-OUT = R / "work" / "build_a" / "arena" / "p1_switch_rows.jsonl"
+R = Path(__file__).resolve().parents[1]; sys.path.insert(0, str(R)); sys.dont_write_bytecode = True
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+AGENT = str(R / "agent" / "main.py")
+OUT = R / "data" / "switch_test_rows.jsonl"
 
 def load(tag, ep):
     return json.load(gzip.open(R / "replays" / tag / f"ep_{ep}.json.gz", "rt", encoding="utf-8"))
@@ -35,7 +35,7 @@ def run(job):
     for name, plan in (("control", pb), ("test", p1_follow.splice([pa, pb], [sw]))):
         pair = [None, None]
         pair[sb] = p1_follow.follower_from(plan, sb, r3=True)
-        pair[1 - sb] = DTRW
+        pair[1 - sb] = AGENT
         shop_pin.install(shop_sequence(rb))
         try:
             with _silence_fds():
@@ -68,8 +68,8 @@ def main():
             with open(OUT, "a", encoding="utf-8") as fh:
                 fh.write(json.dumps(row) + "\n")
             c, t = row["control"], row["test"]
-            print(f"A {row['a']} -> B {row['b']} | B real {row['b_real']:>9,.0f} | control {c[0]:>9,.0f} vs dtrw {c[1]:>9,.0f} | "
-                  f"test {t[0]:>9,.0f} vs dtrw {t[1]:>9,.0f} | test/control {t[0]/max(c[0],1):5.0%}", flush=True)
+            print(f"A {row['a']} -> B {row['b']} | B real {row['b_real']:>9,.0f} | control {c[0]:>9,.0f} vs agent {c[1]:>9,.0f} | "
+                  f"test {t[0]:>9,.0f} vs agent {t[1]:>9,.0f} | test/control {t[0]/max(c[0],1):5.0%}", flush=True)
 
 if __name__ == "__main__":
     sys.stdout.reconfigure(encoding="utf-8")

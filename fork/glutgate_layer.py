@@ -1,8 +1,8 @@
 # ---------------------------------------------------------------------------
-#  GLUTGATE layer (Shane Thivaharraja fork, Exp 123): don't sell into a
+#  GLUTGATE layer (fork): don't sell into a
 # deep glut — the live-proven mirror edge.
 #
-# Live decode (episode 110978823/110977722, Sep 19): "NineThree" runs the
+# Live decode (episode 110978823/110977722): "NineThree" runs the
 # byte-identical 2945 farm physically (unit ops EXACT to the single op) and
 # beat it +487 purely in the market stream: on d18-26 the base dumps MILK at
 # $3-28 (base 160), WOOL at $55 (base 200), STRAWBERRY at $62 (base 120) —

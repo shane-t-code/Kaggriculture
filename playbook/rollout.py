@@ -1,4 +1,4 @@
-# ROLLOUT  — simulate the rest of the game from the CURRENT
+# ROLLOUT — simulate the rest of the game from the CURRENT
 # observation, inside the episode, using the real engine (kaggle_environments
 # is present at runtime; no network).  Used by the look-ahead plan chooser:
 # for each candidate plan, roll the game to the end from our exact farm and

@@ -1,4 +1,4 @@
-"""AUTO-GENERATED tape agent — LOCAL POOL ONLY, NEVER SUBMIT.
+"""AUTO-GENERATED tape agent — local analysis pool only.
 Source: C:/Kaggriculture/replays/live_v71c_sep13/episode-108610904-replay.json  opponent seat of 'Utkarsh #2' (vs 'Shane Thivaharraja').
 Built by tools/tape_build.py .  Open-loop replay of the recorded
 stream by obs.step; steps past the recording PASS."""

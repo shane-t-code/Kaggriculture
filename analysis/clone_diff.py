@@ -1,13 +1,14 @@
-# CLONE DIFF  — what do the better copies of OUR family do differently?
+# CLONE DIFF — what do higher-rated copies of our agent family do differently?
 # In a live game between us and a same-opening family variant both farms start
 # identical, so the two seats' action streams are identical until THEIR private
 # edit fires.  We diff the two streams of the SAME replay step by step.
 # No games are played, no seeds spent.  Streams one replay at a time
 # (download -> diff -> delete) because C: is nearly full.
-# PREDECLARED READING: an edit is worth porting only if (a) it shows up in
+# DECISION RULE (fixed in advance): an edit is worth porting only if (a) it shows up in
 # >= 3 different opponents' games and (b) the bank gap opens on the same days
 # the edit fires.
 # Usage: python -X utf8 clone_diff.py <episode_id> [<episode_id> ...]
+# Needs the Kaggle CLI (kaggle competitions replay) on PATH or KAGGLE_CLI set.
 import gzip
 import json
 import os
@@ -15,11 +16,12 @@ import subprocess
 import sys
 from collections import Counter
 
-ROOT = r"C:\Kaggriculture"
-TMP = ROOT + r"\work\build_a\arena\h2h\tmp_clone"
-OUT = ROOT + r"\work\build_a\arena\clone_diff_rows.jsonl"
-KAGGLE = ROOT + r"\.venv\Scripts\kaggle.exe"
-ME = "Shane"
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+TMP = os.path.join(ROOT, "data", "tmp_replays")
+OUT = os.path.join(ROOT, "data", "clone_diff_rows.jsonl")
+KAGGLE = os.environ.get("KAGGLE_CLI", "kaggle")
+# prefix of OUR team name as it appears in replays (override with TEAM_NAME)
+ME = os.environ.get("TEAM_NAME", "Shane")
 
 
 def fetch(ep):

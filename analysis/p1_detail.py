@@ -1,17 +1,17 @@
-# PHASE 1 DETAIL  — one top-team recording vs our live agent in the
+# FIRST FAILED PURCHASE — one top-team recording vs our agent in the
 # recording's own world: print, for the first N steps, the recording's market
 # orders with money/hands in the REAL game vs the MOVED game, so the first
-# failed purchase and its cause are visible.  Local only.
+# failed purchase and its cause are visible. Analysis tool.
 # Usage: python -X utf8 p1_detail.py <episode> <seat> [last_step]
 import ast
 import json
 import sys
 from pathlib import Path
 
-R = Path(r"C:\Kaggriculture")
+R = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(R))
 sys.dont_write_bytecode = True
-DTRW = str(R / "work" / "build_a" / "grow" / "variants" / "dtrw.py")
+AGENT = str(R / "agent" / "main.py")
 
 
 def main():
@@ -29,7 +29,7 @@ def main():
     seed = rep.get("configuration", {}).get("seed") or rep["info"].get("seed")
     pair = [None, None]
     pair[seat] = tape_agent(rep, seat)
-    pair[1 - seat] = DTRW
+    pair[1 - seat] = AGENT
     shop_pin.install(shop_sequence(rep))
     try:
         with _silence_fds():
@@ -41,7 +41,7 @@ def main():
         shop_pin.uninstall()
     orig = rep["steps"]
     print(f"ep {ep} recording of {teams[seat]} (real opponent {teams[1-seat]}) "
-          f"vs dtrw")
+          f"vs our agent")
     for t in range(1, last + 1):
         a = orig[t][seat].get("action") or {}
         mk = a.get("market") or []
@@ -54,7 +54,7 @@ def main():
             print(f"      after: money real {of['money']:9.1f} moved "
                   f"{nf['money']:9.1f} | hands real {len(of['hands'])} moved "
                   f"{len(nf['hands'])} | real-opp orders "
-                  f"{json.dumps(ro.get('market') or [])[:90]} | dtrw orders "
+                  f"{json.dumps(ro.get('market') or [])[:90]} | our orders "
                   f"{json.dumps(no.get('market') or [])[:90]}")
 
 

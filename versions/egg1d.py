@@ -5,14 +5,14 @@ STATUS: egg1 — EGG-ECONOMY BRANCH v1 (v54k + 4 geese / sheep 4->2; targets the
 = v50a + one line: from day 28, sell batch caps are OFF (n = stock).
 Live close-loss decode: 4 of 11 sub-8k losses stranded MORE shed
 value than the losing margin (d29 harvests arrive with 1-2 market
-turns left; milk batch 3/turn cannot clear 6-9 units).  Exp 68a
+turns left; milk batch 3/turn cannot clear 6-9 units). 
 (ℓ-aware lock-in) tested INERT — 8k+ leads at d24 are already-won
 games; close games never reach the trigger — dropped.
 FALSIFICATION: leftover shed value at step 719 must go to ~0 on
 replays; 16-seed A/B must not regress (margins should tick up in
 close games; big-seed games mostly unchanged).
 
-Was: v50a — CANDIDATE 2026-09-03 (ANTI-TAPE COUNTER-SCHEDULE, Exp 66).
+Was: v50a — CANDIDATE 2026-09-03 (ANTI-TAPE COUNTER-SCHEDULE).
 = v47b + fighting-phase module vs the tape class (top of board; we
 are 0-16 vs it, and every tape-class live opponent is an auto-loss).
 A tape is OPEN-LOOP: its complete sell schedule is embedded in its
@@ -34,7 +34,7 @@ plants ZERO carrots (blueprint default) while v45a's 12 carrots won
 the town.  Fix: _DYN_CARROT_CAP 12 when carrot drain >= 8/day, else
 0 — blueprint stays the default, carrots return where they pay.
 
-Was: v47a — CANDIDATE 2026-09-02 (BLUEPRINT PORT, Exp 64).
+Was: v47a — CANDIDATE 2026-09-02 (BLUEPRINT PORT).
 = v45a + the live 150-165k winners' coordinated shape, decoded from
 99 live episodes (0W-14L vs the 120k+ class; 4 exact copies of one
 public blueprint at 110-164k).  The bundle — deliberately coordinated,
@@ -102,7 +102,7 @@ measured -3,490) + the gen-1 genome: d0_feed 8 -> 6.  Pod S3 held-out
 field +414, dBank +4,857.  Local gauntlet: vs v40a 77 seeds
 **133W-21L (86.4%) +4,750 mu/sigma 1.01**; tape leg flat (-813 = noise).
 Scale bundles all NEGATIVE (hands dial proven INERT - hiring machinery
-is the bottleneck, see PLAN Exp 60); SE land and early geese confirmed
+is the bottleneck, see PLAN); SE land and early geese confirmed
 losses.  Was:
 ROUTING, ported from v33a).  VALIDATION (field-primary): vs v39a 77
 seeds both seats **122W-32L (79.2%), +3,227, mu/sigma 0.76**; vs tape
@@ -163,7 +163,7 @@ delayed it → day-clock gates (q2 from d6, q3 from d10).  The melon
 detonation WORKED in the probe ($368@d10 → $9,155@d11, cows 4→11 in
 two days) — the engine is alive, the plumbing killed it.
 
-Was: v37a — PROTOTYPE: MONSTER-NATIVE ECONOMY (from the Exp 53/54
+Was: v37a — PROTOTYPE: MONSTER-NATIVE ECONOMY (from the/54
 blueprints, built as SHAPE — no actions copied).  The decoded 115-160k
 farms run a day-0 ALL-IN (start money is $3,000, engine L252): Prashant
 d0 = 2 cows + 2 sheep + 12 melons + 7 wheat + 5 hands, ending day 0
@@ -189,7 +189,7 @@ does the real reallocation: on latch, STRAWBERRY cap drops 35 -> 15
 and strawberry seed purchases stop.  Check moved day 6 -> 9 (3 draws):
 the observed false-positive class (2 bakeries then a premium run,
 probe seed 0) no longer fires; day-9 fire set is a strict subset.
-Exp 48-49 found the herd family's worst towns are dead-premium draws
+-49 found the herd family's worst towns are dead-premium draws
 (no strawberry/milk-eating shop early) — exactly where the wheat-native
 v30a prototype WINS (wheat demand never gluts: 6 shop types eat it).
 The shop draw is public, one shop unlocks every 3 days, and the day-6
@@ -200,9 +200,7 @@ factory at the latch day instead.  Trigger reads shops only; games
 where it never fires are byte-identical to v25.
 
 Underlying: v25 — Phase 6 fix #11 (PROMOTED, = v24 + SEARCHED OPENING).  The
-first search-discovered shape change (Exp 47: 29-generation pod search
-over 14 opening dials, honest gate = dWins>=+10 AND dBank>0 AND
-field-legs>=0 on 200 held-out seeds).  Six genes moved vs v24: cow_pause
+first search-discovered shape change.  Six genes moved vs v24: cow_pause
 5->3, resume_day 11->9, str_want 6->7, wheat_cap 20->22, TARGET_HANDS
 6->8 (= 12 hands at 3 quadrants — the elite labor level), factory_day
 18->22.  The shape story: berries interleave from the 3rd cow (not 5th),
@@ -404,7 +402,7 @@ margin -48.5k (v8: -54.0k, v7: -59.5k), sd 10.5k (was 16.0k); still 0-16 — the
 the gap is production, targeted next (strawberry volume, opening speed).
 A/B record: v7a beat v7 51-13 over 64 (79.7%) | v6a beat v6 46-18 (71.9%) | v5b beat
 v5 31-1 | v5a beat v4 27-5 | v4c beat v3 28-4 | v3a beat v2 30-2 | v2a beat v1 32-0 |
-v1 beat v0 32-0.  Bank-diff risk (v7b): WASH, shelved for Phase 6.  docs/PLAN.md has all.
+v1 beat v0 32-0.  Bank-diff risk (v7b): WASH, shelved for Phase 6.
 
 Everything from v1 (task list, greedy assignment, stickiness, 4 hands, melon-12 + carrot mix,
 day-29 endgame) plus the livestock pipeline:
@@ -1392,7 +1390,7 @@ def _market_orders(day, hour, money, seeds, shed, inventories, prices, hires_tod
         for _ in range(min(want_hires, 10 - len(orders))):
             orders.append(["HIRE"])
 
-    # v37a day-0 all-in (monster blueprint, Exp 53): deploy nearly all
+    # v37a day-0 all-in (monster blueprint): deploy nearly all
     # $3,000 starting cash into compounding assets in the first hour —
     # the 12 melons detonate at day 10-12 and fund the cow tail.
     if day == 0 and hour == 0:
@@ -1515,7 +1513,7 @@ def _market_orders(day, hour, money, seeds, shed, inventories, prices, hires_tod
     milk_proj = milk_seen + max(0, 8 - len(shops)) * 0.375
     # v47b NOTE: a d8+ REAL-drain cow cut was tried and REVERTED — cutting
     # 9 -> 6 cows in a dead-milk town raised our bank +12k but gifted the
-    # 6-cow opponent +21.8k (milk market recovered for THEM; Exp 63
+    # 6-cow opponent +21.8k (milk market recovered for THEM;
     # principle).  Head-to-head, the 9-cow dump keeps mutual pressure.
     cow_target = 6 if milk_proj < 2.0 else ANIMAL_TARGETS["COW"]
     sheep_target = _DYN_SHEEP.get(_CUR_SEAT, ANIMAL_TARGETS["SHEEP"])
